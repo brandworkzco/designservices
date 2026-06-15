@@ -99,9 +99,9 @@
 
     <!-- ENGINE CODE -->
     <script>
-    <script>
     const FORMSPREE_HOOK_URL = "https://formspree.io/f/xaqzvwgr";
 
+    // Standard Application Notification Popups
     function triggerToast(title, body, style = "success") {
         const container = document.getElementById('toast-container');
         const element = document.createElement('div');
@@ -113,61 +113,164 @@
         setTimeout(() => { element.remove(); }, 4000);
     }
 
+    // Toggle back and forth between screens
     function toggleAuthTab(targetTab) {
         const loginForm = document.getElementById('login-form');
         const registerForm = document.getElementById('register-form');
         const tabLoginBtn = document.getElementById('tab-login');
         const tabRegisterBtn = document.getElementById('tab-register');
         const title = document.getElementById('auth-title');
+        const subtitle = document.getElementById('auth-subtitle');
 
         if (targetTab === 'register') {
             loginForm.classList.add('hidden');
             registerForm.classList.remove('hidden');
             title.innerText = "Register New Account";
+            subtitle.innerText = "Create an executive profile configuration to manage creative projects.";
+            
             tabRegisterBtn.className = "px-4 py-1.5 text-xs font-bold rounded-md bg-yellow-400 text-slate-950 transition-all";
             tabLoginBtn.className = "px-4 py-1.5 text-xs font-bold rounded-md text-slate-400 hover:text-white transition-all";
         } else {
             registerForm.classList.add('hidden');
             loginForm.classList.remove('hidden');
             title.innerText = "Access Client Portal";
+            subtitle.innerText = "Sign in to track design requests and process orders.";
+            
             tabLoginBtn.className = "px-4 py-1.5 text-xs font-bold rounded-md bg-yellow-400 text-slate-950 transition-all";
             tabRegisterBtn.className = "px-4 py-1.5 text-xs font-bold rounded-md text-slate-400 hover:text-white transition-all";
         }
     }
 
-    function handleLogin(event) {
-        event.preventDefault();
-        const usernameInput = document.getElementById('login-user').value.trim();
-        const passwordInput = document.getElementById('login-pass').value;
-        const user = JSON.parse(localStorage.getItem(`bz_user_${usernameInput}`));
-
-        if (user && user.pass === passwordInput) {
-            localStorage.setItem('bz_active_session', JSON.stringify(user));
-            triggerToast("Access Granted", "Redirecting...", "success");
-            setTimeout(() => { window.location.href = "portal.html"; }, 1000);
-        } else {
-            triggerToast("Authentication Failed", "Invalid credentials.", "error");
-        }
-    }
-
+    // Processing Registration Submissions
     function handleRegister(event) {
         event.preventDefault();
-        const newUser = {
-            username: document.getElementById('reg-user').value.trim(),
-            email: document.getElementById('reg-email').value.trim(),
-            pass: document.getElementById('reg-pass').value
-        };
+        
+        const username = document.getElementById('reg-user').value.trim();
+        const email = document.getElementById('reg-email').value.trim();
+        const phone = document.getElementById('reg-phone').value.trim();
+        const pass = document.getElementById('reg-pass').value;
+        const billing = document.getElementById('reg-billing').value.trim();
 
-        if (localStorage.getItem(`bz_user_${newUser.username}`)) {
-            triggerToast("Error", "Username exists.", "error");
+        // Local Browser validation layer checks
+        if (localStorage.getItem(`bz_user_${username}`)) {
+            triggerToast("Registration Error", "That username is already registered in browser memory caches.", "error");
             return;
         }
 
-        localStorage.setItem(`bz_user_${newUser.username}`, JSON.stringify(newUser));
-        localStorage.setItem('bz_active_session', JSON.stringify(newUser));
-        triggerToast("Success", "Account created! Loading...", "success");
-        setTimeout(() => { window.location.href = "portal.html"; }, 1000);
+        const newUserPayload = { username, email, phone, pass, billing };
+        
+        // Save user into browser memory cache permanently
+        localStorage.setItem(`bz_user_${username}`, JSON.stringify(newUserPayload));
+        
+        // Save current active session state
+        localStorage.setItem('bz_active_session', JSON.stringify(newUserPayload));
+
+        // Submit structural logs telemetry webhook directly out to Formspree
+        fetch(FORMSPREE_HOOK_URL, {
+            method: 'POST',
+            headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                Notification_Type: "Client Account Created (Standalone Route)",
+                Registered_Username: username,
+                Email_Contact: email,
+                Phone_Contact: phone,
+                Configured_Billing_Base: billing
+            })
+        }).catch(err => console.log("Formspree data processing background status notice."));
+
+        displaySuccessfulAuthentication(username);
+        triggerToast("Account Operational", `Profile structural assets built successfully for ${username}.`, "success");
     }
-</script></script>
+
+    // Processing Sign In Actions
+    function handleLogin(event) {
+        event.preventDefault();
+        
+        const usernameInput = document.getElementById('login-user').value.trim();
+        const passwordInput = document.getElementById('login-pass').value;
+        const recordedUserObject = JSON.parse(localStorage.getItem(`bz_user_${usernameInput}`));
+
+        if (recordedUserObject && recordedUserObject.pass === passwordInput) {
+            localStorage.setItem('bz_active_session', JSON.stringify(recordedUserObject));
+            displaySuccessfulAuthentication(usernameInput);
+            triggerToast("Access Granted", "Session parameters confirmed and synchronized smoothly.", "success");
+        } else {
+            triggerToast("Authentication Failed", "Invalid matching credentials located inside index registries.", "error");
+        }
+    }
+
+    function displaySuccessfulAuthentication(username) {
+        document.getElementById('login-form').classList.add('hidden');
+        document.getElementById('register-form').classList.add('hidden');
+        document.getElementById('tab-login').parentElement.classList.add('hidden');
+        
+        document.getElementById('auth-title').innerText = "Portal Authorized";
+        document.getElementById('auth-subtitle').innerText = "Active user configuration verified.";
+        
+        document.getElementById('welcome-message').innerText = `Greetings, user session account @${username} is loaded.`;
+        document.getElementById('authenticated-panel').classList.remove('hidden');
+    }
+
+    function clearSession() {
+        localStorage.removeItem('bz_active_session');
+        window.location.reload();
+    }
+
+    // Lifecycle check to see if user is already logged in
+    window.addEventListener('DOMContentLoaded', () => {
+        const sessionActive = JSON.parse(localStorage.getItem('bz_active_session'));
+        if (sessionActive && sessionActive.username) {
+            displaySuccessfulAuthentication(sessionActive.username);
+        }
+    });
+// 1. Processing Sign In Actions inside auth.html
+function handleLogin(event) {
+    event.preventDefault();
+    
+    const usernameInput = document.getElementById('login-user').value.trim();
+    const passwordInput = document.getElementById('login-pass').value;
+    const recordedUserObject = JSON.parse(localStorage.getItem(`bz_user_${usernameInput}`));
+
+    if (recordedUserObject && recordedUserObject.pass === passwordInput) {
+        // Save their session data into browser memory
+        localStorage.setItem('bz_active_session', JSON.stringify(recordedUserObject));
+        
+        triggerToast("Access Granted", "Redirecting to your portal...", "success");
+        
+        // MOVE THE USER TO THE PORTAL PAGE IMMEDIATELY
+        setTimeout(() => {
+            window.location.href = "portal.html";
+        }, 1000);
+    } else {
+        triggerToast("Authentication Failed", "Invalid matching credentials.", "error");
+    }
+}
+
+// 2. Processing Registration Submissions inside auth.html
+function handleRegister(event) {
+    event.preventDefault();
+    
+    const username = document.getElementById('reg-user').value.trim();
+    const email = document.getElementById('reg-email').value.trim();
+    const phone = document.getElementById('reg-phone').value.trim();
+    const pass = document.getElementById('reg-pass').value;
+    const billing = document.getElementById('reg-billing').value.trim();
+
+    if (localStorage.getItem(`bz_user_${username}`)) {
+        triggerToast("Registration Error", "Username already exists.", "error");
+        return;
+    }
+
+    const newUserPayload = { username, email, phone, pass, billing };
+    localStorage.setItem(`bz_user_${username}`, JSON.stringify(newUserPayload));
+    localStorage.setItem('bz_active_session', JSON.stringify(newUserPayload));
+
+    triggerToast("Account Operational", "Account created! Loading dashboard...", "success");
+
+    // MOVE THE USER TO THE PORTAL PAGE IMMEDIATELY
+    setTimeout(() => {
+        window.location.href = "portal.html";
+    }, 1000);
+}    </script>
 </body>
 </html>

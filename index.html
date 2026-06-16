@@ -70,7 +70,7 @@
                     </button>
 
                     <button onclick="toggleCartDrawer(true)" class="relative p-2 rounded-lg bg-yellow-400 hover:bg-yellow-500 text-slate-950 transition-all font-bold flex items-center justify-center shadow-md shadow-yellow-400/20">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24 stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
                         <span id="cart-badge" class="absolute -top-1.5 -right-1.5 bg-rose-600 text-white text-[9px] font-black w-5 h-5 rounded-full flex items-center justify-center opacity-0 scale-90 transition-all duration-300">0</span>
                     </button>
                 </div>
@@ -299,6 +299,10 @@
                             <span class="text-slate-400">Selected Terms:</span>
                             <span id="cust-det-term" class="font-semibold text-yellow-400 uppercase tracking-wide">Not Selected</span>
                         </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-400">Product Size Target:</span>
+                            <span class="font-semibold text-white">5 cm × 2 cm</span>
+                        </div>
                         <div class="flex flex-col space-y-1 pt-1.5">
                             <span class="text-slate-400 font-bold">Default Billing Address:</span>
                             <p id="cust-det-billing" class="text-slate-300 font-light bg-slate-900 p-2 rounded border border-slate-800 mt-1 leading-relaxed text-[11px]">No address configured.</p>
@@ -504,14 +508,14 @@
             id: "p_frame_1",
             title: "Menu Design",
             dropdownLabel: "All",
-            poster: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100%' height='100%' fill='%231e293b'/><text x='50%' y='55%' font-weight='bold' font-size='12' fill='%23eab308' dominant-baseline='middle' text-anchor='middle'>MENU DESIGN</text></svg>",
+            poster: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&auto=format&fit=crop&q=80",
             dropdowns: [
-                { name: "Basic A4", price: 25.00, info: "-1 side\n-A4 only\n-not provide image\nedit" },
-                { name: "Basic A3/A2", price: 30.00, info: "-1 side\n-A3/A2 only\n-not provide image\nedit" },
-                { name: "Advanced Package", price: 75.00, info: "-1-3 sides\n-A4 size only\n-not provide image\nedit" },
-                { name: "Executive Package", price: 120.00, info: "-1-5 sides\n-A4 size only" },
-                { name: "Leading Package", price: 240.00, info: "-1-10 sides\n-A4 size only\n-provide edit image" },
-                { name: "Clean/Modern", price: 50.00, info: "-1 side\n-provide edit image\n-digital and clean" }
+                { name: "Basic A4", price: 25.00, info: "- 1 side\n- A4 only\n- not provide image edit" },
+                { name: "Basic A3/A2", price: 30.00, info: "- 1 side\n- A3/A2 only\n- not provide image edit" },
+                { name: "Advanced Package", price: 75.00, info: "- 1-3 sides\n- A4 size only\n- not provide image edit" },
+                { name: "Executive Package", price: 120.00, info: "- 1-5 sides\n- A4 size only" },
+                { name: "Leading Package", price: 240.00, info: "- 1-10 sides\n- A4 size only\n- provide edit image" },
+                { name: "Clean/Modern", price: 50.00, info: "- 1 side\n- provide edit image\n- digital and clean" }
             ]
         },
         {
@@ -520,7 +524,7 @@
             dropdownLabel: "All",
             poster: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100%' height='100%' fill='%231e293b'/><text x='50%' y='55%' font-weight='bold' font-size='12' fill='%23eab308' dominant-baseline='middle' text-anchor='middle'>SECOND PRODUCT</text></svg>",
             dropdowns: [
-                { name: "Standard Setup Package", price: 60.00, info: "-Basic vector layout guidelines" }
+                { name: "Standard Setup Package", price: 60.00, info: "- Basic vector layout guidelines" }
             ]
         }
     ];
@@ -646,40 +650,62 @@
 
         PRODUCTS.forEach(product => {
             const card = document.createElement('div');
-            card.className = "bg-slate-900 border border-slate-800 rounded-2xl p-5 hover:border-yellow-400/30 transition-all duration-300 flex flex-col justify-between group";
+            card.className = "bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-xl transition-all hover:scale-[1.01] hover:border-yellow-500/30 flex flex-col justify-between";
             
             let selectionTierHTML = "";
             if (product.dropdowns && product.dropdowns.length > 0) {
+                // Split multi-line requirements info text safely into modern checkmark item lines
+                const infoLines = (product.dropdowns[0].info || '').split('\n').filter(l => l.trim() !== '');
+                const inlineListHTML = infoLines.map(line => `
+                    <div class="flex items-center space-x-2 text-xs text-slate-300">
+                        <div class="w-4 h-4 rounded-full bg-yellow-400 flex items-center justify-center flex-shrink-0">
+                            <svg class="w-2.5 h-2.5 text-slate-950" fill="none" stroke="currentColor" stroke-width="4" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        </div>
+                        <span>${line.replace(/^-\s*/, '')}</span>
+                    </div>
+                `).join('');
+
                 selectionTierHTML = `
-                    <div class="space-y-2 pt-2">
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Drop-down: ${product.dropdownLabel}</label>
-                        <select id="frontend-select-${product.id}" onchange="updateFrontendSelectedPrice('${product.id}')" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs text-white outline-none transition-colors">
-                            ${product.dropdowns.map((drop, dIdx) => `<option value="${dIdx}">[RM ${drop.price.toFixed(2)}] ${drop.name}</option>`).join('')}
-                        </select>
-                        <div id="frontend-info-box-${product.id}" class="bg-slate-950/60 p-3 rounded-lg border border-slate-850 text-[11px] text-slate-400 font-mono whitespace-pre-line mt-1.5 leading-relaxed">
-                            ${product.dropdowns[0] ? product.dropdowns[0].info || '- standard tier selection summary' : ''}
+                    <div class="p-5 space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-800/60 pb-3">
+                            <div>
+                                <h3 class="text-lg font-black tracking-tight text-white uppercase">${product.title}</h3>
+                                <p class="text-[10px] text-slate-400 font-bold tracking-wider mt-0.5 uppercase">Dropdown: ${product.dropdownLabel}</p>
+                            </div>
+                            <div class="text-right flex items-baseline space-x-2">
+                                <span class="text-[10px] uppercase font-bold text-slate-500">Estimated</span>
+                                <span id="frontend-price-badge-${product.id}" class="text-2xl font-black text-yellow-400">RM ${product.dropdowns[0].price.toFixed(2)}</span>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <select id="frontend-select-${product.id}" onchange="updateFrontendSelectedPrice('${product.id}')" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs text-white outline-none transition-colors">
+                                ${product.dropdowns.map((drop, dIdx) => `<option value="${dIdx}">[RM ${drop.price.toFixed(2)}] ${drop.name}</option>`).join('')}
+                            </select>
+                            <div id="frontend-info-box-${product.id}" class="space-y-2 pt-2">
+                                ${inlineListHTML || '<span class="text-slate-500 italic text-[11px]">- standard tier summary</span>'}
+                            </div>
                         </div>
                     </div>
                 `;
             } else {
-                selectionTierHTML = `<div class="text-[11px] text-slate-500 italic py-2">No configurations provided.</div>`;
+                selectionTierHTML = `<div class="p-5 text-[11px] text-slate-500 italic">No configuration variants parsed.</div>`;
             }
 
-            const activePrice = product.dropdowns && product.dropdowns[0] ? product.dropdowns[0].price : 0.00;
-
             card.innerHTML = `
-                <div class="space-y-4">
-                    <div class="aspect-video w-full rounded-xl overflow-hidden bg-slate-950 border border-slate-850 flex items-center justify-center relative shadow-inner">
-                        <img src="${product.poster}" class="w-full h-full object-cover" alt="Product Frame Asset" />
-                    </div>
-                    <div class="flex items-center justify-between border-b border-slate-800 pb-2">
-                        <h3 class="text-base font-black tracking-tight text-white uppercase group-hover:text-yellow-400 transition-colors">${product.title}</h3>
-                        <span id="frontend-price-badge-${product.id}" class="text-base font-black text-yellow-400">RM ${activePrice.toFixed(2)}</span>
+                <div>
+                    <div class="relative aspect-video w-full bg-slate-950 flex items-center justify-center overflow-hidden border-b border-slate-800">
+                        <img src="${product.poster}" class="w-full h-full object-contain p-2" alt="${product.title}" onerror="this.src='https://placehold.co/600x400/1e293b/facc15?text=Product+Photo'">
+                        <span class="absolute top-3 left-3 bg-yellow-400 text-slate-950 font-black text-[9px] uppercase px-2.5 py-1 rounded-full shadow-lg">
+                            DESIGN WORK
+                        </span>
                     </div>
                     ${selectionTierHTML}
                 </div>
-                <div class="pt-4 border-t border-slate-800/60 mt-4">
-                    <button onclick="addProductToBasket('${product.id}')" class="w-full py-2.5 bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-black text-xs rounded-xl transition-all uppercase tracking-wider shadow-md">
+                <div class="p-5 pt-0">
+                    <button onclick="addProductToBasket('${product.id}')" class="w-full py-3 bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-black text-xs rounded-xl transition-all uppercase tracking-wider shadow-md">
                         Add Package variant to basket
                     </button>
                 </div>
@@ -695,7 +721,19 @@
         
         if (selectedDropdown) {
             document.getElementById(`frontend-price-badge-${productId}`).innerText = `RM ${selectedDropdown.price.toFixed(2)}`;
-            document.getElementById(`frontend-info-box-${productId}`).innerText = selectedDropdown.info || '- standard tier selection summary';
+            const infoBox = document.getElementById(`frontend-info-box-${productId}`);
+            
+            const infoLines = (selectedDropdown.info || '').split('\n').filter(l => l.trim() !== '');
+            infoBox.innerHTML = infoLines.map(line => `
+                <div class="flex items-center space-x-2 text-xs text-slate-300 animate-fadeIn">
+                    <div class="w-4 h-4 rounded-full bg-yellow-400 flex items-center justify-center flex-shrink-0">
+                        <svg class="w-2.5 h-2.5 text-slate-950" fill="none" stroke="currentColor" stroke-width="4" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                    </div>
+                    <span>${line.replace(/^-\s*/, '')}</span>
+                </div>
+            `).join('') || '<span class="text-slate-500 italic text-[11px]">- standard tier summary</span>';
         }
     }
 
@@ -777,7 +815,6 @@
         const registeredUsers = JSON.parse(localStorage.getItem("active_users")) || {};
         let targetUserKey = null;
 
-        // Search active users matrix mapping matches
         for (const username in registeredUsers) {
             if (username.toLowerCase() === inputVal.toLowerCase() || registeredUsers[username].email.toLowerCase() === inputVal.toLowerCase()) {
                 targetUserKey = username;
@@ -786,14 +823,10 @@
         }
 
         if (targetUserKey) {
-            // Generate simple random 6-digit access code sequence
             const generatedCode = "BZ-" + Math.floor(100000 + Math.random() * 900000);
-            
-            // Rewrite transient user password directly within DB framework
             registeredUsers[targetUserKey].pass = generatedCode;
             localStorage.setItem("active_users", JSON.stringify(registeredUsers));
             
-            // Print key display metrics to view viewport layout
             codeDisplay.innerText = generatedCode;
             successDiv.classList.remove('hidden');
             showToast("Temporary structural code processed safely.");
@@ -1317,7 +1350,7 @@
         PRODUCTS[pIdx].dropdowns.push({
             name: "Custom tier option variant",
             price: 50.00,
-            info: ":-1 side\n-provide edit image\n-digital design"
+            info: "- 1 side\n- provide edit image\n- digital design"
         });
         saveProductsToStorage();
         renderAdminScratchSandbox();

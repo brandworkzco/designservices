@@ -1076,8 +1076,8 @@
         document.getElementById('cart-total-price').innerText = `RM ${total.toFixed(2)}`;
     }
 
-    function initiateToyyibPayCheckout() {
-       // 1. Direct verify against LocalStorage instead of the 'currentUser' variable
+function initiateToyyibPayCheckout() {
+    // 1. Verify Session
     const rawSession = localStorage.getItem("current_session_user");
     const activeUser = rawSession ? JSON.parse(rawSession) : null;
 
@@ -1088,19 +1088,44 @@
         return;
     }
 
-    // 2. Proceed with the logic using 'activeUser'
+    // 2. Validate Cart
     if (cart.length === 0) {
         showToast("Add products to your basket before checking out.", "error");
         return;
     }
 
-    const brief = document.getElementById('checkout-brief-text').value.trim();
-    if (!brief) {
+    // 3. Validate Brief
+    const briefInput = document.getElementById('checkout-brief-text');
+    if (!briefInput || !briefInput.value.trim()) {
         showToast("Please provide design briefs/instructions.", "error");
         return;
     }
 
-    // ... rest of your existing code remains the same
+    // 4. DISPLAY MODAL (This part must be inside the function!)
+    const cartTotalText = document.getElementById('cart-total-price').innerText;
+    document.getElementById('toyyibpay-bill-amount').innerText = cartTotalText;
+
+    const bankGrid = document.getElementById('bank-selectors-grid');
+    bankGrid.innerHTML = "";
+    selectedBankId = "";
+
+    MALAYSIAN_BANKS.forEach(bank => {
+        const btn = document.createElement('button');
+        btn.id = `bank-btn-${bank.id}`;
+        btn.type = "button";
+        btn.onclick = () => selectMalaysianBankOption(bank.id);
+        btn.className = "p-3 bg-slate-950 border border-slate-800 rounded-xl hover:border-yellow-400/40 text-left transition-all duration-300 flex items-center space-x-2 w-full";
+        btn.innerHTML = `
+            <div class="w-3 h-3 rounded-full border-2 border-slate-800 flex items-center justify-center p-0.5" id="bank-radio-${bank.id}">
+                <div class="w-full h-full rounded-full bg-transparent" id="bank-radio-dot-${bank.id}"></div>
+            </div>
+            <span class="text-[11px] font-bold text-white">${bank.name}</span>
+        `;
+        bankGrid.appendChild(btn);
+    });
+
+    // Open Modal
+    document.getElementById('toyyibpay-modal').classList.remove('hidden');
 }
 
         // Display ToyyibPay simulated bank selector

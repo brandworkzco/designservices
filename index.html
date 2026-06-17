@@ -1334,17 +1334,27 @@
     }
 
     function handleScratchPosterStream(event, pIdx) {
-        const file = event.target.files[0];
-        if (!file) return;
+    const file = event.target.files[0];
+    if (!file) return;
 
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            PRODUCTS[pIdx].poster = e.target.result;
-            document.getElementById(`scratch-preview-${PRODUCTS[pIdx].id}`).src = e.target.result;
-            showToast("Encoded file stream asset successfully.");
-        }
-        reader.readAsDataURL(file);
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        // 1. Update the product data
+        PRODUCTS[pIdx].poster = e.target.result;
+        
+        // 2. Update the Admin preview
+        document.getElementById(`scratch-preview-${PRODUCTS[pIdx].id}`).src = e.target.result;
+        
+        // 3. Save to LocalStorage
+        saveProductsToStorage(); 
+        
+        // 4. Force a re-render of the storefront so it shows up live
+        renderProductCatalog();
+        
+        showToast("Encoded file stream asset successfully.");
     }
+    reader.readAsDataURL(file);
+}
 
     function appendNewScratchDropdown(pIdx) {
         PRODUCTS[pIdx].dropdowns.push({

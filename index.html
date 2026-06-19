@@ -5,25 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Brandworkz Co | Premium Graphic Design Store</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
         }
         ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
         }
         ::-webkit-scrollbar-track {
-            background: #020617;
+            background: #0f172a;
         }
         ::-webkit-scrollbar-thumb {
-            background: #facc15;
-            border-radius: 9999px;
-            border: 2px solid #020617;
+            background: #eab308;
+            border-radius: 4px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #eab308;
+            background: #ca8a04;
         }
         .hide-scrollbar::-webkit-scrollbar {
             display: none;
@@ -33,119 +32,97 @@
             scrollbar-width: none;
         }
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(6px); }
+            from { opacity: 0; transform: translateY(4px); }
             to { opacity: 1; transform: translateY(0); }
         }
         .animate-fadeIn {
-            animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation: fadeIn 0.25s ease-out forwards;
         }
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-yellow-400 selection:text-slate-950 overflow-x-hidden">
 
-    <!-- Sticky Header -->
-    <header class="sticky top-0 z-45 bg-slate-950/90 backdrop-blur-md border-b border-yellow-400/20 px-4 py-4 sm:px-8 shadow-lg">
-        <div class="max-w-7xl mx-auto flex flex-col gap-4">
+    <header class="sticky top-0 z-40 bg-slate-900/95 backdrop-blur-md border-b border-yellow-400/30 px-3 py-3 sm:px-6">
+        <div class="max-w-7xl mx-auto flex flex-col gap-3">
             <div class="flex items-center justify-between w-full">
-                <button onclick="switchView('store')" class="flex items-center space-x-3 group text-left bg-transparent border-0 p-0 cursor-pointer">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-yellow-400 to-amber-500 flex items-center justify-center font-black text-slate-950 text-xl transform group-hover:rotate-6 transition-transform shadow-md shadow-yellow-400/20">
+                <button onclick="switchView('store')" class="flex items-center space-x-2 group text-left bg-transparent border-0 p-0 cursor-pointer">
+                    <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-yellow-400 flex items-center justify-center font-black text-slate-950 text-lg sm:text-xl transform group-hover:rotate-6 transition-transform">
                         BZ
                     </div>
                     <div>
-                        <span class="text-lg sm:text-2xl font-black tracking-wider text-white">BRAND<span class="text-yellow-400">WORKZ CO</span></span>
-                        <p class="text-[10px] text-slate-450 tracking-widest uppercase font-bold">Studio Dynamic Portfolio</p>
+                        <span class="text-base sm:text-xl font-extrabold tracking-wider text-white">BRAND<span class="text-yellow-400">WORKZ CO</span></span>
+                        <p class="text-[9px] text-slate-400 tracking-widest uppercase font-semibold">Design Studio</p>
                     </div>
                 </button>
 
-                <div class="flex items-center space-x-2 sm:space-x-3">
-                    <button id="customer-portal-btn" onclick="switchView('customer-auth')" class="flex items-center space-x-2 px-3.5 py-2.5 text-xs font-bold rounded-xl border border-slate-800 bg-slate-900 text-slate-200 hover:border-yellow-400/40 hover:bg-slate-850 transition-all">
-                        <svg class="w-4 h-4 text-yellow-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                        </svg>
+                <div class="flex items-center space-x-1.5 sm:space-x-3">
+                    <button id="customer-portal-btn" onclick="switchView('customer-auth')" class="flex items-center space-x-1 px-2.5 py-2 text-xs font-bold rounded-lg border border-slate-800 bg-slate-950 text-slate-300 hover:border-yellow-400/40 transition-all">
+                        <svg class="w-3.5 h-3.5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                         <span id="customer-portal-text">Profile Portal</span>
-                        <span id="customer-portal-username" class="max-w-[120px] truncate text-[11px] text-yellow-400 font-extrabold hidden"></span>
+                        <span id="customer-portal-username" class="max-w-[120px] truncate text-[11px] text-yellow-400 font-bold hidden"></span>
                     </button>
 
-                    <button id="admin-space-btn" onclick="switchView('admin')" class="flex items-center space-x-2 px-3.5 py-2.5 text-xs font-bold rounded-xl border border-yellow-400/20 bg-slate-900/60 text-yellow-400 hover:bg-yellow-400 hover:text-slate-950 transition-all shadow-md shadow-yellow-400/5">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
+                    <button onclick="switchView('admin')" class="flex items-center space-x-1 px-2.5 py-2 text-xs font-bold rounded-lg border border-yellow-400/30 bg-slate-900 text-yellow-400 hover:bg-yellow-400 hover:text-slate-950 transition-all shadow shadow-yellow-400/10">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
                         </svg>
-                        <span id="admin-btn-label">Admin Space</span>
+                        <span>Admin Space</span>
                     </button>
 
-                    <button onclick="toggleCartDrawer(true)" class="relative p-3 rounded-xl bg-yellow-400 hover:bg-yellow-500 text-slate-950 transition-all font-bold flex items-center justify-center shadow-lg shadow-yellow-400/10">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
-                        </svg>
-                        <span id="cart-badge" class="absolute -top-1.5 -right-1.5 bg-rose-600 text-white text-[10px] font-black w-5.5 h-5.5 rounded-full flex items-center justify-center border-2 border-slate-950 opacity-0 scale-90 transition-all duration-300">0</span>
+                    <button onclick="toggleCartDrawer(true)" class="relative p-2 rounded-lg bg-yellow-400 hover:bg-yellow-500 text-slate-950 transition-all font-bold flex items-center justify-center shadow-md shadow-yellow-400/20">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24 stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                        <span id="cart-badge" class="absolute -top-1.5 -right-1.5 bg-rose-600 text-white text-[9px] font-black w-5 h-5 rounded-full flex items-center justify-center opacity-0 scale-90 transition-all duration-300">0</span>
                     </button>
                 </div>
             </div>
 
-            <nav class="flex items-center justify-start space-x-2 overflow-x-auto pb-1 border-t border-slate-900 pt-3 text-xs font-bold tracking-wide hide-scrollbar">
-                <button onclick="switchView('store'); setTimeout(() => document.getElementById('storefront-section').scrollIntoView({behavior: 'smooth'}), 100);" class="text-yellow-400 hover:text-yellow-300 transition-colors whitespace-nowrap bg-slate-900 py-1.5 px-3.5 rounded-lg border border-slate-800">Browse Catalog</button>
-                <button onclick="switchView('store'); setTimeout(() => document.getElementById('how-it-works').scrollIntoView({behavior: 'smooth'}), 100);" class="text-slate-350 hover:text-yellow-400 transition-colors whitespace-nowrap bg-slate-950/40 py-1.5 px-3.5 rounded-lg">Our Process Guidelines</button>
-                <button onclick="switchView('store'); setTimeout(() => document.getElementById('payment-methods').scrollIntoView({behavior: 'smooth'}), 100);" class="text-slate-350 hover:text-yellow-400 transition-colors whitespace-nowrap bg-slate-950/40 py-1.5 px-3.5 rounded-lg">ToyyibPay FPX Info</button>
+            <nav class="flex items-center justify-start space-x-2 overflow-x-auto py-1.5 border-t border-slate-800/60 text-xs font-bold tracking-wide hide-scrollbar">
+                <button onclick="switchView('store'); setTimeout(() => document.getElementById('storefront-section').scrollIntoView(), 50);" class="text-yellow-400 hover:text-yellow-300 transition-colors whitespace-nowrap bg-slate-950 py-1.5 px-3 rounded-md border border-slate-800">Browse Services</button>
+                <button onclick="switchView('store'); setTimeout(() => document.getElementById('how-it-works').scrollIntoView(), 50);" class="text-slate-300 hover:text-yellow-400 transition-colors whitespace-nowrap bg-slate-950/40 py-1.5 px-3 rounded-md">Our Process</button>
+                <button onclick="switchView('store'); setTimeout(() => document.getElementById('payment-methods').scrollIntoView(), 50);" class="text-slate-300 hover:text-yellow-400 transition-colors whitespace-nowrap bg-slate-950/40 py-1.5 px-3 rounded-md">ToyyibPay Info</button>
             </nav>
         </div>
     </header>
 
-    <!-- Main Store View -->
     <div id="store-view" class="flex-grow animate-fadeIn">
-        
-        <!-- Hero Section -->
-        <section class="relative bg-slate-950 border-b border-yellow-500/10 overflow-hidden py-16 px-4 sm:px-8">
-            <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(250,204,21,0.06),transparent_55%)]"></div>
-            <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 items-center relative z-10">
-                <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
-                    <div class="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-yellow-400/10 border border-yellow-400/20 text-yellow-400 text-xs font-bold tracking-wider uppercase">
+        <section class="relative bg-slate-900 border-b border-yellow-500/10 overflow-hidden py-10 px-4 sm:px-8">
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(250,204,21,0.05),transparent_50%)]"></div>
+            <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+                <div class="lg:col-span-7 space-y-5 text-center lg:text-left">
+                    <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-yellow-400/10 border border-yellow-400/20 text-yellow-400 text-[10px] sm:text-xs font-bold tracking-wider uppercase">
                         <span class="flex h-2 w-2 relative">
                             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75"></span>
                             <span class="relative inline-flex rounded-full h-2 w-2 bg-yellow-500"></span>
                         </span>
-                        <span>Official ToyyibPay FPX Storefront &amp; Portal</span>
+                        <span>Official ToyyibPay FPX Storefront</span>
                     </div>
-                    <h1 class="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight leading-tight text-white">
+                    <h1 class="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight leading-tight text-white">
                         Creative Layouts <br class="hidden sm:inline">
-                        Designed <span class="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-amber-300 to-amber-500 drop-shadow">To Stand Out.</span>
+                        Designed <span class="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-yellow-300 to-amber-500 drop-shadow">To Stand Out.</span>
                     </h1>
-                    <p class="text-slate-300 text-sm sm:text-lg max-w-xl mx-auto lg:mx-0 font-light leading-relaxed">
-                        Order tailored creative suites with customizable dimension parameters, store persistent order tracking keys directly to your custom portal, and authenticate seamlessly through Malaysian bank transfers.
+                    <p class="text-slate-300 text-sm sm:text-base max-w-xl mx-auto lg:mx-0 font-light leading-relaxed">
+                        Customize elite design templates with adjustable sizing dropdown categories, save defaults to your Checkout Profile, and pay securely using direct Malaysian FPX.
                     </p>
-                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
-                        <button onclick="document.getElementById('storefront-section').scrollIntoView({behavior: 'smooth'});" class="w-full sm:w-auto px-8 py-3.5 bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-black text-xs rounded-xl transition-all text-center uppercase tracking-wider shadow-lg shadow-yellow-400/15">
+                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 pt-2">
+                        <button onclick="document.getElementById('storefront-section').scrollIntoView();" class="w-full sm:w-auto px-6 py-3 bg-yellow-400 text-slate-950 font-extrabold text-xs rounded-xl hover:bg-yellow-500 transition-all text-center uppercase tracking-wider">
                             Explore Catalog
-                        </button>
-                        <button onclick="switchView('customer-auth')" class="w-full sm:w-auto px-8 py-3.5 bg-slate-900 border border-slate-800 hover:border-yellow-400/30 text-slate-300 hover:text-white font-bold text-xs rounded-xl transition-all text-center uppercase tracking-wider">
-                            Go to Profile Portal
                         </button>
                     </div>
                 </div>
 
-                <!-- Secure Gate Badge Feature -->
                 <div class="lg:col-span-5 relative flex justify-center w-full">
-                    <div class="relative w-full max-w-md">
-                        <div class="absolute -inset-1 bg-gradient-to-r from-yellow-400 to-amber-500 rounded-2xl blur opacity-20 animate-pulse"></div>
-                        <div class="relative bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-4">
-                            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-                                <span class="text-[11px] font-extrabold uppercase text-yellow-400 tracking-wider">Secure Payment Node</span>
-                                <span class="text-[10px] px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/25 font-bold">FPX Gateway Online</span>
+                    <div class="relative w-full max-w-sm">
+                        <div class="absolute -inset-1 bg-gradient-to-r from-yellow-400 to-amber-500 rounded-2xl blur opacity-25 animate-pulse"></div>
+                        <div class="relative bg-slate-950 border border-yellow-400/50 rounded-2xl p-5 shadow-2xl space-y-3">
+                            <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                                <span class="text-[10px] font-bold uppercase text-yellow-400 tracking-wider">Verified Secure Gateway</span>
+                                <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/25 font-bold">FPX Active</span>
                             </div>
-                            <div class="bg-slate-950 border border-slate-855 rounded-xl p-4 flex items-center gap-3">
-                                <div class="text-3xl">🏦</div>
+                            <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 flex items-center gap-3">
+                                <div class="text-2xl">💳</div>
                                 <div class="flex-grow">
-                                    <h4 class="font-extrabold text-white text-xs">Direct ToyyibPay Integration</h4>
-                                    <p class="text-[11px] text-slate-400 mt-0.5">Automated bank checkout processing node</p>
-                                </div>
-                            </div>
-                            <div class="text-[11px] text-slate-400 leading-relaxed bg-slate-950 p-3.5 rounded-xl border border-slate-855 space-y-1">
-                                <div class="flex items-center justify-between">
-                                    <span>Currency Code</span>
-                                    <span class="font-bold text-slate-200">MYR (RM)</span>
-                                </div>
-                                <div class="flex items-center justify-between">
-                                    <span>Response Protocol</span>
-                                    <span class="font-bold text-slate-200">Direct Callback Simulation</span>
+                                    <h4 class="font-bold text-white text-xs">ToyyibPay Integration</h4>
+                                    <p class="text-[10px] text-slate-400">Direct instant bank transfer checkout</p>
                                 </div>
                             </div>
                         </div>
@@ -154,204 +131,199 @@
             </div>
         </section>
 
-        <!-- Product storefront Grid -->
-        <section id="storefront-section" class="max-w-7xl mx-auto py-16 px-4 sm:px-8">
-            <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+        <section id="storefront-section" class="max-w-7xl mx-auto py-12 px-4 sm:px-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
                 <div>
-                    <h2 class="text-3xl font-extrabold text-white tracking-tight">Our <span class="text-yellow-400">Creative Services Catalog</span></h2>
-                    <p class="text-slate-400 text-sm mt-1.5">Select your preferred dynamic configuration layout. Prices scale instantly based on your dropdown selection.</p>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Our <span class="text-yellow-400">Creative Services Catalog</span></h2>
+                    <p class="text-slate-400 text-xs sm:text-sm mt-1">Select your preferred package layout variant to automatically calibrate checkout profiles.</p>
                 </div>
-                <div class="flex items-center space-x-2 text-[11px] font-bold text-slate-400 bg-slate-900 p-2.5 px-3.5 rounded-xl border border-slate-800 self-start">
+                <div class="flex items-center space-x-2 text-[11px] text-slate-400 bg-slate-900 p-2 rounded-lg border border-slate-800 self-start">
                     <span class="w-2.5 h-2.5 bg-yellow-400 rounded-full inline-block animate-pulse"></span>
-                    <span>Real-time Sandbox Calibration Module</span>
+                    <span>Real-time Multi-tier Matrix Active</span>
                 </div>
             </div>
-            <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+            <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </section>
 
-        <!-- Workflow / Guideline Rules -->
-        <section id="how-it-works" class="bg-slate-900 border-t border-b border-yellow-500/10 py-16 px-4 sm:px-8">
+        <section id="how-it-works" class="bg-slate-900 border-t border-b border-yellow-500/10 py-12 px-4 sm:px-8">
             <div class="max-w-7xl mx-auto">
-                <div class="text-center max-w-xl mx-auto mb-12">
-                    <h2 class="text-3xl font-black text-white">The <span class="text-yellow-400">Brandworkz Co</span> Workflow</h2>
-                    <p class="text-slate-400 text-xs sm:text-sm mt-2">Professional branding made simple. Secure your workflow in three steps.</p>
+                <div class="text-center max-w-xl mx-auto mb-8">
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-white">The <span class="text-yellow-400">Brandworkz Co</span> Workflow</h2>
+                    <p class="text-slate-400 text-xs mt-2">Professional branding, simplified. Follow our 3-step checkout cycle.</p>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-                    <div class="bg-slate-950 p-6 rounded-2xl border border-slate-850 relative group hover:border-yellow-400/30 transition-all duration-300">
-                        <div class="w-12 h-12 rounded-xl bg-yellow-400 text-slate-950 font-black flex items-center justify-center text-xl mx-auto mb-4 shadow-md shadow-yellow-400/10">1</div>
-                        <h4 class="text-lg font-bold text-white mb-2">Build Profile Portal</h4>
-                        <p class="text-slate-405 text-xs sm:text-sm leading-relaxed font-light">Register your email and billing details to activate your persistent "Checkout Dashboard Profile".</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                    <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 relative group hover:border-yellow-400/40 transition-all">
+                        <div class="w-10 h-10 rounded-xl bg-yellow-400 text-slate-950 font-black flex items-center justify-center text-lg mx-auto mb-3">1</div>
+                        <h4 class="text-base font-bold text-white mb-1.5">Sign In Profile</h4>
+                        <p class="text-slate-400 text-xs leading-relaxed">Register your email, phone, and billing details to activate your persistent "Checkout Profile".</p>
                     </div>
-                    <div class="bg-slate-950 p-6 rounded-2xl border border-slate-850 relative group hover:border-yellow-400/30 transition-all duration-300">
-                        <div class="w-12 h-12 rounded-xl bg-yellow-400 text-slate-950 font-black flex items-center justify-center text-xl mx-auto mb-4 shadow-md shadow-yellow-400/10">2</div>
-                        <h4 class="text-lg font-bold text-white mb-2">Configure Design Options</h4>
-                        <p class="text-slate-405 text-xs sm:text-sm leading-relaxed font-light">Choose dimensions, templates, and insert custom specifications inside the checkout basket drawer.</p>
+                    <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 relative group hover:border-yellow-400/40 transition-all">
+                        <div class="w-10 h-10 rounded-xl bg-yellow-400 text-slate-950 font-black flex items-center justify-center text-lg mx-auto mb-3">2</div>
+                        <h4 class="text-base font-bold text-white mb-1.5">Configure Options</h4>
+                        <p class="text-slate-400 text-xs leading-relaxed">Choose standard Banner or Menu sizes. Custom prices scale instantly based on your selection.</p>
                     </div>
-                    <div class="bg-slate-950 p-6 rounded-2xl border border-slate-850 relative group hover:border-yellow-400/30 transition-all duration-300">
-                        <div class="w-12 h-12 rounded-xl bg-yellow-400 text-slate-950 font-black flex items-center justify-center text-xl mx-auto mb-4 shadow-md shadow-yellow-400/10">3</div>
-                        <h4 class="text-lg font-bold text-white mb-2">Submit &amp; Pay Securely</h4>
-                        <p class="text-slate-405 text-xs sm:text-sm leading-relaxed font-light">Your specifications go to the administrator. Once confirmed, checkout immediately via direct Malaysian FPX bank transfers.</p>
+                    <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 relative group hover:border-yellow-400/40 transition-all">
+                        <div class="w-10 h-10 rounded-xl bg-yellow-400 text-slate-950 font-black flex items-center justify-center text-lg mx-auto mb-3">3</div>
+                        <h4 class="text-base font-bold text-white mb-1.5">Auto-Submit &amp; Pay</h4>
+                        <p class="text-slate-400 text-xs leading-relaxed">Click submit to record your brief, dispatch confirmation logs, and process via secure ToyyibPay FPX.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Gateway Documentation Details -->
-        <section id="payment-methods" class="max-w-7xl mx-auto py-16 px-4 sm:px-8 text-center space-y-5">
-            <div class="w-16 h-16 rounded-full bg-yellow-400/10 flex items-center justify-center text-3xl mx-auto border border-yellow-400/20">🔒</div>
-            <h3 class="text-2xl sm:text-3xl font-black text-white">Direct ToyyibPay FPX API Integration</h3>
-            <p class="text-slate-300 max-w-2xl mx-auto text-xs sm:text-base leading-relaxed font-light">
-                Secure customer checkouts are compiled and dispatched transparently under Malaysian FPX banking regulatory schemas to partner endpoint: <code class="text-yellow-400 bg-slate-900 px-2.5 py-1.5 rounded-lg text-xs sm:text-sm font-mono border border-slate-850">https://toyyibpay.com/brandworks</code>.
+        <section id="payment-methods" class="max-w-7xl mx-auto py-12 px-4 sm:px-8 text-center space-y-4">
+            <div class="w-12 h-12 rounded-full bg-yellow-400/10 flex items-center justify-center text-2xl mx-auto">🔒</div>
+            <h3 class="text-xl sm:text-2xl font-black text-white">Direct ToyyibPay FPX Processing</h3>
+            <p class="text-slate-400 max-w-xl mx-auto text-xs sm:text-sm leading-relaxed">
+                Transactions are authorized with secure Malaysian bank transfers. All digital checkouts are securely prepared for dispatch to: <code class="text-yellow-400 bg-slate-900 px-1.5 py-0.5 rounded text-[11px] sm:text-xs font-mono">https://toyyibpay.com/brandworks</code>.
             </p>
         </section>
     </div>
 
-    <!-- Customer Access View -->
-    <div id="customer-auth-view" class="hidden flex-grow px-4 sm:px-8 py-10 max-w-4xl mx-auto w-full animate-fadeIn">
-        <div class="mb-6">
-            <button onclick="switchView('store')" class="inline-flex items-center space-x-2 text-xs font-bold text-yellow-400 bg-slate-900 border border-slate-800 px-4 py-2.5 rounded-xl hover:border-yellow-400 transition-all">
-                &larr; Back to Front Catalog
+    <div id="customer-auth-view" class="hidden flex-grow px-3 sm:px-8 py-8 max-w-4xl mx-auto w-full animate-fadeIn">
+        <div class="mb-4">
+            <button onclick="switchView('store')" class="inline-flex items-center space-x-2 text-xs font-bold text-yellow-400 bg-slate-900 border border-slate-800 px-4 py-2 rounded-xl hover:border-yellow-400 transition-all">
+                &larr; Back to Front Page
             </button>
         </div>
 
-        <!-- Unauthenticated Form Area -->
-        <div id="customer-unauthenticated-card" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-10 shadow-2xl space-y-6">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-800 pb-5 gap-4">
+        <div id="customer-unauthenticated-card" class="bg-slate-900 border border-slate-800 rounded-2xl p-5 sm:p-8 shadow-2xl space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-800 pb-4 gap-3">
                 <div>
-                    <h2 class="text-2xl font-black text-white flex items-center gap-2"><span>Customer Portal</span></h2>
-                    <p class="text-slate-400 text-xs mt-1">Access or create your persistent custom checkout profile.</p>
+                    <h2 class="text-xl font-extrabold text-white flex items-center gap-2"><span>Customer Portal</span></h2>
+                    <p class="text-slate-400 text-[11px] sm:text-xs mt-0.5">Access or create your persistent custom checkout profile.</p>
                 </div>
-                <div class="flex bg-slate-950 p-1 rounded-xl border border-slate-850 self-start">
-                    <button id="tab-cust-login" onclick="toggleCustomerAuthTab('login')" class="px-5 py-2 text-xs font-bold rounded-lg bg-yellow-400 text-slate-950 transition-all">Sign In</button>
-                    <button id="tab-cust-register" onclick="toggleCustomerAuthTab('register')" class="px-5 py-2 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition-all">Sign Up</button>
+                <div class="flex bg-slate-950 p-1 rounded-lg border border-slate-800 self-start">
+                    <button id="tab-cust-login" onclick="toggleCustomerAuthTab('login')" class="px-3.5 py-1.5 text-xs font-bold rounded-md bg-yellow-400 text-slate-950 transition-all">Sign In</button>
+                    <button id="tab-cust-register" onclick="toggleCustomerAuthTab('register')" class="px-3.5 py-1.5 text-xs font-bold rounded-md text-slate-400 hover:text-white transition-all">Sign Up</button>
                 </div>
             </div>
 
-            <!-- Login Input Form -->
             <form id="customer-login-form" onsubmit="handleCustomerLogin(event)" class="space-y-4">
                 <div class="space-y-1">
                     <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Username</label>
-                    <input type="text" id="cust-login-user" required placeholder="Enter your username" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400 rounded-xl p-3.5 text-xs sm:text-sm text-white outline-none transition-all">
+                    <input type="text" id="cust-login-user" required placeholder="Your username" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs sm:text-sm text-white outline-none transition-colors">
                 </div>
                 <div class="space-y-1">
                     <div class="flex justify-between items-center">
                         <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Password</label>
-                        <button type="button" onclick="toggleCustomerAuthTab('forgot')" class="text-xs text-yellow-400 hover:underline font-medium bg-transparent border-0 p-0 cursor-pointer">Forgot Credentials?</button>
+                        <button type="button" onclick="toggleCustomerAuthTab('forgot')" class="text-[11px] text-yellow-400 hover:underline font-medium bg-transparent border-0 p-0 cursor-pointer">Forgot Credentials?</button>
                     </div>
-                    <input type="password" id="cust-login-pass" required placeholder="••••••••" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400 rounded-xl p-3.5 text-xs sm:text-sm text-white outline-none transition-all">
+                    <input type="password" id="cust-login-pass" required placeholder="••••••••" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs sm:text-sm text-white outline-none transition-colors">
                 </div>
-                <div id="cust-login-error" class="text-rose-500 text-xs font-semibold hidden bg-rose-500/10 p-3.5 rounded-lg border border-rose-500/20 text-center">
-                    Invalid credentials. Sign up first if you do not have an active session!
+                <div id="cust-login-error" class="text-rose-500 text-xs font-semibold hidden bg-rose-500/10 p-2.5 rounded border border-rose-500/20 text-center">
+                    Invalid credentials. Sign up first if you don't have an active account!
                 </div>
-                <button type="submit" class="w-full py-4 bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-black rounded-xl transition-all text-xs uppercase tracking-widest shadow-md">
-                    Access Portal
+                <button type="submit" class="w-full py-3 bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-black rounded-lg transition-all text-xs uppercase tracking-widest">
+                    Access Profile
                 </button>
             </form>
 
-            <!-- Registration Input Form -->
             <form id="customer-register-form" onsubmit="handleCustomerRegister(event)" class="space-y-4 hidden">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div class="space-y-1">
                         <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Username <span class="text-rose-500">*</span></label>
-                        <input type="text" id="cust-reg-user" required placeholder="Pick profile ID" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-xl p-3.5 text-xs sm:text-sm text-white outline-none">
+                        <input type="text" id="cust-reg-user" required placeholder="Choose username" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs sm:text-sm text-white outline-none transition-colors">
                     </div>
                     <div class="space-y-1">
                         <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Email Address <span class="text-rose-500">*</span></label>
-                        <input type="email" id="cust-reg-email" required placeholder="e.g. hello@brandworkz.co" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-xl p-3.5 text-xs sm:text-sm text-white outline-none">
+                        <input type="email" id="cust-reg-email" required placeholder="brandworkzco@gmail.com" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs sm:text-sm text-white outline-none transition-colors">
                     </div>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div class="space-y-1">
-                        <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Malaysian Contact Number <span class="text-rose-500">*</span></label>
-                        <input type="tel" id="cust-reg-phone" required placeholder="e.g. +60123456789" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-xl p-3.5 text-xs sm:text-sm text-white outline-none">
+                        <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Phone Number <span class="text-rose-500">*</span></label>
+                        <input type="tel" id="cust-reg-phone" required placeholder="e.g. +60123456789" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs sm:text-sm text-white outline-none transition-colors">
                     </div>
                     <div class="space-y-1">
                         <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Password <span class="text-rose-500">*</span></label>
-                        <input type="password" id="cust-reg-pass" required placeholder="Create secure password" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-xl p-3.5 text-xs sm:text-sm text-white outline-none">
+                        <input type="password" id="cust-reg-pass" required placeholder="Password" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs sm:text-sm text-white outline-none transition-colors">
                     </div>
                 </div>
                 <div class="space-y-1">
-                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Default Billing Address <span class="text-rose-500">*</span></label>
-                    <textarea id="cust-reg-billing" required rows="3" placeholder="Enter physical or corporate address for FPX invoices..." class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-xl p-3.5 text-xs sm:text-sm text-white outline-none resize-none"></textarea>
+                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Billing Address <span class="text-rose-500">*</span></label>
+                    <textarea id="cust-reg-billing" required rows="3" placeholder="Enter full billing address details" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs sm:text-sm text-white outline-none transition-colors resize-none"></textarea>
                 </div>
-                <button type="submit" class="w-full py-4 bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-black rounded-xl transition-all text-xs uppercase tracking-widest">
-                    Register Profile &amp; Save Details
+                <button type="submit" class="w-full py-3.5 bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-black rounded-lg transition-all text-xs uppercase tracking-widest">
+                    Register Profile &amp; Submit details
                 </button>
             </form>
 
-            <!-- Recovery Form -->
             <form id="customer-forgot-form" onsubmit="handleCustomerRecovery(event)" class="space-y-4 hidden animate-fadeIn">
                 <div class="space-y-1">
-                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Registered Username or Email</label>
-                    <input type="text" id="cust-recovery-input" required placeholder="Enter username or email address" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-3.5 text-xs text-white outline-none">
+                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Account Username or Registered Email</label>
+                    <input type="text" id="cust-recovery-input" required placeholder="Enter username or email address" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs sm:text-sm text-white outline-none transition-colors">
                 </div>
-                <div id="cust-recovery-success" class="text-slate-100 text-xs hidden bg-slate-950 border border-yellow-400/30 p-4 rounded-xl space-y-2">
-                    <p class="font-extrabold text-yellow-400 uppercase tracking-wide">✨ Temporary Access Key Generated!</p>
-                    <p class="text-slate-300 leading-relaxed">Enter your username and this temporary tracking credential to gain access to your portal:</p>
-                    <div class="bg-slate-900 border border-slate-800 px-4 py-3 rounded text-center text-white font-black text-sm tracking-widest select-all" id="cust-recovery-code-display"></div>
+                <div id="cust-recovery-success" class="text-slate-100 text-xs hidden bg-slate-950 border border-yellow-400/40 p-4 rounded-xl space-y-2">
+                    <p class="font-extrabold text-yellow-400 uppercase tracking-wide">✨ Temporary Redirection Key Generated!</p>
+                    <p class="text-slate-300 leading-relaxed font-mono">Use your account username alongside this temporary tracking code to log in directly:</p>
+                    <div class="bg-slate-900 border border-slate-800 px-3 py-2 rounded text-center text-white font-black text-sm tracking-widest select-all" id="cust-recovery-code-display"></div>
                 </div>
-                <div class="flex items-center gap-3 pt-2">
-                    <button type="button" onclick="toggleCustomerAuthTab('login')" class="w-1/3 py-3.5 bg-slate-950 text-slate-400 border border-slate-800 font-bold rounded-xl text-xs hover:text-white uppercase tracking-wider">Cancel</button>
-                    <button type="submit" class="w-2/3 py-3.5 bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-black rounded-xl text-xs uppercase tracking-wider">Request Access Code</button>
+                <div class="flex items-center gap-2 pt-2">
+                    <button type="button" onclick="toggleCustomerAuthTab('login')" class="w-1/3 py-3 bg-slate-950 text-slate-400 border border-slate-800 font-bold rounded-lg text-xs hover:text-white uppercase tracking-wider">Cancel</button>
+                    <button type="submit" class="w-2/3 py-3 bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-black rounded-lg text-xs uppercase tracking-wider">Request Access Code</button>
                 </div>
             </form>
         </div>
 
-        <!-- Authenticated Portal View -->
-        <div id="customer-authenticated-card" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-10 shadow-2xl space-y-6 hidden animate-fadeIn">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-800 pb-5 gap-4">
-                <div class="flex items-center space-x-3.5">
-                    <div class="w-14 h-14 rounded-full bg-yellow-400/10 border border-yellow-400/20 flex items-center justify-center text-3xl font-bold">👤</div>
+        <div id="customer-authenticated-card" class="bg-slate-900 border border-slate-800 rounded-2xl p-5 sm:p-8 shadow-2xl space-y-5 hidden animate-fadeIn">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-800 pb-4 gap-4">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 rounded-full bg-yellow-400 flex items-center justify-center text-slate-950 text-xl font-bold">👤</div>
                     <div>
-                        <span class="text-yellow-400 text-[10px] font-black uppercase tracking-wider block">Customer Panel Active</span>
+                        <span class="text-yellow-400 text-[10px] font-bold uppercase tracking-wider block">Verified Customer Profile</span>
                         <h3 id="authenticated-cust-username" class="text-lg sm:text-xl font-black text-white">Welcome back!</h3>
                     </div>
                 </div>
-                <button onclick="logoutCustomer()" class="px-4 py-2 bg-rose-600/10 hover:bg-rose-600 border border-rose-500/20 hover:border-rose-500 text-rose-400 hover:text-white font-bold text-xs rounded-xl transition-all flex items-center space-x-1.5 justify-center self-start sm:self-auto">
-                    <span>Logout Session</span>
+                <button onclick="logoutCustomer()" class="px-4 py-2 bg-rose-600/10 hover:bg-rose-600 border border-rose-500/20 hover:border-rose-500 text-rose-400 hover:text-white font-bold text-xs rounded-lg transition-all flex items-center space-x-1 justify-center self-start sm:self-auto">
+                    Logout Portal
                 </button>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-1">
-                <div class="bg-slate-950 p-6 rounded-2xl border border-slate-850 space-y-4">
-                    <h4 class="text-xs font-bold text-white border-b border-slate-900 pb-2 flex items-center justify-between">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 pt-1">
+                <div class="bg-slate-950 p-5 rounded-xl border border-slate-850 space-y-3">
+                    <h4 class="text-xs font-bold text-white border-b border-slate-900 pb-1.5 flex items-center justify-between">
                         <span>Profile Credentials</span>
                         <span class="text-[9px] uppercase font-black text-yellow-400 tracking-wider">Connected</span>
                     </h4>
-                    <div class="space-y-3 text-xs leading-relaxed">
+                    <div class="space-y-2 text-xs">
                         <div class="flex justify-between gap-2">
-                            <span class="text-slate-400 font-light">Email Address:</span>
-                            <span id="cust-det-email" class="font-bold text-white truncate max-w-[180px]">email@domain.com</span>
+                            <span class="text-slate-400">Email:</span>
+                            <span id="cust-det-email" class="font-semibold text-white truncate max-w-[150px]">email@domain.com</span>
                         </div>
                         <div class="flex justify-between">
-                            <span class="text-slate-400 font-light">Contact Link:</span>
-                            <span id="cust-det-phone" class="font-bold text-white">+601...</span>
+                            <span class="text-slate-400">Contact Number:</span>
+                            <span id="cust-det-phone" class="font-semibold text-white">+601...</span>
                         </div>
                         <div class="flex justify-between">
-                            <span class="text-slate-400 font-light">Direct Terms:</span>
-                            <span id="cust-det-term" class="font-bold text-yellow-400 uppercase tracking-wide">Not Selected</span>
+                            <span class="text-slate-400">Selected Terms:</span>
+                            <span id="cust-det-term" class="font-semibold text-yellow-400 uppercase tracking-wide">Not Selected</span>
                         </div>
-                        <div class="flex flex-col space-y-1.5 pt-2">
-                            <span class="text-slate-400 font-bold">Default Billing Coordinates:</span>
-                            <p id="cust-det-billing" class="text-slate-300 font-light bg-slate-900 p-3 rounded-lg border border-slate-850 mt-1 leading-relaxed text-[11px]">No coordinates configured.</p>
+                        <div class="flex justify-between">
+                            <span class="text-slate-400">Product Size Target:</span>
+                            <span class="font-semibold text-white">5 cm × 2 cm</span>
+                        </div>
+                        <div class="flex flex-col space-y-1 pt-1.5">
+                            <span class="text-slate-400 font-bold">Default Billing Address:</span>
+                            <p id="cust-det-billing" class="text-slate-300 font-light bg-slate-900 p-2 rounded border border-slate-800 mt-1 leading-relaxed text-[11px]">No address configured.</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-slate-950 p-6 rounded-2xl border border-slate-850 space-y-4 flex flex-col justify-between">
+                <div class="bg-slate-950 p-5 rounded-xl border border-slate-850 space-y-3 flex flex-col justify-between">
                     <div>
-                        <h4 class="text-xs font-black uppercase text-yellow-400 tracking-wider border-b border-slate-900 pb-2">
-                            <span>Interactive Checkout Actions</span>
+                        <h4 class="text-xs font-black uppercase text-yellow-400 tracking-wider flex items-center justify-between">
+                            <span>Checkout Action Centre</span>
                         </h4>
-                        <div id="customer-order-action-area" class="mt-4 space-y-4">
-                            <div class="p-4 bg-slate-900 rounded-xl border border-slate-850 text-center space-y-2">
-                                <p class="text-xs text-slate-400 font-medium">Order Status Node:</p>
-                                <span id="customer-status-badge" class="px-3.5 py-1.5 rounded-lg text-xs font-black bg-slate-950 text-slate-500 border border-slate-800 inline-block">No Active Order</span>
+                        <div id="customer-order-action-area" class="mt-4 space-y-3">
+                            <div class="p-3 bg-slate-900 rounded-lg border border-slate-800 text-center">
+                                <p class="text-xs text-slate-400 mb-2">Order Tracking Status:</p>
+                                <span id="customer-status-badge" class="px-3 py-1 rounded text-xs font-bold bg-slate-950 text-slate-400 border border-slate-800">No Active Order</span>
                             </div>
                             <div id="dynamic-workflow-btn-placeholder">
-                                <button onclick="triggerOrderConfirmationRequest()" class="w-full py-3 bg-slate-800 text-slate-500 cursor-not-allowed font-bold text-xs uppercase tracking-wider rounded-xl">
-                                    No Active Order Configuration Found
-                               </button>
+                                <button onclick="triggerOrderConfirmationRequest()" class="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs uppercase tracking-wider rounded-xl transition-all">
+                                    Request Confirmation Order
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -360,83 +332,79 @@
         </div>
     </div>
 
-    <!-- Admin workspace space View -->
-    <div id="admin-view" class="hidden flex-grow px-4 sm:px-8 py-10 max-w-7xl mx-auto w-full animate-fadeIn">
-        <div class="bg-slate-900 border border-yellow-400/20 rounded-2xl p-4 sm:p-8 shadow-2xl space-y-6">
-            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-slate-800 pb-5 gap-4">
+    <div id="admin-view" class="hidden flex-grow px-3 sm:px-8 py-8 max-w-7xl mx-auto w-full animate-fadeIn">
+        <div class="bg-slate-900 border border-yellow-400/30 rounded-2xl p-4 sm:p-8 shadow-2xl space-y-6">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-slate-800 pb-4 gap-4">
                 <div>
-                    <h2 class="text-2xl font-black text-white flex items-center gap-2.5">
-                        <span>Admin Workspace</span>
-                        <span class="text-[10px] font-black px-3 py-1 bg-yellow-400 text-slate-950 rounded-full uppercase tracking-wider">Studio Master</span>
+                    <h2 class="text-2xl font-black text-white flex items-center gap-2">
+                        <span>Admin Workspace Controls</span>
+                        <span class="text-xs font-bold px-2.5 py-0.5 bg-yellow-400 text-slate-950 rounded-full">Owner Access</span>
                     </h2>
-                    <p class="text-slate-400 text-xs mt-1.5">Configure live inventory layouts instantly. Changes synchronize directly back into storefront catalogs.</p>
+                    <p class="text-slate-400 text-xs mt-1">Configure product layout fields dynamically. Changes are automatically synchronized with the front-end view grid.</p>
                 </div>
-                <div class="flex space-x-2.5 self-start sm:self-auto">
-                    <button onclick="logoutAdmin()" class="text-xs font-bold text-rose-400 hover:text-white px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-850 hover:border-rose-500 transition-all">
-                        Exit Session
+                <div class="flex space-x-2">
+                    <button onclick="logoutAdmin()" class="text-xs font-bold text-rose-400 hover:text-white px-3.5 py-2 rounded-lg bg-slate-950 border border-slate-800 hover:border-rose-500 transition-all">
+                        Logout Portal
                     </button>
-                    <button onclick="switchView('store')" class="text-xs font-bold text-slate-400 hover:text-white px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-850 hover:border-yellow-400/40 transition-all">
-                        View Storefront
+                    <button onclick="switchView('store')" class="text-xs font-bold text-slate-400 hover:text-white px-3.5 py-2 rounded-lg bg-slate-950 border border-slate-800 hover:border-yellow-400/40 transition-all">
+                        Return to Storefront
                     </button>
                 </div>
             </div>
 
-            <!-- Interactive Catalog Sandbox Builder -->
-            <div class="bg-slate-950 rounded-2xl p-6 border border-slate-850 space-y-4">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-900 pb-4">
+            <div class="bg-slate-950 rounded-xl p-5 border border-slate-850 space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-900 pb-3">
                     <div>
-                        <h3 class="text-sm font-black text-white uppercase tracking-wider">Catalog Inventory Editor</h3>
-                        <p class="text-[11px] text-slate-500">Append items, edit layout attributes, or add adjustable price tiers dynamically.</p>
+                        <h3 class="text-sm font-black text-white uppercase tracking-wider">Dynamic Sandbox Frame Arrays</h3>
+                        <p class="text-[11px] text-slate-500">Edit elements on the fly, upload custom asset streams, and append structural trifold drops instantly.</p>
                     </div>
-                    <button onclick="appendBlankProductFrame()" class="px-5 py-2.5 bg-yellow-400 hover:bg-yellow-500 text-slate-950 text-xs font-black uppercase rounded-xl shadow-md transition-all self-start sm:self-auto">
-                        (+) Add New Product Frame
+                    <button onclick="appendBlankProductFrame()" class="px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-slate-950 text-xs font-black uppercase rounded-lg shadow-md transition-all self-start sm:self-auto">
+                        (+) New Product Frame
                     </button>
                 </div>
                 
                 <div id="admin-scratch-frames-container" class="grid grid-cols-1 md:grid-cols-2 gap-8 pt-2"></div>
             </div>
 
-            <!-- Simulated Workflow Monitor -->
-            <div class="bg-slate-950 border border-slate-850 p-6 rounded-2xl space-y-4">
-                <h3 class="text-sm font-black text-white uppercase tracking-wider border-b border-slate-900 pb-3 flex items-center justify-between">
-                    <span>Live Order Workflow Monitor</span>
-                    <span class="w-3 h-3 bg-blue-500 rounded-full animate-pulse border-2 border-slate-950"></span>
+            <div class="bg-slate-950 border border-slate-850 p-5 rounded-xl space-y-4">
+                <h3 class="text-sm font-black text-white uppercase tracking-wider border-b border-slate-900 pb-2 flex items-center justify-between">
+                    <span>Live Client Workflow Tracker</span>
+                    <span class="w-2.5 h-2.5 bg-blue-500 rounded-full animate-pulse"></span>
                 </h3>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse text-xs">
                         <thead>
-                            <tr class="border-b border-slate-900 text-slate-400 font-extrabold uppercase tracking-wider">
-                                <th class="pb-3 pl-2">Customer Context</th>
-                                <th class="pb-3">Payment Choice</th>
-                                <th class="pb-3">Current Total</th>
-                                <th class="pb-3">Status Node</th>
-                                <th class="pb-3 text-right pr-2">Action Controls</th>
+                            <tr class="border-b border-slate-900 text-slate-400">
+                                <th class="pb-2 font-bold uppercase">Customer Session</th>
+                                <th class="pb-2 font-bold uppercase">Payment Choice</th>
+                                <th class="pb-2 font-bold uppercase">Order Flow Status</th>
+                                <th class="pb-2 font-bold uppercase">Approval Matrix</th>
+                                <th class="pb-2 font-bold uppercase text-right">Job Execution</th>
                             </tr>
                         </thead>
-                        <tbody id="admin-workflow-table-body" class="divide-y divide-slate-900"></tbody>
+                        <tbody id="admin-workflow-table-body"></tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Admin Master Passcode Modal -->
-    <div id="admin-gate-modal" class="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md hidden flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-yellow-400/30 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 animate-fadeIn">
-            <div class="text-center border-b border-slate-800 pb-4">
-                <div class="w-12 h-12 bg-yellow-400/10 rounded-full flex items-center justify-center mx-auto text-yellow-400 font-bold mb-2 border border-yellow-400/20">🔑</div>
-                <h3 class="text-lg font-black text-white">Security Credentials Authorized Only</h3>
-                <p class="text-xs text-slate-400 mt-1.5">Administrative workspace access requires master key check.</p>
+    <div id="admin-gate-modal" class="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-yellow-400/40 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 animate-fadeIn">
+            <div class="text-center border-b border-slate-800 pb-3">
+                <h3 class="text-lg font-black text-white">Security Access Verification</h3>
+                <p class="text-xs text-slate-400 mt-1">Please insert verified administrative clearance keys to manage matrix logs.</p>
+            </div>
             <form onsubmit="challengeAdminCredentials(event)" class="space-y-4">
                 <div class="space-y-1">
-                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Master Username</label>
-                    <input type="text" id="gate-admin-user" required placeholder="Master username" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs text-white outline-none">
+                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Admin Username</label>
+                    <input type="text" id="gate-admin-user" required placeholder="Enter username" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs text-white outline-none">
                 </div>
                 <div class="space-y-1">
-                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Security Access Passphrase</label>
+                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Secure Password Key</label>
                     <input type="password" id="gate-admin-pass" required placeholder="••••••••" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs text-white outline-none">
                 </div>
-                <div class="flex items-center gap-3 pt-2">
+                <div class="flex items-center gap-2 pt-2">
                     <button type="button" onclick="closeAdminGateModal()" class="w-1/3 py-2.5 bg-slate-950 text-slate-400 border border-slate-800 font-bold rounded-xl text-xs hover:text-white">Cancel</button>
                     <button type="submit" class="w-2/3 py-2.5 bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-black rounded-xl text-xs uppercase tracking-wider">Authorize Space</button>
                 </div>
@@ -444,27 +412,20 @@
         </div>
     </div>
 
-    <!-- Basket Drawer Backdrop -->
-    <div id="cart-drawer-backdrop" class="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-sm transition-opacity duration-300 opacity-0 hidden" onclick="toggleCartDrawer(false)"></div>
-    
-    <!-- Basket Drawer Sidepanel -->
+    <div id="cart-drawer-backdrop" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm transition-opacity duration-300 opacity-0 hidden" onclick="toggleCartDrawer(false)"></div>
     <div class="fixed inset-y-0 right-0 max-w-md w-full bg-slate-900 border-l border-yellow-400/20 shadow-2xl z-50 flex flex-col justify-between transform transition-transform duration-300 translate-x-full" id="cart-drawer-panel">
         <div class="p-5 border-b border-slate-800 flex items-center justify-between bg-slate-950">
-            <div class="flex items-center space-x-2.5">
+            <div class="flex items-center space-x-2">
                 <span class="text-xl">🛒</span>
                 <h3 class="text-lg font-black text-white">Your Checkout Basket</h3>
             </div>
-            <button onclick="toggleCartDrawer(false)" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
-                </svg>
+            <button onclick="toggleCartDrawer(false)" class="p-1 rounded-md text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
         </div>
 
-        <!-- Basket Products List -->
         <div class="flex-grow p-5 overflow-y-auto space-y-4" id="cart-drawer-list"></div>
 
-        <!-- Basket Metadata & Checkout Rules -->
         <div class="p-5 border-t border-slate-800 bg-slate-950 space-y-4" id="cart-drawer-summary">
             <div class="space-y-1.5">
                 <div class="flex justify-between text-xs">
@@ -472,138 +433,105 @@
                     <span id="cart-subtotal" class="font-semibold text-white">RM 0.00</span>
                 </div>
                 <div class="flex justify-between text-sm border-t border-slate-900 pt-2 font-bold text-white">
-                    <span>Grand Total (MYR):</span>
-                    <span id="cart-total-price" class="text-yellow-400 text-lg">RM 0.00</span>
+                    <span>Total (Malaysian Ringgit):</span>
+                    <span id="cart-total-price" class="text-yellow-400 text-base">RM 0.00</span>
                 </div>
             </div>
             <div class="space-y-1.5 pt-1">
                 <label class="block text-[10px] font-bold text-slate-300 uppercase tracking-wider">Select Payment Term Option</label>
-                <select id="checkout-term-selector" class="w-full bg-slate-900 border border-slate-800 focus:border-yellow-400 rounded-xl p-3 text-xs text-white outline-none transition-all">
-                    <option value="fpx">Online Transfer with FPX Gateway</option>
-                    <option value="cash">Cash Terms (Direct Quotation Route)</option>
+                <select id="checkout-term-selector" class="w-full bg-slate-900 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs text-white outline-none transition-colors">
+                    <option value="fpx">Online Transfer with FPX</option>
+                    <option value="cash">Cash Only (Quotation Request Workflow)</option>
                 </select>
             </div>
             <div class="space-y-1.5 pt-1">
                 <label class="block text-[10px] font-bold text-slate-300 uppercase tracking-wider">Design Project Brief / Requirements</label>
-                <textarea id="checkout-brief-text" placeholder="Detail custom dimensions (e.g. A4 size), target files formats, specific brand palettes, or references..." class="w-full bg-slate-900 border border-slate-800 focus:border-yellow-400 rounded-xl p-3.5 text-xs text-white outline-none transition-all resize-none" rows="3"></textarea>
+                <textarea id="checkout-brief-text" placeholder="Specify project codes (e.g. Project 803), specific dimensions (e.g. 5cm x 2cm), or specific cultural themes..." class="w-full bg-slate-900 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs text-white outline-none transition-colors resize-none" rows="3"></textarea>
             </div>
-            <button onclick="executeBasketSubmission()" class="w-full py-3.5 bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-black rounded-xl transition-all text-xs uppercase tracking-widest shadow-lg shadow-yellow-400/10 flex items-center justify-center space-x-1.5">
-                <span>Lock Brief &amp; Save to Profile</span>
+            <button onclick="executeBasketSubmission()" class="w-full py-3 bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-black rounded-lg transition-all text-xs uppercase tracking-widest shadow-lg shadow-yellow-400/20 flex items-center justify-center space-x-1">
+                <span>Lock Brief Selection to Profile</span>
             </button>
         </div>
     </div>
 
-    <!-- Simulated ToyyibPay Wire Frame -->
     <div id="toyyibpay-modal" class="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-md hidden flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-yellow-400/30 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-6 animate-fadeIn">
-            <div class="flex items-center justify-between border-b border-slate-800 pb-4">
-                <div class="flex items-center space-x-2.5">
-                    <span class="text-yellow-400 font-black text-sm bg-slate-950 px-3 py-1.5 rounded-lg border border-yellow-400/20 font-mono">toyyibPay</span>
-                    <span class="text-xs text-slate-400 font-extrabold uppercase tracking-wider">Secure Bank Portal</span>
+        <div class="bg-slate-900 border border-yellow-400/40 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-6 animate-fadeIn">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <div class="flex items-center space-x-2">
+                    <span class="text-yellow-400 font-extrabold text-base bg-slate-950 px-2.5 py-1.5 rounded border border-yellow-400/30">toyyibPay</span>
+                    <span class="text-xs text-slate-400 font-semibold uppercase tracking-wider">FPX Secure Checkout</span>
                 </div>
-                <button onclick="closeToyyibpayModal()" class="text-slate-400 hover:text-white text-xs font-bold uppercase tracking-wider bg-slate-950 border border-slate-800 px-3 py-2 rounded-lg transition-colors">Cancel Payment</button>
+                <button onclick="closeToyyibpayModal()" class="text-slate-400 hover:text-white text-xs font-bold uppercase tracking-wider bg-slate-950 border border-slate-800 px-3 py-1.5 rounded">Cancel</button>
             </div>
             <div class="space-y-4">
-                <div class="bg-slate-950 p-4 rounded-xl border border-slate-855 flex items-center justify-between">
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-850 flex items-center justify-between">
                     <div>
-                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Merchant Identity</span>
-                        <span class="font-extrabold text-xs sm:text-sm text-white">BRANDWORKZ CO</span>
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Merchant Name</span>
+                        <span class="font-extrabold text-sm text-white">BRANDWORKZ CO</span>
                     </div>
                     <div class="text-right">
-                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Authorized Bill Amount</span>
-                        <span id="toyyibpay-bill-amount" class="font-black text-base sm:text-lg text-yellow-400">RM 0.00</span>
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Billing Amount</span>
+                        <span id="toyyibpay-bill-amount" class="font-black text-base text-yellow-400">RM 0.00</span>
                     </div>
                 </div>
-                <div class="space-y-3">
-                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Choose FPX Bank Target</label>
-                    <div class="grid grid-cols-2 gap-3" id="bank-selectors-grid"></div>
+                <div class="space-y-2">
+                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Term</label>
+                    <div class="grid grid-cols-2 gap-2" id="bank-selectors-grid"></div>
                 </div>
             </div>
             <button onclick="processToyyibPaySimulation()" id="toyyibpay-submit-btn" class="w-full py-4 bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-black rounded-xl transition-all text-xs uppercase tracking-widest flex items-center justify-center space-x-2 shadow-lg shadow-yellow-400/10">
-                <span>Secure Authorization &amp; Wire</span>
+                <span>Proceed Authorization Transfer</span>
             </button>
         </div>
     </div>
 
-    <!-- Styled Sandbox Toast container -->
-    <div id="toast-container" class="fixed bottom-5 right-5 z-55 space-y-2.5 pointer-events-none max-w-sm w-full"></div>
+    <div id="toast-container" class="fixed bottom-4 right-4 z-50 space-y-2 pointer-events-none"></div>
 
-    <!-- Footer Area -->
-    <footer class="bg-slate-950 border-t border-slate-900 py-8 px-4 mt-auto">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between text-xs text-slate-450 gap-6">
+    <footer class="bg-slate-900 border-t border-slate-800/80 py-6 px-4 mt-auto">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between text-xs text-slate-400 gap-4">
             <div class="flex items-center space-x-2">
-                <span class="font-black text-white text-sm">Brandworkz.Co</span>
-                <span>&copy; 2026 Studio. Protected and Verified.</span>
+                <span class="font-extrabold text-white">Brandworkz.Co</span>
+                <span>&copy; 2026. All Rights Reserved.</span>
             </div>
-            <div class="flex items-center space-x-6">
-                <button onclick="switchView('store')" class="hover:text-yellow-400 transition-colors bg-transparent border-0 cursor-pointer text-xs font-bold text-slate-450">Services Catalog</button>
-                <button onclick="switchView('customer-auth')" class="hover:text-yellow-400 transition-colors bg-transparent border-0 cursor-pointer text-xs font-bold text-slate-450">Customer Portal</button>
-                <button onclick="switchView('admin')" class="hover:text-yellow-400 transition-colors bg-transparent border-0 cursor-pointer text-xs font-bold text-slate-450">Admin Space</button>
+            <div class="flex items-center space-x-4">
+                <button onclick="switchView('store')" class="hover:text-yellow-400 transition-colors bg-transparent border-0 cursor-pointer">Catalog</button>
+                <button onclick="switchView('customer-auth')" class="hover:text-yellow-400 transition-colors bg-transparent border-0 cursor-pointer">Customer Dashboard</button>
+                <button onclick="switchView('admin')" class="hover:text-yellow-400 transition-colors bg-transparent border-0 cursor-pointer">Admin Workspace</button>
             </div>
         </div>
     </footer>
 
     <script>
-    // Premium customizable catalog parameters with integrated cover posters
+    /* LOCALPERSISTENCE SEED DATA MATRIX WITH NESTED DROPDOWNS */
     let PRODUCTS = JSON.parse(localStorage.getItem("bw_products")) || [
         {
             id: "p_frame_1",
-            title: "Menu & Layout Design",
-            dropdownLabel: "Layout Tiers",
+            title: "Menu Design",
+            dropdownLabel: "All",
             poster: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&auto=format&fit=crop&q=80",
             dropdowns: [
-                { name: "Basic Menu (A4 Side Only)", price: 25.00, info: "- 1 side\n- A4 layout format\n- Pre-formatted stock typography\n- Not provide custom image editing" },
-                { name: "Standard Menu (A3/A2 Format)", price: 45.00, info: "- 1 side\n- Large format A3 or A2 scales\n- Clean presentation design\n- Standard vector illustrations" },
-                { name: "Advanced Packaging Layout", price: 125.00, info: "- Multi-page layout (1-3 sides)\n- Creative typography system\n- Interactive QR code placeholder\n- A4 format vector export" },
-                { name: "Executive Suite (Multi-page)", price: 220.00, info: "- Up to 5 pages premium catalog\n- Highly tailored aesthetic theme\n- High-resolution dynamic output\n- Multi-format print-ready files" },
-                { name: "Elite Brandworkz Catalog Package", price: 380.00, info: "- Unlimited page menu and catalog layouts\n- Bespoke original vector illustration design\n- Custom graphics and palette guidelines" }
+                { name: "Basic A4", price: 25.00, info: "- 1 side\n- A4 only\n- not provide image edit" },
+                { name: "Basic A3/A2", price: 30.00, info: "- 1 side\n- A3/A2 only\n- not provide image edit" },
+                { name: "Advanced Package", price: 75.00, info: "- 1-3 sides\n- A4 size only\n- not provide image edit" },
+                { name: "Executive Package", price: 120.00, info: "- 1-5 sides\n- A4 size only" },
+                { name: "Leading Package", price: 240.00, info: "- 1-10 sides\n- A4 size only\n- provide edit image" },
+                { name: "Clean/Modern", price: 50.00, info: "- 1 side\n- provide edit image\n- digital and clean" }
             ]
         },
         {
             id: "p_frame_2",
-            title: "Vector Logo Suite",
-            dropdownLabel: "Brand Tiers",
-            poster: "https://images.unsplash.com/photo-1626785774573-4b799315345d?w=600&auto=format&fit=crop&q=80",
+            title: "Second product",
+            dropdownLabel: "All",
+            poster: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100%' height='100%' fill='%231e293b'/><text x='50%' y='55%' font-weight='bold' font-size='12' fill='%23eab308' dominant-baseline='middle' text-anchor='middle'>SECOND PRODUCT</text></svg>",
             dropdowns: [
-                { name: "Starter Corporate Icon", price: 150.00, info: "- 2 distinct vector sketches\n- Custom color palettes guidelines\n- Format deliverables: High-res PNG & SVG" },
-                { name: "Professional Brand Suite", price: 350.00, info: "- 4 master logo alternatives\n- Secondary branding icon variant\n- Complete typography guidelines\n- Unlimited source code revisions" },
-                { name: "Full Identity Brandworkz Manual", price: 850.00, info: "- Complete design ecosystem guide\n- 6 vector initial layout options\n- Business card templates\n- Stationery & merchandise guidelines" }
-            ]
-        },
-        {
-            id: "p_frame_3",
-            title: "Social Media Campaign Pack",
-            dropdownLabel: "Post Options",
-            poster: "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=600&auto=format&fit=crop&q=80",
-            dropdowns: [
-                { name: "Standard Pack (5 Post Layouts)", price: 120.00, info: "- 5 social graphics templates\n- Grid concept guidelines\n- Delivery format: Editable Figma file" },
-                { name: "Ultimate Campaign Pack (15 Elements)", price: 290.00, info: "- 15 tailored templates (posts + stories)\n- Animated video layout transition (.mp4)\n- Content branding style manual" }
+                { name: "Standard Setup Package", price: 60.00, info: "- Basic vector layout guidelines" }
             ]
         }
     ];
 
-    // Bank list with SVG icons 
     const TERMS_OPTIONS = [
-        { 
-            id: "maybank2u", 
-            name: "Maybank2u",
-            icon: `<svg class="w-6 h-6 text-yellow-500 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>`
-        },
-        { 
-            id: "cimb_clicks", 
-            name: "CIMB Clicks",
-            icon: `<svg class="w-6 h-6 text-red-500 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>`
-        },
-        { 
-            id: "public_bank", 
-            name: "Public Bank",
-            icon: `<svg class="w-6 h-6 text-teal-500 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>`
-        },
-        { 
-            id: "rhb_now", 
-            name: "RHB Now",
-            icon: `<svg class="w-6 h-6 text-blue-500 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>`
-        }
+        { id: "cash", name: "Cash Only" },
+        { id: "fpx", name: "Online Transfer with FPX" }
     ];
 
     let cart = [];
@@ -611,7 +539,6 @@
     let selectedTermId = "";
     let isAdminLoggedIn = JSON.parse(sessionStorage.getItem("is_admin_session")) || false;
 
-    // Simulation Workflow State Machine 
     let WORKFLOW_STATE = JSON.parse(localStorage.getItem("bw_workflow_state")) || {
         hasRequest: false,
         customerUsername: "",
@@ -630,7 +557,6 @@
         renderProductCatalog();
         loadActiveSession();
         if (isAdminLoggedIn) {
-            syncAdminButtonUI();
             renderAdminWorkspace();
         }
     }
@@ -667,18 +593,17 @@
     function challengeAdminCredentials(event) {
         event.preventDefault();
         const user = document.getElementById('gate-admin-user').value.trim();
-        const pass = document.getElementById('gate-admin-pass').value.trim();
+        const pass = document.getElementById('gate-admin-pass').value;
 
         if (user === 'admin' && pass === '134228') {
             isAdminLoggedIn = true;
             sessionStorage.setItem("is_admin_session", JSON.stringify(true));
             closeAdminGateModal();
-            showToast("Administrative clearance authenticated successfully.");
+            showToast("Admin access cleared safely.");
             document.getElementById('admin-gate-modal').querySelector('form').reset();
-            syncAdminButtonUI();
             switchView('admin');
         } else {
-            showToast("Clearance error: Invalid credentials.", "error");
+            showToast("Invalid administrative credentials.", "error");
         }
     }
 
@@ -686,42 +611,21 @@
         isAdminLoggedIn = false;
         sessionStorage.removeItem("is_admin_session");
         document.getElementById('admin-view').classList.add('hidden');
-        showToast("Logged out from Administrative workspace.");
-        syncAdminButtonUI();
+        showToast("Logged out safely from Admin Space.");
         switchView('store');
-    }
-
-    function syncAdminButtonUI() {
-        const btnLabel = document.getElementById('admin-btn-label');
-        if (btnLabel) {
-            btnLabel.innerText = isAdminLoggedIn ? "Admin Panel Active" : "Admin Space";
-        }
     }
 
     function saveWorkflowToStorage() {
         localStorage.setItem("bw_workflow_state", JSON.stringify(WORKFLOW_STATE));
     }
 
-    function handleLiveTitleChange(pIdx, newTitle) {
-        PRODUCTS[pIdx].title = newTitle;
-        saveProductsToStorage();
-        renderProductCatalog();
-    }
-
-    // Styled sandbox toast notifications
     function showToast(message, type = "success") {
         const container = document.getElementById('toast-container');
-        if (!container) return;
         const toast = document.createElement('div');
         toast.className = `p-4 rounded-xl shadow-2xl flex items-center space-x-3 text-xs font-bold border transform scale-95 translate-y-2 opacity-0 transition-all duration-300 pointer-events-auto ${
-            type === "success" ? "bg-slate-900 border-yellow-400 text-yellow-400" : "bg-slate-900 border-rose-500 text-rose-505"
+            type === "success" ? "bg-slate-900 border-yellow-400 text-yellow-400" : "bg-slate-900 border-rose-500 text-rose-500"
         }`;
-        toast.innerHTML = `
-            <div class="p-1 rounded bg-slate-950/60 flex items-center justify-center">
-                ${type === 'success' ? '⚡' : '⚠️'}
-            </div>
-            <span class="flex-grow">${message}</span>
-        `;
+        toast.innerHTML = `<span>${type === 'success' ? '⚡' : '⚠️'}</span><span>${message}</span>`;
         container.appendChild(toast);
         setTimeout(() => {
             toast.classList.remove('opacity-0', 'scale-95', 'translate-y-2');
@@ -730,17 +634,17 @@
         setTimeout(() => {
             toast.classList.add('opacity-0', 'scale-95', 'translate-y-2');
             setTimeout(() => { toast.remove(); }, 300);
-        }, 4500);
+        }, 4000);
     }
 
-    // Dynamic front Catalog Rendering
+    /* FRONT-END CLIENT RENDER ENGINE */
     function renderProductCatalog() {
         const container = document.getElementById('products-grid');
         if(!container) return;
         container.innerHTML = "";
 
         if (PRODUCTS.length === 0) {
-            container.innerHTML = `<div class="col-span-full text-center text-slate-500 py-16 italic text-xs">No catalog inventory entries active in database workspace.</div>`;
+            container.innerHTML = `<div class="col-span-full text-center text-slate-500 py-12 italic text-xs">No live inventory entries detected in space matrix.</div>`;
             return;
         }
 
@@ -750,55 +654,59 @@
             
             let selectionTierHTML = "";
             if (product.dropdowns && product.dropdowns.length > 0) {
+                // Split multi-line requirements info text safely into modern checkmark item lines
                 const infoLines = (product.dropdowns[0].info || '').split('\n').filter(l => l.trim() !== '');
                 const inlineListHTML = infoLines.map(line => `
-                    <div class="flex items-center space-x-2.5 text-xs text-slate-300">
-                        <div class="w-4.5 h-4.5 rounded-full bg-yellow-400/10 border border-yellow-400/20 flex items-center justify-center flex-shrink-0 text-[10px] text-yellow-400">✓</div>
+                    <div class="flex items-center space-x-2 text-xs text-slate-300">
+                        <div class="w-4 h-4 rounded-full bg-yellow-400 flex items-center justify-center flex-shrink-0">
+                            <svg class="w-2.5 h-2.5 text-slate-950" fill="none" stroke="currentColor" stroke-width="4" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        </div>
                         <span>${line.replace(/^-\s*/, '')}</span>
                     </div>
                 `).join('');
 
                 selectionTierHTML = `
-                    <div class="p-6 space-y-4">
-                        <div class="flex items-center justify-between border-b border-slate-850 pb-4">
+                    <div class="p-5 space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-800/60 pb-3">
                             <div>
-                                <h3 class="text-base sm:text-lg font-black tracking-tight text-white uppercase">${product.title}</h3>
-                                <p class="text-[9px] text-slate-400 font-bold tracking-wider mt-0.5 uppercase">${product.dropdownLabel}</p>
+                                <h3 class="text-lg font-black tracking-tight text-white uppercase">${product.title}</h3>
+                                <p class="text-[10px] text-slate-400 font-bold tracking-wider mt-0.5 uppercase">Dropdown: ${product.dropdownLabel}</p>
                             </div>
-                            <div class="text-right flex flex-col">
-                                <span class="text-[9px] uppercase font-bold text-slate-550">Estimates</span>
-                                <span id="frontend-price-badge-${product.id}" class="text-xl sm:text-2xl font-black text-yellow-400">RM ${product.dropdowns[0].price.toFixed(2)}</span>
+                            <div class="text-right flex items-baseline space-x-2">
+                                <span class="text-[10px] uppercase font-bold text-slate-500">Estimated</span>
+                                <span id="frontend-price-badge-${product.id}" class="text-2xl font-black text-yellow-400">RM ${product.dropdowns[0].price.toFixed(2)}</span>
                             </div>
                         </div>
 
-                        <div class="space-y-3">
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">Select Layout Variant</label>
-                            <select id="frontend-select-${product.id}" onchange="updateFrontendSelectedPrice('${product.id}')" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-xl p-3.5 text-xs text-white outline-none transition-all">
+                        <div class="space-y-2">
+                            <select id="frontend-select-${product.id}" onchange="updateFrontendSelectedPrice('${product.id}')" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs text-white outline-none transition-colors">
                                 ${product.dropdowns.map((drop, dIdx) => `<option value="${dIdx}">[RM ${drop.price.toFixed(2)}] ${drop.name}</option>`).join('')}
                             </select>
-                            <div id="frontend-info-box-${product.id}" class="space-y-2.5 pt-2 border-t border-slate-850">
-                                ${inlineListHTML || '<span class="text-slate-555 italic text-[11px]">- Standard tier constraints guidelines</span>'}
+                            <div id="frontend-info-box-${product.id}" class="space-y-2 pt-2">
+                                ${inlineListHTML || '<span class="text-slate-500 italic text-[11px]">- standard tier summary</span>'}
                             </div>
                         </div>
                     </div>
                 `;
             } else {
-                selectionTierHTML = `<div class="p-6 text-[11px] text-slate-500 italic">No configuration variants parsed.</div>`;
+                selectionTierHTML = `<div class="p-5 text-[11px] text-slate-500 italic">No configuration variants parsed.</div>`;
             }
 
             card.innerHTML = `
                 <div>
-                    <div class="relative aspect-video w-full bg-slate-955 flex items-center justify-center overflow-hidden border-b border-slate-850">
-                        <img src="${product.poster}" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105" alt="${product.title}" onerror="this.src='https://images.unsplash.com/photo-1626785774573-4b799315345d?w=600&auto=format&fit=crop&q=80'">
-                        <span class="absolute top-3.5 left-3.5 bg-yellow-400 text-slate-950 font-black text-[9px] uppercase px-3 py-1 rounded-full shadow-lg">
-                            DESIGN SERVICES
+                    <div class="relative aspect-video w-full bg-slate-950 flex items-center justify-center overflow-hidden border-b border-slate-800">
+                        <img src="${product.poster}" class="w-full h-full object-contain p-2" alt="${product.title}" onerror="this.src='https://placehold.co/600x400/1e293b/facc15?text=Product+Photo'">
+                        <span class="absolute top-3 left-3 bg-yellow-400 text-slate-950 font-black text-[9px] uppercase px-2.5 py-1 rounded-full shadow-lg">
+                            DESIGN WORK
                         </span>
                     </div>
                     ${selectionTierHTML}
                 </div>
-                <div class="p-6 pt-0">
-                    <button onclick="addProductToBasket('${product.id}')" class="w-full py-3.5 bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-black text-xs rounded-xl transition-all uppercase tracking-wider shadow-md shadow-yellow-400/5">
-                        Add to Checkout Basket
+                <div class="p-5 pt-0">
+                    <button onclick="addProductToBasket('${product.id}')" class="w-full py-3 bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-black text-xs rounded-xl transition-all uppercase tracking-wider shadow-md">
+                        Add Package variant to basket
                     </button>
                 </div>
             `;
@@ -808,9 +716,7 @@
 
     function updateFrontendSelectedPrice(productId) {
         const product = PRODUCTS.find(p => p.id === productId);
-        const selectEl = document.getElementById(`frontend-select-${productId}`);
-        if (!selectEl) return;
-        const dropdownIdx = selectEl.value;
+        const dropdownIdx = document.getElementById(`frontend-select-${productId}`).value;
         const selectedDropdown = product.dropdowns[dropdownIdx];
         
         if (selectedDropdown) {
@@ -819,11 +725,15 @@
             
             const infoLines = (selectedDropdown.info || '').split('\n').filter(l => l.trim() !== '');
             infoBox.innerHTML = infoLines.map(line => `
-                <div class="flex items-center space-x-2.5 text-xs text-slate-300 animate-fadeIn">
-                    <div class="w-4.5 h-4.5 rounded-full bg-yellow-400/10 border border-yellow-400/20 flex items-center justify-center flex-shrink-0 text-[10px] text-yellow-400">✓</div>
+                <div class="flex items-center space-x-2 text-xs text-slate-300 animate-fadeIn">
+                    <div class="w-4 h-4 rounded-full bg-yellow-400 flex items-center justify-center flex-shrink-0">
+                        <svg class="w-2.5 h-2.5 text-slate-950" fill="none" stroke="currentColor" stroke-width="4" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                    </div>
                     <span>${line.replace(/^-\s*/, '')}</span>
                 </div>
-            `).join('') || '<span class="text-slate-555 italic text-[11px]">- Standard tier details summary</span>';
+            `).join('') || '<span class="text-slate-500 italic text-[11px]">- standard tier summary</span>';
         }
     }
 
@@ -840,7 +750,7 @@
         userBadge.innerText = user.username;
         userBadge.classList.remove('hidden');
 
-        document.getElementById('authenticated-cust-username').innerText = `Welcome, ${user.username}!`;
+        document.getElementById('authenticated-cust-username').innerText = `Welcome back, ${user.username}!`;
         document.getElementById('cust-det-email').innerText = user.email;
         document.getElementById('cust-det-phone').innerText = user.phone;
         document.getElementById('cust-det-billing').innerText = user.billing;
@@ -859,7 +769,7 @@
 
         const registeredUsers = JSON.parse(localStorage.getItem("active_users"));
         if (registeredUsers[username]) {
-            showToast("Registration error: Username already exists.", "error");
+            showToast("Username already exists.", "error");
             return;
         }
 
@@ -870,8 +780,7 @@
         currentUser = userData;
         localStorage.setItem("current_session_user", JSON.stringify(userData));
         syncAuthenticatedLayout(userData);
-        showToast(`Registration processed. Welcome back, ${username}!`);
-        updateCustomerWorkflowUI();
+        showToast(`Welcome board, ${username}!`);
     }
 
     function handleCustomerLogin(event) {
@@ -889,11 +798,11 @@
             localStorage.setItem("current_session_user", JSON.stringify(savedUser));
             syncAuthenticatedLayout(savedUser);
             document.getElementById('customer-login-form').reset();
-            showToast(`Logged in successfully as ${currentUser.username}`);
+            showToast(`Logged in safely as ${currentUser.username}`);
             updateCustomerWorkflowUI();
         } else {
             errorDiv.classList.remove('hidden');
-            showToast("Authentication failure: Verify credentials.", "error");
+            showToast("Invalid credentials.", "error");
         }
     }
 
@@ -914,16 +823,16 @@
         }
 
         if (targetUserKey) {
-            const generatedCode = "BZ-KEY-" + Math.floor(100000 + Math.random() * 900000);
+            const generatedCode = "BZ-" + Math.floor(100000 + Math.random() * 900000);
             registeredUsers[targetUserKey].pass = generatedCode;
             localStorage.setItem("active_users", JSON.stringify(registeredUsers));
             
             codeDisplay.innerText = generatedCode;
             successDiv.classList.remove('hidden');
-            showToast("Temporary redirection security code prepared.");
+            showToast("Temporary structural code processed safely.");
         } else {
             successDiv.classList.add('hidden');
-            showToast("Recovery error: Credentials not matched.", "error");
+            showToast("No verified profile records match credentials.", "error");
         }
     }
 
@@ -935,7 +844,7 @@
         document.getElementById('customer-portal-username').classList.add('hidden');
         document.getElementById('customer-portal-text').classList.remove('hidden');
         toggleCustomerAuthTab('login');
-        showToast("Logged out safely from profile portal.");
+        showToast("Logged out from customer session.");
         updateCustomerWorkflowUI();
     }
 
@@ -952,21 +861,22 @@
         
         if (tab === 'register') {
             registerForm.classList.remove('hidden');
-            tabRegBtn.className = "px-5 py-2 text-xs font-bold rounded-lg bg-yellow-400 text-slate-950 transition-all";
-            tabLoginBtn.className = "px-5 py-2 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition-all";
+            tabRegBtn.className = "px-3.5 py-1.5 text-xs font-bold rounded-md bg-yellow-400 text-slate-950 transition-all";
+            tabLoginBtn.className = "px-3.5 py-1.5 text-xs font-bold rounded-md text-slate-400 hover:text-white transition-all";
         } else if (tab === 'login') {
             loginForm.classList.remove('hidden');
-            tabLoginBtn.className = "px-5 py-2 text-xs font-bold rounded-lg bg-yellow-400 text-slate-950 transition-all";
-            tabRegBtn.className = "px-5 py-2 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition-all";
+            tabLoginBtn.className = "px-3.5 py-1.5 text-xs font-bold rounded-md bg-yellow-400 text-slate-950 transition-all";
+            tabRegBtn.className = "px-3.5 py-1.5 text-xs font-bold rounded-md text-slate-400 hover:text-white transition-all";
         } else if (tab === 'forgot') {
             forgotForm.classList.remove('hidden');
             document.getElementById('cust-recovery-success').classList.add('hidden');
             document.getElementById('customer-forgot-form').reset();
-            tabLoginBtn.className = "px-5 py-2 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition-all";
-            tabRegBtn.className = "px-5 py-2 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition-all";
+            tabLoginBtn.className = "px-3.5 py-1.5 text-xs font-bold rounded-md text-slate-400 hover:text-white transition-all";
+            tabRegBtn.className = "px-3.5 py-1.5 text-xs font-bold rounded-md text-slate-400 hover:text-white transition-all";
         }
     }
 
+    /* BASKET REDISTRIBUTION MATRIX */
     function toggleCartDrawer(state) {
         const backdrop = document.getElementById('cart-drawer-backdrop');
         const panel = document.getElementById('cart-drawer-panel');
@@ -988,7 +898,7 @@
         const selectedDropdown = product.dropdowns[dropdownIdx];
 
         if(!selectedDropdown) {
-            showToast("Configuration variant selection required.", "error");
+            showToast("Please choose an option first.", "error");
             return;
         }
 
@@ -1006,20 +916,18 @@
             });
         }
         updateCartBadgeCount();
-        showToast(`Appended design spec: ${product.title} (${selectedDropdown.name}) to basket.`);
+        showToast(`Added ${product.title} (${selectedDropdown.name}) to basket!`);
     }
 
     function updateCartBadgeCount() {
         const totalQty = cart.reduce((acc, item) => acc + item.quantity, 0);
         const badge = document.getElementById('cart-badge');
-        if (badge) {
-            if (totalQty > 0) {
-                badge.innerText = totalQty;
-                badge.classList.remove('opacity-0', 'scale-90');
-                badge.classList.add('opacity-100', 'scale-100');
-            } else {
-                badge.classList.add('opacity-0', 'scale-90');
-            }
+        if (totalQty > 0) {
+            badge.innerText = totalQty;
+            badge.classList.remove('opacity-0', 'scale-90');
+            badge.classList.add('opacity-100', 'scale-100');
+        } else {
+            badge.classList.add('opacity-0', 'scale-90');
         }
     }
 
@@ -1039,9 +947,9 @@
 
         if (cart.length === 0) {
             listContainer.innerHTML = `
-                <div class="h-64 flex flex-col items-center justify-center text-slate-550 space-y-3">
-                    <span class="text-4xl">🏜️</span>
-                    <p class="text-xs font-bold uppercase tracking-wider">Your basket is empty.</p>
+                <div class="h-64 flex flex-col items-center justify-center text-slate-500 space-y-2">
+                    <span class="text-3xl">🏜️</span>
+                    <p class="text-xs">Your basket is currently empty.</p>
                 </div>
             `;
             document.getElementById('cart-subtotal').innerText = "RM 0.00";
@@ -1055,25 +963,25 @@
             runningSubtotal += cost;
 
             const div = document.createElement('div');
-            div.className = "bg-slate-955 border border-slate-850 p-4 rounded-2xl space-y-3.5 animate-fadeIn";
+            div.className = "bg-slate-950 border border-slate-850 p-3.5 rounded-xl space-y-2";
             div.innerHTML = `
                 <div class="flex items-start justify-between gap-2">
                     <div>
                         <h4 class="font-extrabold text-xs text-white truncate max-w-[200px]">${item.title}</h4>
-                        <span class="text-[10px] text-yellow-400 font-bold block mt-0.5">${item.optionSelected}</span>
+                        <span class="text-[10px] text-yellow-400 font-semibold block mt-0.5">${item.optionSelected}</span>
                     </div>
                     <span class="text-xs font-black text-white">RM ${cost.toFixed(2)}</span>
                 </div>
-                <div class="flex items-center justify-between border-t border-slate-900 pt-3">
+                <div class="flex items-center justify-between border-t border-slate-900 pt-2">
                     <div class="flex items-center space-x-2 text-xs text-slate-400">
                         <span>Qty:</span>
-                        <div class="flex items-center bg-slate-900 border border-slate-850 rounded-lg overflow-hidden">
-                            <button onclick="changeCartItemQty(${index}, -1)" class="px-2.5 py-1 font-black hover:bg-slate-800 hover:text-yellow-400 transition-colors">-</button>
-                            <span class="px-2.5 font-bold text-white">${item.quantity}</span>
-                            <button onclick="changeCartItemQty(${index}, 1)" class="px-2.5 py-1 font-black hover:bg-slate-800 hover:text-yellow-400 transition-colors">+</button>
+                        <div class="flex items-center bg-slate-900 border border-slate-800 rounded-lg">
+                            <button onclick="changeCartItemQty(${index}, -1)" class="px-2 py-0.5 font-black hover:text-yellow-400">-</button>
+                            <span class="px-2 font-bold text-white">${item.quantity}</span>
+                            <button onclick="changeCartItemQty(${index}, 1)" class="px-2 py-0.5 font-black hover:text-yellow-400">+</button>
                         </div>
                     </div>
-                    <button onclick="changeCartItemQty(${index}, -${item.quantity})" class="text-[10px] text-rose-500 font-extrabold uppercase hover:underline">Remove</button>
+                    <button onclick="changeCartItemQty(${index}, -${item.quantity})" class="text-[10px] text-rose-500 font-bold hover:underline">Remove</button>
                 </div>
             `;
             listContainer.appendChild(div);
@@ -1085,18 +993,18 @@
 
     function executeBasketSubmission() {
         if (!currentUser) {
-            showToast("Dashboard authentication required to lock configuration briefs.", "error");
+            showToast("Please sign in to lock selections to your profile.", "error");
             switchView('customer-auth');
             toggleCartDrawer(false);
             return;
         }
         if (cart.length === 0) {
-            showToast("Checkout submission failed: Basket empty.", "error");
+            showToast("Basket is empty.", "error");
             return;
         }
         const briefVal = document.getElementById('checkout-brief-text').value.trim();
         if(!briefVal) {
-            showToast("Design guidelines input required: Outline project context details.", "error");
+            showToast("Please include structural design requirements or project reference notes.", "error");
             return;
         }
 
@@ -1115,9 +1023,10 @@
         toggleCartDrawer(false);
         cart = [];
         updateCartBadgeCount();
-        showToast("Design specs locked! Administrative workflow confirmation requested.");
+        showToast("Design selection successfully locked down to your profile dashboard!");
     }
 
+    /* REALTIME CUSTOMER PROFILE PORTAL CONTROLLER */
     function updateCustomerWorkflowUI() {
         const area = document.getElementById('dynamic-workflow-btn-placeholder');
         const badge = document.getElementById('customer-status-badge');
@@ -1125,7 +1034,7 @@
         
         if(currentUser && termLabel) {
             termLabel.innerText = WORKFLOW_STATE.hasRequest && WORKFLOW_STATE.customerUsername === currentUser.username
-                ? (WORKFLOW_STATE.selectedTerm === 'cash' ? "Cash Invoice Quotation" : "Malaysian FPX Gateway")
+                ? (WORKFLOW_STATE.selectedTerm === 'cash' ? "Cash Only" : "Online Transfer with FPX")
                 : "Not Selected";
         }
 
@@ -1133,10 +1042,10 @@
 
         if (!currentUser || !WORKFLOW_STATE.hasRequest || WORKFLOW_STATE.customerUsername !== currentUser.username) {
             badge.innerText = "No Active Order";
-            badge.className = "px-3.5 py-1.5 rounded-lg text-xs font-black bg-slate-950 text-slate-550 border border-slate-800";
+            badge.className = "px-3 py-1 rounded text-xs font-bold bg-slate-950 text-slate-400 border border-slate-800";
             area.innerHTML = `
-                <div class="text-center p-4 bg-slate-900 border border-slate-850 rounded-xl text-xs text-slate-400 italic">
-                    Configure design specifications in your cart, outline requirement briefs, and click Submit to start.
+                <div class="text-center p-2 text-xs text-slate-500 italic">
+                    Add catalog items to basket and submit requirements brief to start workflow loop.
                 </div>
             `;
             return;
@@ -1145,44 +1054,39 @@
         badge.innerText = WORKFLOW_STATE.status;
 
         if (WORKFLOW_STATE.status === "Pending Confirmation") {
-            badge.className = "px-3.5 py-1.5 rounded-lg text-xs font-black bg-amber-500/10 text-amber-400 border border-amber-500/30";
+            badge.className = "px-3 py-1 rounded text-xs font-bold bg-amber-500/10 text-amber-400 border border-amber-500/30";
             area.innerHTML = `
-                <div class="space-y-2">
-                    <button disabled class="w-full py-3 bg-slate-800 text-slate-500 cursor-not-allowed font-extrabold text-xs uppercase tracking-wider rounded-xl border border-slate-750">
-                        Awaiting Admin Confirmation...
-                    </button>
-                    <p class="text-[10px] text-center text-slate-400 italic">Tip: Access the <strong class="text-yellow-400 cursor-pointer" onclick="switchView('admin')">Admin Space</strong> (Access Key: 134228) to confirm this project request manually.</p>
-                </div>
+                <button disabled class="w-full py-2.5 bg-slate-800 text-slate-500 cursor-not-allowed font-bold text-xs uppercase tracking-wider rounded-xl border border-slate-700">
+                    Awaiting Admin Approval...
+                </button>
             `;
         } else if (WORKFLOW_STATE.status === "Approved") {
-            badge.className = "px-3.5 py-1.5 rounded-lg text-xs font-black bg-emerald-500/10 text-emerald-400 border border-emerald-500/30";
+            badge.className = "px-3 py-1 rounded text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30";
             if (WORKFLOW_STATE.selectedTerm === "cash") {
                 area.innerHTML = `
-                    <button onclick="executeCashQuotationApproval()" class="w-full py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow-lg shadow-blue-500/15">
-                        Confirm Quotation Request Invoice
+                    <button onclick="executeCashQuotationApproval()" class="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow-lg shadow-blue-600/20">
+                        Approve for a Quotation
                     </button>
                 `;
             } else {
                 area.innerHTML = `
-                    <button onclick="triggerToyyibpayFPXPaymentLink()" class="w-full py-3.5 bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-black text-xs uppercase tracking-widest rounded-xl transition-all shadow-lg shadow-yellow-500/10">
-                        Proceed Secure FPX Payment
+                    <button onclick="triggerToyyibpayFPXPaymentLink()" class="w-full py-2.5 bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow-lg shadow-yellow-400/20">
+                        Buy Now with FPX
                     </button>
                 `;
             }
         } else if (WORKFLOW_STATE.status === "Quotation Processed") {
-            badge.className = "px-3.5 py-1.5 rounded-lg text-xs font-black bg-blue-500/10 text-blue-400 border border-blue-500/30";
+            badge.className = "px-3 py-1 rounded text-xs font-bold bg-blue-500/10 text-blue-400 border border-blue-500/30";
             area.innerHTML = `
-                <div class="p-4 bg-blue-500/10 border border-blue-500/20 text-blue-400 font-bold text-center text-xs rounded-xl space-y-1.5">
-                    <div>Awaiting Project Completion by Studio...</div>
-                    <div class="text-[10px] font-normal text-slate-300">Quotation approved under direct cash terms. Master administrator workspace keeps track of design parameters.</div>
+                <div class="p-3 bg-blue-500/10 border border-blue-500/20 text-blue-400 font-bold text-center text-xs rounded-xl">
+                    Awaiting Project Completion by Studio Admin...
                 </div>
             `;
         } else if (WORKFLOW_STATE.status === "Completed") {
-            badge.className = "px-3.5 py-1.5 rounded-lg text-xs font-black bg-emerald-500/10 text-emerald-400 border border-emerald-500/30";
+            badge.className = "px-3 py-1 rounded text-xs font-bold bg-blue-500/10 text-blue-400 border border-blue-500/30";
             area.innerHTML = `
-                <div class="p-4 bg-gradient-to-br from-slate-900 to-slate-950 border border-emerald-500/30 text-emerald-400 font-extrabold text-center text-xs rounded-xl space-y-1.5 shadow-xl">
-                    <p class="text-yellow-400 uppercase tracking-widest text-[10px]">✨ Transaction Settled</p>
-                    <p class="text-slate-200 font-medium">Your design specs are completed! Original high-resolution deliverables are compiled and processed safely by Master Studio Admin.</p>
+                <div class="p-3 bg-blue-500/10 border border-blue-500/20 text-blue-400 font-bold text-center text-xs rounded-xl">
+                    🎉 Order Processed &amp; Marked Completed by Studio Admin!
                 </div>
             `;
         }
@@ -1192,11 +1096,11 @@
         WORKFLOW_STATE.status = "Quotation Processed";
         saveWorkflowToStorage();
         updateCustomerWorkflowUI();
-        showToast("Cash quotation approved. Order queued in studio pipeline.");
+        showToast("Quotation request submitted directly back to Studio Admin.");
     }
 
     function triggerOrderConfirmationRequest() {
-        showToast("Configure basket parameters first and submit checkout request.", "error");
+        showToast("Please populate checkout basket to submit request", "error");
     }
 
     function triggerToyyibpayFPXPaymentLink() {
@@ -1210,15 +1114,12 @@
             btn.id = `term-btn-${term.id}`;
             btn.type = "button";
             btn.onclick = () => selectTermOption(term.id);
-            btn.className = "p-3.5 bg-slate-955 border border-slate-850 rounded-xl hover:border-yellow-400/45 text-left transition-all duration-300 flex items-center space-x-3 w-full";
+            btn.className = "p-3 bg-slate-950 border border-slate-800 rounded-xl hover:border-yellow-400/40 text-left transition-all duration-300 flex items-center space-x-2 w-full";
             btn.innerHTML = `
-                <div class="w-4 h-4 rounded-full border border-slate-800 flex items-center justify-center p-0.5 flex-shrink-0" id="term-radio-${term.id}">
+                <div class="w-3.5 h-3.5 rounded-full border border-slate-700 flex items-center justify-center p-0.5" id="term-radio-${term.id}">
                     <div class="w-full h-full rounded-full bg-transparent" id="term-radio-dot-${term.id}"></div>
                 </div>
-                <div class="flex items-center space-x-2">
-                    ${term.icon}
-                    <span class="text-xs font-extrabold text-white">${term.name}</span>
-                </div>
+                <span class="text-[11px] font-bold text-white">${term.name}</span>
             `;
             bankGrid.appendChild(btn);
         });
@@ -1229,13 +1130,13 @@
     function selectTermOption(termId) {
         selectedTermId = termId;
         TERMS_OPTIONS.forEach(t => {
-            document.getElementById(`term-radio-${t.id}`).className = "w-4 h-4 rounded-full border border-slate-800 flex items-center justify-center p-0.5 flex-shrink-0";
+            document.getElementById(`term-radio-${t.id}`).className = "w-3.5 h-3.5 rounded-full border border-slate-700 flex items-center justify-center p-0.5";
             document.getElementById(`term-radio-dot-${t.id}`).className = "w-full h-full rounded-full bg-transparent";
-            document.getElementById(`term-btn-${t.id}`).className = "p-3.5 bg-slate-955 border border-slate-850 rounded-xl text-left w-full flex items-center space-x-3";
+            document.getElementById(`term-btn-${t.id}`).className = "p-3 bg-slate-950 border border-slate-800 rounded-xl text-left w-full";
         });
-        document.getElementById(`term-radio-${termId}`).className = "w-4 h-4 rounded-full border-yellow-400 flex items-center justify-center p-0.5 flex-shrink-0";
+        document.getElementById(`term-radio-${termId}`).className = "w-3.5 h-3.5 rounded-full border border-yellow-400 flex items-center justify-center p-0.5";
         document.getElementById(`term-radio-dot-${termId}`).className = "w-full h-full rounded-full bg-yellow-400";
-        document.getElementById(`term-btn-${termId}`).className = "p-3.5 bg-slate-955 border-2 border-yellow-400/60 rounded-xl text-left w-full flex items-center space-x-3 shadow shadow-yellow-400/5";
+        document.getElementById(`term-btn-${termId}`).className = "p-3 bg-slate-950 border border-yellow-400/50 rounded-xl text-left w-full shadow shadow-yellow-400/5";
     }
 
     function closeToyyibpayModal() {
@@ -1244,24 +1145,23 @@
 
     function processToyyibPaySimulation() {
         if(!selectedTermId) {
-            showToast("Malaysian FPX selection is mandated to process bank wire.", "error");
+            showToast("Please pick a checkout Term option.", "error");
             return;
         }
         const submitBtn = document.getElementById('toyyibpay-submit-btn');
         submitBtn.disabled = true;
-        submitBtn.innerText = "Interfacing safe bank transfer protocols...";
+        submitBtn.innerText = "Processing redirection form structure...";
 
         setTimeout(() => {
             submitBtn.disabled = false;
-            submitBtn.innerText = "Secure Authorization & Wire";
+            submitBtn.innerText = "Proceed Authorization Transfer";
             closeToyyibpayModal();
-            showToast("Direct Toyyibpay simulated FPX callback finalized successfully!");
-            WORKFLOW_STATE.status = "Completed";
-            saveWorkflowToStorage();
-            updateCustomerWorkflowUI();
-        }, 1500);
+            showToast("Redirection initialized to Toyyibpay active payment gateway.");
+            window.location.href = "https://toyyibpay.com/brandworks";
+        }, 1200);
     }
 
+    /* ADMINISTRATIVE CORE WORKSPACE SECTORS */
     function renderAdminWorkspace() {
         if(!isAdminLoggedIn) return;
         renderAdminWorkflowPanel();
@@ -1274,57 +1174,56 @@
         tbody.innerHTML = "";
 
         if (!WORKFLOW_STATE.hasRequest) {
-            tbody.innerHTML = `<tr><td colspan="5" class="text-center py-6 text-slate-500 italic text-xs">No client design specifications in confirmation queues.</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-slate-500 italic">No incoming confirmation client requests detected.</td></tr>`;
             return;
         }
 
         const tr = document.createElement('tr');
-        tr.className = "border-b border-slate-900 text-xs hover:bg-slate-900/40 transition-colors";
+        tr.className = "border-b border-slate-900/60 font-medium";
 
         let actionsHTML = "";
         if (WORKFLOW_STATE.status === "Pending Confirmation") {
-            const btnLabel = WORKFLOW_STATE.selectedTerm === 'cash' ? "Approve Cash Quote" : "Confirm FPX Request";
+            const btnLabel = WORKFLOW_STATE.selectedTerm === 'cash' ? "Approve Quotation" : "Approve Request";
             actionsHTML = `
-                <button onclick="adminApproveWorkflowOrder()" class="px-3.5 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-black rounded-lg uppercase text-[9px] tracking-wider transition-colors shadow">
+                <button onclick="adminApproveWorkflowOrder()" class="px-3 py-1 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-black rounded uppercase text-[10px] tracking-wider transition-colors">
                     ${btnLabel}
                 </button>
             `;
         } else if (WORKFLOW_STATE.status === "Approved" && WORKFLOW_STATE.selectedTerm === "fpx") {
-            actionsHTML = `<span class="text-slate-400 text-[10px] font-bold uppercase tracking-wider bg-slate-900 px-2.5 py-1 rounded border border-slate-800">Awaiting user FPX payment</span>`;
+            actionsHTML = `<span class="text-slate-400 text-[10px] italic">Awaiting User FPX payment</span>`;
         } else if (WORKFLOW_STATE.status === "Approved" && WORKFLOW_STATE.selectedTerm === "cash") {
-            actionsHTML = `<span class="text-slate-400 text-[10px] font-bold uppercase tracking-wider bg-slate-900 px-2.5 py-1 rounded border border-slate-800">Awaiting user Invoice approval</span>`;
+            actionsHTML = `<span class="text-slate-400 text-[10px] italic">Awaiting User Quote Approval</span>`;
         } else if (WORKFLOW_STATE.status === "Quotation Processed" || WORKFLOW_STATE.status === "Approved") {
             actionsHTML = `
-                <button onclick="adminCompleteWorkflowOrder()" class="px-3.5 py-1.5 bg-blue-500 hover:bg-blue-600 text-slate-950 font-black rounded-lg uppercase text-[9px] tracking-wider transition-colors shadow">
-                    Finalize Work Deliverables
+                <button onclick="adminCompleteWorkflowOrder()" class="px-3 py-1 bg-blue-500 hover:bg-blue-600 text-slate-950 font-black rounded uppercase text-[10px] tracking-wider transition-colors">
+                    Mark Completed
                 </button>
             `;
         } else {
-            actionsHTML = `<span class="text-emerald-400 text-[10px] font-black uppercase tracking-widest bg-emerald-500/10 px-3 py-1 rounded border border-emerald-500/20">Completed &amp; Dispatched</span>`;
+            actionsHTML = `<span class="text-slate-500 text-[10px] uppercase font-bold tracking-widest">Workflow Settled</span>`;
         }
 
-        const displayTerm = WORKFLOW_STATE.selectedTerm === 'cash' ? 'Cash Terms' : 'FPX Transfer';
+        const displayTerm = WORKFLOW_STATE.selectedTerm === 'cash' ? 'Cash Only' : 'FPX Transfer';
 
         tr.innerHTML = `
-            <td class="py-4 pl-2">
-                <span class="block text-white font-extrabold text-sm">${WORKFLOW_STATE.customerUsername}</span>
-                <span class="text-[10px] text-slate-405 max-w-[220px] block truncate mt-1 bg-slate-955 p-2 rounded-lg border border-slate-850">${WORKFLOW_STATE.brief}</span>
+            <td class="py-3 text-white font-bold">
+                <span class="block">${WORKFLOW_STATE.customerUsername}</span>
+                <span class="text-[10px] text-slate-500 font-light max-w-[180px] block truncate">${WORKFLOW_STATE.brief}</span>
             </td>
-            <td class="py-4">
-                <span class="font-semibold text-slate-300">${displayTerm}</span>
-            </td>
-            <td class="py-4 text-yellow-400 font-extrabold text-sm">RM ${WORKFLOW_STATE.amount.toFixed(2)}</td>
-            <td class="py-4">
-                <span class="px-2.5 py-1 rounded text-[9px] font-black uppercase ${
-                    WORKFLOW_STATE.status === 'Pending Confirmation' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' :
-                    WORKFLOW_STATE.status === 'Approved' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-blue-500/10 text-blue-400 border border-blue-500/20'
+            <td class="py-3 text-slate-300 font-medium">${displayTerm}</td>
+            <td class="py-3 text-yellow-400 font-extrabold">RM ${WORKFLOW_STATE.amount.toFixed(2)}</td>
+            <td class="py-3">
+                <span class="px-2 py-0.5 rounded text-[10px] font-black uppercase ${
+                    WORKFLOW_STATE.status === 'Pending Confirmation' ? 'bg-amber-500/10 text-amber-400' :
+                    WORKFLOW_STATE.status === 'Approved' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-blue-500/10 text-blue-400'
                 }">${WORKFLOW_STATE.status}</span>
             </td>
-            <td class="py-4 text-right pr-2">${actionsHTML}</td>
+            <td class="py-3 text-right">${actionsHTML}</td>
         `;
         tbody.appendChild(tr);
     }
 
+    /* THE EDITABLE SCRATCH STYLE CONTROLLER FRAME */
     function renderAdminScratchSandbox() {
         const container = document.getElementById('admin-scratch-frames-container');
         if (!container) return;
@@ -1332,74 +1231,78 @@
 
         PRODUCTS.forEach((product, pIdx) => {
             const block = document.createElement('div');
-            block.className = "bg-slate-900 border border-slate-800 rounded-2xl p-5 relative space-y-4 shadow-xl";
+            block.className = "bg-slate-900 border-2 border-slate-800 rounded-2xl p-6 relative space-y-4 shadow-xl";
             
             let nestedDropdownsHTML = "";
             product.dropdowns.forEach((drop, dIdx) => {
                 nestedDropdownsHTML += `
-                    <div class="bg-slate-955 p-4 rounded-xl border border-slate-850 space-y-3 relative">
-                        <div class="flex items-center justify-between gap-2 border-b border-slate-900 pb-2">
-                            <span class="text-[10px] text-yellow-400 font-bold uppercase tracking-widest">Adjustable Option Tier ${dIdx + 1}</span>
+                    <div class="bg-slate-950 p-3 rounded-xl border border-slate-850 space-y-2 relative group">
+                        <div class="flex items-center justify-between gap-2">
+                            <span class="text-[10px] text-yellow-500 font-bold uppercase tracking-wider">List Drop-down ${dIdx + 1}</span>
                             <button onclick="removeScratchDropdown(${pIdx}, ${dIdx})" class="text-[10px] font-bold text-rose-500 hover:underline">Remove Option</button>
                         </div>
-                        <div class="grid grid-cols-2 gap-3">
+                        <div class="grid grid-cols-2 gap-2">
                             <div>
-                                <label class="block text-[9px] uppercase font-bold text-slate-500 mb-1">Tier Title</label>
-                                <input type="text" value="${drop.name}" oninput="updateScratchDropdownValue(${pIdx}, ${dIdx}, 'name', this.value)" class="w-full bg-slate-900 border border-slate-800 text-white rounded-lg p-2.5 text-xs font-semibold outline-none focus:border-yellow-400" />
+                                <label class="block text-[9px] uppercase font-bold text-slate-500">Tier Name</label>
+                                <input type="text" value="${drop.name}" onchange="updateScratchDropdownValue(${pIdx}, ${dIdx}, 'name', this.value)" class="w-full bg-slate-900 border border-slate-800 text-white rounded p-1 text-xs font-semibold outline-none focus:border-yellow-400" />
                             </div>
                             <div>
-                                <label class="block text-[9px] uppercase font-bold text-slate-500 mb-1">Price (RM)</label>
-                                <input type="number" step="0.01" value="${drop.price}" oninput="updateScratchDropdownValue(${pIdx}, ${dIdx}, 'price', this.value)" class="w-full bg-slate-900 border border-slate-800 text-yellow-400 rounded-lg p-2.5 text-xs font-bold outline-none focus:border-yellow-400" />
+                                <label class="block text-[9px] uppercase font-bold text-slate-500">Price (RM)</label>
+                                <input type="number" step="0.01" value="${drop.price}" onchange="updateScratchDropdownValue(${pIdx}, ${dIdx}, 'price', this.value)" class="w-full bg-slate-900 border border-slate-800 text-yellow-400 rounded p-1 text-xs font-bold outline-none focus:border-yellow-400" />
                             </div>
                         </div>
                         <div>
-                            <label class="block text-[9px] uppercase font-bold text-slate-505 mb-1">Bullet Guidelines Information (Split lines with enters)</label>
-                            <textarea rows="3" oninput="updateScratchDropdownValue(${pIdx}, ${dIdx}, 'info', this.value)" class="w-full bg-slate-900 border border-slate-800 text-slate-300 font-mono rounded-lg p-2.5 text-[10px] outline-none focus:border-yellow-400 resize-none">${drop.info || ''}</textarea>
+                            <label class="block text-[9px] uppercase font-bold text-slate-500">*Small Font Info*</label>
+                            <textarea rows="2" onchange="updateScratchDropdownValue(${pIdx}, ${dIdx}, 'info', this.value)" class="w-full bg-slate-900 border border-slate-800 text-slate-400 font-mono rounded p-1.5 text-[10px] outline-none focus:border-yellow-400 resize-none">${drop.info || ''}</textarea>
                         </div>
                     </div>
                 `;
             });
 
             block.innerHTML = `
-                <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-                    <span class="text-[10px] font-mono font-bold text-slate-500 uppercase tracking-widest">FRAME UNIQUE ID: ${product.id}</span>
-                    <button onclick="deleteProductFrame(${pIdx})" class="w-7 h-7 rounded-full bg-rose-600/10 hover:bg-rose-600 text-rose-400 hover:text-white flex items-center justify-center text-xs font-black transition-all border border-rose-500/20">×</button>
+                <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                    <span class="text-xs font-mono font-bold text-slate-500">FRAME CODE: ${product.id}</span>
+                    <button onclick="deleteProductFrame(${pIdx})" class="w-6 h-6 rounded-full bg-rose-600/20 hover:bg-rose-600 text-rose-400 hover:text-white flex items-center justify-center text-xs font-black transition-all">X</button>
                 </div>
 
-                <div class="space-y-2">
-                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Product Image URL Source</label>
-                    <div class="flex flex-col gap-3 bg-slate-955 p-3 rounded-xl border border-slate-850">
-                        <img id="scratch-preview-${product.id}" src="${product.poster}" class="w-full h-28 object-cover rounded-lg bg-slate-900 border border-slate-850" onerror="this.src='https://images.unsplash.com/photo-1626785774573-4b799315345d?w=600&auto=format&fit=crop&q=80'" />
-                        <input type="text" value="${product.poster}" oninput="PRODUCTS[pIdx].poster = this.value; document.getElementById('scratch-preview-${product.id}').src = this.value; saveProductsToStorage();" class="w-full bg-slate-900 border border-slate-800 text-white rounded-lg p-2 text-xs outline-none focus:border-yellow-400" placeholder="Enter custom image unsplash URL..." />
+                <div class="space-y-1.5">
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Product Image (Upload from device or PC) ! Editable</label>
+                    <div class="flex items-center gap-4 bg-slate-950 p-3 rounded-xl border border-slate-850">
+                        <img id="scratch-preview-${product.id}" src="${product.poster}" class="w-14 h-14 object-cover rounded bg-slate-900 border border-slate-800" />
+                        <input type="file" accept="image/*" onchange="handleScratchPosterStream(event, ${pIdx})" class="text-[11px] text-slate-400 file:mr-2 file:py-1 file:px-2.5 file:rounded file:border-0 file:text-[10px] file:font-black file:bg-slate-800 file:text-white hover:file:bg-slate-750 cursor-pointer" />
                     </div>
                 </div>
 
-                <div class="space-y-2">
-                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Product Catalog Header Name</label>
-                    <input type="text" value="${product.title}" oninput="handleLiveTitleChange(${pIdx}, this.value)" class="w-full bg-slate-955 border border-slate-850 text-white rounded-xl p-3 text-xs font-black outline-none focus:border-yellow-400" />
+                <hr class="border-slate-800" />
+
+                <div class="space-y-1">
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">*Big Font* Product Title ! Editable</label>
+                    <input type="text" value="${product.title}" onchange="PRODUCTS[pIdx].title = this.value; saveProductsToStorage();" class="w-full bg-slate-950 border border-slate-800 text-white rounded-lg p-2.5 text-sm font-black outline-none focus:border-yellow-400" />
                 </div>
 
-                <div class="space-y-2">
-                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Dropdown Label Node</label>
-                    <input type="text" value="${product.dropdownLabel}" oninput="PRODUCTS[pIdx].dropdownLabel = this.value; saveProductsToStorage();" class="w-full bg-slate-955 border border-slate-850 text-yellow-400 font-bold rounded-xl p-2.5 text-xs outline-none focus:border-yellow-400" />
+                <hr class="border-slate-800" />
+
+                <div class="space-y-1">
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Drop-down Base Group Label ! Editable</label>
+                    <input type="text" value="${product.dropdownLabel}" onchange="PRODUCTS[pIdx].dropdownLabel = this.value; saveProductsToStorage();" class="w-full bg-slate-950 border border-slate-800 text-yellow-400 font-bold rounded-lg p-2 text-xs outline-none focus:border-yellow-400" />
                 </div>
 
-                <div class="space-y-3.5 max-h-[300px] overflow-y-auto pr-1 hide-scrollbar">
+                <div class="space-y-3 max-h-[220px] overflow-y-auto pr-1 hide-scrollbar">
                     ${nestedDropdownsHTML}
                 </div>
 
-                <div class="grid grid-cols-2 gap-3 pt-2">
-                    <button onclick="appendNewScratchDropdown(${pIdx})" class="py-2.5 bg-slate-955 border border-slate-800 hover:border-yellow-400/30 text-slate-300 hover:text-white font-bold text-xs rounded-xl transition-colors">
-                        (+) Add Option Variant
+                <div class="grid grid-cols-2 gap-2 pt-2">
+                    <button onclick="appendNewScratchDropdown(${pIdx})" class="py-2 bg-slate-950 border border-slate-800 hover:border-yellow-400/40 text-slate-300 font-bold text-xs rounded-xl transition-all">
+                        (+) New Drop-down
                     </button>
-                    <button onclick="popLastScratchDropdown(${pIdx})" class="py-2.5 bg-slate-955 border border-slate-800 hover:border-rose-500/30 text-rose-400 font-bold text-xs rounded-xl transition-colors">
-                        (-) Delete Option Variant
+                    <button onclick="popLastScratchDropdown(${pIdx})" class="py-2 bg-slate-950 border border-slate-800 hover:border-rose-500/40 text-rose-400 font-bold text-xs rounded-xl transition-all">
+                        (-) Delete Drop-down
                     </button>
                 </div>
 
-                <div class="pt-4 border-t border-slate-855">
-                    <button onclick="commitScratchChangesLive(${pIdx})" class="w-full py-3 bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow-md">
-                        Commit Configurations Live
+                <div class="pt-4 border-t border-slate-800/80">
+                    <button onclick="commitScratchChangesLive(${pIdx})" class="w-full py-2.5 bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow-md">
+                        [Button: Committed changes to live]
                     </button>
                 </div>
             `;
@@ -1411,61 +1314,66 @@
         const nextId = "p_frame_" + (PRODUCTS.length + 1);
         PRODUCTS.push({
             id: nextId,
-            title: "New Premium Layout Theme",
-            dropdownLabel: "All Options",
-            poster: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600&auto=format&fit=crop&q=80",
+            title: "New Custom Title Frame",
+            dropdownLabel: "All",
+            poster: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100%' height='100%' fill='%231e293b'/><text x='50%' y='55%' font-weight='bold' font-size='10' fill='%23eab308' dominant-baseline='middle' text-anchor='middle'>BLANK FRAME</text></svg>",
             dropdowns: [
-                { name: "Default Option Package", price: 50.00, info: "- Custom vector layouts blueprint\n- High resolution exports included" }
+                { name: "Default Option Package", price: 10.00, info: "- custom guidelines info entry" }
             ]
         });
         saveProductsToStorage();
         renderAdminScratchSandbox();
-        renderProductCatalog();
-        showToast("Appended new customized design frame safely.");
+        showToast("Appended new editable product layout frame.");
     }
 
     function deleteProductFrame(index) {
         PRODUCTS.splice(index, 1);
         saveProductsToStorage();
         renderAdminScratchSandbox();
-        renderProductCatalog();
-        showToast("Removed product frame from system space.");
+        showToast("Removed product frame safely.");
+    }
+
+    function handleScratchPosterStream(event, pIdx) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            PRODUCTS[pIdx].poster = e.target.result;
+            document.getElementById(`scratch-preview-${PRODUCTS[pIdx].id}`).src = e.target.result;
+            showToast("Encoded file stream asset successfully.");
+        }
+        reader.readAsDataURL(file);
     }
 
     function appendNewScratchDropdown(pIdx) {
         PRODUCTS[pIdx].dropdowns.push({
-            name: "Premium Customized Option Variant",
-            price: 75.00,
-            info: "- Unlimited edits\n- Direct call callback support\n- Customized graphic palettes layouts"
+            name: "Custom tier option variant",
+            price: 50.00,
+            info: "- 1 side\n- provide edit image\n- digital design"
         });
         saveProductsToStorage();
         renderAdminScratchSandbox();
-        renderProductCatalog();
-        showToast("Added configurable item option dropdown.");
     }
 
     function popLastScratchDropdown(pIdx) {
         if(PRODUCTS[pIdx].dropdowns.length <= 1) {
-            showToast("Catalog error: At least one configurable dropdown layer must exist.", "error");
+            showToast("At least one drop-down option variant configuration is mandated.", "error");
             return;
         }
         PRODUCTS[pIdx].dropdowns.pop();
         saveProductsToStorage();
         renderAdminScratchSandbox();
-        renderProductCatalog();
-        showToast("Popped options variant.");
     }
 
     function removeScratchDropdown(pIdx, dIdx) {
         if(PRODUCTS[pIdx].dropdowns.length <= 1) {
-            showToast("Catalog error: At least one configurable dropdown layer must exist.", "error");
+            showToast("At least one drop-down option variant configuration is mandated.", "error");
             return;
         }
         PRODUCTS[pIdx].dropdowns.splice(dIdx, 1);
         saveProductsToStorage();
         renderAdminScratchSandbox();
-        renderProductCatalog();
-        showToast("Removed dropdown variant item.");
     }
 
     function updateScratchDropdownValue(pIdx, dIdx, field, val) {
@@ -1480,7 +1388,7 @@
     function commitScratchChangesLive(pIdx) {
         saveProductsToStorage();
         renderProductCatalog();
-        showToast(`🎉 Live calibration committed for layout: "${PRODUCTS[pIdx].title}"`);
+        showToast(`🎉 Changes for frame "${PRODUCTS[pIdx].title}" committed successfully live!`);
     }
 
     function adminApproveWorkflowOrder() {
@@ -1488,7 +1396,7 @@
         saveWorkflowToStorage();
         renderAdminWorkspace();
         updateCustomerWorkflowUI();
-        showToast("Client design specs approved. Customer workspace refreshed.");
+        showToast("Client request approved. Customer dashboard layout updated.");
     }
 
     function adminCompleteWorkflowOrder() {
@@ -1496,7 +1404,7 @@
         saveWorkflowToStorage();
         renderAdminWorkspace();
         updateCustomerWorkflowUI();
-        showToast("Workflow closed and marked Complete.");
+        showToast("Workflow order marked Completed safely.");
     }
     </script>
 </body>

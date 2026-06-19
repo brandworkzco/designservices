@@ -520,11 +520,16 @@
         },
         {
             id: "p_frame_2",
-            title: "Logo Design",
+            title: "Menu Design",
             dropdownLabel: "All",
-            poster: "previousmenu.png' width='100' height='100' viewBox='0 0 100 100'><rect width='100%' height='100%' fill='%231e293b'/><text x='50%' y='55%' font-weight='bold' font-size='12' fill='%23eab308' dominant-baseline='middle' text-anchor='middle'>SECOND PRODUCT</text></svg>",
+            poster: "previousmenu.png",
             dropdowns: [
-                { name: "Starter", price: 120.00, info: "- Basic vector layout guidelines" }
+                { name: "Basic A4", price: 25.00, info: "- 1 side\n- A4 only\n- not provide image edit" },
+                { name: "Basic A3/A2", price: 30.00, info: "- 1 side\n- A3/A2 only\n- not provide image edit" },
+                { name: "Advanced Package", price: 75.00, info: "- 1-3 sides\n- A4 size only\n- not provide image edit" },
+                { name: "Executive Package", price: 120.00, info: "- 1-5 sides\n- A4 size only" },
+                { name: "Leading Package", price: 240.00, info: "- 1-10 sides\n- A4 size only\n- provide edit image" },
+                { name: "Clean/Modern", price: 50.00, info: "- 1 side\n- provide edit image\n- digital and clean" }
             ]
         }
     ];
@@ -573,7 +578,7 @@
 
         document.getElementById('store-view').classList.add('hidden');
         document.getElementById('customer-auth-view').classList.add('hidden');
-        document.getElementById('admin-view').classList.add('hidden');
+        document.getElementassList.add('hidden');
 
         if (viewName === 'store') {
             document.getElementById('store-view').classList.remove('hidden');

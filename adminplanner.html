@@ -1,1603 +1,1695 @@
-import React, { useState, useMemo, useRef, useEffect } from 'react';
-import { 
-  AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer
-} from 'recharts';
-import { 
-  LayoutDashboard, Briefcase, FileText, CheckSquare, Users, 
-  TrendingUp, Plus, Trash2, UploadCloud, AlertCircle, Calendar, 
-  X, ChevronRight, Check, ShieldCheck, Lock, User, Eye, EyeOff, 
-  ShieldAlert, Image, ArrowDownToLine, Sparkles
-} from 'lucide-react';
-
-// Luxury Mock Projects with complete pricing structure (RM)
-const initialProjects = [
-  {
-    id: "proj-1",
-    invoiceNo: "INV-2026-001",
-    clientName: "Aura Royale Residence",
-    projectName: "Luxury Brand Identity & Guidelines",
-    status: "In Progress",
-    dateOut: "2026-06-15",
-    shippingDate: "2026-07-20",
-    cost: 4800,
-    tax: 288, // 6% Sales Tax (SST) standard in Malaysia or custom tax
-    category: "Branding",
-    files: [
-      { name: "Aura_BrandBook_Draft.pdf", size: "14.2 MB" },
-      { name: "RoyaleLogo_Vector.svg", size: "2.4 MB" }
-    ]
-  },
-  {
-    id: "proj-2",
-    invoiceNo: "INV-2026-002",
-    clientName: "Chronos Watches",
-    projectName: "Premium Product Packaging Design",
-    status: "Completed",
-    dateOut: "2026-05-10",
-    shippingDate: "2026-06-01",
-    cost: 7200,
-    tax: 432,
-    category: "Packaging",
-    files: [
-      { name: "Box_Dieline_V4.ai", size: "38.5 MB" },
-      { name: "Chronos_Golden_Mockup.png", size: "8.1 MB" }
-    ]
-  },
-  {
-    id: "proj-3",
-    invoiceNo: "INV-2026-003",
-    clientName: "Elysian Wellness Spa",
-    projectName: "Scented Candle Label & Web Assets",
-    status: "Wait for Respond",
-    dateOut: "2026-06-01",
-    shippingDate: "2026-06-28",
-    cost: 3500,
-    tax: 210,
-    category: "Label Design",
-    files: [
-      { name: "Elysian_Moodboard.pdf", size: "6.7 MB" }
-    ]
-  },
-  {
-    id: "proj-4",
-    invoiceNo: "INV-2026-004",
-    clientName: "Vanguard Tech",
-    projectName: "Interactive UI/UX Prototype Layout",
-    status: "Delayed",
-    dateOut: "2026-04-12",
-    shippingDate: "2026-05-30",
-    cost: 9500,
-    tax: 570,
-    category: "UI/UX",
-    files: []
-  }
-];
-
-// Design Workflow Checklist
-const initialTasks = [
-  { id: "task-1", text: "Refine golden ratio logo geometry for Chronos Watches", category: "High Priority", completed: true },
-  { id: "task-2", text: "Draft typography pairings for Aura Royale brochure", category: "In Progress", completed: false },
-  { id: "task-3", text: "Send final source vector package to Elysian Spa", category: "Review", completed: false },
-  { id: "task-4", text: "Schedule UX hand-off call with Vanguard developer team", category: "Backlog", completed: false },
-  { id: "task-5", text: "Calibrate monitor color profile to sRGB & AdobeRGB", category: "Maintenance", completed: true }
-];
-
-// Creative Designer Earnings Chart data
-const monthlyEarningsData = [
-  { name: 'Jan', Sales: 5200 },
-  { name: 'Feb', Sales: 6800 },
-  { name: 'Mar', Sales: 9400 },
-  { name: 'Apr', Sales: 8200 },
-  { name: 'May', Sales: 11500 },
-  { name: 'Jun', Sales: 15400 }
-];
-
-// Encoded forms of: username = "admin", password = "134228"
-const ENCODED_USER = "YWRtaW4=";
-const ENCODED_PASS = "MTM0MjI4";
-
-export default function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [usernameInput, setUsernameInput] = useState('');
-  const [passwordInput, setPasswordInput] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [loginError, setLoginError] = useState('');
-  const [isLoggingIn, setIsLoggingIn] = useState(false);
-
-  const [activeTab, setActiveTab] = useState('dashboard');
-  const [projects, setProjects] = useState(initialProjects);
-  const [tasks, setTasks] = useState(initialTasks);
-  const [newTaskText, setNewTaskText] = useState('');
-  const [newTaskCategory, setNewTaskCategory] = useState('High Priority');
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-[#0A0A0A]">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brandworkz Co. Premium Black & Gold Digital Planner</title>
   
-  // Modal, Active View, and Download states
-  const [selectedInvoice, setSelectedInvoice] = useState(null);
-  const [showAddProjectModal, setShowAddProjectModal] = useState(false);
-  const [notification, setNotification] = useState(null);
+  <!-- Inter & Playfair Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   
-  // Download Installation Progress States
-  const [downloadProgress, setDownloadProgress] = useState(null); // null (idle) or 0 to 100 (downloading)
-  const [downloadStepText, setDownloadStepText] = useState('');
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- ChartJS CDN for Premium Analytics -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-  // Form states for new projects
-  const [formClient, setFormClient] = useState('');
-  const [formProject, setFormProject] = useState('');
-  const [formStatus, setFormStatus] = useState('In Progress');
-  const [formDateOut, setFormDateOut] = useState('');
-  const [formShippingDate, setFormShippingDate] = useState('');
-  const [formCost, setFormCost] = useState('');
-  const [formTax, setFormTax] = useState('');
-  const [formCategory, setFormCategory] = useState('Branding');
+  <!-- HTML2Canvas CDN for High-Quality PNG Export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
-  // Simulated file upload variables
-  const fileInputRefs = useRef({});
-  const invoiceRenderRef = useRef(null);
-
-  // Restore session from sessionStorage on load (safe across refreshes)
-  useEffect(() => {
-    const sessionAuth = sessionStorage.getItem('bz_session_auth');
-    if (sessionAuth === 'active_authenticated') {
-      setIsLoggedIn(true);
-    }
-
-    // Load html2canvas dynamically from CDN to allow local browser rendering to PNG image
-    const script = document.createElement('script');
-    script.src = "https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js";
-    script.async = true;
-    document.body.appendChild(script);
-
-    return () => {
-      // Clean up script on unmount
-      const existingScript = document.querySelector(`script[src="${script.src}"]`);
-      if (existingScript) {
-        document.body.removeChild(existingScript);
-      }
-    };
-  }, []);
-
-  const triggerNotification = (message, type = 'success') => {
-    setNotification({ message, type });
-    setTimeout(() => setNotification(null), 4000);
-  };
-
-  const handleSecurityAccess = (e) => {
-    e.preventDefault();
-    setLoginError('');
-    setIsLoggingIn(true);
-
-    // Simulate luxury security verification response time
-    setTimeout(() => {
-      try {
-        const checkUser = window.btoa(usernameInput);
-        const checkPass = window.btoa(passwordInput);
-
-        if (checkUser === ENCODED_USER && checkPass === ENCODED_PASS) {
-          setIsLoggedIn(true);
-          sessionStorage.setItem('bz_session_auth', 'active_authenticated');
-          triggerNotification("Access Granted. Welcome back to Brandworkz Co.");
-        } else {
-          setLoginError("Invalid Studio credentials. Access has been denied.");
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            serif: ['Playfair Display', 'serif'],
+            mono: ['Space Grotesk', 'monospace'],
+          }
         }
-      } catch (err) {
-        setLoginError("Encryption handshake failed. Please try again.");
-      } finally {
-        setIsLoggingIn(false);
       }
-    }, 700);
-  };
-
-  const handleLogout = () => {
-    setIsLoggedIn(false);
-    sessionStorage.removeItem('bz_session_auth');
-    setUsernameInput('');
-    setPasswordInput('');
-    triggerNotification("Logged out successfully from the secure workspace.", "info");
-  };
-
-  // Sequential Invoice Number Generator based on current projects count or timestamp
-  const generateInvoiceNumber = () => {
-    const nextNum = projects.length + 1;
-    const paddedNum = String(nextNum).padStart(3, '0');
-    return `INV-2026-${paddedNum}`;
-  };
-
-  const financialSummary = useMemo(() => {
-    let subtotal = 0;
-    let taxTotal = 0;
-    projects.forEach(p => {
-      subtotal += Number(p.cost) || 0;
-      taxTotal += Number(p.tax) || 0;
-    });
-    return {
-      subtotal,
-      taxTotal,
-      grandTotal: subtotal + taxTotal
-    };
-  }, [projects]);
-
-  const handleAddProject = (e) => {
-    e.preventDefault();
-    if (!formClient || !formProject || !formCost) {
-      triggerNotification("Please fill in the Client, Project Name, and Selling Cost", "error");
-      return;
     }
+  </script>
 
-    const costNum = parseFloat(formCost) || 0;
-    // Auto-calculate tax if empty (using standard 6% SST as reference)
-    const taxNum = formTax !== '' ? parseFloat(formTax) : parseFloat((costNum * 0.06).toFixed(2));
-    const newInvoiceNo = generateInvoiceNumber();
+  <style>
+    /* Premium Smooth Scrollbars & Accent Focus */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0A0A0A;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #D4AF37;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #FCF6BA;
+    }
+    .gold-gradient-text {
+      background: linear-gradient(to right, #FCF6BA 0%, #D4AF37 50%, #BF953F 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .gold-gradient-bg {
+      background: linear-gradient(135deg, #BF953F 0%, #D4AF37 50%, #FCF6BA 100%);
+    }
+    .gold-border-glow:focus {
+      outline: none;
+      border-color: #D4AF37;
+      box-shadow: 0 0 10px rgba(212, 175, 55, 0.25);
+    }
+    @keyframes slide-in {
+      from { transform: translateY(-1rem); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .animate-slide-in {
+      animation: slide-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes fade-in {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .animate-fade-in {
+      animation: fade-in 0.25s ease-out forwards;
+    }
+  </style>
+</head>
+<body class="h-full text-gray-100 font-sans antialiased selection:bg-[#D4AF37]/30 selection:text-white">
 
-    const newProject = {
-      id: `proj-${Date.now()}`,
-      invoiceNo: newInvoiceNo,
-      clientName: formClient,
-      projectName: formProject,
-      status: formStatus,
-      dateOut: formDateOut || new Date().toISOString().split('T')[0],
-      shippingDate: formShippingDate || new Date(Date.now() + 30*24*60*60*1000).toISOString().split('T')[0],
-      cost: costNum,
-      tax: taxNum,
-      category: formCategory,
-      files: []
-    };
+  <!-- DYNAMIC TOAST NOTIFICATIONS -->
+  <div id="toast-container" class="fixed top-6 right-6 z-50 flex flex-col gap-3 pointer-events-none"></div>
 
-    setProjects([newProject, ...projects]);
-    setShowAddProjectModal(false);
-    triggerNotification(`Created Project & ${newInvoiceNo} Successfully!`);
+  <!-- GRAPHICS EXPORT OVERLAY PROGRESS MODAL -->
+  <div id="export-progress" class="hidden fixed inset-0 bg-[#070707]/95 z-50 flex flex-col items-center justify-center p-6 backdrop-blur-md animate-fade-in">
+    <div class="max-w-md w-full text-center space-y-6">
+      <div class="relative inline-flex items-center justify-center">
+        <div class="absolute inset-0 bg-[#D4AF37]/10 rounded-full blur-xl animate-pulse"></div>
+        <div class="relative bg-[#111] border border-[#D4AF37]/40 p-5 rounded-full shadow-[0_0_30px_rgba(212,175,55,0.2)]">
+          <i data-lucide="image" class="text-[#D4AF37] h-8 w-8 animate-bounce"></i>
+        </div>
+      </div>
+
+      <div class="space-y-2">
+        <h3 class="text-lg font-serif tracking-wider font-semibold text-white">GENERATING RASTER PNG</h3>
+        <p id="export-step-text" class="text-[11px] text-[#D4AF37] tracking-widest uppercase font-mono">Initializing graphics layout renderer...</p>
+      </div>
+
+      <div class="space-y-1 text-left">
+        <div class="flex justify-between text-xs font-mono text-gray-400">
+          <span>EXPORT RATIO: 2X HIGH-RES</span>
+          <span id="export-percent-text" class="text-[#D4AF37] font-bold">0%</span>
+        </div>
+        <div class="h-3 bg-[#111] rounded-full border border-white/5 overflow-hidden p-0.5">
+          <div id="export-progress-bar" class="h-full rounded-full bg-gradient-to-r from-[#BF953F] via-[#D4AF37] to-[#FCF6BA] shadow-[0_0_10px_rgba(212,175,55,0.5)] transition-all duration-75" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <p class="text-[10px] text-gray-500 max-w-xs mx-auto leading-relaxed">
+        Please keep your browser tab active. The canvas layout is compiling into a high-quality portable raster image compatible with all smartphones and tablets.
+      </p>
+    </div>
+  </div>
+
+  <!-- SECURE GATEWAY (LOGIN OVERLAY) -->
+  <div id="login-overlay" class="min-h-screen bg-[#070707] flex items-center justify-center p-4 relative overflow-hidden font-sans">
+    <div class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-[#D4AF37]/5 blur-[120px] pointer-events-none"></div>
+    <div class="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-[#D4AF37]/5 blur-[120px] pointer-events-none"></div>
+
+    <div class="max-w-md w-full bg-gradient-to-b from-[#0F0F0F] to-[#141414] border border-[#D4AF37]/25 rounded-2xl p-8 shadow-[0_20px_50px_rgba(0,0,0,0.9)] relative z-10 transition-all duration-300">
+      <div class="text-center mb-8">
+        <h1 class="text-xl font-serif font-semibold tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-[#FCF6BA] via-[#D4AF37] to-[#BF953F]">BRANDWORKZ CO.</h1>
+        <p class="text-[10px] text-gray-400 uppercase tracking-[0.2em] font-medium mt-1">Creative Suite Secure Gateway</p>
+      </div>
+
+      <div class="bg-[#181818] border border-white/5 rounded-xl p-4 mb-6 flex items-start gap-3">
+        <div class="text-[#D4AF37] mt-0.5 shrink-0">
+          <i data-lucide="shield-check" class="animate-pulse h-[18px] w-[18px]"></i>
+        </div>
+        <div>
+          <p class="text-xs font-semibold text-white">Public Hosting Shield Active</p>
+          <p class="text-[10px] text-gray-400 mt-0.5 leading-relaxed">This business workspace is encrypted. Verify your credential keys to open your planner dashboard.</p>
+        </div>
+      </div>
+
+      <div id="login-error-container" class="hidden bg-rose-950/20 border border-rose-500/30 rounded-lg p-3.5 mb-6 flex items-start gap-3 animate-slide-in">
+        <i data-lucide="shield-alert" class="text-rose-400 shrink-0 mt-0.5 h-4 w-4"></i>
+        <p id="login-error-msg" class="text-xs text-rose-300 font-medium"></p>
+      </div>
+
+      <form id="login-form" class="space-y-5">
+        <div class="space-y-1.5">
+          <label class="text-[10px] text-gray-400 uppercase tracking-widest block font-semibold">Workspace Username</label>
+          <div class="relative">
+            <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500">
+              <i data-lucide="user" class="h-[15px] w-[15px]"></i>
+            </span>
+            <input 
+              type="text" 
+              id="login-username"
+              required
+              placeholder="Enter username" 
+              class="w-full bg-[#181818] border border-white/10 rounded-xl pl-10 pr-4 py-3 text-xs text-white focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/30 transition-all font-sans"
+            />
+          </div>
+        </div>
+
+        <div class="space-y-1.5">
+          <label class="text-[10px] text-gray-400 uppercase tracking-widest block font-semibold">Security Access Key</label>
+          <div class="relative">
+            <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500">
+              <i data-lucide="lock" class="h-[15px] w-[15px]"></i>
+            </span>
+            <input 
+              type="password" 
+              id="login-password"
+              required
+              placeholder="Enter password" 
+              class="w-full bg-[#181818] border border-white/10 rounded-xl pl-10 pr-11 py-3 text-xs text-white focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/30 transition-all font-sans"
+            />
+            <button 
+              type="button"
+              id="toggle-password"
+              class="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white transition-colors"
+            >
+              <i data-lucide="eye" class="h-[15px] w-[15px]"></i>
+            </button>
+          </div>
+        </div>
+
+        <button 
+          type="submit" 
+          id="login-submit-btn"
+          class="w-full mt-2 bg-gradient-to-r from-[#BF953F] via-[#D4AF37] to-[#FCF6BA] hover:brightness-110 text-[#0A0A0A] font-bold text-xs py-3.5 rounded-xl shadow-[0_4px_20px_rgba(212,175,55,0.25)] transition-all flex items-center justify-center gap-2 tracking-wider"
+        >
+          <i data-lucide="lock" class="h-3.5 w-3.5"></i>
+          UNLOCK WORKSPACE
+        </button>
+      </form>
+
+      <div class="text-center mt-8 pt-6 border-t border-white/5">
+        <p class="text-[9px] text-gray-600 uppercase tracking-widest">Brandworkz Co. • Enterprise Suite Security v2.6</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- AUTHENTICATED WORKSPACE CONTAINER -->
+  <div id="app-workspace" class="hidden min-h-screen bg-[#0A0A0A] text-gray-100 flex flex-col font-sans relative">
     
-    // Reset Form Fields
-    setFormClient('');
-    setFormProject('');
-    setFormStatus('In Progress');
-    setFormDateOut('');
-    setFormShippingDate('');
-    setFormCost('');
-    setFormTax('');
-  };
+    <!-- APPLICATION HEADER -->
+    <header class="border-b border-[#D4AF37]/20 bg-[#0F0F0F] px-6 py-4 flex flex-wrap justify-between items-center gap-4 sticky top-0 z-40 shadow-lg print:hidden">
+      <div class="flex items-center gap-3">
+        <div>
+          <span class="text-xs uppercase tracking-[0.2em] text-[#D4AF37] font-bold block">Exclusive Suite</span>
+          <h1 class="text-lg font-serif font-semibold tracking-wide text-white">BRANDWORKZ CO.</h1>
+        </div>
+      </div>
 
-  // Remove/Cancel project & invoice instantly
-  const handleDeleteProject = (id, invoiceNo) => {
-    setProjects(projects.filter(p => p.id !== id));
-    triggerNotification(`Invoice ${invoiceNo || ""} has been successfully cancelled & deleted.`);
-  };
+      <div class="flex items-center gap-6 text-right">
+        <div class="hidden sm:block">
+          <p class="text-[10px] uppercase text-gray-400 tracking-wider">TAX (29.17%)</p>
+          <p id="header-tax-liability" class="text-sm font-semibold text-[#D4AF37]">RM 0.00</p>
+        </div>
+        <div>
+          <p class="text-[10px] uppercase text-gray-400 tracking-wider">GRAND TOTAL EARNINGS</p>
+          <p id="header-grand-total" class="text-base font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#FCF6BA] via-[#D4AF37] to-[#BF953F]">RM 0.00</p>
+        </div>
+        <button 
+          onclick="openAddProjectModal()" 
+          class="flex items-center gap-2 bg-gradient-to-r from-[#BF953F] to-[#D4AF37] hover:from-[#FCF6BA] hover:to-[#B38728] text-[#0A0A0A] font-semibold text-xs px-4 py-2 rounded shadow-[0_4px_15px_rgba(212,175,55,0.3)] transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0"
+        >
+          <i data-lucide="plus" class="h-4 w-4"></i>
+          NEW CLIENT PROJECT
+        </button>
+      </div>
+    </header>
 
-  // Toggle Task Checklist
-  const toggleTask = (id) => {
-    setTasks(tasks.map(t => t.id === id ? { ...t, completed: !t.completed } : t));
-  };
-
-  // Add Task
-  const handleAddTask = (e) => {
-    e.preventDefault();
-    if (!newTaskText.trim()) return;
-    const newTask = {
-      id: `task-${Date.now()}`,
-      text: newTaskText,
-      category: newTaskCategory,
-      completed: false
-    };
-    setTasks([newTask, ...tasks]);
-    setNewTaskText('');
-    triggerNotification("To-Do task successfully listed!");
-  };
-
-  // Delete Task
-  const handleDeleteTask = (id) => {
-    setTasks(tasks.filter(t => t.id !== id));
-  };
-
-  const handleSimulatedFileUpload = (projectId, event) => {
-    const file = event.target.files[0];
-    if (!file) return;
-
-    const formattedSize = file.size > 1024 * 1024 
-      ? `${(file.size / (1024 * 1024)).toFixed(1)} MB` 
-      : `${(file.size / 1024).toFixed(1)} KB`;
-
-    setProjects(projects.map(p => {
-      if (p.id === projectId) {
-        return {
-          ...p,
-          files: [...p.files, { name: file.name, size: formattedSize }]
-        };
-      }
-      return p;
-    }));
-
-    triggerNotification(`Asset "${file.name}" linked successfully to client project!`);
-  };
-
-  // Custom trigger for file upload button clicking
-  const triggerFileInput = (projId) => {
-    if (fileInputRefs.current[projId]) {
-      fileInputRefs.current[projId].click();
-    }
-  };
-
-  // Real PNG image compilation process with standard 0% to 100% indicator installation simulator
-  const handleExportAsPNG = () => {
-    if (!window.html2canvas) {
-      triggerNotification("Loading visual rendering engine... Click again in a second.", "info");
-      return;
-    }
-
-    if (!invoiceRenderRef.current) {
-      triggerNotification("Cannot find invoice layout template. Try selecting another invoice.", "error");
-      return;
-    }
-
-    // Begin progress sequence from 0%
-    setDownloadProgress(0);
-    setDownloadStepText("Initializing graphics layout renderer...");
-
-    let currentPercent = 0;
-    const stepIntervals = [
-      { max: 20, text: "Compiling vector assets & layers..." },
-      { max: 50, text: "Applying high-end black & gold styling..." },
-      { max: 75, text: "Calculating sales taxonomies and SST (RM)..." },
-      { max: 95, text: "Generating digital graphic blueprint (PNG)..." },
-      { max: 100, text: "Ready! Saving directly to your device..." }
-    ];
-
-    const progressTimer = setInterval(() => {
-      currentPercent += Math.floor(Math.random() * 4) + 2; // Increments of 2% to 5%
+    <div class="flex-1 flex flex-col md:flex-row">
       
-      if (currentPercent >= 100) {
-        currentPercent = 100;
-        clearInterval(progressTimer);
-        setDownloadProgress(100);
-        setDownloadStepText("Download complete! Enjoy your digital copy.");
+      <!-- SIDEBAR WORKSPACE NAVIGATION -->
+      <nav class="w-full md:w-64 bg-[#0F0F0F] border-b md:border-b-0 md:border-r border-[#D4AF37]/15 p-4 flex md:flex-col gap-2 overflow-x-auto md:overflow-x-visible shrink-0 print:hidden">
+        <div class="hidden md:block py-3 px-2 mb-4 border-b border-[#D4AF37]/10">
+          <p class="text-xs font-serif text-[#D4AF37] italic">"Good design is financial intelligence visualized."</p>
+        </div>
 
-        // Execute actual high quality raster generation
-        setTimeout(() => {
-          window.html2canvas(invoiceRenderRef.current, {
-            scale: 2, // High resolution upscale for crystal clear lines
-            useCORS: true,
-            allowTaint: true,
-            backgroundColor: "#FFFFFF", // High contrast background for printing/sharing
-          }).then((canvas) => {
-            // Convert to native base64 png link
-            const pngURI = canvas.toDataURL("image/png");
-            const downloadLink = document.createElement("a");
-            downloadLink.href = pngURI;
-            downloadLink.download = `${selectedInvoice.invoiceNo}_BrandworkzCo.png`;
-            document.body.appendChild(downloadLink);
-            downloadLink.click();
-            document.body.removeChild(downloadLink);
+        <button 
+          onclick="switchTab('dashboard')"
+          id="nav-dashboard"
+          class="w-full flex items-center gap-3 px-4 py-3 rounded text-sm font-medium transition-all"
+        >
+          <i data-lucide="layout-dashboard" class="h-[18px] w-[18px]"></i>
+          Creative Dashboard
+        </button>
 
-            triggerNotification(`High-Res PNG Saved: ${selectedInvoice.invoiceNo}`);
-            
-            // Clean modal view delay
-            setTimeout(() => {
-              setDownloadProgress(null);
-              setDownloadStepText('');
-            }, 800);
-          }).catch((err) => {
-            console.error("Renderer error:", err);
-            triggerNotification("Layout renderer was blocked by element styles.", "error");
-            setDownloadProgress(null);
-          });
-        }, 500);
-      } else {
-        setDownloadProgress(currentPercent);
-        // Find matching text step
-        const step = stepIntervals.find(s => currentPercent <= s.max);
-        if (step) {
-          setDownloadStepText(step.text);
-        }
-      }
-    }, 60); // Total animation lasts about 1.5 - 2.5 seconds
-  };
+        <button 
+          onclick="switchTab('tracker')"
+          id="nav-tracker"
+          class="w-full flex items-center gap-3 px-4 py-3 rounded text-sm font-medium transition-all"
+        >
+          <i data-lucide="briefcase" class="h-[18px] w-[18px]"></i>
+          Projects Tracker
+        </button>
 
-  if (!isLoggedIn) {
-    return (
-      <div className="min-h-screen bg-[#070707] text-gray-100 flex items-center justify-center p-4 relative overflow-hidden font-sans selection:bg-[#D4AF37]/30 selection:text-[#FFF]">
-        {/* Abstract Gold Glow Effects */}
-        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-[#D4AF37]/5 blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-[#D4AF37]/5 blur-[120px] pointer-events-none" />
+        <button 
+          onclick="switchTab('invoices')"
+          id="nav-invoices"
+          class="w-full flex items-center gap-3 px-4 py-3 rounded text-sm font-medium transition-all"
+        >
+          <i data-lucide="file-text" class="h-[18px] w-[18px]"></i>
+          Invoices & Billing
+        </button>
 
-        <div className="max-w-md w-full bg-gradient-to-b from-[#0F0F0F] to-[#141414] border border-[#D4AF37]/25 rounded-2xl p-8 shadow-[0_20px_50px_rgba(0,0,0,0.9)] relative z-10 transition-all duration-300">
-          
-          {/* Company Brand Branding */}
-          <div className="text-center mb-8">
-            <div className="inline-flex bg-gradient-to-br from-[#D4AF37] via-[#B38728] to-[#FCF6BA] px-4 py-3 rounded-2xl shadow-[0_0_20px_rgba(212,175,55,0.25)] items-center justify-center font-bold text-[#0D0D0D] text-lg mb-4">
-              BZ
-            </div>
-            <h1 className="text-xl font-serif font-semibold tracking-wider text-white">BRANDWORKZ CO.</h1>
-            <p className="text-[10px] text-gray-400 uppercase tracking-[0.2em] font-medium mt-1">Creative Suite Secure Gateway</p>
+        <button 
+          onclick="switchTab('tasks')"
+          id="nav-tasks"
+          class="w-full flex items-center gap-3 px-4 py-3 rounded text-sm font-medium transition-all"
+        >
+          <i data-lucide="check-square" class="h-[18px] w-[18px]"></i>
+          Task Workspace
+        </button>
+
+        <button 
+          onclick="switchTab('clients')"
+          id="nav-clients"
+          class="w-full flex items-center gap-3 px-4 py-3 rounded text-sm font-medium transition-all"
+        >
+          <i data-lucide="users" class="h-[18px] w-[18px]"></i>
+          Premium Financials
+        </button>
+
+        <div class="mt-auto pt-6 border-t border-[#D4AF37]/10 flex flex-col gap-3">
+          <button 
+            onclick="handleLogout()"
+            class="w-full flex items-center justify-center gap-2 py-2 bg-rose-950/20 hover:bg-rose-950/40 border border-rose-500/20 hover:border-rose-500/40 text-rose-400 text-xs rounded transition-all"
+          >
+            <i data-lucide="lock" class="h-3 w-3"></i> Lock Workspace
+          </button>
+          <div class="text-center">
+            <span class="text-[10px] tracking-wider text-gray-500 uppercase block">Premium Planner v2.6</span>
+            <span class="text-[9px] text-[#D4AF37]/60 block font-mono">RM Currency Enabled</span>
           </div>
+        </div>
+      </nav>
 
-          {/* Secure access guidelines */}
-          <div className="bg-[#181818] border border-white/5 rounded-xl p-4 mb-6 flex items-start gap-3">
-            <div className="text-[#D4AF37] mt-0.5 shrink-0">
-              <ShieldCheck size={18} className="animate-pulse" />
-            </div>
+      <!-- PRIMARY CONTENT COMPONENT VIEWPORTS -->
+      <main class="flex-1 p-6 md:p-8 overflow-y-auto max-w-7xl mx-auto w-full">
+        
+        <!-- VIEW: DASHBOARD -->
+        <div id="view-dashboard" class="space-y-6 animate-fade-in hidden">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
-              <p className="text-xs font-semibold text-white">Public Hosting Shield Active</p>
-              <p className="text-[10px] text-gray-400 mt-0.5 leading-relaxed">This business workspace is encrypted. Verify your credential keys to open your planner dashboard.</p>
+              <h2 class="text-2xl font-serif text-white tracking-wide">DESIGN STUDIO COMMAND</h2>
+              <p class="text-xs text-gray-400">High-level insights, active pipeline metrics and client revenue flows.</p>
+            </div>
+            <div class="flex items-center gap-2 bg-[#141414] border border-white/5 rounded-lg px-4 py-2">
+              <div class="h-2 w-2 rounded-full bg-[#D4AF37] animate-pulse"></div>
+              <span class="text-xs text-gray-300 font-mono">Status: Authenticated & Secured Session</span>
             </div>
           </div>
 
-          {/* Login Errors */}
-          {loginError && (
-            <div className="bg-rose-950/20 border border-rose-500/30 rounded-lg p-3.5 mb-6 flex items-start gap-3 animate-slide-in">
-              <ShieldAlert className="text-rose-400 shrink-0 mt-0.5" size={16} />
-              <p className="text-xs text-rose-300 font-medium">{loginError}</p>
+          <!-- KPI Metric Summary Panels -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="bg-gradient-to-br from-[#121212] to-[#181818] border border-[#D4AF37]/25 rounded p-5 relative overflow-hidden group hover:border-[#D4AF37]/55 transition-all">
+              <span class="text-xs text-gray-400 uppercase tracking-wider block mb-1">Total Booked Portfolio</span>
+              <p id="dashboard-grand-total" class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#FCF6BA] to-[#D4AF37]">RM 0.00</p>
+              <p class="text-[10px] text-[#D4AF37] mt-2 flex items-center gap-1">
+                <i data-lucide="shield-check" class="h-3 w-3"></i> Includes Taxes (29.17% rate)
+              </p>
             </div>
-          )}
 
-          {/* Credential Form */}
-          <form onSubmit={handleSecurityAccess} className="space-y-5">
-            <div className="space-y-1.5">
-              <label className="text-[10px] text-gray-400 uppercase tracking-widest block font-semibold">Workspace Username</label>
-              <div className="relative">
-                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500">
-                  <User size={15} />
-                </span>
-                <input 
-                  type="text" 
-                  required
-                  value={usernameInput}
-                  onChange={(e) => setUsernameInput(e.target.value)}
-                  placeholder="Enter username" 
-                  className="w-full bg-[#181818] border border-white/10 rounded-xl pl-10 pr-4 py-3 text-xs text-white focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/30 transition-all font-sans"
-                />
+            <div class="bg-[#121212] border border-white/5 rounded p-5 relative overflow-hidden group hover:border-[#D4AF37]/30 transition-all">
+              <span class="text-xs text-gray-400 uppercase tracking-wider block mb-1">Active Projects</span>
+              <p id="dashboard-active-count" class="text-2xl font-bold text-white">0 Active</p>
+              <p id="dashboard-progress-count" class="text-[10px] text-gray-500 mt-2">0 currently in design progress</p>
+            </div>
+
+            <div class="bg-[#121212] border border-white/5 rounded p-5 relative overflow-hidden group hover:border-[#D4AF37]/30 transition-all">
+              <span class="text-xs text-gray-400 uppercase tracking-wider block mb-1">Tax Liability (29.17%)</span>
+              <p id="dashboard-tax-total" class="text-2xl font-bold text-[#D4AF37]">RM 0.00</p>
+              <p class="text-[10px] text-[#D4AF37]/85 mt-2 flex items-center gap-1">
+                <i data-lucide="calendar" class="h-3 w-3"></i> Dynamic tracking from system invoices
+              </p>
+            </div>
+
+            <div class="bg-[#121212] border border-white/5 rounded p-5 relative overflow-hidden group hover:border-[#D4AF37]/30 transition-all">
+              <span class="text-xs text-gray-400 uppercase tracking-wider block mb-1">To-Do Task Progress</span>
+              <p id="dashboard-task-percent" class="text-2xl font-bold text-white">0%</p>
+              <p id="dashboard-task-completed" class="text-[10px] text-gray-500 mt-2">0 of 0 tasks completed</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Analytics Graph Grid -->
+            <div class="bg-[#121212] border border-white/5 rounded-lg p-5 lg:col-span-2 space-y-4">
+              <div class="flex items-center justify-between">
+                <div>
+                  <h3 class="text-sm font-medium text-white tracking-wider uppercase">Quarterly Design Earnings</h3>
+                  <p class="text-xs text-gray-500">Sales progression over standard monthly billing cycles.</p>
+                </div>
+                <span class="text-xs font-semibold text-[#D4AF37] px-2.5 py-1 bg-[#201A0E] rounded border border-[#D4AF37]/30">RM (MYR)</span>
+              </div>
+              <div class="h-64 relative">
+                <canvas id="earningsChart"></canvas>
               </div>
             </div>
 
-            <div className="space-y-1.5">
-              <label className="text-[10px] text-gray-400 uppercase tracking-widest block font-semibold">Security Access Key</label>
-              <div className="relative">
-                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500">
-                  <Lock size={15} />
-                </span>
-                <input 
-                  type={showPassword ? "text" : "password"} 
-                  required
-                  value={passwordInput}
-                  onChange={(e) => setPasswordInput(e.target.value)}
-                  placeholder="Enter password" 
-                  className="w-full bg-[#181818] border border-white/10 rounded-xl pl-10 pr-11 py-3 text-xs text-white focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/30 transition-all font-sans"
-                />
+            <!-- Output Pipeline Tracker Panel -->
+            <div class="bg-[#121212] border border-white/5 rounded-lg p-5 flex flex-col justify-between">
+              <div>
+                <h3 class="text-sm font-medium text-white tracking-wider uppercase mb-1">Design Output Pipeline</h3>
+                <p class="text-xs text-gray-500 mb-4">Urgent statuses requiring client feedback or file delivery.</p>
+                <div id="dashboard-pipeline-list" class="space-y-3">
+                  <!-- Generated dynamically -->
+                </div>
+              </div>
+
+              <button 
+                onclick="switchTab('tracker')" 
+                class="w-full mt-4 text-center py-2 bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white rounded text-xs transition-all flex items-center justify-center gap-1"
+              >
+                Manage Client Tracking <i data-lucide="chevron-right" class="h-3.5 w-3.5"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Mini Deliverables Checklist Panel -->
+          <div class="bg-[#121212] border border-white/5 rounded-lg p-5">
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <h3 class="text-sm font-medium text-white tracking-wider uppercase">Today's Creative Deliverables</h3>
+                <p class="text-xs text-gray-500 font-serif italic">Check tasks off as you perfect the vectors.</p>
+              </div>
+              <button onclick="switchTab('tasks')" class="text-xs text-[#D4AF37] hover:underline">
+                View full board
+              </button>
+            </div>
+            <div id="dashboard-deliverables-list" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <!-- Rendered Dynamically -->
+            </div>
+          </div>
+        </div>
+
+        <!-- VIEW: PROJECTS TRACKER -->
+        <div id="view-tracker" class="space-y-6 animate-fade-in hidden">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <h2 class="text-2xl font-serif text-white tracking-wide">ACTIVE PORTFOLIO & PIPELINE</h2>
+              <p class="text-xs text-gray-400">Manage client deliverables, upload design mockups, and evaluate individual financial margins.</p>
+            </div>
+            <button 
+              onclick="openAddProjectModal()" 
+              class="flex items-center gap-2 bg-gradient-to-r from-[#BF953F] to-[#D4AF37] text-black font-semibold text-xs px-5 py-2.5 rounded shadow-lg transition-transform hover:-translate-y-0.5"
+            >
+              <i data-lucide="plus" class="h-4 w-4"></i> NEW CLIENT INVOICE/PROJECT
+            </button>
+          </div>
+
+          <div class="bg-[#121212] border border-white/5 rounded-lg overflow-hidden shadow-2xl">
+            <div class="p-4 bg-[#1A1A1A] border-b border-white/5 flex flex-wrap justify-between items-center gap-4">
+              <span class="text-xs uppercase tracking-wider text-[#D4AF37] font-semibold">Active Design Directives</span>
+              <div class="text-xs text-gray-400">
+                Grand Total Booked: <span id="tracker-summary-grand-total" class="font-bold text-white font-mono">RM 0.00</span>
+              </div>
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs text-gray-300">
+                <thead class="bg-[#161616] text-[#D4AF37] font-mono text-[10px] uppercase border-b border-[#D4AF37]/10">
+                  <tr>
+                    <th class="p-4">Invoice / Client</th>
+                    <th class="p-4">Project Scope</th>
+                    <th class="p-4">Dates</th>
+                    <th class="p-4">Status</th>
+                    <th class="p-4 text-right">Cost (RM)</th>
+                    <th class="p-4 text-right">Tax (29.17%)</th>
+                    <th class="p-4 text-right">Total (RM)</th>
+                    <th class="p-4 text-center">Design Files</th>
+                    <th class="p-4 text-center">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="tracker-table-body" class="divide-y divide-white/5">
+                  <!-- Generated dynamically -->
+                </tbody>
+              </table>
+            </div>
+
+            <div class="bg-[#161616] p-4 border-t border-white/5 flex flex-wrap justify-between items-center gap-4 font-mono text-xs">
+              <span class="text-gray-400">Total Recorded Active Pipeline Invoices: <span id="tracker-invoice-count" class="text-white font-bold">0</span></span>
+              <div class="flex gap-6 text-right">
+                <div>
+                  <span class="text-[10px] text-gray-400 block uppercase">Subtotal</span>
+                  <span id="tracker-subtotal" class="text-sm font-semibold text-gray-200">RM 0.00</span>
+                </div>
+                <div>
+                  <span class="text-[10px] text-gray-400 block uppercase">Estimated Taxes</span>
+                  <span id="tracker-tax" class="text-sm font-semibold text-[#D4AF37]">RM 0.00</span>
+                </div>
+                <div class="border-l border-white/10 pl-6">
+                  <span class="text-[10px] text-[#D4AF37] block uppercase font-bold">Grand Total (RM)</span>
+                  <span id="tracker-grand-total" class="text-base font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#FCF6BA] to-[#D4AF37]">RM 0.00</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- VIEW: INVOICES HUB -->
+        <div id="view-invoices" class="space-y-6 animate-fade-in hidden">
+          <!-- Dynamic Inner View Toggle (List vs Detailed Layout Preview) -->
+          <div id="invoice-hub-list-mode" class="space-y-6">
+            <div>
+              <h2 class="text-2xl font-serif text-white tracking-wide">INVOICES HUB</h2>
+              <p class="text-xs text-gray-400">Manage, preview, and generate client billing receipts. Export as high-resolution PNG format instantly.</p>
+            </div>
+            <div id="invoice-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <!-- Dynamically rendered -->
+            </div>
+          </div>
+
+          <div id="invoice-hub-detail-mode" class="space-y-6 hidden">
+            <div class="flex flex-wrap justify-between items-center gap-4 bg-[#121212] p-4 rounded border border-white/5">
+              <button 
+                onclick="closeInvoiceDetail()" 
+                class="text-xs text-gray-400 hover:text-white flex items-center gap-1.5"
+              >
+                <i data-lucide="x" class="h-4 w-4"></i> Back to Invoices
+              </button>
+              <div class="flex items-center gap-3">
+                <span class="text-xs text-gray-400 italic">💡 Compiles and exports layout directly as a PNG graphic</span>
                 <button 
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white transition-colors"
+                  onclick="triggerPNGExport()"
+                  class="flex items-center gap-2 bg-gradient-to-r from-[#BF953F] to-[#D4AF37] text-black font-bold text-xs px-5 py-2.5 rounded shadow-lg hover:from-[#FCF6BA] hover:to-[#B38728] transition-all"
                 >
-                  {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
+                  <i data-lucide="arrow-down-to-line" class="h-4 w-4"></i> Export PNG (Download)
                 </button>
               </div>
+            </div>
+
+            <!-- Printable Render Container -->
+            <div class="p-2 overflow-x-auto">
+              <div 
+                id="invoice-render-sheet"
+                class="bg-white text-gray-900 p-8 md:p-12 rounded-lg shadow-2xl max-w-3xl mx-auto border-t-8 border-[#D4AF37] font-serif"
+                style="width: 768px"
+              >
+                <!-- Filled Dynamically -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- VIEW: TASK WORKSPACE -->
+        <div id="view-tasks" class="space-y-6 animate-fade-in hidden">
+          <div>
+            <h2 class="text-2xl font-serif text-white tracking-wide">TASK WORKSPACE</h2>
+            <p class="text-xs text-gray-400">Keep graphic assets on path, manage revision backlogs, and structure layout cycles.</p>
+          </div>
+
+          <form id="task-addition-form" class="bg-[#121212] p-5 rounded-lg border border-white/5 flex flex-col md:flex-row gap-3 items-end">
+            <div class="flex-1 w-full space-y-1">
+              <label class="text-[10px] text-gray-400 uppercase tracking-wider block">Add Custom Deliverable Task</label>
+              <input 
+                type="text" 
+                id="new-task-text"
+                required
+                placeholder="e.g., Export transparent PNG guidelines and typography sets..."
+                class="w-full bg-[#1A1A1A] border border-white/10 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D4AF37] transition-all"
+              />
+            </div>
+
+            <div class="w-full md:w-48 space-y-1">
+              <label class="text-[10px] text-gray-400 uppercase tracking-wider block">Category Tag</label>
+              <select 
+                id="new-task-category"
+                class="w-full bg-[#1A1A1A] border border-white/10 rounded px-3 py-2 text-xs text-[#D4AF37] focus:outline-none focus:border-[#D4AF37] transition-all"
+              >
+                <option value="High Priority">High Priority</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Review">Review</option>
+                <option value="Backlog">Backlog</option>
+                <option value="Maintenance">Maintenance</option>
+              </select>
             </div>
 
             <button 
               type="submit" 
-              disabled={isLoggingIn}
-              className="w-full mt-2 bg-gradient-to-r from-[#BF953F] via-[#D4AF37] to-[#FCF6BA] hover:brightness-110 text-[#0A0A0A] font-bold text-xs py-3.5 rounded-xl shadow-[0_4px_20px_rgba(212,175,55,0.25)] transition-all flex items-center justify-center gap-2 tracking-wider"
+              class="w-full md:w-auto bg-gradient-to-r from-[#BF953F] to-[#D4AF37] text-black font-semibold text-xs px-6 py-2.5 rounded hover:from-[#FCF6BA] hover:to-[#B38728] transition-all shrink-0 font-bold"
             >
-              {isLoggingIn ? (
-                <>
-                  <div className="h-4 w-4 border-2 border-[#0A0A0A] border-t-transparent rounded-full animate-spin" />
-                  AUTHENTICATING KEY...
-                </>
-              ) : (
-                <>
-                  <Lock size={14} className="stroke-[2.5]" />
-                  UNLOCK WORKSPACE
-                </>
-              )}
+              ADD TASK
             </button>
           </form>
 
-          {/* Footer branding details */}
-          <div className="text-center mt-8 pt-6 border-t border-white/5">
-            <p className="text-[9px] text-gray-600 uppercase tracking-widest">Brandworkz Co. • Enterprise Suite Security v2.6</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-[#0A0A0A] text-gray-100 flex flex-col font-sans selection:bg-[#D4AF37]/30 selection:text-[#FFF] relative">
-      
-      {/* PNG INSTALLATION DOWNLOAD PROGRESS DIALOG OVERLAY */}
-      {downloadProgress !== null && (
-        <div className="fixed inset-0 bg-[#070707]/95 z-50 flex flex-col items-center justify-center p-6 backdrop-blur-md animate-fade-in">
-          <div className="max-w-md w-full text-center space-y-6">
-            <div className="relative inline-flex items-center justify-center">
-              <div className="absolute inset-0 bg-[#D4AF37]/10 rounded-full blur-xl animate-pulse" />
-              <div className="relative bg-[#111] border border-[#D4AF37]/40 p-5 rounded-full shadow-[0_0_30px_rgba(212,175,55,0.2)]">
-                <Image className="text-[#D4AF37] animate-bounce" size={32} />
-              </div>
+          <div class="bg-[#121212] border border-white/5 rounded-lg p-5">
+            <div class="flex justify-between items-center mb-4">
+              <span class="text-xs uppercase tracking-wider text-[#D4AF37] font-semibold">Active Studio Task Board</span>
+              <span id="task-completed-fraction" class="text-[10px] text-gray-400 font-mono">Completed: 0 / 0</span>
             </div>
 
-            <div className="space-y-2">
-              <h3 className="text-lg font-serif tracking-wider font-semibold text-white">GENERATING RASTER PNG</h3>
-              <p className="text-[11px] text-[#D4AF37] tracking-widest uppercase font-mono">{downloadStepText}</p>
+            <div id="tasks-interactive-list" class="space-y-2">
+              <!-- Dynamically populated -->
             </div>
-
-            {/* Simulated Installation bar tracker */}
-            <div className="space-y-1 text-left">
-              <div className="flex justify-between text-xs font-mono text-gray-400">
-                <span>EXPORT RATIO: 2X HIGH-RES</span>
-                <span className="text-[#D4AF37] font-bold">{downloadProgress}%</span>
-              </div>
-              <div className="h-3 bg-[#111] rounded-full border border-white/5 overflow-hidden p-0.5">
-                <div 
-                  className="h-full rounded-full bg-gradient-to-r from-[#BF953F] via-[#D4AF37] to-[#FCF6BA] shadow-[0_0_10px_rgba(212,175,55,0.5)] transition-all duration-75"
-                  style={{ width: `${downloadProgress}%` }}
-                />
-              </div>
-            </div>
-
-            <p className="text-[10px] text-gray-500 max-w-xs mx-auto leading-relaxed">
-              Please keep your browser active. The canvas layout is compiling into a high-quality portable raster image compatible with all smartphones and tablets.
-            </p>
           </div>
         </div>
-      )}
 
-      {/* Dynamic Notifications Banner */}
-      {notification && (
-        <div className="fixed top-6 right-6 z-50 flex items-center gap-3 bg-gradient-to-r from-[#1E1E1E] to-[#121212] border-l-4 border-[#D4AF37] px-6 py-4 rounded-lg shadow-[0_10px_30px_rgba(0,0,0,0.8)] animate-slide-in">
-          <div className="h-2 w-2 rounded-full bg-[#D4AF37] animate-ping" />
-          <span className="text-sm font-medium text-gray-200">{notification.message}</span>
-          <button onClick={() => setNotification(null)} className="text-gray-400 hover:text-white ml-2">
-            <X size={15} />
-          </button>
-        </div>
-      )}
-
-      {/* Header Bar */}
-      <header className="border-b border-[#D4AF37]/20 bg-[#0F0F0F] px-6 py-4 flex flex-wrap justify-between items-center gap-4 sticky top-0 z-40 shadow-lg print:hidden">
-        <div className="flex items-center gap-3">
-          <div className="bg-gradient-to-br from-[#D4AF37] via-[#B38728] to-[#FCF6BA] px-3 py-2 rounded-lg shadow-[0_0_12px_rgba(212,175,55,0.4)] flex items-center justify-center font-bold text-[#0D0D0D] text-sm">
-            BZ
-          </div>
+        <!-- VIEW: PREMIUM FINANCIALS -->
+        <div id="view-clients" class="space-y-6 animate-fade-in hidden">
           <div>
-            <span className="text-xs uppercase tracking-[0.2em] text-[#D4AF37] font-bold block">Exclusive Suite</span>
-            <h1 className="text-lg font-serif font-semibold tracking-wide text-white">BRANDWORKZ CO. PLANNER</h1>
-          </div>
-        </div>
-
-        {/* Global Statistics Highlights in RM */}
-        <div className="flex items-center gap-6 text-right">
-          <div className="hidden sm:block">
-            <p className="text-[10px] uppercase text-gray-400 tracking-wider">TAX (6% SST)</p>
-            <p className="text-sm font-semibold text-[#D4AF37]">RM {financialSummary.taxTotal.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-          </div>
-          <div>
-            <p className="text-[10px] uppercase text-gray-400 tracking-wider">GRAND TOTAL EARNINGS</p>
-            <p className="text-base font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#FCF6BA] via-[#D4AF37] to-[#BF953F]">
-              RM {financialSummary.grandTotal.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            </p>
-          </div>
-          <button 
-            onClick={() => setShowAddProjectModal(true)} 
-            className="flex items-center gap-2 bg-gradient-to-r from-[#BF953F] to-[#D4AF37] hover:from-[#FCF6BA] hover:to-[#B38728] text-[#0A0A0A] font-semibold text-xs px-4 py-2 rounded shadow-[0_4px_15px_rgba(212,175,55,0.3)] transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0"
-          >
-            <Plus size={16} className="stroke-[3]" />
-            NEW CLIENT PROJECT
-          </button>
-        </div>
-      </header>
-
-      {/* Sidebar and Navigation Tabs Container */}
-      <div className="flex-1 flex flex-col md:flex-row">
-        
-        {/* Navigation Sidebar */}
-        <nav className="w-full md:w-64 bg-[#0F0F0F] border-b md:border-b-0 md:border-r border-[#D4AF37]/15 p-4 flex md:flex-col gap-2 overflow-x-auto md:overflow-x-visible shrink-0 print:hidden">
-          <div className="hidden md:block py-3 px-2 mb-4 border-b border-[#D4AF37]/10">
-            <p className="text-xs font-serif text-[#D4AF37] italic">"Good design is financial intelligence visualized."</p>
+            <h2 class="text-2xl font-serif text-white tracking-wide">PREMIUM FINANCIALS</h2>
+            <p class="text-xs text-gray-400">Deep-dive financial reports, tax breakdowns (29.17% rate), and client portfolio statistics.</p>
           </div>
 
-          <button 
-            onClick={() => setActiveTab('dashboard')}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded text-sm font-medium transition-all ${
-              activeTab === 'dashboard' 
-                ? 'bg-[#1E1910] text-[#D4AF37] border-l-2 border-[#D4AF37] shadow-[inset_0_0_10px_rgba(212,175,55,0.1)]' 
-                : 'text-gray-400 hover:text-white hover:bg-white/5'
-            }`}
-          >
-            <LayoutDashboard size={18} />
-            Creative Dashboard
-          </button>
+          <div class="bg-[#121212] border border-white/5 rounded-lg p-5">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-sm font-medium text-white tracking-wider uppercase">Client Portfolio Breakdown</h3>
+              <span class="text-[10px] text-gray-400">Currency configured to Malaysian Ringgit (RM)</span>
+            </div>
 
-          <button 
-            onClick={() => setActiveTab('tracker')}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded text-sm font-medium transition-all ${
-              activeTab === 'tracker' 
-                ? 'bg-[#1E1910] text-[#D4AF37] border-l-2 border-[#D4AF37] shadow-[inset_0_0_10px_rgba(212,175,55,0.1)]' 
-                : 'text-gray-400 hover:text-white hover:bg-white/5'
-            }`}
-          >
-            <Briefcase size={18} />
-            Projects Tracker
-          </button>
-
-          <button 
-            onClick={() => setActiveTab('invoices')}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded text-sm font-medium transition-all ${
-              activeTab === 'invoices' 
-                ? 'bg-[#1E1910] text-[#D4AF37] border-l-2 border-[#D4AF37] shadow-[inset_0_0_10px_rgba(212,175,55,0.1)]' 
-                : 'text-gray-400 hover:text-white hover:bg-white/5'
-            }`}
-          >
-            <FileText size={18} />
-            Invoices & Billing
-          </button>
-
-          <button 
-            onClick={() => setActiveTab('tasks')}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded text-sm font-medium transition-all ${
-              activeTab === 'tasks' 
-                ? 'bg-[#1E1910] text-[#D4AF37] border-l-2 border-[#D4AF37] shadow-[inset_0_0_10px_rgba(212,175,55,0.1)]' 
-                : 'text-gray-400 hover:text-white hover:bg-white/5'
-            }`}
-          >
-            <CheckSquare size={18} />
-            Task Workspace
-          </button>
-
-          <button 
-            onClick={() => setActiveTab('clients')}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded text-sm font-medium transition-all ${
-              activeTab === 'clients' 
-                ? 'bg-[#1E1910] text-[#D4AF37] border-l-2 border-[#D4AF37] shadow-[inset_0_0_10px_rgba(212,175,55,0.1)]' 
-                : 'text-gray-400 hover:text-white hover:bg-white/5'
-            }`}
-          >
-            <Users size={18} />
-            Premium Financials
-          </button>
-
-          {/* Secure Logout Trigger inside sidebar */}
-          <div className="mt-auto pt-6 border-t border-[#D4AF37]/10 flex flex-col gap-3">
-            <button 
-              onClick={handleLogout}
-              className="w-full flex items-center justify-center gap-2 py-2 bg-rose-950/20 hover:bg-rose-950/40 border border-rose-500/20 hover:border-rose-500/40 text-rose-400 text-xs rounded transition-all"
-            >
-              <Lock size={12} /> Lock Workspace
-            </button>
-            <div className="text-center">
-              <span className="text-[10px] tracking-wider text-gray-500 uppercase block">Premium Planner v2.6</span>
-              <span className="text-[9px] text-[#D4AF37]/60 block font-mono">RM Currency Enabled</span>
+            <div id="financial-client-breakdown" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <!-- Dynamically Rendered -->
             </div>
           </div>
-        </nav>
 
-        {/* Main Immersive Canvas Area */}
-        <main className="flex-1 p-6 md:p-8 overflow-y-auto max-w-7xl mx-auto w-full">
-          
-          {/* TAB 1: CREATIVE DASHBOARD */}
-          {activeTab === 'dashboard' && (
-            <div className="space-y-6 animate-fade-in">
-              {/* Luxury Intro and Quick Settings */}
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div>
-                  <h2 className="text-2xl font-serif text-white tracking-wide">DESIGN STUDIO COMMAND</h2>
-                  <p className="text-xs text-gray-400">High-level insights, active pipeline metrics and client revenue flows.</p>
-                </div>
-                <div className="flex items-center gap-2 bg-[#141414] border border-white/5 rounded-lg px-4 py-2">
-                  <div className="h-2 w-2 rounded-full bg-[#D4AF37] animate-pulse" />
-                  <span className="text-xs text-gray-300 font-mono">Status: Authenticated & Secured Session</span>
-                </div>
-              </div>
-
-              {/* Statistics Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="bg-gradient-to-br from-[#121212] to-[#181818] border border-[#D4AF37]/25 rounded p-5 relative overflow-hidden group hover:border-[#D4AF37]/55 transition-all">
-                  <div className="absolute top-0 right-0 p-3 text-white/5 group-hover:text-[#D4AF37]/10 transition-colors">
-                    <TrendingUp size={60} />
-                  </div>
-                  <span className="text-xs text-gray-400 uppercase tracking-wider block mb-1">Total Booked Portfolio</span>
-                  <p className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#FCF6BA] to-[#D4AF37]">
-                    RM {financialSummary.grandTotal.toLocaleString('en-MY', { minimumFractionDigits: 2 })}
-                  </p>
-                  <p className="text-[10px] text-[#D4AF37] mt-2 flex items-center gap-1">
-                    <ShieldCheck size={12} /> Includes Taxes (6% SST equivalent)
-                  </p>
-                </div>
-
-                <div className="bg-[#121212] border border-white/5 rounded p-5 relative overflow-hidden group hover:border-[#D4AF37]/30 transition-all">
-                  <span className="text-xs text-gray-400 uppercase tracking-wider block mb-1">Active Projects</span>
-                  <p className="text-2xl font-bold text-white">
-                    {projects.filter(p => p.status !== 'Completed').length} Active
-                  </p>
-                  <p className="text-[10px] text-gray-500 mt-2">
-                    {projects.filter(p => p.status === 'In Progress').length} currently in design progress
-                  </p>
-                </div>
-
-                <div className="bg-[#121212] border border-white/5 rounded p-5 relative overflow-hidden group hover:border-[#D4AF37]/30 transition-all">
-                  <span className="text-xs text-gray-400 uppercase tracking-wider block mb-1">Tax Liability (SST)</span>
-                  <p className="text-2xl font-bold text-[#D4AF37]">
-                    RM {financialSummary.taxTotal.toLocaleString('en-MY', { minimumFractionDigits: 2 })}
-                  </p>
-                  <p className="text-[10px] text-[#D4AF37]/85 mt-2 flex items-center gap-1">
-                    <Calendar size={12} /> Dynamic tracking from generated invoices
-                  </p>
-                </div>
-
-                <div className="bg-[#121212] border border-white/5 rounded p-5 relative overflow-hidden group hover:border-[#D4AF37]/30 transition-all">
-                  <span className="text-xs text-gray-400 uppercase tracking-wider block mb-1">To-Do Task Progress</span>
-                  <p className="text-2xl font-bold text-white">
-                    {Math.round((tasks.filter(t => t.completed).length / (tasks.length || 1)) * 100)}%
-                  </p>
-                  <p className="text-[10px] text-gray-500 mt-2">
-                    {tasks.filter(t => t.completed).length} of {tasks.length} tasks completed
-                  </p>
-                </div>
-              </div>
-
-              {/* Graphical Overviews - Styled specifically with luxury Gold Gradients */}
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                
-                {/* Recharts Area Chart for Earnings */}
-                <div className="bg-[#121212] border border-white/5 rounded-lg p-5 lg:col-span-2 space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h3 className="text-sm font-medium text-white tracking-wider uppercase">Quarterly Design Earnings</h3>
-                      <p className="text-xs text-gray-500">Sales progression over standard monthly billing cycles.</p>
-                    </div>
-                    <span className="text-xs font-semibold text-[#D4AF37] px-2.5 py-1 bg-[#201A0E] rounded border border-[#D4AF37]/30">RM (MYR)</span>
-                  </div>
-                  <div className="h-64">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <AreaChart data={monthlyEarningsData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                        <defs>
-                          <linearGradient id="goldGradient" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor="#D4AF37" stopOpacity={0.4}/>
-                            <stop offset="95%" stopColor="#D4AF37" stopOpacity={0}/>
-                          </linearGradient>
-                        </defs>
-                        <XAxis dataKey="name" stroke="#555" fontSize={11} tickLine={false} />
-                        <YAxis stroke="#555" fontSize={11} tickLine={false} />
-                        <Tooltip 
-                          contentStyle={{ backgroundColor: '#1A1A1A', borderColor: '#D4AF37', borderRadius: '4px' }}
-                          labelStyle={{ color: '#D4AF37', fontWeight: 'bold' }}
-                          itemStyle={{ color: '#FFF' }}
-                        />
-                        <Area type="monotone" dataKey="Sales" stroke="#D4AF37" strokeWidth={2} fillOpacity={1} fill="url(#goldGradient)" />
-                      </AreaChart>
-                    </ResponsiveContainer>
-                  </div>
-                </div>
-
-                {/* Side Queue Card list */}
-                <div className="bg-[#121212] border border-white/5 rounded-lg p-5 flex flex-col justify-between">
-                  <div>
-                    <h3 className="text-sm font-medium text-white tracking-wider uppercase mb-1">Design Output Pipeline</h3>
-                    <p className="text-xs text-gray-500 mb-4">Urgent statuses requiring client feedback or file delivery.</p>
-                    
-                    <div className="space-y-3">
-                      {projects.map(p => (
-                        <div key={p.id} className="flex items-center justify-between p-2.5 bg-[#1A1A1A] rounded border border-white/5 hover:border-[#D4AF37]/30 transition-all">
-                          <div className="max-w-[150px] truncate">
-                            <h4 className="text-xs font-semibold text-white truncate">{p.projectName}</h4>
-                            <p className="text-[10px] text-gray-400 truncate">{p.clientName}</p>
-                          </div>
-                          <span className={`text-[9px] px-2 py-0.5 rounded-full font-bold ${
-                            p.status === 'Completed' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
-                            p.status === 'Delayed' ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20' :
-                            p.status === 'Wait for Respond' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' :
-                            'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20'
-                          }`}>
-                            {p.status}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <button 
-                    onClick={() => setActiveTab('tracker')} 
-                    className="w-full mt-4 text-center py-2 bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white rounded text-xs transition-all flex items-center justify-center gap-1"
-                  >
-                    Manage Client Tracking <ChevronRight size={14} />
-                  </button>
-                </div>
-
-              </div>
-
-              {/* To Do Glance */}
-              <div className="bg-[#121212] border border-white/5 rounded-lg p-5">
-                <div className="flex items-center justify-between mb-4">
-                  <div>
-                    <h3 className="text-sm font-medium text-white tracking-wider uppercase">Today's Creative Deliverables</h3>
-                    <p className="text-xs text-gray-500 font-serif italic">Check tasks off as you perfect the vectors.</p>
-                  </div>
-                  <button onClick={() => setActiveTab('tasks')} className="text-xs text-[#D4AF37] hover:underline">
-                    View full board
-                  </button>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  {tasks.slice(0, 4).map(t => (
-                    <div 
-                      key={t.id} 
-                      onClick={() => toggleTask(t.id)}
-                      className="p-3 bg-[#1A1A1A] rounded border border-white/5 flex items-center justify-between cursor-pointer hover:border-[#D4AF37]/30 hover:bg-[#202020] transition-all"
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className={`h-4 w-4 rounded border flex items-center justify-center transition-all ${
-                          t.completed ? 'bg-[#D4AF37] border-[#D4AF37]' : 'border-gray-600'
-                        }`}>
-                          {t.completed && <Check size={12} className="text-[#0D0D0D] stroke-[3]" />}
-                        </div>
-                        <span className={`text-xs text-gray-200 ${t.completed ? 'line-through text-gray-500' : ''}`}>
-                          {t.text}
-                        </span>
-                      </div>
-                      <span className="text-[9px] bg-white/10 text-gray-400 px-2 py-0.5 rounded font-mono uppercase">
-                        {t.category}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* TAB 2: PROJECTS TRACKER */}
-          {activeTab === 'tracker' && (
-            <div className="space-y-6 animate-fade-in">
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div>
-                  <h2 className="text-2xl font-serif text-white tracking-wide">ACTIVE PORTFOLIO & PIPELINE</h2>
-                  <p className="text-xs text-gray-400">Manage client deliverables, upload design mockups, and evaluate individual financial margins.</p>
-                </div>
-                <button 
-                  onClick={() => setShowAddProjectModal(true)} 
-                  className="flex items-center gap-2 bg-gradient-to-r from-[#BF953F] to-[#D4AF37] text-black font-semibold text-xs px-5 py-2.5 rounded shadow-lg transition-transform hover:-translate-y-0.5"
-                >
-                  <Plus size={16} className="stroke-[3]" /> NEW CLIENT INVOICE/PROJECT
-                </button>
-              </div>
-
-              {/* Real-time Project List / Table */}
-              <div className="bg-[#121212] border border-white/5 rounded-lg overflow-hidden shadow-2xl">
-                <div className="p-4 bg-[#1A1A1A] border-b border-white/5 flex flex-wrap justify-between items-center gap-4">
-                  <span className="text-xs uppercase tracking-wider text-[#D4AF37] font-semibold">Active Design Directives</span>
-                  <div className="text-xs text-gray-400">
-                    Grand Total Booked: <span className="font-bold text-white font-mono">RM {financialSummary.grandTotal.toFixed(2)}</span>
-                  </div>
-                </div>
-
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left text-xs text-gray-300">
-                    <thead className="bg-[#161616] text-[#D4AF37] font-mono text-[10px] uppercase border-b border-[#D4AF37]/10">
-                      <tr>
-                        <th className="p-4">Invoice / Client</th>
-                        <th className="p-4">Project Scope</th>
-                        <th className="p-4">Dates</th>
-                        <th className="p-4">Status</th>
-                        <th className="p-4 text-right">Cost (RM)</th>
-                        <th className="p-4 text-right">Tax (6%)</th>
-                        <th className="p-4 text-right">Total (RM)</th>
-                        <th className="p-4 text-center">Design Files</th>
-                        <th className="p-4 text-center">Action</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-white/5">
-                      {projects.map((p) => {
-                        const totalCost = p.cost + p.tax;
-                        return (
-                          <tr key={p.id} className="hover:bg-[#1A1A1A]/50 transition-colors">
-                            <td className="p-4">
-                              <span className="font-mono text-[10px] text-[#D4AF37] bg-[#221B0F] px-2 py-0.5 rounded border border-[#D4AF37]/20 block w-max mb-1">
-                                {p.invoiceNo}
-                              </span>
-                              <span className="font-semibold text-white block">{p.clientName}</span>
-                            </td>
-                            <td className="p-4">
-                              <span className="text-white font-medium block">{p.projectName}</span>
-                              <span className="text-[10px] text-gray-400 bg-white/5 px-2 py-0.5 rounded block w-max mt-1">{p.category}</span>
-                            </td>
-                            <td className="p-4 whitespace-nowrap">
-                              <div className="flex items-center gap-2 text-[10px]">
-                                <span className="text-gray-400">Out:</span> 
-                                <span className="font-mono font-semibold">{p.dateOut}</span>
-                              </div>
-                              <div className="flex items-center gap-2 text-[10px] mt-1">
-                                <span className="text-[#D4AF37]">Ship:</span> 
-                                <span className="font-mono font-semibold text-white">{p.shippingDate}</span>
-                              </div>
-                            </td>
-                            <td className="p-4">
-                              <select 
-                                value={p.status}
-                                onChange={(e) => {
-                                  setProjects(projects.map(item => item.id === p.id ? { ...item, status: e.target.value } : item));
-                                  triggerNotification(`Updated ${p.invoiceNo} status to ${e.target.value}`);
-                                }}
-                                className={`text-[10px] font-bold rounded px-2.5 py-1 bg-[#1A1A1A] border cursor-pointer outline-none transition-all ${
-                                  p.status === 'Completed' ? 'border-emerald-500/50 text-emerald-400' :
-                                  p.status === 'Delayed' ? 'border-rose-500/50 text-rose-400' :
-                                  p.status === 'Wait for Respond' ? 'border-amber-500/50 text-amber-400' :
-                                  'border-cyan-500/50 text-cyan-400'
-                                }`}
-                              >
-                                <option value="In Progress">In Progress</option>
-                                <option value="Delayed">Delayed</option>
-                                <option value="Completed">Completed</option>
-                                <option value="Wait for Respond">Wait for Respond</option>
-                              </select>
-                            </td>
-                            <td className="p-4 text-right font-mono font-semibold text-gray-300">
-                              {p.cost.toFixed(2)}
-                            </td>
-                            <td className="p-4 text-right font-mono text-[#D4AF37]">
-                              {p.tax.toFixed(2)}
-                            </td>
-                            <td className="p-4 text-right font-mono font-bold text-white">
-                              {totalCost.toFixed(2)}
-                            </td>
-                            <td className="p-4">
-                              {/* File Asset List & Quick Uploader */}
-                              <div className="space-y-1 max-w-[180px] mx-auto">
-                                {p.files.map((file, fIdx) => (
-                                  <div key={fIdx} className="flex items-center justify-between text-[10px] bg-black/40 px-2 py-1 rounded border border-white/5">
-                                    <span className="truncate text-gray-300 mr-2" title={file.name}>{file.name}</span>
-                                    <span className="text-[9px] text-gray-500 shrink-0">{file.size}</span>
-                                  </div>
-                                ))}
-                                <input 
-                                  type="file" 
-                                  ref={el => fileInputRefs.current[p.id] = el}
-                                  onChange={(e) => handleSimulatedFileUpload(p.id, e)}
-                                  className="hidden"
-                                />
-                                <button 
-                                  onClick={() => triggerFileInput(p.id)}
-                                  className="w-full flex items-center justify-center gap-1.5 py-1 bg-[#201A0F] hover:bg-[#2D2311] border border-[#D4AF37]/30 hover:border-[#D4AF37] text-xs text-[#D4AF37] rounded transition-all"
-                                >
-                                  <UploadCloud size={11} /> Upload asset
-                                </button>
-                              </div>
-                            </td>
-                            <td className="p-4 text-center">
-                              <div className="flex justify-center items-center gap-2">
-                                <button 
-                                  onClick={() => {
-                                    setSelectedInvoice(p);
-                                    setActiveTab('invoices');
-                                  }}
-                                  className="p-1.5 bg-[#1F1C16] hover:bg-[#D4AF37] text-[#D4AF37] hover:text-black rounded transition-all"
-                                  title="View Invoice Sheet"
-                                >
-                                  <FileText size={14} />
-                                </button>
-                                <button 
-                                  onClick={() => handleDeleteProject(p.id, p.invoiceNo)}
-                                  className="p-1.5 bg-rose-950/40 hover:bg-rose-600 text-rose-400 hover:text-white rounded transition-all"
-                                  title="Cancel & Delete Invoice"
-                                >
-                                  <Trash2 size={14} />
-                                </button>
-                              </div>
-                            </td>
-                          </tr>
-                        );
-                      })}
-                      {projects.length === 0 && (
-                        <tr>
-                          <td colSpan={9} className="p-8 text-center text-gray-500">
-                            <AlertCircle className="mx-auto mb-2 text-gray-600" size={28} />
-                            No projects or active invoice records found. Create one above to begin.
-                          </td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-
-                {/* Totals Summary Footer bar */}
-                <div className="bg-[#161616] p-4 border-t border-white/5 flex flex-wrap justify-between items-center gap-4 font-mono text-xs">
-                  <span className="text-gray-400">Total Recorded Active Pipeline Invoices: <span className="text-white font-bold">{projects.length}</span></span>
-                  <div className="flex gap-6 text-right">
-                    <div>
-                      <span className="text-[10px] text-gray-400 block uppercase">Subtotal</span>
-                      <span className="text-sm font-semibold text-gray-200">RM {financialSummary.subtotal.toFixed(2)}</span>
-                    </div>
-                    <div>
-                      <span className="text-[10px] text-gray-400 block uppercase">Estimated Taxes</span>
-                      <span className="text-sm font-semibold text-[#D4AF37]">RM {financialSummary.taxTotal.toFixed(2)}</span>
-                    </div>
-                    <div className="border-l border-white/10 pl-6">
-                      <span className="text-[10px] text-[#D4AF37] block uppercase font-bold">Grand Total (RM)</span>
-                      <span className="text-base font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#FCF6BA] to-[#D4AF37]">
-                        RM {financialSummary.grandTotal.toFixed(2)}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* TAB 3: INVOICES & BILLING */}
-          {activeTab === 'invoices' && (
-            <div className="space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-[#121212] border border-white/5 rounded-lg p-5 space-y-4">
+              <h3 class="text-sm font-medium text-white uppercase tracking-wider">Dynamic Tax Registry (29.17%)</h3>
+              <p class="text-xs text-gray-400">This registry compiles dynamic tax assessments calculated at exactly 29.17%.</p>
               
-              {/* If no invoice selected, display list */}
-              {!selectedInvoice ? (
-                <div className="space-y-6">
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <h2 className="text-2xl font-serif text-white tracking-wide">INVOICES HUB</h2>
-                      <p className="text-xs text-gray-400">Manage, preview, and generate client billing receipts. Export as high-resolution PNG format instantly.</p>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {projects.map((p) => {
-                      const total = p.cost + p.tax;
-                      return (
-                        <div key={p.id} className="bg-[#121212] border border-white/5 rounded p-5 flex flex-col justify-between hover:border-[#D4AF37]/40 transition-all shadow-md">
-                          <div className="space-y-3">
-                            <div className="flex justify-between items-start">
-                              <span className="font-mono text-xs text-[#D4AF37] bg-[#221B0F] px-2.5 py-1 rounded border border-[#D4AF37]/30">
-                                {p.invoiceNo}
-                              </span>
-                              <span className={`text-[10px] font-semibold px-2 py-0.5 rounded ${
-                                p.status === 'Completed' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-cyan-500/10 text-cyan-400'
-                              }`}>
-                                {p.status}
-                              </span>
-                            </div>
-
-                            <div>
-                              <p className="text-[10px] text-gray-500 uppercase tracking-wide">Client</p>
-                              <h3 className="text-sm font-bold text-white">{p.clientName}</h3>
-                              <p className="text-xs text-gray-400 mt-1 italic">{p.projectName}</p>
-                            </div>
-
-                            <hr className="border-white/5" />
-
-                            <div className="grid grid-cols-2 gap-2 text-xs">
-                              <div>
-                                <span className="text-[9px] text-gray-500 block">BASE COST</span>
-                                <span className="font-mono font-medium text-gray-300">RM {p.cost.toFixed(2)}</span>
-                              </div>
-                              <div>
-                                <span className="text-[9px] text-gray-500 block">TAX COLLECTED</span>
-                                <span className="font-mono font-medium text-[#D4AF37]">RM {p.tax.toFixed(2)}</span>
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="mt-5 pt-3 border-t border-white/5 flex items-center justify-between">
-                            <div>
-                              <span className="text-[9px] text-[#D4AF37] block font-semibold uppercase">TOTAL AMOUNT</span>
-                              <span className="font-mono font-bold text-white text-sm">RM {total.toFixed(2)}</span>
-                            </div>
-                            <div className="flex gap-2">
-                              <button 
-                                onClick={() => setSelectedInvoice(p)}
-                                className="px-3 py-1.5 bg-[#D4AF37] hover:bg-[#FCF6BA] text-[#0A0A0A] font-bold rounded text-[11px] transition-all flex items-center gap-1"
-                              >
-                                Preview Layout
-                              </button>
-                              <button 
-                                onClick={() => handleDeleteProject(p.id, p.invoiceNo)}
-                                className="p-1.5 bg-rose-950/30 hover:bg-rose-600 text-rose-400 hover:text-white rounded transition-all"
-                                title="Cancel Invoice"
-                              >
-                                <Trash2 size={13} />
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })}
-                    {projects.length === 0 && (
-                      <div className="col-span-full p-12 bg-[#121212] border border-white/5 rounded text-center text-gray-500">
-                        <AlertCircle className="mx-auto mb-2" size={24} />
-                        No dynamic invoices generated yet. Please record a new project!
-                      </div>
-                    )}
-                  </div>
+              <div class="space-y-3 font-mono text-xs">
+                <div class="flex justify-between py-1.5 border-b border-white/5">
+                  <span class="text-gray-400">Total Pre-Tax Earnings:</span>
+                  <span id="registry-pre-tax" class="text-white">RM 0.00</span>
                 </div>
-              ) : (
-                /* Selected Invoice Layout View */
-                <div className="space-y-6">
-                  {/* Actions & Back Button for Interface */}
-                  <div className="flex flex-wrap justify-between items-center gap-4 bg-[#121212] p-4 rounded border border-white/5">
-                    <button 
-                      onClick={() => setSelectedInvoice(null)} 
-                      className="text-xs text-gray-400 hover:text-white flex items-center gap-1.5"
-                    >
-                      <X size={16} /> Back to Invoices
-                    </button>
-                    <div className="flex items-center gap-3">
-                      <span className="text-xs text-gray-400 italic">💡 Compiles and exports layout directly as a PNG graphic</span>
-                      <button 
-                        onClick={handleExportAsPNG}
-                        className="flex items-center gap-2 bg-gradient-to-r from-[#BF953F] to-[#D4AF37] text-black font-bold text-xs px-5 py-2.5 rounded shadow-lg hover:from-[#FCF6BA] hover:to-[#B38728] transition-all"
-                      >
-                        <ArrowDownToLine size={15} /> Export PNG (Download)
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* HTML2CANVAS RENDER AREA - EXCLUSIVELY STYLED AND COMPATIBLE FOR EXPORT */}
-                  <div className="p-2 overflow-x-auto">
-                    <div 
-                      ref={invoiceRenderRef}
-                      className="bg-white text-gray-900 p-8 md:p-12 rounded-lg shadow-2xl max-w-3xl mx-auto border-t-8 border-[#D4AF37] font-serif"
-                      style={{ width: "768px" }} // Fixed layout width to guarantee consistent ratio renders
-                    >
-                      {/* Header */}
-                      <div className="flex justify-between items-start gap-6 border-b pb-8">
-                        <div>
-                          <div className="flex items-center gap-2 text-[#9A7B2C] mb-2 font-sans font-bold text-lg tracking-wider">
-                            <span className="px-2 py-1 bg-[#111] text-[#D4AF37] rounded font-mono text-sm leading-none">BZ</span>
-                            BRANDWORKZ CO.
-                          </div>
-                          <p className="text-xs text-gray-600 font-sans not-italic leading-relaxed">
-                            Premium Graphic Design & Branding Suite<br />
-                            158 Jalan Ampang, Level 24 G-Tower<br />
-                            Kuala Lumpur, 50450, Malaysia<br />
-                            Email: creatives@brandworkz.co
-                          </p>
-                        </div>
-                        <div className="text-right font-sans">
-                          <h2 className="text-2xl font-bold text-[#9A7B2C] tracking-wide font-serif">TAX INVOICE</h2>
-                          <p className="text-xs text-gray-500 mt-1 font-mono">Invoice No: <span className="text-gray-900 font-bold">{selectedInvoice.invoiceNo}</span></p>
-                          <p className="text-xs text-gray-500 font-mono">Date Issued: <span className="text-gray-900">{selectedInvoice.dateOut}</span></p>
-                          <p className="text-xs text-gray-500 font-mono">Shipping/Delivery: <span className="text-gray-900">{selectedInvoice.shippingDate}</span></p>
-                        </div>
-                      </div>
-
-                      {/* Bill To & Project Info */}
-                      <div className="grid grid-cols-2 gap-6 my-8 font-sans">
-                        <div>
-                          <span className="text-[10px] text-gray-400 uppercase font-bold tracking-wider block mb-1">PREPARED FOR:</span>
-                          <p className="font-bold text-sm text-gray-900">{selectedInvoice.clientName}</p>
-                          <p className="text-xs text-gray-600 mt-1">Authorized client representative</p>
-                        </div>
-                        <div className="text-right">
-                          <span className="text-[10px] text-gray-400 uppercase font-bold tracking-wider block mb-1">PROJECT SCOPE:</span>
-                          <p className="font-semibold text-sm text-gray-900">{selectedInvoice.projectName}</p>
-                          <p className="text-xs text-[#9A7B2C] mt-1 font-semibold">{selectedInvoice.category}</p>
-                        </div>
-                      </div>
-
-                      {/* Table of Services */}
-                      <table className="w-full text-left my-8 font-sans">
-                        <thead>
-                          <tr className="border-b-2 border-gray-200 text-xs font-bold text-gray-500 uppercase">
-                            <th className="py-2">Design Service Description</th>
-                            <th className="py-2 text-right">Tax Class</th>
-                            <th className="py-2 text-right">Selling Cost (RM)</th>
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y text-xs text-gray-800">
-                          <tr>
-                            <td className="py-4">
-                              <span className="font-bold text-gray-900 block">{selectedInvoice.projectName}</span>
-                              <span className="text-[10px] text-gray-500">Customized layout drafts, graphic assets, vector delivery, and visual consultation guidelines.</span>
-                            </td>
-                            <td className="py-4 text-right font-mono text-gray-600">6% SST Equivalent</td>
-                            <td className="py-4 text-right font-mono font-semibold text-gray-900">
-                              RM {selectedInvoice.cost.toFixed(2)}
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-
-                      {/* Cost Calculations */}
-                      <div className="flex justify-end font-sans">
-                        <div className="w-80 space-y-2.5 text-xs text-gray-700">
-                          <div className="flex justify-between">
-                            <span>Subtotal:</span>
-                            <span className="font-mono font-medium text-gray-900">RM {selectedInvoice.cost.toFixed(2)}</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span>Services Tax (6% Equivalent):</span>
-                            <span className="font-mono font-medium text-[#9A7B2C]">RM {selectedInvoice.tax.toFixed(2)}</span>
-                          </div>
-                          <div className="border-t pt-2.5 flex justify-between font-bold text-sm text-gray-900">
-                            <span>Grand Total Due:</span>
-                            <span className="font-mono text-[#9A7B2C] text-base">RM {(selectedInvoice.cost + selectedInvoice.tax).toFixed(2)}</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Terms & Bank Information */}
-                      <div className="mt-12 pt-8 border-t border-gray-100 text-[10px] text-gray-500 space-y-2 font-sans">
-                        <p className="font-semibold text-gray-800 uppercase">Payment Directives & Terms:</p>
-                        <p>Please make all bank transfers to <span className="font-bold text-gray-800">Brandworkz Co (Malayan Banking Berhad - Account 514-XXX-XXXX)</span> referencing this invoice number.</p>
-                        <p>Receipt or payment confirmations can be uploaded in the asset workspace panel or emailed to accounts@brandworkz.co.</p>
-                        <div className="pt-4 text-center border-t border-gray-100 text-gray-400">
-                          Thank you for commissioning our exclusive boutique design studio. We look forward to designing with you again!
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                <div class="flex justify-between py-1.5 border-b border-white/5">
+                  <span class="text-gray-400">Total Tax liability (29.17%):</span>
+                  <span id="registry-tax" class="text-[#D4AF37]">RM 0.00</span>
                 </div>
-              )}
+                <div class="flex justify-between py-1.5 pt-3 font-bold text-sm border-t border-white/10">
+                  <span class="text-white uppercase">Gross Revenue (RM):</span>
+                  <span id="registry-gross" class="text-transparent bg-clip-text bg-gradient-to-r from-[#FCF6BA] to-[#D4AF37]">RM 0.00</span>
+                </div>
+              </div>
+              <div class="bg-[#1A1A1A] p-3 rounded text-[10px] text-[#D4AF37] leading-relaxed border border-[#D4AF37]/25">
+                <strong>Registry Guidelines:</strong> Invoice edits and dynamic deletion calculations take place in real-time. In-memory indexing ensures calculations remain zero-lag.
+              </div>
             </div>
-          )}
 
-          {/* TAB 4: TASK WORKSPACE */}
-          {activeTab === 'tasks' && (
-            <div className="space-y-6 animate-fade-in">
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                <div>
-                  <h2 className="text-2xl font-serif text-white tracking-wide">TASK WORKSPACE</h2>
-                  <p className="text-xs text-gray-400">Keep graphic assets on path, manage revision backlogs, and structure layout cycles.</p>
+            <div class="bg-[#121212] border border-white/5 rounded-lg p-5 flex flex-col justify-between">
+              <div>
+                <h3 class="text-sm font-medium text-white uppercase tracking-wider mb-2">Design Output Performance</h3>
+                <p class="text-xs text-gray-400 mb-4">A high level statistical view of your studio's efficiency metrics.</p>
+
+                <div class="space-y-4">
+                  <div>
+                    <div class="flex justify-between text-xs mb-1">
+                      <span class="text-gray-400">Project Completion Ratio</span>
+                      <span id="stats-completion-ratio" class="text-white font-mono">0 / 0</span>
+                    </div>
+                    <div class="h-1.5 bg-black rounded overflow-hidden">
+                      <div id="stats-completion-bar" class="h-full bg-gradient-to-r from-[#BF953F] to-[#D4AF37] rounded transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div class="flex justify-between text-xs mb-1">
+                      <span class="text-gray-400">Pending Feedback / Revisions</span>
+                      <span id="stats-pending-ratio" class="text-white font-mono">0 Projects</span>
+                    </div>
+                    <div class="h-1.5 bg-black rounded overflow-hidden">
+                      <div id="stats-pending-bar" class="h-full bg-[#D4AF37] rounded" style="width: 0%"></div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              {/* Task Add Form */}
-              <form onSubmit={handleAddTask} className="bg-[#121212] p-5 rounded-lg border border-white/5 flex flex-col md:flex-row gap-3 items-end">
-                <div className="flex-1 w-full space-y-1">
-                  <label className="text-[10px] text-gray-400 uppercase tracking-wider block">Add Custom Deliverable Task</label>
-                  <input 
-                    type="text" 
-                    value={newTaskText}
-                    onChange={(e) => setNewTaskText(e.target.value)}
-                    placeholder="e.g., Export transparent PNG guidelines and typography sets..."
-                    className="w-full bg-[#1A1A1A] border border-white/10 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D4AF37] transition-all"
-                  />
-                </div>
+              <p class="text-[10px] text-gray-500 italic mt-6">
+                Optimized for compiling studio financial sheets during design tax audits.
+              </p>
+            </div>
+          </div>
+        </div>
 
-                <div className="w-full md:w-48 space-y-1">
-                  <label className="text-[10px] text-gray-400 uppercase tracking-wider block">Category Tag</label>
-                  <select 
-                    value={newTaskCategory}
-                    onChange={(e) => setNewTaskCategory(e.target.value)}
-                    className="w-full bg-[#1A1A1A] border border-white/10 rounded px-3 py-2 text-xs text-[#D4AF37] focus:outline-none focus:border-[#D4AF37] transition-all"
-                  >
-                    <option value="High Priority">High Priority</option>
-                    <option value="In Progress">In Progress</option>
-                    <option value="Review">Review</option>
-                    <option value="Backlog">Backlog</option>
-                    <option value="Maintenance">Maintenance</option>
-                  </select>
-                </div>
+      </main>
+    </div>
 
+    <!-- MODAL: ADD CLIENT PROJECT -->
+    <div id="add-project-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-fade-in">
+      <div class="bg-[#121212] border border-[#D4AF37]/40 rounded-lg max-w-lg w-full overflow-hidden shadow-2xl">
+        <div class="bg-[#1A1A1A] p-4 border-b border-white/5 flex justify-between items-center">
+          <span class="text-xs uppercase tracking-wider text-[#D4AF37] font-semibold">New Project & Invoice Entry</span>
+          <button onclick="closeAddProjectModal()" class="text-gray-400 hover:text-white">
+            <i data-lucide="x" class="h-4 w-4"></i>
+          </button>
+        </div>
+
+        <form id="add-project-form" class="p-6 space-y-4">
+          <div class="grid grid-cols-2 gap-4">
+            <div class="space-y-1">
+              <label class="text-[10px] text-gray-400 uppercase tracking-wider">Client Name</label>
+              <input 
+                type="text" 
+                id="form-client"
+                required
+                placeholder="e.g., Zenith Agency"
+                class="w-full bg-[#1A1A1A] border border-white/10 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D4AF37] transition-all"
+              />
+            </div>
+            <div class="space-y-1">
+              <label class="text-[10px] text-gray-400 uppercase tracking-wider">Project Category</label>
+              <select 
+                id="form-category"
+                class="w-full bg-[#1A1A1A] border border-white/10 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D4AF37] transition-all"
+              >
+                <option value="Branding">Branding</option>
+                <option value="Packaging">Packaging</option>
+                <option value="UI/UX">UI/UX</option>
+                <option value="Label Design">Label Design</option>
+                <option value="Editorial">Editorial</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="space-y-1">
+            <label class="text-[10px] text-gray-400 uppercase tracking-wider">Project Name / Scope</label>
+            <input 
+              type="text" 
+              id="form-project"
+              required
+              placeholder="e.g., Premium Logo Design & Vector Package"
+              class="w-full bg-[#1A1A1A] border border-white/10 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D4AF37] transition-all"
+            />
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div class="space-y-1">
+              <label class="text-[10px] text-gray-400 uppercase tracking-wider">Date Out (Start)</label>
+              <input 
+                type="date" 
+                id="form-dateout"
+                class="w-full bg-[#1A1A1A] border border-white/10 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D4AF37] transition-all"
+              />
+            </div>
+            <div class="space-y-1">
+              <label class="text-[10px] text-gray-400 uppercase tracking-wider">Shipping Date (Delivery)</label>
+              <input 
+                type="date" 
+                id="form-shipping"
+                class="w-full bg-[#1A1A1A] border border-white/10 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D4AF37] transition-all"
+              />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div class="space-y-1">
+              <label class="text-[10px] text-gray-400 uppercase tracking-wider">Selling Cost (RM)</label>
+              <input 
+                type="number" 
+                step="0.01"
+                id="form-cost"
+                required
+                placeholder="e.g., 4500"
+                class="w-full bg-[#1A1A1A] border border-white/10 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D4AF37] transition-all"
+              />
+            </div>
+            <div class="space-y-1">
+              <label class="text-[10px] text-gray-400 uppercase tracking-wider">Tax Cost (RM) - Blank for auto 29.17%</label>
+              <input 
+                type="number" 
+                step="0.01"
+                id="form-tax"
+                placeholder="Auto Calculated (29.17%)"
+                class="w-full bg-[#1A1A1A] border border-white/10 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D4AF37] transition-all"
+              />
+            </div>
+          </div>
+
+          <div class="space-y-1">
+            <label class="text-[10px] text-gray-400 uppercase tracking-wider">Initial Design Status</label>
+            <select 
+              id="form-status"
+              class="w-full bg-[#1A1A1A] border border-white/10 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D4AF37] transition-all"
+            >
+              <option value="In Progress">In Progress</option>
+              <option value="Delayed">Delayed</option>
+              <option value="Completed">Completed</option>
+              <option value="Wait for Respond">Wait for Respond</option>
+            </select>
+          </div>
+
+          <div class="pt-4 border-t border-white/5 flex justify-end gap-3">
+            <button 
+              type="button" 
+              onclick="closeAddProjectModal()"
+              class="px-4 py-2 bg-white/5 hover:bg-white/10 text-xs rounded transition-all text-gray-300 hover:text-white"
+            >
+              Cancel
+            </button>
+            <button 
+              type="submit" 
+              class="bg-gradient-to-r from-[#BF953F] to-[#D4AF37] text-black font-semibold text-xs px-5 py-2 rounded shadow-lg hover:from-[#FCF6BA] font-bold"
+            >
+              Create & Record Invoice
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- APPLICATION LOGIC & DATA ENGINE -->
+  <script>
+    // State Data Storage Configuration (Malaysian Ringgit - RM)
+    // Project 3 is customized to cost exactly RM 120.00 and carry exactly RM 35.00 in taxes (29.17% of 120)
+    let projects = [
+      {
+        id: "proj-1",
+        invoiceNo: "INV-2026-001",
+        clientName: "Aura Royale Residence",
+        projectName: "Luxury Brand Identity & Guidelines",
+        status: "In Progress",
+        dateOut: "2026-06-15",
+        shippingDate: "2026-07-20",
+        cost: 4800,
+        tax: 1400.16,
+        category: "Branding",
+        files: [
+          { name: "Aura_BrandBook_Draft.pdf", size: "14.2 MB" },
+          { name: "RoyaleLogo_Vector.svg", size: "2.4 MB" }
+        ]
+      },
+      {
+        id: "proj-2",
+        invoiceNo: "INV-2026-002",
+        clientName: "Chronos Watches",
+        projectName: "Premium Product Packaging Design",
+        status: "Completed",
+        dateOut: "2026-05-10",
+        shippingDate: "2026-06-01",
+        cost: 7200,
+        tax: 2100.24,
+        category: "Packaging",
+        files: [
+          { name: "Box_Dieline_V4.ai", size: "38.5 MB" },
+          { name: "Chronos_Golden_Mockup.png", size: "8.1 MB" }
+        ]
+      },
+      {
+        id: "proj-3",
+        invoiceNo: "INV-2026-003",
+        clientName: "Elysian Wellness Spa",
+        projectName: "Scented Candle Label & Web Assets",
+        status: "Wait for Respond",
+        dateOut: "2026-06-01",
+        shippingDate: "2026-06-28",
+        cost: 120.00,
+        tax: 35.00, // Exactly RM 35.00
+        category: "Label Design",
+        files: [
+          { name: "Elysian_Moodboard.pdf", size: "6.7 MB" }
+        ]
+      },
+      {
+        id: "proj-4",
+        invoiceNo: "INV-2026-004",
+        clientName: "Vanguard Tech",
+        projectName: "Interactive UI/UX Prototype Layout",
+        status: "Delayed",
+        dateOut: "2026-04-12",
+        shippingDate: "2026-05-30",
+        cost: 9500,
+        tax: 2771.15,
+        category: "UI/UX",
+        files: []
+      }
+    ];
+
+    let tasks = [
+      { id: "task-1", text: "Refine logo geometry for Chronos Watches", category: "High Priority", completed: true },
+      { id: "task-2", text: "Draft typography pairings for Aura Royale brochure", category: "In Progress", completed: false },
+      { id: "task-3", text: "Send final source vector package to Elysian Spa", category: "Review", completed: false },
+      { id: "task-4", text: "Schedule UX hand-off call with Vanguard developer team", category: "Backlog", completed: false },
+      { id: "task-5", text: "Calibrate monitor color profile to sRGB & AdobeRGB", category: "Maintenance", completed: true }
+    ];
+
+    let activeTab = "dashboard";
+    let selectedInvoice = null;
+    let isPasswordVisible = false;
+    let earningsChartInstance = null;
+
+    // Initialization lifecycle on window load
+    window.onload = function() {
+      lucide.createIcons();
+      initLoginHandshake();
+      initTaskHandlers();
+      initProjectForm();
+    };
+
+    // Notification helper
+    function showNotification(message, type = 'success') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = "flex items-center gap-3 bg-[#121212] border-l-4 border-[#D4AF37] px-6 py-4 rounded-lg shadow-[0_10px_30px_rgba(0,0,0,0.8)] animate-slide-in pointer-events-auto cursor-pointer";
+      toast.innerHTML = `
+        <div class="h-2 w-2 rounded-full bg-[#D4AF37] animate-ping"></div>
+        <span class="text-sm font-medium text-gray-200">${message}</span>
+      `;
+      toast.onclick = () => toast.remove();
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(-10px)';
+        toast.style.transition = 'all 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
+      }, 4000);
+    }
+
+    // Login system flow
+    function initLoginHandshake() {
+      const form = document.getElementById('login-form');
+      const toggleBtn = document.getElementById('toggle-password');
+      const passwordInput = document.getElementById('login-password');
+
+      // Check active auth session
+      const existingSession = sessionStorage.getItem('brandworkz_session_auth');
+      if (existingSession === 'active_authenticated') {
+        renderAuthWorkspace();
+      }
+
+      toggleBtn.onclick = function() {
+        isPasswordVisible = !isPasswordVisible;
+        passwordInput.type = isPasswordVisible ? 'text' : 'password';
+        toggleBtn.innerHTML = isPasswordVisible 
+          ? `<i data-lucide="eye-off" class="h-[15px] w-[15px]"></i>` 
+          : `<i data-lucide="eye" class="h-[15px] w-[15px]"></i>`;
+        lucide.createIcons();
+      };
+
+      form.onsubmit = function(e) {
+        e.preventDefault();
+        const username = document.getElementById('login-username').value;
+        const pass = passwordInput.value;
+        const submitBtn = document.getElementById('login-submit-btn');
+
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `AUTHENTICATING KEY...`;
+
+        setTimeout(() => {
+          if (window.btoa(username) === "YWRtaW4=" && window.btoa(pass) === "MTM0MjI4") {
+            sessionStorage.setItem('brandworkz_session_auth', 'active_authenticated');
+            renderAuthWorkspace();
+            showNotification("Access Granted. Welcome back to Brandworkz Co.");
+          } else {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = `<i data-lucide="lock" class="h-3.5 w-3.5"></i> UNLOCK WORKSPACE`;
+            lucide.createIcons();
+            const errDiv = document.getElementById('login-error-container');
+            const errMsg = document.getElementById('login-error-msg');
+            errMsg.innerText = "Invalid Studio credentials. Access has been denied.";
+            errDiv.classList.remove('hidden');
+          }
+        }, 700);
+      };
+    }
+
+    function renderAuthWorkspace() {
+      document.getElementById('login-overlay').classList.add('hidden');
+      document.getElementById('app-workspace').classList.remove('hidden');
+      switchTab(activeTab);
+      recalculateGlobalFinancials();
+    }
+
+    function handleLogout() {
+      sessionStorage.removeItem('brandworkz_session_auth');
+      document.getElementById('app-workspace').classList.add('hidden');
+      document.getElementById('login-overlay').classList.remove('hidden');
+      document.getElementById('login-username').value = '';
+      document.getElementById('login-password').value = '';
+      document.getElementById('login-error-container').classList.add('hidden');
+      showNotification("Logged out successfully from the secure workspace.", "info");
+    }
+
+    // Recalculates tax outputs and earnings dynamic state
+    function recalculateGlobalFinancials() {
+      let subtotal = 0;
+      let taxTotal = 0;
+
+      projects.forEach(p => {
+        subtotal += Number(p.cost) || 0;
+        taxTotal += Number(p.tax) || 0;
+      });
+
+      const grandTotal = subtotal + taxTotal;
+
+      // Update Top Nav Headers
+      document.getElementById('header-tax-liability').innerText = `RM ${taxTotal.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+      document.getElementById('header-grand-total').innerText = `RM ${grandTotal.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+      // Update Dashboard Metric Card Nodes
+      if (activeTab === "dashboard") {
+        document.getElementById('dashboard-grand-total').innerText = `RM ${grandTotal.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        const activeCount = projects.filter(p => p.status !== 'Completed').length;
+        document.getElementById('dashboard-active-count').innerText = `${activeCount} Active`;
+        document.getElementById('dashboard-progress-count').innerText = `${projects.filter(p => p.status === 'In Progress').length} currently in design progress`;
+        document.getElementById('dashboard-tax-total').innerText = `RM ${taxTotal.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        
+        const completedTasks = tasks.filter(t => t.completed).length;
+        const totalTasks = tasks.length || 1;
+        const percent = Math.round((completedTasks / totalTasks) * 100);
+        document.getElementById('dashboard-task-percent').innerText = `${percent}%`;
+        document.getElementById('dashboard-task-completed').innerText = `${completedTasks} of ${tasks.length} tasks completed`;
+      }
+
+      // Update Tracker metrics
+      if (activeTab === "tracker") {
+        document.getElementById('tracker-summary-grand-total').innerText = `RM ${grandTotal.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        document.getElementById('tracker-invoice-count').innerText = projects.length;
+        document.getElementById('tracker-subtotal').innerText = `RM ${subtotal.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        document.getElementById('tracker-tax').innerText = `RM ${taxTotal.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        document.getElementById('tracker-grand-total').innerText = `RM ${grandTotal.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+      }
+
+      // Update Premium Financial Registry metrics
+      if (activeTab === "clients") {
+        document.getElementById('registry-pre-tax').innerText = `RM ${subtotal.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        document.getElementById('registry-tax').innerText = `RM ${taxTotal.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        document.getElementById('registry-gross').innerText = `RM ${grandTotal.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        
+        const finished = projects.filter(p => p.status === 'Completed').length;
+        document.getElementById('stats-completion-ratio').innerText = `${finished} / ${projects.length}`;
+        document.getElementById('stats-completion-bar').style.width = `${(finished / (projects.length || 1)) * 100}%`;
+
+        const pending = projects.filter(p => p.status === 'Wait for Respond').length;
+        document.getElementById('stats-pending-ratio').innerText = `${pending} Project${pending !== 1 ? 's' : ''}`;
+        document.getElementById('stats-pending-bar').style.width = `${(pending / (projects.length || 1)) * 100}%`;
+      }
+    }
+
+    // Dynamic Navigation Handling
+    function switchTab(tabId) {
+      activeTab = tabId;
+      selectedInvoice = null;
+
+      // Hide all standard views
+      document.getElementById('view-dashboard').classList.add('hidden');
+      document.getElementById('view-tracker').classList.add('hidden');
+      document.getElementById('view-invoices').classList.add('hidden');
+      document.getElementById('view-tasks').classList.add('hidden');
+      document.getElementById('view-clients').classList.add('hidden');
+
+      // Remove highlight selectors
+      const tabs = ['dashboard', 'tracker', 'invoices', 'tasks', 'clients'];
+      tabs.forEach(t => {
+        const btn = document.getElementById(`nav-${t}`);
+        if (btn) {
+          btn.className = "w-full flex items-center gap-3 px-4 py-3 rounded text-sm font-medium transition-all text-gray-400 hover:text-white hover:bg-white/5";
+        }
+      });
+
+      // Highlight active tab
+      const activeBtn = document.getElementById(`nav-${tabId}`);
+      if (activeBtn) {
+        activeBtn.className = "w-full flex items-center gap-3 px-4 py-3 rounded text-sm font-medium transition-all bg-[#1E1910] text-[#D4AF37] border-l-2 border-[#D4AF37] shadow-[inset_0_0_10px_rgba(212,175,55,0.1)]";
+      }
+
+      // Show designated viewport
+      const targetView = document.getElementById(`view-${tabId}`);
+      if (targetView) {
+        targetView.classList.remove('hidden');
+      }
+
+      recalculateGlobalFinancials();
+
+      // Trigger sub-render callbacks
+      if (tabId === "dashboard") renderDashboardView();
+      if (tabId === "tracker") renderTrackerView();
+      if (tabId === "invoices") renderInvoiceHub();
+      if (tabId === "tasks") renderTasksView();
+      if (tabId === "clients") renderFinancialsView();
+    }
+
+    // SUB-RENDERER: DASHBOARD VIEW
+    function renderDashboardView() {
+      // 1. Chart Rendering Handled Safely via standard chartjs
+      const ctx = document.getElementById('earningsChart').getContext('2d');
+      if (earningsChartInstance) {
+        earningsChartInstance.destroy();
+      }
+
+      earningsChartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+          datasets: [{
+            label: 'Studio Revenues (RM)',
+            data: [5200, 6800, 9400, 8200, 11500, 15400],
+            borderColor: '#D4AF37',
+            borderWidth: 2,
+            backgroundColor: 'rgba(212, 175, 55, 0.05)',
+            fill: true,
+            tension: 0.3
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false }
+          },
+          scales: {
+            x: { grid: { color: '#222' }, ticks: { color: '#888' } },
+            y: { grid: { color: '#222' }, ticks: { color: '#888' } }
+          }
+        }
+      });
+
+      // 2. Render Output Pipeline Tracker
+      const pipelineContainer = document.getElementById('dashboard-pipeline-list');
+      pipelineContainer.innerHTML = '';
+      projects.slice(0, 3).forEach(p => {
+        let badgeClass = "bg-cyan-500/10 text-cyan-400 border-cyan-500/20";
+        if (p.status === 'Completed') badgeClass = "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
+        if (p.status === 'Delayed') badgeClass = "bg-rose-500/10 text-rose-400 border border-rose-500/20";
+        if (p.status === 'Wait for Respond') badgeClass = "bg-amber-500/10 text-amber-400 border border-amber-500/20";
+
+        pipelineContainer.innerHTML += `
+          <div class="flex items-center justify-between p-2.5 bg-[#1A1A1A] rounded border border-white/5 hover:border-[#D4AF37]/30 transition-all">
+            <div class="max-w-[150px] truncate">
+              <h4 class="text-xs font-semibold text-white truncate">${p.projectName}</h4>
+              <p class="text-[10px] text-gray-400 truncate">${p.clientName}</p>
+            </div>
+            <span class="text-[9px] px-2 py-0.5 rounded-full font-bold border ${badgeClass}">
+              ${p.status}
+            </span>
+          </div>
+        `;
+      });
+
+      // 3. Render Dashboard Mini Deliverables Checklist
+      const miniChecklist = document.getElementById('dashboard-deliverables-list');
+      miniChecklist.innerHTML = '';
+      tasks.slice(0, 4).forEach(t => {
+        miniChecklist.innerHTML += `
+          <div 
+            onclick="toggleTaskCompleted('${t.id}')"
+            class="p-3 bg-[#1A1A1A] rounded border border-white/5 flex items-center justify-between cursor-pointer hover:border-[#D4AF37]/30 hover:bg-[#202020] transition-all"
+          >
+            <div class="flex items-center gap-3">
+              <div class="h-4 w-4 rounded border flex items-center justify-center transition-all ${
+                t.completed ? 'bg-[#D4AF37] border-[#D4AF37]' : 'border-gray-600'
+              }">
+                ${t.completed ? `<i data-lucide="check" class="text-black h-3 w-3 stroke-[3]"></i>` : ''}
+              </div>
+              <span class="text-xs text-gray-200 ${t.completed ? 'line-through text-gray-500' : ''}">
+                ${t.text}
+              </span>
+            </div>
+            <span class="text-[9px] bg-white/10 text-gray-400 px-2 py-0.5 rounded font-mono uppercase">
+              ${t.category}
+            </span>
+          </div>
+        `;
+      });
+      lucide.createIcons();
+    }
+
+    // SUB-RENDERER: TRACKER VIEW
+    function renderTrackerView() {
+      const tbody = document.getElementById('tracker-table-body');
+      tbody.innerHTML = '';
+
+      projects.forEach(p => {
+        const totalCost = p.cost + p.tax;
+        
+        let filesListHTML = `<div class="space-y-1 max-w-[180px] mx-auto">`;
+        p.files.forEach(file => {
+          filesListHTML += `
+            <div class="flex items-center justify-between text-[10px] bg-black/40 px-2 py-1 rounded border border-white/5">
+              <span class="truncate text-gray-300 mr-2" title="${file.name}">${file.name}</span>
+              <span class="text-[9px] text-gray-500 shrink-0">${file.size}</span>
+            </div>
+          `;
+        });
+        filesListHTML += `
+          <input 
+            type="file" 
+            id="file-upload-input-${p.id}" 
+            onchange="simulateFileUpload('${p.id}', event)" 
+            class="hidden" 
+          />
+          <button 
+            onclick="document.getElementById('file-upload-input-${p.id}').click()"
+            class="w-full flex items-center justify-center gap-1.5 py-1 bg-[#201A0F] hover:bg-[#2D2311] border border-[#D4AF37]/30 hover:border-[#D4AF37] text-xs text-[#D4AF37] rounded transition-all"
+          >
+            <i data-lucide="upload-cloud" class="h-3 w-3"></i> Upload asset
+          </button>
+        </div>`;
+
+        tbody.innerHTML += `
+          <tr class="hover:bg-[#1A1A1A]/50 transition-colors">
+            <td class="p-4">
+              <span class="font-mono text-[10px] text-[#D4AF37] bg-[#221B0F] px-2 py-0.5 rounded border border-[#D4AF37]/20 block w-max mb-1">
+                ${p.invoiceNo}
+              </span>
+              <span class="font-semibold text-white block">${p.clientName}</span>
+            </td>
+            <td class="p-4">
+              <span class="text-white font-medium block">${p.projectName}</span>
+              <span class="text-[10px] text-gray-400 bg-white/5 px-2 py-0.5 rounded block w-max mt-1">${p.category}</span>
+            </td>
+            <td class="p-4 whitespace-nowrap">
+              <div class="flex items-center gap-2 text-[10px]">
+                <span class="text-gray-400">Out:</span> 
+                <span class="font-mono font-semibold">${p.dateOut}</span>
+              </div>
+              <div class="flex items-center gap-2 text-[10px] mt-1">
+                <span class="text-[#D4AF37]">Ship:</span> 
+                <span class="font-mono font-semibold text-white">${p.shippingDate}</span>
+              </div>
+            </td>
+            <td class="p-4">
+              <select 
+                onchange="updateProjectStatus('${p.id}', this.value)"
+                class="text-[10px] font-bold rounded px-2.5 py-1 bg-[#1A1A1A] border cursor-pointer outline-none transition-all ${
+                  p.status === 'Completed' ? 'border-emerald-500/50 text-emerald-400' :
+                  p.status === 'Delayed' ? 'border-rose-500/50 text-rose-400' :
+                  p.status === 'Wait for Respond' ? 'border-amber-500/50 text-amber-400' :
+                  'border-cyan-500/50 text-cyan-400'
+                }"
+              >
+                <option value="In Progress" ${p.status === 'In Progress' ? 'selected' : ''}>In Progress</option>
+                <option value="Delayed" ${p.status === 'Delayed' ? 'selected' : ''}>Delayed</option>
+                <option value="Completed" ${p.status === 'Completed' ? 'selected' : ''}>Completed</option>
+                <option value="Wait for Respond" ${p.status === 'Wait for Respond' ? 'selected' : ''}>Wait for Respond</option>
+              </select>
+            </td>
+            <td class="p-4 text-right font-mono font-semibold text-gray-300">
+              ${p.cost.toFixed(2)}
+            </td>
+            <td class="p-4 text-right font-mono text-[#D4AF37]">
+              ${p.tax.toFixed(2)}
+            </td>
+            <td class="p-4 text-right font-mono font-bold text-white">
+              ${totalCost.toFixed(2)}
+            </td>
+            <td class="p-4">
+              ${filesListHTML}
+            </td>
+            <td class="p-4 text-center">
+              <div class="flex justify-center items-center gap-2">
                 <button 
-                  type="submit" 
-                  className="w-full md:w-auto bg-gradient-to-r from-[#BF953F] to-[#D4AF37] text-black font-semibold text-xs px-6 py-2.5 rounded hover:from-[#FCF6BA] hover:to-[#B38728] transition-all shrink-0"
+                  onclick="viewInvoiceDetail('${p.id}')"
+                  class="p-1.5 bg-[#1F1C16] hover:bg-[#D4AF37] text-[#D4AF37] hover:text-black rounded transition-all"
+                  title="View Invoice Sheet"
                 >
-                  ADD TASK
+                  <i data-lucide="file-text" class="h-3.5 w-3.5"></i>
                 </button>
-              </form>
+                <button 
+                  onclick="deleteProject('${p.id}')"
+                  class="p-1.5 bg-rose-950/40 hover:bg-rose-600 text-rose-400 hover:text-white rounded transition-all"
+                  title="Cancel & Delete Invoice"
+                >
+                  <i data-lucide="trash-2" class="h-3.5 w-3.5"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      });
 
-              {/* List of Tasks */}
-              <div className="bg-[#121212] border border-white/5 rounded-lg p-5">
-                <div className="flex justify-between items-center mb-4">
-                  <span className="text-xs uppercase tracking-wider text-[#D4AF37] font-semibold">Active Studio Task Board</span>
-                  <span className="text-[10px] text-gray-400 font-mono">
-                    Completed: {tasks.filter(t => t.completed).length} / {tasks.length}
+      if (projects.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colSpan="9" class="p-8 text-center text-gray-500">
+              <i data-lucide="alert-circle" class="mx-auto mb-2 text-gray-600 h-7 w-7"></i>
+              No projects or active invoice records found. Create one above to begin.
+            </td>
+          </tr>
+        `;
+      }
+      lucide.createIcons();
+    }
+
+    // Tracker dynamic callbacks
+    function updateProjectStatus(projectId, newStatus) {
+      projects = projects.map(p => p.id === projectId ? { ...p, status: newStatus } : p);
+      showNotification(`Updated project status to ${newStatus}`);
+      recalculateGlobalFinancials();
+    }
+
+    function simulateFileUpload(projectId, event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const formattedSize = file.size > 1024 * 1024 
+        ? `${(file.size / (1024 * 1024)).toFixed(1)} MB` 
+        : `${(file.size / 1024).toFixed(1)} KB`;
+
+      projects = projects.map(p => {
+        if (p.id === projectId) {
+          return {
+            ...p,
+            files: [...p.files, { name: file.name, size: formattedSize }]
+          };
+        }
+        return p;
+      });
+
+      showNotification(`Asset "${file.name}" linked successfully to project!`);
+      renderTrackerView();
+    }
+
+    function deleteProject(projectId) {
+      const p = projects.find(item => item.id === projectId);
+      projects = projects.filter(item => item.id !== projectId);
+      showNotification(`Invoice ${p ? p.invoiceNo : ''} cancelled and deleted.`);
+      recalculateGlobalFinancials();
+      if (activeTab === "tracker") renderTrackerView();
+      if (activeTab === "invoices") renderInvoiceHub();
+    }
+
+    // SUB-RENDERER: INVOICES HUB VIEW
+    function renderInvoiceHub() {
+      if (selectedInvoice) {
+        document.getElementById('invoice-hub-list-mode').classList.add('hidden');
+        document.getElementById('invoice-hub-detail-mode').classList.remove('hidden');
+        
+        // Render detailed tax sheet
+        const sheet = document.getElementById('invoice-render-sheet');
+        const totalDue = selectedInvoice.cost + selectedInvoice.tax;
+
+        sheet.innerHTML = `
+          <div class="flex justify-between items-start gap-6 border-b pb-8">
+            <div>
+              <div class="text-[#9A7B2C] mb-2 font-sans font-bold text-lg tracking-wider">
+                BRANDWORKZ CO.
+              </div>
+              <p class="text-xs text-gray-600 font-sans not-italic leading-relaxed">
+                Premium Graphic Design & Branding Suite<br />
+                158 Jalan Ampang, Level 24 G-Tower<br />
+                Kuala Lumpur, 50450, Malaysia<br />
+                Email: creatives@brandworkz.co
+              </p>
+            </div>
+            <div class="text-right font-sans">
+              <h2 class="text-2xl font-bold text-[#9A7B2C] tracking-wide font-serif">TAX INVOICE</h2>
+              <p class="text-xs text-gray-500 mt-1 font-mono">Invoice No: <span class="text-gray-900 font-bold">${selectedInvoice.invoiceNo}</span></p>
+              <p class="text-xs text-gray-500 font-mono">Date Issued: <span class="text-gray-900">${selectedInvoice.dateOut}</span></p>
+              <p class="text-xs text-gray-500 font-mono">Shipping/Delivery: <span class="text-gray-900">${selectedInvoice.shippingDate}</span></p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-6 my-8 font-sans">
+            <div>
+              <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider block mb-1">PREPARED FOR:</span>
+              <p class="font-bold text-sm text-gray-900">${selectedInvoice.clientName}</p>
+              <p class="text-xs text-gray-600 mt-1">Authorized client representative</p>
+            </div>
+            <div class="text-right">
+              <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider block mb-1">PROJECT SCOPE:</span>
+              <p class="font-semibold text-sm text-gray-900">${selectedInvoice.projectName}</p>
+              <p class="text-xs text-[#9A7B2C] mt-1 font-semibold">${selectedInvoice.category}</p>
+            </div>
+          </div>
+
+          <table class="w-full text-left my-8 font-sans">
+            <thead>
+              <tr class="border-b-2 border-gray-200 text-xs font-bold text-gray-500 uppercase">
+                <th class="py-2">Design Service Description</th>
+                <th class="py-2 text-right">Tax Class</th>
+                <th class="py-2 text-right">Selling Cost (RM)</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y text-xs text-gray-800">
+              <tr>
+                <td class="py-4">
+                  <span class="font-bold text-gray-900 block">${selectedInvoice.projectName}</span>
+                  <span class="text-[10px] text-gray-500">Customized layout drafts, graphic assets, vector delivery, and visual consultation guidelines.</span>
+                </td>
+                <td class="py-4 text-right font-mono text-gray-600">29.17% Tax Rate</td>
+                <td class="py-4 text-right font-mono font-semibold text-gray-900">
+                  RM ${selectedInvoice.cost.toFixed(2)}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="flex justify-end font-sans">
+            <div class="w-80 space-y-2.5 text-xs text-gray-700">
+              <div class="flex justify-between">
+                <span>Subtotal:</span>
+                <span class="font-mono font-medium text-gray-900">RM ${selectedInvoice.cost.toFixed(2)}</span>
+              </div>
+              <div class="flex justify-between">
+                <span>Services Tax (29.17%):</span>
+                <span class="font-mono font-medium text-[#9A7B2C]">RM ${selectedInvoice.tax.toFixed(2)}</span>
+              </div>
+              <div class="border-t pt-2.5 flex justify-between font-bold text-sm text-gray-900 border-gray-200">
+                <span>Grand Total Due:</span>
+                <span class="font-mono text-[#9A7B2C] text-base font-bold">RM ${totalDue.toFixed(2)}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-12 pt-8 border-t border-gray-100 text-[10px] text-gray-500 space-y-2 font-sans leading-relaxed">
+            <p class="font-semibold text-gray-800 uppercase">Payment Directives & Terms:</p>
+            <p>Please make all bank transfers to <span class="font-bold text-gray-800">Brandworkz Co (Malayan Banking Berhad - Account 514-XXX-XXXX)</span> referencing this invoice number.</p>
+            <p>Receipt or payment confirmations can be uploaded in the asset workspace panel or emailed to accounts@brandworkz.co.</p>
+            <div class="pt-4 text-center border-t border-gray-100 text-gray-400 font-serif italic">
+              Thank you for commissioning our exclusive boutique design studio. We look forward to designing with you again!
+            </div>
+          </div>
+        `;
+      } else {
+        document.getElementById('invoice-hub-list-mode').classList.remove('hidden');
+        document.getElementById('invoice-hub-detail-mode').classList.add('hidden');
+
+        const grid = document.getElementById('invoice-cards-grid');
+        grid.innerHTML = '';
+
+        projects.forEach(p => {
+          const total = p.cost + p.tax;
+          grid.innerHTML += `
+            <div class="bg-[#121212] border border-white/5 rounded p-5 flex flex-col justify-between hover:border-[#D4AF37]/40 transition-all shadow-md">
+              <div class="space-y-3">
+                <div class="flex justify-between items-start">
+                  <span class="font-mono text-xs text-[#D4AF37] bg-[#221B0F] px-2.5 py-1 rounded border border-[#D4AF37]/30">
+                    ${p.invoiceNo}
+                  </span>
+                  <span class="text-[10px] font-semibold px-2 py-0.5 rounded ${
+                    p.status === 'Completed' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-cyan-500/10 text-cyan-400'
+                  }">
+                    ${p.status}
                   </span>
                 </div>
 
-                <div className="space-y-2">
-                  {tasks.map((task) => (
-                    <div 
-                      key={task.id}
-                      className="flex items-center justify-between p-3 bg-[#1A1A1A] rounded border border-white/5 hover:border-[#D4AF37]/30 transition-all group"
-                    >
-                      <div className="flex items-center gap-3">
-                        <button 
-                          onClick={() => toggleTask(task.id)}
-                          className={`h-5 w-5 rounded-full border flex items-center justify-center transition-all ${
-                            task.completed 
-                              ? 'bg-gradient-to-r from-[#BF953F] to-[#D4AF37] border-transparent text-[#0A0A0A]' 
-                              : 'border-white/20 hover:border-[#D4AF37]'
-                          }`}
-                        >
-                          {task.completed && <Check size={12} className="stroke-[3]" />}
-                        </button>
-                        <span className={`text-xs ${task.completed ? 'line-through text-gray-500' : 'text-gray-200'}`}>
-                          {task.text}
-                        </span>
-                      </div>
-
-                      <div className="flex items-center gap-2">
-                        <span className={`text-[9px] px-2 py-0.5 rounded font-mono ${
-                          task.category === 'High Priority' ? 'bg-rose-500/10 text-rose-400 border border-rose-500/10' :
-                          task.category === 'In Progress' ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/10' :
-                          task.category === 'Review' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/10' :
-                          'bg-white/5 text-gray-400'
-                        }`}>
-                          {task.category}
-                        </span>
-                        <button 
-                          onClick={() => handleDeleteTask(task.id)}
-                          className="p-1 text-gray-500 hover:text-rose-500 rounded transition-all"
-                        >
-                          <Trash2 size={14} />
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                  {tasks.length === 0 && (
-                    <p className="text-center text-xs text-gray-500 py-6">All daily design tasks cleared! Good work.</p>
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* TAB 5: PREMIUM FINANCIALS */}
-          {activeTab === 'clients' && (
-            <div className="space-y-6 animate-fade-in">
-              <div>
-                <h2 className="text-2xl font-serif text-white tracking-wide">PREMIUM FINANCIALS</h2>
-                <p className="text-xs text-gray-400">Deep-dive financial reports, tax breakdowns (6% SST equivalent), and client portfolio statistics.</p>
-              </div>
-
-              {/* Client Listing */}
-              <div className="bg-[#121212] border border-white/5 rounded-lg p-5">
-                <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-sm font-medium text-white tracking-wider uppercase">Client Portfolio Breakdown</h3>
-                  <span className="text-[10px] text-gray-400">Currency configured to Malaysian Ringgit (RM)</span>
+                <div>
+                  <p class="text-[10px] text-gray-500 uppercase tracking-wide">Client</p>
+                  <h3 class="text-sm font-bold text-white">${p.clientName}</h3>
+                  <p class="text-xs text-gray-400 mt-1 italic">${p.projectName}</p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {projects.map((p) => {
-                    const total = p.cost + p.tax;
-                    return (
-                      <div key={p.id} className="p-4 bg-[#1A1A1A] rounded border border-white/5 flex justify-between items-center hover:border-[#D4AF37]/20 transition-all">
-                        <div>
-                          <span className="text-[10px] text-gray-500 uppercase">CLIENT REPRESENTATIVE</span>
-                          <h4 className="text-sm font-bold text-white">{p.clientName}</h4>
-                          <span className="text-[10px] text-[#D4AF37] block mt-1">{p.projectName}</span>
-                        </div>
-                        <div className="text-right">
-                          <span className="text-[10px] text-gray-500 block">TOTAL VOLUME</span>
-                          <span className="font-mono font-bold text-white block">RM {total.toFixed(2)}</span>
-                          <span className="text-[9px] bg-white/5 text-gray-400 px-1.5 py-0.5 rounded font-mono mt-1 inline-block">
-                            SST RM {p.tax.toFixed(2)}
-                          </span>
-                        </div>
-                      </div>
-                    );
-                  })}
-                  {projects.length === 0 && (
-                    <p className="col-span-full text-center text-xs text-gray-500 py-6">No client portfolios available yet.</p>
-                  )}
-                </div>
-              </div>
+                <hr class="border-white/5" />
 
-              {/* Financial Balance Summary and Taxes */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                
-                {/* Tax Statement summary card */}
-                <div className="bg-[#121212] border border-white/5 rounded-lg p-5 space-y-4">
-                  <h3 className="text-sm font-medium text-white uppercase tracking-wider">Dynamic SST / Tax Registry</h3>
-                  <p className="text-xs text-gray-400">This register compiles tax metrics calculated automatically for design services.</p>
-                  
-                  <div className="space-y-3 font-mono text-xs">
-                    <div className="flex justify-between py-1.5 border-b border-white/5">
-                      <span className="text-gray-400">Total Pre-Tax Earnings:</span>
-                      <span className="text-white">RM {financialSummary.subtotal.toFixed(2)}</span>
-                    </div>
-                    <div className="flex justify-between py-1.5 border-b border-white/5">
-                      <span className="text-gray-400">Total Tax liability (6%):</span>
-                      <span className="text-[#D4AF37]">RM {financialSummary.taxTotal.toFixed(2)}</span>
-                    </div>
-                    <div className="flex justify-between py-1.5 pt-3 font-bold text-sm">
-                      <span className="text-white uppercase">Gross Revenue (RM):</span>
-                      <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FCF6BA] to-[#D4AF37]">
-                        RM {financialSummary.grandTotal.toFixed(2)}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="bg-[#1A1A1A] p-3 rounded text-[10px] text-[#D4AF37] leading-relaxed border border-[#D4AF37]/25">
-                    <strong>Note:</strong> Cancelled invoices removed via the Projects or Invoice Hubs are automatically taken out of this registry. No compound queries are performed, keeping calculations instantaneous.
-                  </div>
-                </div>
-
-                {/* Performance Analytics metrics */}
-                <div className="bg-[#121212] border border-white/5 rounded-lg p-5 flex flex-col justify-between">
+                <div class="grid grid-cols-2 gap-2 text-xs">
                   <div>
-                    <h3 className="text-sm font-medium text-white uppercase tracking-wider mb-2">Design Output Performance</h3>
-                    <p className="text-xs text-gray-400 mb-4">A high level statistical view of your studio's efficiency metrics.</p>
-
-                    <div className="space-y-3">
-                      <div>
-                        <div className="flex justify-between text-xs mb-1">
-                          <span className="text-gray-400">Project Completion Ratio</span>
-                          <span className="text-white font-mono">
-                            {projects.filter(p => p.status === 'Completed').length} / {projects.length}
-                          </span>
-                        </div>
-                        <div className="h-1.5 bg-black rounded overflow-hidden">
-                          <div 
-                            className="h-full bg-gradient-to-r from-[#BF953F] to-[#D4AF37] rounded transition-all duration-500"
-                            style={{ width: `${(projects.filter(p => p.status === 'Completed').length / (projects.length || 1)) * 100}%` }}
-                          />
-                        </div>
-                      </div>
-
-                      <div>
-                        <div className="flex justify-between text-xs mb-1">
-                          <span className="text-gray-400">Pending Feedback / Revisions</span>
-                          <span className="text-white font-mono">
-                            {projects.filter(p => p.status === 'Wait for Respond').length} Projects
-                          </span>
-                        </div>
-                        <div className="h-1.5 bg-black rounded overflow-hidden">
-                          <div 
-                            className="h-full bg-[#D4AF37] rounded" 
-                            style={{ width: `${(projects.filter(p => p.status === 'Wait for Respond').length / (projects.length || 1)) * 100}%` }}
-                          />
-                        </div>
-                      </div>
-                    </div>
+                    <span class="text-[9px] text-gray-500 block">BASE COST</span>
+                    <span class="font-mono font-medium text-gray-300">RM ${p.cost.toFixed(2)}</span>
                   </div>
-
-                  <p className="text-[10px] text-gray-500 italic mt-6">
-                    Perfect for preparing financial sheets for tax declarations or agency audits.
-                  </p>
+                  <div>
+                    <span class="text-[9px] text-gray-500 block">TAX COLLECTED</span>
+                    <span class="font-mono font-medium text-[#D4AF37]">RM ${p.tax.toFixed(2)}</span>
+                  </div>
                 </div>
+              </div>
 
+              <div class="mt-5 pt-3 border-t border-white/5 flex items-center justify-between">
+                <div>
+                  <span class="text-[9px] text-[#D4AF37] block font-semibold uppercase">TOTAL AMOUNT</span>
+                  <span class="font-mono font-bold text-white text-sm">RM ${total.toFixed(2)}</span>
+                </div>
+                <div class="flex gap-2">
+                  <button 
+                    onclick="viewInvoiceDetail('${p.id}')"
+                    class="px-3 py-1.5 bg-[#D4AF37] hover:bg-[#FCF6BA] text-[#0A0A0A] font-bold rounded text-[11px] transition-all flex items-center gap-1"
+                  >
+                    Preview Layout
+                  </button>
+                  <button 
+                    onclick="deleteProject('${p.id}')"
+                    class="p-1.5 bg-rose-950/30 hover:bg-rose-600 text-rose-400 hover:text-white rounded transition-all"
+                  >
+                    <i data-lucide="trash-2" class="h-3.5 w-3.5"></i>
+                  </button>
+                </div>
               </div>
             </div>
-          )}
+          `;
+        });
 
-        </main>
-      </div>
+        if (projects.length === 0) {
+          grid.innerHTML = `
+            <div class="col-span-full p-12 bg-[#121212] border border-white/5 rounded text-center text-gray-500">
+              <i data-lucide="alert-circle" class="mx-auto mb-2 text-gray-600 h-6 w-6"></i>
+              No dynamic invoices generated yet. Please record a new project!
+            </div>
+          `;
+        }
+      }
+      lucide.createIcons();
+    }
 
-      {/* ADD PROJECT MODAL */}
-      {showAddProjectModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-fade-in">
-          <div className="bg-[#121212] border border-[#D4AF37]/40 rounded-lg max-w-lg w-full overflow-hidden shadow-2xl">
-            <div className="bg-[#1A1A1A] p-4 border-b border-white/5 flex justify-between items-center">
-              <span className="text-xs uppercase tracking-wider text-[#D4AF37] font-semibold">New Project & Invoice Entry</span>
-              <button onClick={() => setShowAddProjectModal(false)} className="text-gray-400 hover:text-white">
-                <X size={18} />
+    function viewInvoiceDetail(projectId) {
+      selectedInvoice = projects.find(p => p.id === projectId);
+      activeTab = "invoices";
+      switchTab("invoices");
+    }
+
+    function closeInvoiceDetail() {
+      selectedInvoice = null;
+      renderInvoiceHub();
+    }
+
+    // Raster PNG Export Compiler using HTML2Canvas
+    function triggerPNGExport() {
+      const element = document.getElementById('invoice-render-sheet');
+      if (!element) return;
+
+      const progressOverlay = document.getElementById('export-progress');
+      const progressText = document.getElementById('export-step-text');
+      const percentText = document.getElementById('export-percent-text');
+      const progressBar = document.getElementById('export-progress-bar');
+
+      progressOverlay.classList.remove('hidden');
+
+      let currentPercent = 0;
+      const stepIntervals = [
+        { max: 20, text: "Compiling vector assets & layers..." },
+        { max: 50, text: "Applying high-end black & gold styling..." },
+        { max: 75, text: "Calculating sales taxonomies and SST (RM)..." },
+        { max: 95, text: "Generating digital graphic blueprint (PNG)..." },
+        { max: 100, text: "Ready! Saving directly to your device..." }
+      ];
+
+      const timer = setInterval(() => {
+        currentPercent += Math.floor(Math.random() * 4) + 2;
+        if (currentPercent >= 100) {
+          currentPercent = 100;
+          clearInterval(timer);
+
+          progressBar.style.width = '100%';
+          percentText.innerText = '100%';
+          progressText.innerText = "Ready! Saving directly to your device...";
+
+          setTimeout(() => {
+            html2canvas(element, {
+              scale: 2,
+              useCORS: true,
+              allowTaint: true,
+              backgroundColor: "#FFFFFF"
+            }).then(canvas => {
+              const image = canvas.toDataURL("image/png");
+              const link = document.createElement('a');
+              link.href = image;
+              link.download = `${selectedInvoice.invoiceNo}_BrandworkzCo.png`;
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+
+              showNotification(`High-Res PNG Saved: ${selectedInvoice.invoiceNo}`);
+              progressOverlay.classList.add('hidden');
+            }).catch(err => {
+              console.error("Renderer error:", err);
+              showNotification("Export failed due to system rendering block.", "error");
+              progressOverlay.classList.add('hidden');
+            });
+          }, 400);
+
+        } else {
+          progressBar.style.width = `${currentPercent}%`;
+          percentText.innerText = `${currentPercent}%`;
+          const currentStep = stepIntervals.find(s => currentPercent <= s.max);
+          if (currentStep) {
+            progressText.innerText = currentStep.text;
+          }
+        }
+      }, 60);
+    }
+
+    // SUB-RENDERER: TASK WORKSPACE
+    function initTaskHandlers() {
+      const form = document.getElementById('task-addition-form');
+      form.onsubmit = function(e) {
+        e.preventDefault();
+        const textInput = document.getElementById('new-task-text');
+        const categoryInput = document.getElementById('new-task-category');
+
+        if (!textInput.value.trim()) return;
+
+        const newTask = {
+          id: `task-${Date.now()}`,
+          text: textInput.value.trim(),
+          category: categoryInput.value,
+          completed: false
+        };
+
+        tasks.unshift(newTask);
+        textInput.value = '';
+        showNotification("To-Do task successfully listed!");
+        renderTasksView();
+        recalculateGlobalFinancials();
+      };
+    }
+
+    function renderTasksView() {
+      const list = document.getElementById('tasks-interactive-list');
+      list.innerHTML = '';
+
+      tasks.forEach(t => {
+        list.innerHTML += `
+          <div class="flex items-center justify-between p-3 bg-[#1A1A1A] rounded border border-white/5 hover:border-[#D4AF37]/30 transition-all group">
+            <div class="flex items-center gap-3">
+              <button 
+                onclick="toggleTaskCompleted('${t.id}')"
+                class="h-5 w-5 rounded-full border flex items-center justify-center transition-all ${
+                  t.completed 
+                    ? 'bg-gradient-to-r from-[#BF953F] to-[#D4AF37] border-transparent text-[#0A0A0A]' 
+                    : 'border-white/20 hover:border-[#D4AF37]'
+                }"
+              >
+                ${t.completed ? `<i data-lucide="check" class="h-3 w-3 stroke-[3]"></i>` : ''}
+              </button>
+              <span class="text-xs ${t.completed ? 'line-through text-gray-500' : 'text-gray-200'}">
+                ${t.text}
+              </span>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <span class="text-[9px] px-2 py-0.5 rounded font-mono ${
+                t.category === 'High Priority' ? 'bg-rose-500/10 text-rose-400 border border-rose-500/10' :
+                t.category === 'In Progress' ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/10' :
+                t.category === 'Review' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/10' :
+                'bg-white/5 text-gray-400'
+              }">
+                ${t.category}
+              </span>
+              <button 
+                onclick="deleteTask('${t.id}')"
+                class="p-1 text-gray-500 hover:text-rose-500 rounded transition-all"
+              >
+                <i data-lucide="trash-2" class="h-3.5 w-3.5"></i>
               </button>
             </div>
-
-            <form onSubmit={handleAddProject} className="p-6 space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-1">
-                  <label className="text-[10px] text-gray-400 uppercase tracking-wider">Client Name</label>
-                  <input 
-                    type="text" 
-                    value={formClient}
-                    onChange={(e) => setFormClient(e.target.value)}
-                    placeholder="e.g., Zenith Agency"
-                    className="w-full bg-[#1A1A1A] border border-white/10 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D4AF37] transition-all"
-                  />
-                </div>
-                <div className="space-y-1">
-                  <label className="text-[10px] text-gray-400 uppercase tracking-wider">Project Category</label>
-                  <select 
-                    value={formCategory}
-                    onChange={(e) => setFormCategory(e.target.value)}
-                    className="w-full bg-[#1A1A1A] border border-white/10 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D4AF37] transition-all"
-                  >
-                    <option value="Branding">Branding</option>
-                    <option value="Packaging">Packaging</option>
-                    <option value="UI/UX">UI/UX</option>
-                    <option value="Label Design">Label Design</option>
-                    <option value="Editorial">Editorial</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="space-y-1">
-                <label className="text-[10px] text-gray-400 uppercase tracking-wider">Project Name / Scope</label>
-                <input 
-                  type="text" 
-                  value={formProject}
-                  onChange={(e) => setFormProject(e.target.value)}
-                  placeholder="e.g., Premium Logo Design & Vector Package"
-                  className="w-full bg-[#1A1A1A] border border-white/10 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D4AF37] transition-all"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-1">
-                  <label className="text-[10px] text-gray-400 uppercase tracking-wider">Date Out (Start)</label>
-                  <input 
-                    type="date" 
-                    value={formDateOut}
-                    onChange={(e) => setFormDateOut(e.target.value)}
-                    className="w-full bg-[#1A1A1A] border border-white/10 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D4AF37] transition-all"
-                  />
-                </div>
-                <div className="space-y-1">
-                  <label className="text-[10px] text-gray-400 uppercase tracking-wider">Shipping Date (Delivery)</label>
-                  <input 
-                    type="date" 
-                    value={formShippingDate}
-                    onChange={(e) => setFormShippingDate(e.target.value)}
-                    className="w-full bg-[#1A1A1A] border border-white/10 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D4AF37] transition-all"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-1">
-                  <label className="text-[10px] text-gray-400 uppercase tracking-wider">Selling Cost (RM)</label>
-                  <input 
-                    type="number" 
-                    step="0.01"
-                    value={formCost}
-                    onChange={(e) => setFormCost(e.target.value)}
-                    placeholder="e.g., 4500"
-                    className="w-full bg-[#1A1A1A] border border-white/10 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D4AF37] transition-all"
-                  />
-                </div>
-                <div className="space-y-1">
-                  <label className="text-[10px] text-gray-400 uppercase tracking-wider">Tax Cost (RM) - Leave blank for auto 6%</label>
-                  <input 
-                    type="number" 
-                    step="0.01"
-                    value={formTax}
-                    onChange={(e) => setFormTax(e.target.value)}
-                    placeholder="Auto Calculated (6%)"
-                    className="w-full bg-[#1A1A1A] border border-white/10 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D4AF37] transition-all"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-1">
-                <label className="text-[10px] text-gray-400 uppercase tracking-wider">Initial Design Status</label>
-                <select 
-                  value={formStatus}
-                  onChange={(e) => setFormStatus(e.target.value)}
-                  className="w-full bg-[#1A1A1A] border border-white/10 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D4AF37] transition-all"
-                >
-                  <option value="In Progress">In Progress</option>
-                  <option value="Delayed">Delayed</option>
-                  <option value="Completed">Completed</option>
-                  <option value="Wait for Respond">Wait for Respond</option>
-                </select>
-              </div>
-
-              <div className="pt-4 border-t border-white/5 flex justify-end gap-3">
-                <button 
-                  type="button" 
-                  onClick={() => setShowAddProjectModal(false)}
-                  className="px-4 py-2 bg-white/5 hover:bg-white/10 text-xs rounded transition-all"
-                >
-                  Cancel
-                </button>
-                <button 
-                  type="submit" 
-                  className="bg-gradient-to-r from-[#BF953F] to-[#D4AF37] text-black font-semibold text-xs px-5 py-2 rounded shadow-lg hover:from-[#FCF6BA]"
-                >
-                  Create & Record Invoice
-                </button>
-              </div>
-            </form>
           </div>
-        </div>
-      )}
+        `;
+      });
 
-      {/* Styles */}
-      <style>{`
-        @keyframes slide-in {
-          from {
-            transform: translateY(-1rem);
-            opacity: 0;
-          }
-          to {
-            transform: translateY(0);
-            opacity: 1;
-          }
-        }
-        .animate-slide-in {
-          animation: slide-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-        @keyframes fade-in {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-        .animate-fade-in {
-          animation: fade-in 0.25s ease-out forwards;
-        }
-      `}</style>
+      const finished = tasks.filter(t => t.completed).length;
+      document.getElementById('task-completed-fraction').innerText = `Completed: ${finished} / ${tasks.length}`;
+      lucide.createIcons();
+    }
 
-    </div>
-  );
-}
+    function toggleTaskCompleted(taskId) {
+      tasks = tasks.map(t => t.id === taskId ? { ...t, completed: !t.completed } : t);
+      recalculateGlobalFinancials();
+      if (activeTab === "dashboard") renderDashboardView();
+      if (activeTab === "tasks") renderTasksView();
+    }
+
+    function deleteTask(taskId) {
+      tasks = tasks.filter(t => t.id !== taskId);
+      showNotification("Workspace deliverable task removed.");
+      recalculateGlobalFinancials();
+      renderTasksView();
+    }
+
+    // SUB-RENDERER: PREMIUM FINANCIALS
+    function renderFinancialsView() {
+      const list = document.getElementById('financial-client-breakdown');
+      list.innerHTML = '';
+
+      projects.forEach(p => {
+        const total = p.cost + p.tax;
+        list.innerHTML += `
+          <div class="p-4 bg-[#1A1A1A] rounded border border-white/5 flex justify-between items-center hover:border-[#D4AF37]/20 transition-all">
+            <div>
+              <span class="text-[10px] text-gray-500 uppercase">CLIENT REPRESENTATIVE</span>
+              <h4 class="text-sm font-bold text-white">${p.clientName}</h4>
+              <span class="text-[10px] text-[#D4AF37] block mt-1">${p.projectName}</span>
+            </div>
+            <div class="text-right">
+              <span class="text-[10px] text-gray-500 block">TOTAL VOLUME</span>
+              <span class="font-mono font-bold text-white block">RM ${total.toFixed(2)}</span>
+              <span class="text-[9px] bg-white/5 text-gray-400 px-1.5 py-0.5 rounded font-mono mt-1 inline-block">
+                Tax RM ${p.tax.toFixed(2)}
+              </span>
+            </div>
+          </div>
+        `;
+      });
+
+      if (projects.length === 0) {
+        list.innerHTML = `<p class="col-span-full text-center text-xs text-gray-500 py-6">No client portfolios available yet.</p>`;
+      }
+    }
+
+    // PROJECT FORM HANDLING & TAX MATH
+    function initProjectForm() {
+      const form = document.getElementById('add-project-form');
+      form.onsubmit = function(e) {
+        e.preventDefault();
+
+        const client = document.getElementById('form-client').value;
+        const project = document.getElementById('form-project').value;
+        const category = document.getElementById('form-category').value;
+        const dateout = document.getElementById('form-dateout').value;
+        const shipping = document.getElementById('form-shipping').value;
+        const costVal = parseFloat(document.getElementById('form-cost').value) || 0;
+        const taxValInput = document.getElementById('form-tax').value;
+        const status = document.getElementById('form-status').value;
+
+        // Auto calculate 29.17% if tax input left blank
+        const taxVal = taxValInput !== '' ? parseFloat(taxValInput) : parseFloat((costVal * 0.2917).toFixed(2));
+        const newInvoiceNo = `INV-2026-00${projects.length + 1}`;
+
+        const newProjObj = {
+          id: `proj-${Date.now()}`,
+          invoiceNo: newInvoiceNo,
+          clientName: client,
+          projectName: project,
+          status: status,
+          dateOut: dateout || new Date().toISOString().split('T')[0],
+          shippingDate: shipping || new Date(Date.now() + 30*24*60*60*1000).toISOString().split('T')[0],
+          cost: costVal,
+          tax: taxVal,
+          category: category,
+          files: []
+        };
+
+        projects.unshift(newProjObj);
+        closeAddProjectModal();
+        showNotification(`Created Project & ${newInvoiceNo} Successfully!`);
+
+        // Reset Form Inputs
+        form.reset();
+
+        // Refresh Active Visual Layout
+        switchTab(activeTab);
+      };
+    }
+
+    function openAddProjectModal() {
+      document.getElementById('add-project-modal').classList.remove('hidden');
+    }
+
+    function closeAddProjectModal() {
+      document.getElementById('add-project-modal').classList.add('hidden');
+    }
+  </script>
+</body>
+</html>

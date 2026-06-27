@@ -792,9 +792,42 @@
   </div>
 
   <!-- APPLICATION LOGIC & DATA ENGINE -->
-  <script>
-    // State Data Storage Configuration (Malaysian Ringgit - RM)
-    // Project 3 yields exactly RM 35.00 in tax (29.17% of 120.00 base cost)
+  <script type="module">
+    // Firebase Imports
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc, getDoc, collection, onSnapshot, updateDoc, deleteDoc, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    // Firestore Integration Setup & Auth guards
+    const firebaseConfig = typeof __firebase_config !== 'undefined' 
+      ? JSON.parse(__firebase_config) 
+      : {
+          apiKey: "",
+          authDomain: "",
+          projectId: "",
+          storageBucket: "",
+          messagingSenderId: "",
+          appId: ""
+        };
+    const appId = typeof __app_id !== 'undefined' ? __app_id : 'brandworkz-planner-v2';
+    const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+    let app, auth, db;
+    let hasFirebase = false;
+    let currentUser = null;
+
+    if (firebaseConfig && firebaseConfig.projectId) {
+      try {
+        app = initializeApp(firebaseConfig);
+        auth = getAuth(app);
+        db = getFirestore(app);
+        hasFirebase = true;
+      } catch (e) {
+        console.error("Firebase setup failed:", e);
+      }
+    }
+
+    // Default Cache State Data (Loaded first, then updated in-memory and synced to Cloud)
     let projects = [
       {
         id: "proj-1",
@@ -837,7 +870,7 @@
         dateOut: "2026-06-01",
         shippingDate: "2026-06-28",
         cost: 120.00,
-        tax: 35.00, // Exactly RM 35.00
+        tax: 35.00,
         category: "Label Design",
         files: [
           { name: "Elysian_Moodboard.pdf", size: "6.7 MB" }
@@ -871,7 +904,12 @@
     let isPasswordVisible = false;
     let earningsChartInstance = null;
     let isInvoiceEditing = false;
-    let globalTaxRate = 29.17; // Customizable default rate
+    let globalTaxRate = 29.17; 
+
+    // Live Unsubscribe Ref Variables
+    let projectsListener = null;
+    let tasksListener = null;
+    let settingsListener = null;
 
     // Initialization lifecycle on window load
     window.onload = function() {
@@ -880,7 +918,121 @@
       initTaskHandlers();
       initProjectForm();
       updateTaxInputLabel();
+
+      // Trigger automatic Firebase sync on page load if user is already session-verified
+      const existingSession = sessionStorage.getItem('brandworkz_session_auth');
+      if (existingSession === 'active_authenticated') {
+        triggerFirebaseAuthAndSync();
+      }
     };
+
+    // Firebase Auth flow execution
+    async function triggerFirebaseAuthAndSync() {
+      if (!hasFirebase) return;
+      try {
+        if (initialAuthToken) {
+          await signInWithCustomToken(auth, initialAuthToken);
+        } else {
+          await signInAnonymously(auth);
+        }
+      } catch (e) {
+        console.error("Firebase auth initialization failed:", e);
+      }
+    }
+
+    // Monitor Firebase authentication state change
+    if (hasFirebase && auth) {
+      onAuthStateChanged(auth, (user) => {
+        currentUser = user;
+        if (user) {
+          subscribeToFirestoreData(user);
+        } else {
+          // Unsubscribe active listeners
+          if (projectsListener) projectsListener();
+          if (tasksListener) tasksListener();
+          if (settingsListener) settingsListener();
+        }
+      });
+    }
+
+    // Live synced database collection nodes (RULE 1)
+    function subscribeToFirestoreData(user) {
+      if (!user) return;
+
+      const projectsColl = collection(db, 'artifacts', appId, 'public', 'data', 'projects');
+      const tasksColl = collection(db, 'artifacts', appId, 'public', 'data', 'tasks');
+      const settingsDoc = doc(db, 'artifacts', appId, 'public', 'data', 'settings', 'global_settings');
+
+      // Sync Projects
+      projectsListener = onSnapshot(projectsColl, (snapshot) => {
+        const fetchedProjects = [];
+        snapshot.forEach(docSnap => {
+          fetchedProjects.push({ id: docSnap.id, ...docSnap.data() });
+        });
+
+        if (fetchedProjects.length === 0 && projects.length > 0) {
+          // Push local memory projects as database baseline values
+          projects.forEach(async (p) => {
+            await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'projects', p.id), p);
+          });
+        } else {
+          projects = fetchedProjects;
+          if (selectedInvoice) {
+            selectedInvoice = projects.find(p => p.id === selectedInvoice.id) || null;
+          }
+          recalculateGlobalFinancials();
+          refreshCurrentTab();
+        }
+      }, (err) => {
+        console.error("Error reading projects:", err);
+      });
+
+      // Sync Tasks
+      tasksListener = onSnapshot(tasksColl, (snapshot) => {
+        const fetchedTasks = [];
+        snapshot.forEach(docSnap => {
+          fetchedTasks.push({ id: docSnap.id, ...docSnap.data() });
+        });
+
+        if (fetchedTasks.length === 0 && tasks.length > 0) {
+          tasks.forEach(async (t) => {
+            await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'tasks', t.id), t);
+          });
+        } else {
+          tasks = fetchedTasks;
+          recalculateGlobalFinancials();
+          refreshCurrentTab();
+        }
+      }, (err) => {
+        console.error("Error reading tasks:", err);
+      });
+
+      // Sync Settings
+      settingsListener = onSnapshot(settingsDoc, (docSnap) => {
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          if (data.globalTaxRate !== undefined) {
+            globalTaxRate = data.globalTaxRate;
+            const rateInput = document.getElementById('global-tax-rate-input');
+            if (rateInput) rateInput.value = globalTaxRate;
+            updateTaxInputLabel();
+            recalculateGlobalFinancials();
+          }
+        } else {
+          setDoc(settingsDoc, { globalTaxRate: globalTaxRate });
+        }
+      }, (err) => {
+        console.error("Error reading settings:", err);
+      });
+    }
+
+    function refreshCurrentTab() {
+      if (activeTab === "dashboard") renderDashboardView();
+      if (activeTab === "tracker") renderTrackerView();
+      if (activeTab === "invoices") renderInvoiceHub();
+      if (activeTab === "tasks") renderTasksView();
+      if (activeTab === "clients") renderFinancialsView();
+    }
 
     function updateTaxInputLabel() {
       const label = document.getElementById('add-project-tax-label');
@@ -889,13 +1041,24 @@
       }
     }
 
-    function updateGlobalTaxRate(newRate) {
+    async function updateGlobalTaxRate(newRate) {
       const rate = parseFloat(newRate);
       if (!isNaN(rate) && rate >= 0) {
-        globalTaxRate = rate;
-        showNotification(`Default tax rate updated to ${globalTaxRate}%`);
-        updateTaxInputLabel();
-        recalculateGlobalFinancials();
+        if (currentUser) {
+          try {
+            await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'settings', 'global_settings'), {
+              globalTaxRate: rate
+            });
+            showNotification(`Default tax rate updated to ${rate}%`);
+          } catch (e) {
+            console.error("Failed to update tax rate:", e);
+          }
+        } else {
+          globalTaxRate = rate;
+          showNotification(`Default tax rate updated to ${globalTaxRate}% (Local mode)`);
+          updateTaxInputLabel();
+          recalculateGlobalFinancials();
+        }
       } else {
         showNotification("Invalid tax rate entered", "error");
       }
@@ -950,9 +1113,13 @@
         submitBtn.disabled = true;
         submitBtn.innerHTML = `AUTHENTICATING KEY...`;
 
-        setTimeout(() => {
+        setTimeout(async () => {
           if (window.btoa(username) === "YWRtaW4=" && window.btoa(pass) === "MTM0MjI4") {
             sessionStorage.setItem('brandworkz_session_auth', 'active_authenticated');
+            
+            // Sign in anonymously or custom token on database
+            await triggerFirebaseAuthAndSync();
+
             renderAuthWorkspace();
             showNotification("Access Granted. Welcome back to Brandworkz Co.");
           } else {
@@ -975,13 +1142,24 @@
       recalculateGlobalFinancials();
     }
 
-    function handleLogout() {
+    async function handleLogout() {
       sessionStorage.removeItem('brandworkz_session_auth');
       document.getElementById('app-workspace').classList.add('hidden');
       document.getElementById('login-overlay').classList.remove('hidden');
       document.getElementById('login-username').value = '';
       document.getElementById('login-password').value = '';
       document.getElementById('login-error-container').classList.add('hidden');
+      
+      // Perform complete Firebase auth signout to protect database writes
+      if (hasFirebase && auth) {
+        try {
+          await signOut(auth);
+          currentUser = null;
+        } catch (e) {
+          console.error("Signout error:", e);
+        }
+      }
+
       showNotification("Logged out successfully from the secure workspace.", "info");
     }
 
@@ -998,46 +1176,79 @@
       const grandTotal = subtotal + taxTotal;
 
       // Update Top Nav Headers
-      document.getElementById('header-tax-liability').innerText = `RM ${taxTotal.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-      document.getElementById('header-grand-total').innerText = `RM ${grandTotal.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+      const headerTax = document.getElementById('header-tax-liability');
+      const headerGrand = document.getElementById('header-grand-total');
+      if (headerTax) headerTax.innerText = `RM ${taxTotal.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+      if (headerGrand) headerGrand.innerText = `RM ${grandTotal.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
       // Update Dashboard Metric Card Nodes
       if (activeTab === "dashboard") {
-        document.getElementById('dashboard-grand-total').innerText = `RM ${grandTotal.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        const dbGrand = document.getElementById('dashboard-grand-total');
+        if (dbGrand) dbGrand.innerText = `RM ${grandTotal.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        
         const activeCount = projects.filter(p => p.status !== 'Completed').length;
-        document.getElementById('dashboard-active-count').innerText = `${activeCount} Active`;
-        document.getElementById('dashboard-progress-count').innerText = `${projects.filter(p => p.status === 'In Progress').length} currently in design progress`;
-        document.getElementById('dashboard-tax-total').innerText = `RM ${taxTotal.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        const dbActive = document.getElementById('dashboard-active-count');
+        if (dbActive) dbActive.innerText = `${activeCount} Active`;
+
+        const dbProgress = document.getElementById('dashboard-progress-count');
+        if (dbProgress) dbProgress.innerText = `${projects.filter(p => p.status === 'In Progress').length} currently in design progress`;
+
+        const dbTax = document.getElementById('dashboard-tax-total');
+        if (dbTax) dbTax.innerText = `RM ${taxTotal.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
         
         const completedTasks = tasks.filter(t => t.completed).length;
         const totalTasks = tasks.length || 1;
         const percent = Math.round((completedTasks / totalTasks) * 100);
-        document.getElementById('dashboard-task-percent').innerText = `${percent}%`;
-        document.getElementById('dashboard-task-completed').innerText = `${completedTasks} of ${tasks.length} tasks completed`;
+        
+        const dbTaskPercent = document.getElementById('dashboard-task-percent');
+        if (dbTaskPercent) dbTaskPercent.innerText = `${percent}%`;
+
+        const dbTaskCompleted = document.getElementById('dashboard-task-completed');
+        if (dbTaskCompleted) dbTaskCompleted.innerText = `${completedTasks} of ${tasks.length} tasks completed`;
       }
 
       // Update Tracker metrics
       if (activeTab === "tracker") {
-        document.getElementById('tracker-summary-grand-total').innerText = `RM ${grandTotal.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-        document.getElementById('tracker-invoice-count').innerText = projects.length;
-        document.getElementById('tracker-subtotal').innerText = `RM ${subtotal.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-        document.getElementById('tracker-tax').innerText = `RM ${taxTotal.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-        document.getElementById('tracker-grand-total').innerText = `RM ${grandTotal.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        const trGrand = document.getElementById('tracker-summary-grand-total');
+        if (trGrand) trGrand.innerText = `RM ${grandTotal.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+        const trCount = document.getElementById('tracker-invoice-count');
+        if (trCount) trCount.innerText = projects.length;
+
+        const trSub = document.getElementById('tracker-subtotal');
+        if (trSub) trSub.innerText = `RM ${subtotal.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+        const trTax = document.getElementById('tracker-tax');
+        if (trTax) trTax.innerText = `RM ${taxTotal.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+        const trTotal = document.getElementById('tracker-grand-total');
+        if (trTotal) trTotal.innerText = `RM ${grandTotal.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
       }
 
       // Update Premium Financial Registry metrics
       if (activeTab === "clients") {
-        document.getElementById('registry-pre-tax').innerText = `RM ${subtotal.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-        document.getElementById('registry-tax').innerText = `RM ${taxTotal.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-        document.getElementById('registry-gross').innerText = `RM ${grandTotal.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        const regPre = document.getElementById('registry-pre-tax');
+        if (regPre) regPre.innerText = `RM ${subtotal.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+        const regTax = document.getElementById('registry-tax');
+        if (regTax) regTax.innerText = `RM ${taxTotal.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+        const regGross = document.getElementById('registry-gross');
+        if (regGross) regGross.innerText = `RM ${grandTotal.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
         
         const finished = projects.filter(p => p.status === 'Completed').length;
-        document.getElementById('stats-completion-ratio').innerText = `${finished} / ${projects.length}`;
-        document.getElementById('stats-completion-bar').style.width = `${(finished / (projects.length || 1)) * 100}%`;
+        const statsRatio = document.getElementById('stats-completion-ratio');
+        if (statsRatio) statsRatio.innerText = `${finished} / ${projects.length}`;
+
+        const statsBar = document.getElementById('stats-completion-bar');
+        if (statsBar) statsBar.style.width = `${(finished / (projects.length || 1)) * 100}%`;
 
         const pending = projects.filter(p => p.status === 'Wait for Respond').length;
-        document.getElementById('stats-pending-ratio').innerText = `${pending} Project${pending !== 1 ? 's' : ''}`;
-        document.getElementById('stats-pending-bar').style.width = `${(pending / (projects.length || 1)) * 100}%`;
+        const statsPending = document.getElementById('stats-pending-ratio');
+        if (statsPending) statsPending.innerText = `${pending} Project${pending !== 1 ? 's' : ''}`;
+
+        const statsPendingBar = document.getElementById('stats-pending-bar');
+        if (statsPendingBar) statsPendingBar.style.width = `${(pending / (projects.length || 1)) * 100}%`;
       }
     }
 
@@ -1090,7 +1301,9 @@
     // SUB-RENDERER: DASHBOARD VIEW
     function renderDashboardView() {
       // 1. Chart Rendering Handled Safely via standard chartjs
-      const ctx = document.getElementById('earningsChart').getContext('2d');
+      const canvasEl = document.getElementById('earningsChart');
+      if (!canvasEl) return;
+      const ctx = canvasEl.getContext('2d');
       if (earningsChartInstance) {
         earningsChartInstance.destroy();
       }
@@ -1124,57 +1337,62 @@
 
       // 2. Render Output Pipeline Tracker
       const pipelineContainer = document.getElementById('dashboard-pipeline-list');
-      pipelineContainer.innerHTML = '';
-      projects.slice(0, 3).forEach(p => {
-        let badgeClass = "bg-cyan-500/10 text-cyan-400 border-cyan-500/20";
-        if (p.status === 'Completed') badgeClass = "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
-        if (p.status === 'Delayed') badgeClass = "bg-rose-500/10 text-rose-400 border border-rose-500/20";
-        if (p.status === 'Wait for Respond') badgeClass = "bg-amber-500/10 text-amber-400 border border-amber-500/20";
+      if (pipelineContainer) {
+        pipelineContainer.innerHTML = '';
+        projects.slice(0, 3).forEach(p => {
+          let badgeClass = "bg-cyan-500/10 text-cyan-400 border-cyan-500/20";
+          if (p.status === 'Completed') badgeClass = "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
+          if (p.status === 'Delayed') badgeClass = "bg-rose-500/10 text-rose-400 border border-rose-500/20";
+          if (p.status === 'Wait for Respond') badgeClass = "bg-amber-500/10 text-amber-400 border border-amber-500/20";
 
-        pipelineContainer.innerHTML += `
-          <div class="flex items-center justify-between p-2.5 bg-[#1A1A1A] rounded border border-white/5 hover:border-[#D4AF37]/30 transition-all">
-            <div class="max-w-[150px] truncate">
-              <h4 class="text-xs font-semibold text-white truncate">${p.projectName}</h4>
-              <p class="text-[10px] text-gray-400 truncate">${p.clientName}</p>
+          pipelineContainer.innerHTML += `
+            <div class="flex items-center justify-between p-2.5 bg-[#1A1A1A] rounded border border-white/5 hover:border-[#D4AF37]/30 transition-all">
+              <div class="max-w-[150px] truncate">
+                <h4 class="text-xs font-semibold text-white truncate">${p.projectName}</h4>
+                <p class="text-[10px] text-gray-400 truncate">${p.clientName}</p>
+              </div>
+              <span class="text-[9px] px-2 py-0.5 rounded-full font-bold border ${badgeClass}">
+                ${p.status}
+              </span>
             </div>
-            <span class="text-[9px] px-2 py-0.5 rounded-full font-bold border ${badgeClass}">
-              ${p.status}
-            </span>
-          </div>
-        `;
-      });
+          `;
+        });
+      }
 
       // 3. Render Dashboard Mini Deliverables Checklist
       const miniChecklist = document.getElementById('dashboard-deliverables-list');
-      miniChecklist.innerHTML = '';
-      tasks.slice(0, 4).forEach(t => {
-        miniChecklist.innerHTML += `
-          <div 
-            onclick="toggleTaskCompleted('${t.id}')"
-            class="p-3 bg-[#1A1A1A] rounded border border-white/5 flex items-center justify-between cursor-pointer hover:border-[#D4AF37]/30 hover:bg-[#202020] transition-all"
-          >
-            <div class="flex items-center gap-3">
-              <div class="h-4 w-4 rounded border flex items-center justify-center transition-all ${
-                t.completed ? 'bg-[#D4AF37] border-[#D4AF37]' : 'border-gray-600'
-              }">
-                ${t.completed ? `<i data-lucide="check" class="text-black h-3 w-3 stroke-[3]"></i>` : ''}
+      if (miniChecklist) {
+        miniChecklist.innerHTML = '';
+        tasks.slice(0, 4).forEach(t => {
+          miniChecklist.innerHTML += `
+            <div 
+              onclick="toggleTaskCompleted('${t.id}')"
+              class="p-3 bg-[#1A1A1A] rounded border border-white/5 flex items-center justify-between cursor-pointer hover:border-[#D4AF37]/30 hover:bg-[#202020] transition-all"
+            >
+              <div class="flex items-center gap-3">
+                <div class="h-4 w-4 rounded border flex items-center justify-center transition-all ${
+                  t.completed ? 'bg-[#D4AF37] border-[#D4AF37]' : 'border-gray-600'
+                }">
+                  ${t.completed ? `<i data-lucide="check" class="text-black h-3 w-3 stroke-[3]"></i>` : ''}
+                </div>
+                <span class="text-xs text-gray-200 ${t.completed ? 'line-through text-gray-500' : ''}">
+                  ${t.text}
+                </span>
               </div>
-              <span class="text-xs text-gray-200 ${t.completed ? 'line-through text-gray-500' : ''}">
-                ${t.text}
+              <span class="text-[9px] bg-white/10 text-gray-400 px-2 py-0.5 rounded font-mono uppercase">
+                ${t.category}
               </span>
             </div>
-            <span class="text-[9px] bg-white/10 text-gray-400 px-2 py-0.5 rounded font-mono uppercase">
-              ${t.category}
-            </span>
-          </div>
-        `;
-      });
+          `;
+        });
+      }
       lucide.createIcons();
     }
 
     // SUB-RENDERER: TRACKER VIEW
     function renderTrackerView() {
       const tbody = document.getElementById('tracker-table-body');
+      if (!tbody) return;
       tbody.innerHTML = '';
 
       projects.forEach(p => {
@@ -1207,7 +1425,7 @@
         tbody.innerHTML += `
           <tr class="hover:bg-[#1A1A1A]/50 transition-colors">
             <td class="p-4">
-              <span class="font-mono text-[10px] text-[#D4AF37] bg-[#221B0F] px-2 py-0.5 rounded border border-[#D4AF37]/20 block w-max mb-1">
+              <span class="font-mono text-[10px] text-[#D4AF37] bg-[#221B0F] px-2.5 py-1 rounded border border-[#D4AF37]/20 block w-max mb-1">
                 ${p.invoiceNo}
               </span>
               <span class="font-semibold text-white block">${p.clientName}</span>
@@ -1223,7 +1441,7 @@
               </div>
               <div class="flex items-center gap-2 text-[10px] mt-1">
                 <span class="text-[#D4AF37]">Ship:</span> 
-                <span class="font-mono font-semibold text-white">{p.shippingDate}</span>
+                <span class="font-mono font-semibold text-white">${p.shippingDate}</span>
               </div>
             </td>
             <td class="p-4">
@@ -1289,14 +1507,24 @@
       lucide.createIcons();
     }
 
-    // Tracker dynamic callbacks
-    function updateProjectStatus(projectId, newStatus) {
-      projects = projects.map(p => p.id === projectId ? { ...p, status: newStatus } : p);
-      showNotification(`Updated project status to ${newStatus}`);
-      recalculateGlobalFinancials();
+    // Tracker dynamic callbacks (RULE 3 verified)
+    async function updateProjectStatus(projectId, newStatus) {
+      if (currentUser) {
+        try {
+          const projectDoc = doc(db, 'artifacts', appId, 'public', 'data', 'projects', projectId);
+          await updateDoc(projectDoc, { status: newStatus });
+          showNotification(`Updated project status to ${newStatus}`);
+        } catch (e) {
+          console.error("Failed to update status in DB:", e);
+        }
+      } else {
+        projects = projects.map(p => p.id === projectId ? { ...p, status: newStatus } : p);
+        showNotification(`Updated project status to ${newStatus} (Local)`);
+        recalculateGlobalFinancials();
+      }
     }
 
-    function simulateFileUpload(projectId, event) {
+    async function simulateFileUpload(projectId, event) {
       const file = event.target.files[0];
       if (!file) return;
 
@@ -1304,27 +1532,42 @@
         ? `${(file.size / (1024 * 1024)).toFixed(1)} MB` 
         : `${(file.size / 1024).toFixed(1)} KB`;
 
-      projects = projects.map(p => {
-        if (p.id === projectId) {
-          return {
-            ...p,
-            files: [...p.files, { name: file.name, size: formattedSize }]
-          };
-        }
-        return p;
-      });
+      const targetProj = projects.find(p => p.id === projectId);
+      if (!targetProj) return;
 
-      showNotification(`Asset "${file.name}" linked successfully to project!`);
-      renderTrackerView();
+      const updatedFiles = [...targetProj.files, { name: file.name, size: formattedSize }];
+
+      if (currentUser) {
+        try {
+          const projectDoc = doc(db, 'artifacts', appId, 'public', 'data', 'projects', projectId);
+          await updateDoc(projectDoc, { files: updatedFiles });
+          showNotification(`Asset "${file.name}" linked successfully to project!`);
+        } catch (e) {
+          console.error("Failed to upload asset:", e);
+        }
+      } else {
+        projects = projects.map(p => p.id === projectId ? { ...p, files: updatedFiles } : p);
+        showNotification(`Asset "${file.name}" linked successfully (Local)`);
+        renderTrackerView();
+      }
     }
 
-    function deleteProject(projectId) {
+    async function deleteProject(projectId) {
       const p = projects.find(item => item.id === projectId);
-      projects = projects.filter(item => item.id !== projectId);
-      showNotification(`Invoice ${p ? p.invoiceNo : ''} cancelled and deleted.`);
-      recalculateGlobalFinancials();
-      if (activeTab === "tracker") renderTrackerView();
-      if (activeTab === "invoices") renderInvoiceHub();
+      if (currentUser) {
+        try {
+          const projectDoc = doc(db, 'artifacts', appId, 'public', 'data', 'projects', projectId);
+          await deleteDoc(projectDoc);
+          showNotification(`Invoice ${p ? p.invoiceNo : ''} cancelled and deleted.`);
+        } catch (e) {
+          console.error("Failed to delete project:", e);
+        }
+      } else {
+        projects = projects.filter(item => item.id !== projectId);
+        showNotification(`Invoice ${p ? p.invoiceNo : ''} cancelled and deleted (Local).`);
+        recalculateGlobalFinancials();
+        refreshCurrentTab();
+      }
     }
 
     // SUB-RENDERER: INVOICES HUB VIEW (With live tax & amount editor)
@@ -1335,12 +1578,16 @@
         
         // Render detailed editable tax sheet
         const sheet = document.getElementById('invoice-render-sheet');
+        if (!sheet) return;
         const totalDue = selectedInvoice.cost + selectedInvoice.tax;
 
         // Custom UI layout based on edit mode toggle
         if (isInvoiceEditing) {
-          document.getElementById('edit-mode-icon').setAttribute('data-lucide', 'save');
-          document.getElementById('edit-mode-btn-text').innerText = "Save & Exit Edit Mode";
+          const editIcon = document.getElementById('edit-mode-icon');
+          if (editIcon) editIcon.setAttribute('data-lucide', 'save');
+          
+          const editBtnText = document.getElementById('edit-mode-btn-text');
+          if (editBtnText) editBtnText.innerText = "Save & Exit Edit Mode";
 
           sheet.innerHTML = `
             <div class="flex justify-between items-start gap-6 border-b pb-8">
@@ -1445,8 +1692,11 @@
           `;
         } else {
           // Standard Read-only Premium preview
-          document.getElementById('edit-mode-icon').setAttribute('data-lucide', 'edit-3');
-          document.getElementById('edit-mode-btn-text').innerText = "Enable Edit Mode";
+          const editIcon = document.getElementById('edit-mode-icon');
+          if (editIcon) editIcon.setAttribute('data-lucide', 'edit-3');
+
+          const editBtnText = document.getElementById('edit-mode-btn-text');
+          if (editBtnText) editBtnText.innerText = "Enable Edit Mode";
 
           // Calculate current percentage dynamically for reference display
           const percent = ((selectedInvoice.tax / (selectedInvoice.cost || 1)) * 100).toFixed(2);
@@ -1539,6 +1789,7 @@
         document.getElementById('invoice-hub-detail-mode').classList.add('hidden');
 
         const grid = document.getElementById('invoice-cards-grid');
+        if (!grid) return;
         grid.innerHTML = '';
 
         projects.forEach(p => {
@@ -1615,7 +1866,7 @@
     }
 
     // Toggle Invoice Edit Mode and Persist state back
-    function toggleInvoiceEditMode() {
+    async function toggleInvoiceEditMode() {
       if (isInvoiceEditing) {
         // Save Mode triggered
         const costInput = parseFloat(document.getElementById('edit-invoice-cost').value) || 0;
@@ -1631,29 +1882,38 @@
           return;
         }
 
-        // Update main state array
-        projects = projects.map(p => {
-          if (p.id === selectedInvoice.id) {
-            return {
-              ...p,
-              cost: costInput,
-              tax: taxInput,
-              clientName: clientInput,
-              projectName: projectInput,
-              category: categoryInput,
-              dateOut: dateInput,
-              shippingDate: shippingInput
-            };
-          }
-          return p;
-        });
+        const updatedProject = {
+          cost: costInput,
+          tax: taxInput,
+          clientName: clientInput,
+          projectName: projectInput,
+          category: categoryInput,
+          dateOut: dateInput,
+          shippingDate: shippingInput
+        };
 
-        // Update selectedInvoice reference local memory
-        selectedInvoice = projects.find(p => p.id === selectedInvoice.id);
+        if (currentUser) {
+          try {
+            const projectDoc = doc(db, 'artifacts', appId, 'public', 'data', 'projects', selectedInvoice.id);
+            await updateDoc(projectDoc, updatedProject);
+            showNotification("Invoice tax calculations & labels saved successfully!");
+          } catch (e) {
+            console.error("Failed to update project data:", e);
+          }
+        } else {
+          projects = projects.map(p => {
+            if (p.id === selectedInvoice.id) {
+              return { ...p, ...updatedProject };
+            }
+            return p;
+          });
+
+          selectedInvoice = projects.find(p => p.id === selectedInvoice.id);
+          showNotification("Invoice tax calculations & labels saved successfully! (Local)");
+          recalculateGlobalFinancials();
+        }
+
         isInvoiceEditing = false;
-        showNotification("Invoice tax calculations & labels saved successfully!");
-        
-        recalculateGlobalFinancials();
         renderInvoiceHub();
       } else {
         // Enable Edit Mode
@@ -1667,8 +1927,11 @@
       const cost = parseFloat(document.getElementById('edit-invoice-cost').value) || 0;
       const tax = parseFloat(document.getElementById('edit-invoice-tax-amount').value) || 0;
       
-      document.getElementById('edit-subtotal-display').innerText = `RM ${cost.toFixed(2)}`;
-      document.getElementById('edit-grandtotal-display').innerText = `RM ${(cost + tax).toFixed(2)}`;
+      const subtotalDisp = document.getElementById('edit-subtotal-display');
+      if (subtotalDisp) subtotalDisp.innerText = `RM ${cost.toFixed(2)}`;
+      
+      const totalDisp = document.getElementById('edit-grandtotal-display');
+      if (totalDisp) totalDisp.innerText = `RM ${(cost + tax).toFixed(2)}`;
     }
 
     // Calculate tax based on custom percentage rate
@@ -1677,14 +1940,16 @@
       const taxPercent = parseFloat(document.getElementById('edit-invoice-tax-percent').value) || 0;
       const calculatedTax = (cost * (taxPercent / 100));
       
-      document.getElementById('edit-invoice-tax-amount').value = calculatedTax.toFixed(2);
+      const taxAmountInput = document.getElementById('edit-invoice-tax-amount');
+      if (taxAmountInput) taxAmountInput.value = calculatedTax.toFixed(2);
       recalculateEditTotals();
     }
 
     // Direct manual override of the RM Tax box
     function applyDirectTaxAmount() {
       // Clears the rate helper as a custom static amount has been hardcoded
-      document.getElementById('edit-invoice-tax-percent').value = '';
+      const taxPercentInput = document.getElementById('edit-invoice-tax-percent');
+      if (taxPercentInput) taxPercentInput.value = '';
       recalculateEditTotals();
     }
 
@@ -1738,7 +2003,6 @@
           progressText.innerText = "Ready! Saving directly to your device...";
 
           setTimeout(() => {
-            // High Resolution clone offscreen rendering for perfect CSS alignment inside Chrome/Firefox/Safari
             const renderClone = element.cloneNode(true);
             renderClone.style.position = 'absolute';
             renderClone.style.top = '-9999px';
@@ -1747,7 +2011,7 @@
             document.body.appendChild(renderClone);
 
             html2canvas(renderClone, {
-              scale: 2.5, // Crisp 2.5x retina-ready ratio for optimal dynamic viewing
+              scale: 2.5, 
               useCORS: true,
               allowTaint: true,
               backgroundColor: "#FFFFFF"
@@ -1787,7 +2051,7 @@
     // SUB-RENDERER: TASK WORKSPACE
     function initTaskHandlers() {
       const form = document.getElementById('task-addition-form');
-      form.onsubmit = function(e) {
+      form.onsubmit = async function(e) {
         e.preventDefault();
         const textInput = document.getElementById('new-task-text');
         const categoryInput = document.getElementById('new-task-category');
@@ -1801,16 +2065,28 @@
           completed: false
         };
 
-        tasks.unshift(newTask);
+        if (currentUser) {
+          try {
+            const taskDoc = doc(db, 'artifacts', appId, 'public', 'data', 'tasks', newTask.id);
+            await setDoc(taskDoc, newTask);
+            showNotification("To-Do task successfully listed!");
+          } catch (err) {
+            console.error("Error writing task to cloud:", err);
+          }
+        } else {
+          tasks.unshift(newTask);
+          showNotification("To-Do task successfully listed! (Local)");
+          renderTasksView();
+          recalculateGlobalFinancials();
+        }
+
         textInput.value = '';
-        showNotification("To-Do task successfully listed!");
-        renderTasksView();
-        recalculateGlobalFinancials();
       };
     }
 
     function renderTasksView() {
       const list = document.getElementById('tasks-interactive-list');
+      if (!list) return;
       list.innerHTML = '';
 
       tasks.forEach(t => {
@@ -1853,27 +2129,50 @@
       });
 
       const finished = tasks.filter(t => t.completed).length;
-      document.getElementById('task-completed-fraction').innerText = `Completed: ${finished} / ${tasks.length}`;
+      const completedFrac = document.getElementById('task-completed-fraction');
+      if (completedFrac) completedFrac.innerText = `Completed: ${finished} / ${tasks.length}`;
       lucide.createIcons();
     }
 
-    function toggleTaskCompleted(taskId) {
-      tasks = tasks.map(t => t.id === taskId ? { ...t, completed: !t.completed } : t);
-      recalculateGlobalFinancials();
-      if (activeTab === "dashboard") renderDashboardView();
-      if (activeTab === "tasks") renderTasksView();
+    async function toggleTaskCompleted(taskId) {
+      const targetTask = tasks.find(t => t.id === taskId);
+      if (!targetTask) return;
+
+      if (currentUser) {
+        try {
+          const taskDoc = doc(db, 'artifacts', appId, 'public', 'data', 'tasks', taskId);
+          await updateDoc(taskDoc, { completed: !targetTask.completed });
+        } catch (e) {
+          console.error("Failed to toggle task in DB:", e);
+        }
+      } else {
+        tasks = tasks.map(t => t.id === taskId ? { ...t, completed: !t.completed } : t);
+        recalculateGlobalFinancials();
+        refreshCurrentTab();
+      }
     }
 
-    function deleteTask(taskId) {
-      tasks = tasks.filter(t => t.id !== taskId);
-      showNotification("Workspace deliverable task removed.");
-      recalculateGlobalFinancials();
-      renderTasksView();
+    async function deleteTask(taskId) {
+      if (currentUser) {
+        try {
+          const taskDoc = doc(db, 'artifacts', appId, 'public', 'data', 'tasks', taskId);
+          await deleteDoc(taskDoc);
+          showNotification("Workspace deliverable task removed.");
+        } catch (e) {
+          console.error("Failed to delete task from DB:", e);
+        }
+      } else {
+        tasks = tasks.filter(t => t.id !== taskId);
+        showNotification("Workspace deliverable task removed (Local).");
+        recalculateGlobalFinancials();
+        renderTasksView();
+      }
     }
 
     // SUB-RENDERER: PREMIUM FINANCIALS
     function renderFinancialsView() {
       const list = document.getElementById('financial-client-breakdown');
+      if (!list) return;
       list.innerHTML = '';
 
       projects.forEach(p => {
@@ -1904,7 +2203,7 @@
     // PROJECT FORM HANDLING & AUTO-TAX MATH
     function initProjectForm() {
       const form = document.getElementById('add-project-form');
-      form.onsubmit = function(e) {
+      form.onsubmit = async function(e) {
         e.preventDefault();
 
         const client = document.getElementById('form-client').value;
@@ -1919,9 +2218,10 @@
         // Auto calculate using currently customizable globalTaxRate if left blank
         const taxVal = taxValInput !== '' ? parseFloat(taxValInput) : parseFloat((costVal * (globalTaxRate / 100)).toFixed(2));
         const newInvoiceNo = `INV-2026-00${projects.length + 1}`;
+        const newId = `proj-${Date.now()}`;
 
         const newProjObj = {
-          id: `proj-${Date.now()}`,
+          id: newId,
           invoiceNo: newInvoiceNo,
           clientName: client,
           projectName: project,
@@ -1934,14 +2234,21 @@
           files: []
         };
 
-        projects.unshift(newProjObj);
+        if (currentUser) {
+          try {
+            const projectDoc = doc(db, 'artifacts', appId, 'public', 'data', 'projects', newId);
+            await setDoc(projectDoc, newProjObj);
+            showNotification(`Created Project & ${newInvoiceNo} Successfully!`);
+          } catch (err) {
+            console.error("Error creating project in Firestore:", err);
+          }
+        } else {
+          projects.unshift(newProjObj);
+          showNotification(`Created Project & ${newInvoiceNo} Successfully! (Local)`);
+        }
+
         closeAddProjectModal();
-        showNotification(`Created Project & ${newInvoiceNo} Successfully!`);
-
-        // Reset Form Inputs
         form.reset();
-
-        // Refresh Active Visual Layout
         switchTab(activeTab);
       };
     }
@@ -1953,6 +2260,25 @@
     function closeAddProjectModal() {
       document.getElementById('add-project-modal').classList.add('hidden');
     }
+
+    // Export module actions explicitly to the global DOM window object (Strict execution fallback scope)
+    window.openAddProjectModal = openAddProjectModal;
+    window.closeAddProjectModal = closeAddProjectModal;
+    window.updateGlobalTaxRate = updateGlobalTaxRate;
+    window.switchTab = switchTab;
+    window.updateProjectStatus = updateProjectStatus;
+    window.simulateFileUpload = simulateFileUpload;
+    window.deleteProject = deleteProject;
+    window.viewInvoiceDetail = viewInvoiceDetail;
+    window.closeInvoiceDetail = closeInvoiceDetail;
+    window.toggleInvoiceEditMode = toggleInvoiceEditMode;
+    window.recalculateEditTotals = recalculateEditTotals;
+    window.applyTaxPercentage = applyTaxPercentage;
+    window.applyDirectTaxAmount = applyDirectTaxAmount;
+    window.triggerPNGExport = triggerPNGExport;
+    window.toggleTaskCompleted = toggleTaskCompleted;
+    window.deleteTask = deleteTask;
+    window.handleLogout = handleLogout;
   </script>
 </body>
 </html>

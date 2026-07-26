@@ -1,0 +1,2255 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-[#0A0A0A]">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brandworkz Co. Premium Black & Gold Digital Planner (Cloud Sync Enabled)</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            serif: ['Playfair Display', 'serif'],
+            mono: ['Space Grotesk', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0A0A0A;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #D4AF37;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #FCF6BA;
+    }
+    .gold-gradient-text {
+      background: linear-gradient(to right, #FCF6BA 0%, #D4AF37 50%, #BF953F 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .gold-gradient-bg {
+      background: linear-gradient(135deg, #BF953F 0%, #D4AF37 50%, #FCF6BA 100%);
+    }
+    .gold-border-glow:focus {
+      outline: none;
+      border-color: #D4AF37;
+      box-shadow: 0 0 10px rgba(212, 175, 55, 0.25);
+    }
+    @keyframes slide-in {
+      from { transform: translateY(-1rem); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .animate-slide-in {
+      animation: slide-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes fade-in {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .animate-fade-in {
+      animation: fade-in 0.25s ease-out forwards;
+    }
+  </style>
+</head>
+<body class="h-full text-gray-100 font-sans antialiased selection:bg-[#D4AF37]/30 selection:text-white">
+
+  <div id="toast-container" class="fixed top-6 right-6 z-50 flex flex-col gap-3 pointer-events-none"></div>
+
+  <div id="export-progress" class="hidden fixed inset-0 bg-[#070707]/95 z-50 flex flex-col items-center justify-center p-6 backdrop-blur-md animate-fade-in">
+    <div class="max-w-md w-full text-center space-y-6">
+      <div class="relative inline-flex items-center justify-center">
+        <div class="absolute inset-0 bg-[#D4AF37]/10 rounded-full blur-xl animate-pulse"></div>
+        <div class="relative bg-[#111] border border-[#D4AF37]/40 p-5 rounded-full shadow-[0_0_30px_rgba(212,175,55,0.2)]">
+          <i data-lucide="image" class="text-[#D4AF37] h-8 w-8 animate-bounce"></i>
+        </div>
+      </div>
+
+      <div class="space-y-2">
+        <h3 class="text-lg font-serif tracking-wider font-semibold text-white">GENERATING RASTER PNG</h3>
+        <p id="export-step-text" class="text-[11px] text-[#D4AF37] tracking-widest uppercase font-mono">Initializing graphics layout renderer...</p>
+      </div>
+
+      <div class="space-y-1 text-left">
+        <div class="flex justify-between text-xs font-mono text-gray-400">
+          <span>EXPORT PROGRESS</span>
+          <span id="export-percent-text" class="text-[#D4AF37] font-bold">0%</span>
+        </div>
+        <div class="h-3 bg-[#111] rounded-full border border-white/5 overflow-hidden p-0.5">
+          <div id="export-progress-bar" class="h-full rounded-full bg-gradient-to-r from-[#BF953F] via-[#D4AF37] to-[#FCF6BA] shadow-[0_0_10px_rgba(212,175,55,0.5)] transition-all duration-75" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <p class="text-[10px] text-gray-500 max-w-xs mx-auto leading-relaxed">
+        Please keep your browser active. The canvas layout is compiling into a high-quality portable raster image compatible with Chrome, Firefox, Safari, and mobile browsers.
+      </p>
+    </div>
+  </div>
+
+  <div id="login-overlay" class="min-h-screen bg-[#070707] flex items-center justify-center p-4 relative overflow-hidden font-sans">
+    <div class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-[#D4AF37]/5 blur-[120px] pointer-events-none"></div>
+    <div class="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-[#D4AF37]/5 blur-[120px] pointer-events-none"></div>
+
+    <div class="max-w-md w-full bg-gradient-to-b from-[#0F0F0F] to-[#141414] border border-[#D4AF37]/25 rounded-2xl p-8 shadow-[0_20px_50px_rgba(0,0,0,0.9)] relative z-10 transition-all duration-300">
+      <div class="text-center mb-8">
+        <h1 class="text-xl font-serif font-semibold tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-[#FCF6BA] via-[#D4AF37] to-[#BF953F]">BRANDWORKZ CO.</h1>
+        <p class="text-[10px] text-gray-400 uppercase tracking-[0.2em] font-medium mt-1">Creative Suite Secure Gateway</p>
+      </div>
+
+      <div class="bg-[#181818] border border-white/5 rounded-xl p-4 mb-6 flex items-start gap-3">
+        <div class="text-[#D4AF37] mt-0.5 shrink-0">
+          <i data-lucide="cloud-check" class="animate-pulse h-[18px] w-[18px]"></i>
+        </div>
+        <div>
+          <p class="text-xs font-semibold text-white">Cloud Backup Shield Active</p>
+          <p class="text-[10px] text-gray-400 mt-0.5 leading-relaxed">All changes automatically sync in real-time to your encrypted cloud database.</p>
+        </div>
+      </div>
+
+      <div id="login-error-container" class="hidden bg-rose-950/20 border border-rose-500/30 rounded-lg p-3.5 mb-6 flex items-start gap-3 animate-slide-in">
+        <i data-lucide="shield-alert" class="text-rose-400 shrink-0 mt-0.5 h-4 w-4"></i>
+        <p id="login-error-msg" class="text-xs text-rose-300 font-medium"></p>
+      </div>
+
+      <form id="login-form" class="space-y-5">
+        <div class="space-y-1.5">
+          <label class="text-[10px] text-gray-400 uppercase tracking-widest block font-semibold">Workspace Username</label>
+          <div class="relative">
+            <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500">
+              <i data-lucide="user" class="h-[15px] w-[15px]"></i>
+            </span>
+            <input 
+              type="text" 
+              id="login-username"
+              required
+              placeholder="Enter username" 
+              class="w-full bg-[#181818] border border-white/10 rounded-xl pl-10 pr-4 py-3 text-xs text-white focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/30 transition-all font-sans"
+            />
+          </div>
+        </div>
+
+        <div class="space-y-1.5">
+          <label class="text-[10px] text-gray-400 uppercase tracking-widest block font-semibold">Security Access Key</label>
+          <div class="relative">
+            <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500">
+              <i data-lucide="lock" class="h-[15px] w-[15px]"></i>
+            </span>
+            <input 
+              type="password" 
+              id="login-password"
+              required
+              placeholder="Enter password" 
+              class="w-full bg-[#181818] border border-white/10 rounded-xl pl-10 pr-11 py-3 text-xs text-white focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/30 transition-all font-sans"
+            />
+            <button 
+              type="button"
+              id="toggle-password"
+              class="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white transition-colors"
+            >
+              <i data-lucide="eye" class="h-[15px] w-[15px]"></i>
+            </button>
+          </div>
+        </div>
+
+        <button 
+          type="submit" 
+          id="login-submit-btn"
+          class="w-full mt-2 bg-gradient-to-r from-[#BF953F] via-[#D4AF37] to-[#FCF6BA] hover:brightness-110 text-[#0A0A0A] font-bold text-xs py-3.5 rounded-xl shadow-[0_4px_20px_rgba(212,175,55,0.25)] transition-all flex items-center justify-center gap-2 tracking-wider"
+        >
+          <i data-lucide="lock" class="h-3.5 w-3.5"></i>
+          UNLOCK WORKSPACE
+        </button>
+      </form>
+
+      <div class="text-center mt-8 pt-6 border-t border-white/5">
+        <p class="text-[9px] text-gray-600 uppercase tracking-widest">Brandworkz Co. • Enterprise Cloud Backup v2.6</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="app-workspace" class="hidden min-h-screen bg-[#0A0A0A] text-gray-100 flex flex-col font-sans relative">
+    
+    <!-- HEADER -->
+    <header class="border-b border-[#D4AF37]/20 bg-[#0F0F0F] px-6 py-4 flex flex-wrap justify-between items-center gap-4 sticky top-0 z-40 shadow-lg print:hidden">
+      <div class="flex items-center gap-3">
+        <div>
+          <span class="text-xs uppercase tracking-[0.2em] text-[#D4AF37] font-bold block">Exclusive Suite</span>
+          <h1 class="text-lg font-serif font-semibold tracking-wide text-white">BRANDWORKZ CO.</h1>
+        </div>
+      </div>
+
+      <!-- Live Cloud Backup Sync Indicator -->
+      <div class="flex items-center gap-2 bg-[#161616] border border-[#D4AF37]/30 rounded-full px-3 py-1.5 shadow-inner">
+        <div id="cloud-status-dot" class="h-2.5 w-2.5 rounded-full bg-emerald-400 animate-pulse"></div>
+        <span id="cloud-status-text" class="text-[11px] font-mono text-gray-300 font-medium">Cloud Backup Active</span>
+      </div>
+
+      <div class="flex items-center gap-6 text-right">
+        <div class="hidden sm:block">
+          <p class="text-[10px] uppercase text-gray-400 tracking-wider">TAX (SYSTEM DEFAULT)</p>
+          <p id="header-tax-liability" class="text-sm font-semibold text-[#D4AF37]">RM 0.00</p>
+        </div>
+        <div>
+          <p class="text-[10px] uppercase text-gray-400 tracking-wider">GRAND TOTAL EARNINGS</p>
+          <p id="header-grand-total" class="text-base font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#FCF6BA] via-[#D4AF37] to-[#BF953F]">RM 0.00</p>
+        </div>
+        <button 
+          onclick="openAddProjectModal()" 
+          class="flex items-center gap-2 bg-gradient-to-r from-[#BF953F] to-[#D4AF37] hover:from-[#FCF6BA] hover:to-[#B38728] text-[#0A0A0A] font-semibold text-xs px-4 py-2 rounded shadow-[0_4px_15px_rgba(212,175,55,0.3)] transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0"
+        >
+          <i data-lucide="plus" class="h-4 w-4"></i>
+          NEW CLIENT PROJECT
+        </button>
+      </div>
+    </header>
+
+    <div class="flex-1 flex flex-col md:flex-row">
+      
+      <nav class="w-full md:w-64 bg-[#0F0F0F] border-b md:border-b-0 md:border-r border-[#D4AF37]/15 p-4 flex md:flex-col gap-2 overflow-x-auto md:overflow-x-visible shrink-0 print:hidden">
+        <div class="hidden md:block py-3 px-2 mb-4 border-b border-[#D4AF37]/10">
+          <p class="text-xs font-serif text-[#D4AF37] italic">"Good design is financial intelligence visualized."</p>
+        </div>
+
+        <button 
+          onclick="switchTab('dashboard')"
+          id="nav-dashboard"
+          class="w-full flex items-center gap-3 px-4 py-3 rounded text-sm font-medium transition-all"
+        >
+          <i data-lucide="layout-dashboard" class="h-[18px] w-[18px]"></i>
+          Creative Dashboard
+        </button>
+
+        <button 
+          onclick="switchTab('tracker')"
+          id="nav-tracker"
+          class="w-full flex items-center gap-3 px-4 py-3 rounded text-sm font-medium transition-all"
+        >
+          <i data-lucide="briefcase" class="h-[18px] w-[18px]"></i>
+          Projects Tracker
+        </button>
+
+        <button 
+          onclick="switchTab('invoices')"
+          id="nav-invoices"
+          class="w-full flex items-center gap-3 px-4 py-3 rounded text-sm font-medium transition-all"
+        >
+          <i data-lucide="file-text" class="h-[18px] w-[18px]"></i>
+          Invoices & Billing
+        </button>
+
+        <button 
+          onclick="switchTab('tasks')"
+          id="nav-tasks"
+          class="w-full flex items-center gap-3 px-4 py-3 rounded text-sm font-medium transition-all"
+        >
+          <i data-lucide="check-square" class="h-[18px] w-[18px]"></i>
+          Task Workspace
+        </button>
+
+        <button 
+          onclick="switchTab('clients')"
+          id="nav-clients"
+          class="w-full flex items-center gap-3 px-4 py-3 rounded text-sm font-medium transition-all"
+        >
+          <i data-lucide="users" class="h-[18px] w-[18px]"></i>
+          Premium Financials
+        </button>
+
+        <div class="mt-auto pt-6 border-t border-[#D4AF37]/10 flex flex-col gap-3">
+          <button 
+            onclick="handleLogout()"
+            class="w-full flex items-center justify-center gap-2 py-2 bg-rose-950/20 hover:bg-rose-950/40 border border-rose-500/20 hover:border-rose-500/40 text-rose-400 text-xs rounded transition-all"
+          >
+            <i data-lucide="lock" class="h-3 w-3"></i> Lock Workspace
+          </button>
+          <div class="text-center">
+            <span class="text-[10px] tracking-wider text-gray-500 uppercase block">Cloud Auto-Save Enabled</span>
+            <span class="text-[9px] text-[#D4AF37]/60 block font-mono">RM Currency Enabled</span>
+          </div>
+        </div>
+      </nav>
+
+      <main class="flex-1 p-6 md:p-8 overflow-y-auto max-w-7xl mx-auto w-full">
+        
+        <!-- VIEW: DASHBOARD -->
+        <div id="view-dashboard" class="space-y-6 animate-fade-in hidden">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <h2 class="text-2xl font-serif text-white tracking-wide">DESIGN STUDIO COMMAND</h2>
+              <p class="text-xs text-gray-400">High-level insights, active pipeline metrics and client revenue flows with auto cloud backup.</p>
+            </div>
+            <div class="flex items-center gap-2 bg-[#141414] border border-white/5 rounded-lg px-4 py-2">
+              <div class="h-2 w-2 rounded-full bg-[#D4AF37] animate-pulse"></div>
+              <span class="text-xs text-gray-300 font-mono">Status: Authenticated & Cloud Synced</span>
+            </div>
+          </div>
+
+          <!-- KPI Metric Summary Panels -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="bg-gradient-to-br from-[#121212] to-[#181818] border border-[#D4AF37]/25 rounded p-5 relative overflow-hidden group hover:border-[#D4AF37]/55 transition-all">
+              <span class="text-xs text-gray-400 uppercase tracking-wider block mb-1">Total Booked Portfolio</span>
+              <p id="dashboard-grand-total" class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#FCF6BA] to-[#D4AF37]">RM 0.00</p>
+              <p class="text-[10px] text-[#D4AF37] mt-2 flex items-center gap-1">
+                <i data-lucide="shield-check" class="h-3 w-3"></i> Includes Taxes & Custom Additions
+              </p>
+            </div>
+
+            <div class="bg-[#121212] border border-white/5 rounded p-5 relative overflow-hidden group hover:border-[#D4AF37]/30 transition-all">
+              <span class="text-xs text-gray-400 uppercase tracking-wider block mb-1">Active Projects</span>
+              <p id="dashboard-active-count" class="text-2xl font-bold text-white">0 Active</p>
+              <p id="dashboard-progress-count" class="text-[10px] text-gray-500 mt-2">0 currently in design progress</p>
+            </div>
+
+            <div class="bg-[#121212] border border-white/5 rounded p-5 relative overflow-hidden group hover:border-[#D4AF37]/30 transition-all">
+              <span class="text-xs text-gray-400 uppercase tracking-wider block mb-1">Tax Liability</span>
+              <p id="dashboard-tax-total" class="text-2xl font-bold text-[#D4AF37]">RM 0.00</p>
+              <p class="text-[10px] text-[#D4AF37]/85 mt-2 flex items-center gap-1">
+                <i data-lucide="calendar" class="h-3 w-3"></i> Dynamic tracking from system invoices
+              </p>
+            </div>
+
+            <div class="bg-[#121212] border border-white/5 rounded p-5 relative overflow-hidden group hover:border-[#D4AF37]/30 transition-all">
+              <span class="text-xs text-gray-400 uppercase tracking-wider block mb-1">To-Do Task Progress</span>
+              <p id="dashboard-task-percent" class="text-2xl font-bold text-white">0%</p>
+              <p id="dashboard-task-completed" class="text-[10px] text-gray-500 mt-2">0 of 0 tasks completed</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Analytics Graph Grid -->
+            <div class="bg-[#121212] border border-white/5 rounded-lg p-5 lg:col-span-2 space-y-4">
+              <div class="flex items-center justify-between">
+                <div>
+                  <h3 class="text-sm font-medium text-white tracking-wider uppercase">Quarterly Design Earnings</h3>
+                  <p class="text-xs text-gray-500">Sales progression over standard monthly billing cycles.</p>
+                </div>
+                <span class="text-xs font-semibold text-[#D4AF37] px-2.5 py-1 bg-[#201A0E] rounded border border-[#D4AF37]/30">RM (MYR)</span>
+              </div>
+              <div class="h-64 relative">
+                <canvas id="earningsChart"></canvas>
+              </div>
+            </div>
+
+            <!-- Output Pipeline Tracker Panel -->
+            <div class="bg-[#121212] border border-white/5 rounded-lg p-5 flex flex-col justify-between">
+              <div>
+                <h3 class="text-sm font-medium text-white tracking-wider uppercase mb-1">Design Output Pipeline</h3>
+                <p class="text-xs text-gray-500 mb-4">Urgent statuses requiring client feedback or file delivery.</p>
+                <div id="dashboard-pipeline-list" class="space-y-3">
+                  <!-- Generated dynamically -->
+                </div>
+              </div>
+
+              <button 
+                onclick="switchTab('tracker')" 
+                class="w-full mt-4 text-center py-2 bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white rounded text-xs transition-all flex items-center justify-center gap-1"
+              >
+                Manage Client Tracking <i data-lucide="chevron-right" class="h-3.5 w-3.5"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Mini Deliverables Checklist Panel -->
+          <div class="bg-[#121212] border border-white/5 rounded-lg p-5">
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <h3 class="text-sm font-medium text-white tracking-wider uppercase">Today's Creative Deliverables</h3>
+                <p class="text-xs text-gray-500 font-serif italic">Check tasks off as you perfect the vectors (auto saved).</p>
+              </div>
+              <button onclick="switchTab('tasks')" class="text-xs text-[#D4AF37] hover:underline">
+                View full board
+              </button>
+            </div>
+            <div id="dashboard-deliverables-list" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <!-- Rendered Dynamically -->
+            </div>
+          </div>
+        </div>
+
+        <!-- VIEW: PROJECTS TRACKER -->
+        <div id="view-tracker" class="space-y-6 animate-fade-in hidden">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <h2 class="text-2xl font-serif text-white tracking-wide">ACTIVE PORTFOLIO & PIPELINE</h2>
+              <p class="text-xs text-gray-400">Manage client deliverables, upload design mockups, and evaluate individual financial margins.</p>
+            </div>
+            <button 
+              onclick="openAddProjectModal()" 
+              class="flex items-center gap-2 bg-gradient-to-r from-[#BF953F] to-[#D4AF37] text-black font-semibold text-xs px-5 py-2.5 rounded shadow-lg transition-transform hover:-translate-y-0.5"
+            >
+              <i data-lucide="plus" class="h-4 w-4"></i> NEW CLIENT INVOICE/PROJECT
+            </button>
+          </div>
+
+          <div class="bg-[#121212] border border-white/5 rounded-lg overflow-hidden shadow-2xl">
+            <div class="p-4 bg-[#1A1A1A] border-b border-white/5 flex flex-wrap justify-between items-center gap-4">
+              <span class="text-xs uppercase tracking-wider text-[#D4AF37] font-semibold">Active Design Directives</span>
+              <div class="text-xs text-gray-400">
+                Grand Total Booked: <span id="tracker-summary-grand-total" class="font-bold text-white font-mono">RM 0.00</span>
+              </div>
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs text-gray-300">
+                <thead class="bg-[#161616] text-[#D4AF37] font-mono text-[10px] uppercase border-b border-[#D4AF37]/10">
+                  <tr>
+                    <th class="p-4">Invoice / Client</th>
+                    <th class="p-4">Project Scope</th>
+                    <th class="p-4">Dates</th>
+                    <th class="p-4">Status</th>
+                    <th class="p-4 text-right">Cost (RM)</th>
+                    <th class="p-4 text-right">Tax Amount (RM)</th>
+                    <th class="p-4 text-right">Total (RM)</th>
+                    <th class="p-4 text-center">Design Files</th>
+                    <th class="p-4 text-center">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="tracker-table-body" class="divide-y divide-white/5">
+                  <!-- Generated dynamically -->
+                </tbody>
+              </table>
+            </div>
+
+            <div class="bg-[#161616] p-4 border-t border-white/5 flex flex-wrap justify-between items-center gap-4 font-mono text-xs">
+              <span class="text-gray-400">Total Recorded Active Pipeline Invoices: <span id="tracker-invoice-count" class="text-white font-bold">0</span></span>
+              <div class="flex gap-6 text-right">
+                <div>
+                  <span class="text-[10px] text-gray-400 block uppercase">Subtotal</span>
+                  <span id="tracker-subtotal" class="text-sm font-semibold text-gray-200">RM 0.00</span>
+                </div>
+                <div>
+                  <span class="text-[10px] text-gray-400 block uppercase font-medium">Estimated Taxes</span>
+                  <span id="tracker-tax" class="text-sm font-semibold text-[#D4AF37]">RM 0.00</span>
+                </div>
+                <div class="border-l border-white/10 pl-6">
+                  <span class="text-[10px] text-[#D4AF37] block uppercase font-bold">Grand Total (RM)</span>
+                  <span id="tracker-grand-total" class="text-base font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#FCF6BA] to-[#D4AF37]">RM 0.00</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- VIEW: INVOICES HUB -->
+        <div id="view-invoices" class="space-y-6 animate-fade-in hidden">
+          <!-- Dynamic Inner View Toggle (List vs Detailed Layout Preview) -->
+          <div id="invoice-hub-list-mode" class="space-y-6">
+            <div>
+              <h2 class="text-2xl font-serif text-white tracking-wide">INVOICES HUB</h2>
+              <p class="text-xs text-gray-400">Manage, preview, edit, and generate client billing receipts. Export as high-resolution PNG format instantly.</p>
+            </div>
+            <div id="invoice-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <!-- Dynamically rendered -->
+            </div>
+          </div>
+
+          <div id="invoice-hub-detail-mode" class="space-y-6 hidden">
+            <div class="flex flex-wrap justify-between items-center gap-4 bg-[#121212] p-4 rounded border border-white/5">
+              <button 
+                onclick="closeInvoiceDetail()" 
+                class="text-xs text-gray-400 hover:text-white flex items-center gap-1.5"
+              >
+                <i data-lucide="x" class="h-4 w-4"></i> Back to Invoices
+              </button>
+              <div class="flex items-center gap-3">
+                <button 
+                  id="invoice-edit-toggle-btn"
+                  onclick="toggleInvoiceEditMode()"
+                  class="flex items-center gap-2 bg-[#1C1C1C] border border-[#D4AF37]/50 hover:bg-[#2A2A2A] text-[#D4AF37] font-semibold text-xs px-4 py-2.5 rounded transition-all"
+                >
+                  <i id="edit-mode-icon" data-lucide="edit-3" class="h-4 w-4"></i>
+                  <span id="edit-mode-btn-text">Enable Edit Mode</span>
+                </button>
+                <button 
+                  onclick="triggerPNGExport()"
+                  class="flex items-center gap-2 bg-gradient-to-r from-[#BF953F] to-[#D4AF37] text-black font-bold text-xs px-5 py-2.5 rounded shadow-lg hover:from-[#FCF6BA] hover:to-[#B38728] transition-all"
+                >
+                  <i data-lucide="arrow-down-to-line" class="h-4 w-4"></i> Export PNG (Download)
+                </button>
+              </div>
+            </div>
+
+            <!-- Printable Render Container -->
+            <div class="p-2 overflow-x-auto">
+              <div 
+                id="invoice-render-sheet"
+                class="bg-white text-gray-900 p-8 md:p-12 rounded-lg shadow-2xl max-w-3xl mx-auto border-t-8 border-[#D4AF37] font-serif"
+                style="width: 768px"
+              >
+                <!-- Filled Dynamically -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- VIEW: TASK WORKSPACE -->
+        <div id="view-tasks" class="space-y-6 animate-fade-in hidden">
+          <div>
+            <h2 class="text-2xl font-serif text-white tracking-wide">TASK WORKSPACE</h2>
+            <p class="text-xs text-gray-400">Keep graphic assets on path, manage revision backlogs, and structure layout cycles.</p>
+          </div>
+
+          <form id="task-addition-form" class="bg-[#121212] p-5 rounded-lg border border-white/5 flex flex-col md:flex-row gap-3 items-end">
+            <div class="flex-1 w-full space-y-1">
+              <label class="text-[10px] text-gray-400 uppercase tracking-wider block">Add Custom Deliverable Task</label>
+              <input 
+                type="text" 
+                id="new-task-text"
+                required
+                placeholder="e.g., Export transparent PNG guidelines and typography sets..."
+                class="w-full bg-[#1A1A1A] border border-white/10 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D4AF37] transition-all"
+              />
+            </div>
+
+            <div class="w-full md:w-48 space-y-1">
+              <label class="text-[10px] text-gray-400 uppercase tracking-wider block">Category Tag</label>
+              <select 
+                id="new-task-category"
+                class="w-full bg-[#1A1A1A] border border-white/10 rounded px-3 py-2 text-xs text-[#D4AF37] focus:outline-none focus:border-[#D4AF37] transition-all"
+              >
+                <option value="High Priority">High Priority</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Review">Review</option>
+                <option value="Backlog">Backlog</option>
+                <option value="Maintenance">Maintenance</option>
+              </select>
+            </div>
+
+            <button 
+              type="submit" 
+              class="w-full md:w-auto bg-gradient-to-r from-[#BF953F] to-[#D4AF37] text-black text-xs px-6 py-2.5 rounded hover:from-[#FCF6BA] hover:to-[#B38728] transition-all shrink-0 font-bold"
+            >
+              ADD TASK
+            </button>
+          </form>
+
+          <div class="bg-[#121212] border border-white/5 rounded-lg p-5">
+            <div class="flex justify-between items-center mb-4">
+              <span class="text-xs uppercase tracking-wider text-[#D4AF37] font-semibold">Active Studio Task Board</span>
+              <span id="task-completed-fraction" class="text-[10px] text-gray-400 font-mono">Completed: 0 / 0</span>
+            </div>
+
+            <div id="tasks-interactive-list" class="space-y-2">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </div>
+
+        <!-- VIEW: PREMIUM FINANCIALS -->
+        <div id="view-clients" class="space-y-6 animate-fade-in hidden">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h2 class="text-2xl font-serif text-white tracking-wide">PREMIUM FINANCIALS</h2>
+              <p class="text-xs text-gray-400">Deep-dive financial reports, tax breakdowns, and client portfolio statistics.</p>
+            </div>
+            
+            <!-- Global Editable Default Tax Configuration -->
+            <div class="bg-[#121212] border border-[#D4AF37]/35 rounded px-4 py-3 flex items-center gap-3 shadow-md max-w-sm">
+              <i data-lucide="percent" class="text-[#D4AF37] h-5 w-5 shrink-0"></i>
+              <div>
+                <label class="text-[9px] uppercase text-gray-400 tracking-wider block font-bold">Editable Default Tax Rate</label>
+                <div class="flex items-center gap-2 mt-0.5">
+                  <input 
+                    type="number" 
+                    step="0.01" 
+                    id="global-tax-rate-input"
+                    value="29.17"
+                    onchange="updateGlobalTaxRate(this.value)"
+                    class="w-16 bg-[#1A1A1A] border border-white/10 rounded px-1.5 py-0.5 text-xs text-white text-center focus:outline-none focus:border-[#D4AF37]"
+                  />
+                  <span class="text-xs font-semibold text-gray-400">%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-[#121212] border border-white/5 rounded-lg p-5">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-sm font-medium text-white tracking-wider uppercase">Client Portfolio Breakdown</h3>
+              <span class="text-[10px] text-gray-400">Currency configured to Malaysian Ringgit (RM)</span>
+            </div>
+
+            <div id="financial-client-breakdown" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <!-- Dynamically Rendered -->
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-[#121212] border border-white/5 rounded-lg p-5 space-y-4">
+              <h3 class="text-sm font-medium text-white uppercase tracking-wider">Dynamic Tax Registry</h3>
+              <p class="text-xs text-gray-400">This registry compiles dynamic tax assessments calculated at customizable rates.</p>
+              
+              <div class="space-y-3 font-mono text-xs">
+                <div class="flex justify-between py-1.5 border-b border-white/5">
+                  <span class="text-gray-400">Total Pre-Tax Earnings:</span>
+                  <span id="registry-pre-tax" class="text-white">RM 0.00</span>
+                </div>
+                <div class="flex justify-between py-1.5 border-b border-white/5">
+                  <span class="text-gray-400">Total Compiled Tax liability:</span>
+                  <span id="registry-tax" class="text-[#D4AF37]">RM 0.00</span>
+                </div>
+                <div class="flex justify-between py-1.5 pt-3 font-bold text-sm border-t border-white/10">
+                  <span class="text-white uppercase">Gross Revenue (RM):</span>
+                  <span id="registry-gross" class="text-transparent bg-clip-text bg-gradient-to-r from-[#FCF6BA] to-[#D4AF37]">RM 0.00</span>
+                </div>
+              </div>
+              <div class="bg-[#1A1A1A] p-3 rounded text-[10px] text-[#D4AF37] leading-relaxed border border-[#D4AF37]/25">
+                <strong>Cloud Backup Active:</strong> All invoice edits, project creations, and tax rate changes update automatically in the cloud.
+              </div>
+            </div>
+
+            <div class="bg-[#121212] border border-white/5 rounded-lg p-5 flex flex-col justify-between">
+              <div>
+                <h3 class="text-sm font-medium text-white uppercase tracking-wider mb-2">Design Output Performance</h3>
+                <p class="text-xs text-gray-400 mb-4">A high level statistical view of your studio's efficiency metrics.</p>
+
+                <div class="space-y-4">
+                  <div>
+                    <div class="flex justify-between text-xs mb-1">
+                      <span class="text-gray-400">Project Completion Ratio</span>
+                      <span id="stats-completion-ratio" class="text-white font-mono">0 / 0</span>
+                    </div>
+                    <div class="h-1.5 bg-black rounded overflow-hidden">
+                      <div id="stats-completion-bar" class="h-full bg-gradient-to-r from-[#BF953F] to-[#D4AF37] rounded transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div class="flex justify-between text-xs mb-1">
+                      <span class="text-gray-400">Pending Feedback / Revisions</span>
+                      <span id="stats-pending-ratio" class="text-white font-mono">0 Projects</span>
+                    </div>
+                    <div class="h-1.5 bg-black rounded overflow-hidden">
+                      <div id="stats-pending-bar" class="h-full bg-[#D4AF37] rounded" style="width: 0%"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <p class="text-[10px] text-gray-500 italic mt-6">
+                Optimized for compiling studio financial sheets during design tax audits.
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+
+    <div id="add-project-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-fade-in">
+      <div class="bg-[#121212] border border-[#D4AF37]/40 rounded-lg max-w-lg w-full overflow-hidden shadow-2xl">
+        <div class="bg-[#1A1A1A] p-4 border-b border-white/5 flex justify-between items-center">
+          <span class="text-xs uppercase tracking-wider text-[#D4AF37] font-semibold">New Project & Invoice Entry</span>
+          <button onclick="closeAddProjectModal()" class="text-gray-400 hover:text-white">
+            <i data-lucide="x" class="h-4 w-4"></i>
+          </button>
+        </div>
+
+        <form id="add-project-form" class="p-6 space-y-4">
+          <div class="grid grid-cols-2 gap-4">
+            <div class="space-y-1">
+              <label class="text-[10px] text-gray-400 uppercase tracking-wider">Client Name</label>
+              <input 
+                type="text" 
+                id="form-client"
+                required
+                placeholder="e.g., Zenith Agency"
+                class="w-full bg-[#1A1A1A] border border-white/10 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D4AF37] transition-all"
+              />
+            </div>
+            <div class="space-y-1">
+              <label class="text-[10px] text-gray-400 uppercase tracking-wider">Project Category</label>
+              <select 
+                id="form-category"
+                class="w-full bg-[#1A1A1A] border border-white/10 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D4AF37] transition-all"
+              >
+                <option value="Branding">Branding</option>
+                <option value="Packaging">Packaging</option>
+                <option value="UI/UX">UI/UX</option>
+                <option value="Label Design">Label Design</option>
+                <option value="Editorial">Editorial</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="space-y-1">
+            <label class="text-[10px] text-gray-400 uppercase tracking-wider">Project Name / Scope</label>
+            <input 
+              type="text" 
+              id="form-project"
+              required
+              placeholder="e.g., Premium Logo Design & Vector Package"
+              class="w-full bg-[#1A1A1A] border border-white/10 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D4AF37] transition-all"
+            />
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div class="space-y-1">
+              <label class="text-[10px] text-gray-400 uppercase tracking-wider">Date Out (Start)</label>
+              <input 
+                type="date" 
+                id="form-dateout"
+                class="w-full bg-[#1A1A1A] border border-white/10 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D4AF37] transition-all"
+              />
+            </div>
+            <div class="space-y-1">
+              <label class="text-[10px] text-gray-400 uppercase tracking-wider">Shipping Date (Delivery)</label>
+              <input 
+                type="date" 
+                id="form-shipping"
+                class="w-full bg-[#1A1A1A] border border-white/10 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D4AF37] transition-all"
+              />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div class="space-y-1">
+              <label class="text-[10px] text-gray-400 uppercase tracking-wider">Selling Cost (RM)</label>
+              <input 
+                type="number" 
+                step="0.01"
+                id="form-cost"
+                required
+                placeholder="e.g., 4500"
+                class="w-full bg-[#1A1A1A] border border-white/10 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D4AF37] transition-all"
+              />
+            </div>
+            <div class="space-y-1">
+              <label id="add-project-tax-label" class="text-[10px] text-gray-400 uppercase tracking-wider">Tax Cost (RM) - Blank for auto 29.17%</label>
+              <input 
+                type="number" 
+                step="0.01"
+                id="form-tax"
+                placeholder="Auto Calculated"
+                class="w-full bg-[#1A1A1A] border border-white/10 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D4AF37] transition-all"
+              />
+            </div>
+          </div>
+
+          <div class="space-y-1">
+            <label class="text-[10px] text-gray-400 uppercase tracking-wider">Initial Design Status</label>
+            <select 
+              id="form-status"
+              class="w-full bg-[#1A1A1A] border border-white/10 rounded px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D4AF37] transition-all"
+            >
+              <option value="In Progress">In Progress</option>
+              <option value="Delayed">Delayed</option>
+              <option value="Completed">Completed</option>
+              <option value="Wait for Respond">Wait for Respond</option>
+            </select>
+          </div>
+
+          <div class="pt-4 border-t border-white/5 flex justify-end gap-3">
+            <button 
+              type="button" 
+              onclick="closeAddProjectModal()"
+              class="px-4 py-2 bg-white/5 hover:bg-white/10 text-xs rounded transition-all text-gray-300 hover:text-white"
+            >
+              Cancel
+            </button>
+            <button 
+              type="submit" 
+              class="bg-gradient-to-r from-[#BF953F] to-[#D4AF37] text-black text-xs px-5 py-2 rounded shadow-lg hover:from-[#FCF6BA] font-bold"
+            >
+              Create & Record Invoice
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+  <script type="module">
+    // Firebase Imports
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc, getDoc, collection, onSnapshot, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    const firebaseConfig = typeof __firebase_config !== 'undefined' 
+      ? JSON.parse(__firebase_config) 
+      : {
+          apiKey: "",
+          authDomain: "",
+          projectId: "",
+          storageBucket: "",
+          messagingSenderId: "",
+          appId: ""
+        };
+    const appId = typeof __app_id !== 'undefined' ? __app_id : 'brandworkz-planner-v2';
+    const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+    let app, auth, db;
+    let hasFirebase = false;
+    let currentUser = null;
+
+    if (firebaseConfig && firebaseConfig.projectId) {
+      try {
+        app = initializeApp(firebaseConfig);
+        auth = getAuth(app);
+        db = getFirestore(app);
+        hasFirebase = true;
+      } catch (e) {
+        console.error("Firebase setup failed:", e);
+      }
+    }
+
+    let projects = [
+      {
+        id: "proj-1",
+        invoiceNo: "INV-2026-001",
+        clientName: "Aura Royale Residence",
+        projectName: "Luxury Brand Identity & Guidelines",
+        status: "In Progress",
+        dateOut: "2026-06-15",
+        shippingDate: "2026-07-20",
+        cost: 4800,
+        tax: 1400.16,
+        category: "Branding",
+        files: [
+          { name: "Aura_BrandBook_Draft.pdf", size: "14.2 MB" },
+          { name: "RoyaleLogo_Vector.svg", size: "2.4 MB" }
+        ]
+      },
+      {
+        id: "proj-2",
+        invoiceNo: "INV-2026-002",
+        clientName: "Chronos Watches",
+        projectName: "Premium Product Packaging Design",
+        status: "Completed",
+        dateOut: "2026-05-10",
+        shippingDate: "2026-06-01",
+        cost: 7200,
+        tax: 2100.24,
+        category: "Packaging",
+        files: [
+          { name: "Box_Dieline_V4.ai", size: "38.5 MB" },
+          { name: "Chronos_Golden_Mockup.png", size: "8.1 MB" }
+        ]
+      },
+      {
+        id: "proj-3",
+        invoiceNo: "INV-2026-003",
+        clientName: "Elysian Wellness Spa",
+        projectName: "Scented Candle Label & Web Assets",
+        status: "Wait for Respond",
+        dateOut: "2026-06-01",
+        shippingDate: "2026-06-28",
+        cost: 120.00,
+        tax: 35.00,
+        category: "Label Design",
+        files: [
+          { name: "Elysian_Moodboard.pdf", size: "6.7 MB" }
+        ]
+      },
+      {
+        id: "proj-4",
+        invoiceNo: "INV-2026-004",
+        clientName: "Vanguard Tech",
+        projectName: "Interactive UI/UX Prototype Layout",
+        status: "Delayed",
+        dateOut: "2026-04-12",
+        shippingDate: "2026-05-30",
+        cost: 9500,
+        tax: 2771.15,
+        category: "UI/UX",
+        files: []
+      }
+    ];
+
+    let tasks = [
+      { id: "task-1", text: "Refine logo geometry for Chronos Watches", category: "High Priority", completed: true },
+      { id: "task-2", text: "Draft typography pairings for Aura Royale brochure", category: "In Progress", completed: false },
+      { id: "task-3", text: "Send final source vector package to Elysian Spa", category: "Review", completed: false },
+      { id: "task-4", text: "Schedule UX hand-off call with Vanguard developer team", category: "Backlog", completed: false },
+      { id: "task-5", text: "Calibrate monitor color profile to sRGB & AdobeRGB", category: "Maintenance", completed: true }
+    ];
+
+    let activeTab = "dashboard";
+    let selectedInvoice = null;
+    let isPasswordVisible = false;
+    let earningsChartInstance = null;
+    let isInvoiceEditing = false;
+    let globalTaxRate = 29.17; 
+
+    // Live Unsubscribe Ref Variables
+    let projectsListener = null;
+    let tasksListener = null;
+    let settingsListener = null;
+
+    window.onload = function() {
+      lucide.createIcons();
+      initLoginHandshake();
+      initTaskHandlers();
+      initProjectForm();
+      updateTaxInputLabel();
+
+      // Trigger automatic Cloud Authentication & Realtime listeners
+      triggerFirebaseAuthAndSync();
+    };
+
+    async function triggerFirebaseAuthAndSync() {
+      if (!hasFirebase) {
+        updateCloudSyncStatus('local');
+        return;
+      }
+      try {
+        updateCloudSyncStatus('connecting');
+        if (initialAuthToken) {
+          await signInWithCustomToken(auth, initialAuthToken);
+        } else {
+          await signInAnonymously(auth);
+        }
+      } catch (e) {
+        console.error("Firebase auth initialization failed:", e);
+        updateCloudSyncStatus('local');
+      }
+    }
+
+    if (hasFirebase && auth) {
+      onAuthStateChanged(auth, (user) => {
+        currentUser = user;
+        if (user) {
+          updateCloudSyncStatus('connected');
+          subscribeToFirestoreData(user);
+        } else {
+          updateCloudSyncStatus('local');
+          if (projectsListener) projectsListener();
+          if (tasksListener) tasksListener();
+          if (settingsListener) settingsListener();
+        }
+      });
+    }
+
+    function updateCloudSyncStatus(state) {
+      const dot = document.getElementById('cloud-status-dot');
+      const text = document.getElementById('cloud-status-text');
+      if (!dot || !text) return;
+
+      if (state === 'connected') {
+        dot.className = "h-2.5 w-2.5 rounded-full bg-emerald-400 animate-pulse";
+        text.innerText = "Cloud Synced";
+      } else if (state === 'saving') {
+        dot.className = "h-2.5 w-2.5 rounded-full bg-amber-400 animate-spin";
+        text.innerText = "Saving to Cloud...";
+      } else if (state === 'connecting') {
+        dot.className = "h-2.5 w-2.5 rounded-full bg-cyan-400 animate-ping";
+        text.innerText = "Connecting Cloud...";
+      } else {
+        dot.className = "h-2.5 w-2.5 rounded-full bg-gray-500";
+        text.innerText = "Local Mode";
+      }
+    }
+
+    function subscribeToFirestoreData(user) {
+      if (!user) return;
+
+      const projectsColl = collection(db, 'artifacts', appId, 'public', 'data', 'projects');
+      const tasksColl = collection(db, 'artifacts', appId, 'public', 'data', 'tasks');
+      const settingsDoc = doc(db, 'artifacts', appId, 'public', 'data', 'settings', 'global_settings');
+
+      // 1. Sync Projects Collection
+      projectsListener = onSnapshot(projectsColl, (snapshot) => {
+        const fetchedProjects = [];
+        snapshot.forEach(docSnap => {
+          fetchedProjects.push({ id: docSnap.id, ...docSnap.data() });
+        });
+
+        if (fetchedProjects.length === 0 && projects.length > 0) {
+          // Push baseline local projects into Firestore if empty
+          projects.forEach(async (p) => {
+            await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'projects', p.id), p);
+          });
+        } else {
+          projects = fetchedProjects;
+          if (selectedInvoice) {
+            selectedInvoice = projects.find(p => p.id === selectedInvoice.id) || null;
+          }
+          recalculateGlobalFinancials();
+          refreshCurrentTab();
+          updateCloudSyncStatus('connected');
+        }
+      }, (err) => {
+        console.error("Error reading projects from Firestore:", err);
+      });
+
+      // 2. Sync Tasks Collection
+      tasksListener = onSnapshot(tasksColl, (snapshot) => {
+        const fetchedTasks = [];
+        snapshot.forEach(docSnap => {
+          fetchedTasks.push({ id: docSnap.id, ...docSnap.data() });
+        });
+
+        if (fetchedTasks.length === 0 && tasks.length > 0) {
+          tasks.forEach(async (t) => {
+            await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'tasks', t.id), t);
+          });
+        } else {
+          tasks = fetchedTasks;
+          recalculateGlobalFinancials();
+          refreshCurrentTab();
+        }
+      }, (err) => {
+        console.error("Error reading tasks from Firestore:", err);
+      });
+
+      // 3. Sync Settings Collection
+      settingsListener = onSnapshot(settingsDoc, (docSnap) => {
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          if (data.globalTaxRate !== undefined) {
+            globalTaxRate = data.globalTaxRate;
+            const rateInput = document.getElementById('global-tax-rate-input');
+            if (rateInput) rateInput.value = globalTaxRate;
+            updateTaxInputLabel();
+            recalculateGlobalFinancials();
+          }
+        } else {
+          setDoc(settingsDoc, { globalTaxRate: globalTaxRate });
+        }
+      }, (err) => {
+        console.error("Error reading settings from Firestore:", err);
+      });
+    }
+
+    function refreshCurrentTab() {
+      if (activeTab === "dashboard") renderDashboardView();
+      if (activeTab === "tracker") renderTrackerView();
+      if (activeTab === "invoices") renderInvoiceHub();
+      if (activeTab === "tasks") renderTasksView();
+      if (activeTab === "clients") renderFinancialsView();
+    }
+
+    function updateTaxInputLabel() {
+      const label = document.getElementById('add-project-tax-label');
+      if (label) {
+        label.innerText = `Tax Cost (RM) - Blank for auto ${globalTaxRate}%`;
+      }
+    }
+
+    async function updateGlobalTaxRate(newRate) {
+      const rate = parseFloat(newRate);
+      if (!isNaN(rate) && rate >= 0) {
+        if (currentUser) {
+          try {
+            updateCloudSyncStatus('saving');
+            await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'settings', 'global_settings'), {
+              globalTaxRate: rate
+            });
+            showNotification(`Default tax rate updated to ${rate}% on Cloud`);
+            updateCloudSyncStatus('connected');
+          } catch (e) {
+            console.error("Failed to update tax rate in Cloud:", e);
+          }
+        } else {
+          globalTaxRate = rate;
+          showNotification(`Default tax rate updated to ${globalTaxRate}% (Local mode)`);
+          updateTaxInputLabel();
+          recalculateGlobalFinancials();
+        }
+      } else {
+        showNotification("Invalid tax rate entered", "error");
+      }
+    }
+
+    function showNotification(message, type = 'success') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = "flex items-center gap-3 bg-[#121212] border-l-4 border-[#D4AF37] px-6 py-4 rounded-lg shadow-[0_10px_30px_rgba(0,0,0,0.8)] animate-slide-in pointer-events-auto cursor-pointer";
+      toast.innerHTML = `
+        <div class="h-2 w-2 rounded-full bg-[#D4AF37] animate-ping"></div>
+        <span class="text-sm font-medium text-gray-200">${message}</span>
+      `;
+      toast.onclick = () => toast.remove();
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(-10px)';
+        toast.style.transition = 'all 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
+      }, 4000);
+    }
+
+    function initLoginHandshake() {
+      const form = document.getElementById('login-form');
+      const toggleBtn = document.getElementById('toggle-password');
+      const passwordInput = document.getElementById('login-password');
+
+      const existingSession = sessionStorage.getItem('brandworkz_session_auth');
+      if (existingSession === 'active_authenticated') {
+        renderAuthWorkspace();
+      }
+
+      toggleBtn.onclick = function() {
+        isPasswordVisible = !isPasswordVisible;
+        passwordInput.type = isPasswordVisible ? 'text' : 'password';
+        toggleBtn.innerHTML = isPasswordVisible 
+          ? `<i data-lucide="eye-off" class="h-[15px] w-[15px]"></i>` 
+          : `<i data-lucide="eye" class="h-[15px] w-[15px]"></i>`;
+        lucide.createIcons();
+      };
+
+      form.onsubmit = function(e) {
+        e.preventDefault();
+        const username = document.getElementById('login-username').value;
+        const pass = passwordInput.value;
+        const submitBtn = document.getElementById('login-submit-btn');
+
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `AUTHENTICATING KEY...`;
+
+        setTimeout(async () => {
+          if (window.btoa(username) === "YWRtaW4=" && window.btoa(pass) === "MTM0MjI4") {
+            sessionStorage.setItem('brandworkz_session_auth', 'active_authenticated');
+            await triggerFirebaseAuthAndSync();
+            renderAuthWorkspace();
+            showNotification("Access Granted. Welcome back to Brandworkz Co.");
+          } else {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = `<i data-lucide="lock" class="h-3.5 w-3.5"></i> UNLOCK WORKSPACE`;
+            lucide.createIcons();
+            const errDiv = document.getElementById('login-error-container');
+            const errMsg = document.getElementById('login-error-msg');
+            errMsg.innerText = "Invalid Studio credentials. Access has been denied.";
+            errDiv.classList.remove('hidden');
+          }
+        }, 600);
+      };
+    }
+
+    function renderAuthWorkspace() {
+      document.getElementById('login-overlay').classList.add('hidden');
+      document.getElementById('app-workspace').classList.remove('hidden');
+      switchTab(activeTab);
+      recalculateGlobalFinancials();
+    }
+
+    async function handleLogout() {
+      sessionStorage.removeItem('brandworkz_session_auth');
+      document.getElementById('app-workspace').classList.add('hidden');
+      document.getElementById('login-overlay').classList.remove('hidden');
+      document.getElementById('login-username').value = '';
+      document.getElementById('login-password').value = '';
+      document.getElementById('login-error-container').classList.add('hidden');
+      
+      if (hasFirebase && auth) {
+        try {
+          await signOut(auth);
+          currentUser = null;
+          updateCloudSyncStatus('local');
+        } catch (e) {
+          console.error("Signout error:", e);
+        }
+      }
+
+      showNotification("Logged out successfully from the secure workspace.", "info");
+    }
+
+    function recalculateGlobalFinancials() {
+      let subtotal = 0;
+      let taxTotal = 0;
+
+      projects.forEach(p => {
+        subtotal += Number(p.cost) || 0;
+        taxTotal += Number(p.tax) || 0;
+      });
+
+      const grandTotal = subtotal + taxTotal;
+
+      // Header Updates
+      const headerTax = document.getElementById('header-tax-liability');
+      const headerGrand = document.getElementById('header-grand-total');
+      if (headerTax) headerTax.innerText = `RM ${taxTotal.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+      if (headerGrand) headerGrand.innerText = `RM ${grandTotal.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+      // Dashboard Metrics
+      if (activeTab === "dashboard") {
+        const dbGrand = document.getElementById('dashboard-grand-total');
+        if (dbGrand) dbGrand.innerText = `RM ${grandTotal.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        
+        const activeCount = projects.filter(p => p.status !== 'Completed').length;
+        const dbActive = document.getElementById('dashboard-active-count');
+        if (dbActive) dbActive.innerText = `${activeCount} Active`;
+
+        const dbProgress = document.getElementById('dashboard-progress-count');
+        if (dbProgress) dbProgress.innerText = `${projects.filter(p => p.status === 'In Progress').length} currently in design progress`;
+
+        const dbTax = document.getElementById('dashboard-tax-total');
+        if (dbTax) dbTax.innerText = `RM ${taxTotal.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        
+        const completedTasks = tasks.filter(t => t.completed).length;
+        const totalTasks = tasks.length || 1;
+        const percent = Math.round((completedTasks / totalTasks) * 100);
+        
+        const dbTaskPercent = document.getElementById('dashboard-task-percent');
+        if (dbTaskPercent) dbTaskPercent.innerText = `${percent}%`;
+
+        const dbTaskCompleted = document.getElementById('dashboard-task-completed');
+        if (dbTaskCompleted) dbTaskCompleted.innerText = `${completedTasks} of ${tasks.length} tasks completed`;
+      }
+
+      // Tracker View Metrics
+      if (activeTab === "tracker") {
+        const trGrand = document.getElementById('tracker-summary-grand-total');
+        if (trGrand) trGrand.innerText = `RM ${grandTotal.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+        const trCount = document.getElementById('tracker-invoice-count');
+        if (trCount) trCount.innerText = projects.length;
+
+        const trSub = document.getElementById('tracker-subtotal');
+        if (trSub) trSub.innerText = `RM ${subtotal.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+        const trTax = document.getElementById('tracker-tax');
+        if (trTax) trTax.innerText = `RM ${taxTotal.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+        const trTotal = document.getElementById('tracker-grand-total');
+        if (trTotal) trTotal.innerText = `RM ${grandTotal.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+      }
+
+      // Financial Registry View Metrics
+      if (activeTab === "clients") {
+        const regPre = document.getElementById('registry-pre-tax');
+        if (regPre) regPre.innerText = `RM ${subtotal.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+        const regTax = document.getElementById('registry-tax');
+        if (regTax) regTax.innerText = `RM ${taxTotal.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+        const regGross = document.getElementById('registry-gross');
+        if (regGross) regGross.innerText = `RM ${grandTotal.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        
+        const finished = projects.filter(p => p.status === 'Completed').length;
+        const statsRatio = document.getElementById('stats-completion-ratio');
+        if (statsRatio) statsRatio.innerText = `${finished} / ${projects.length}`;
+
+        const statsBar = document.getElementById('stats-completion-bar');
+        if (statsBar) statsBar.style.width = `${(finished / (projects.length || 1)) * 100}%`;
+
+        const pending = projects.filter(p => p.status === 'Wait for Respond').length;
+        const statsPending = document.getElementById('stats-pending-ratio');
+        if (statsPending) statsPending.innerText = `${pending} Project${pending !== 1 ? 's' : ''}`;
+
+        const statsPendingBar = document.getElementById('stats-pending-bar');
+        if (statsPendingBar) statsPendingBar.style.width = `${(pending / (projects.length || 1)) * 100}%`;
+      }
+    }
+
+    function switchTab(tabId) {
+      activeTab = tabId;
+      if (tabId !== "invoices") {
+        selectedInvoice = null;
+        isInvoiceEditing = false;
+      }
+
+      // Hide all viewports
+      ['dashboard', 'tracker', 'invoices', 'tasks', 'clients'].forEach(t => {
+        const view = document.getElementById(`view-${t}`);
+        if (view) view.classList.add('hidden');
+        const btn = document.getElementById(`nav-${t}`);
+        if (btn) {
+          btn.className = "w-full flex items-center gap-3 px-4 py-3 rounded text-sm font-medium transition-all text-gray-400 hover:text-white hover:bg-white/5";
+        }
+      });
+
+      // Highlight target active button
+      const activeBtn = document.getElementById(`nav-${tabId}`);
+      if (activeBtn) {
+        activeBtn.className = "w-full flex items-center gap-3 px-4 py-3 rounded text-sm font-medium transition-all bg-[#1E1910] text-[#D4AF37] border-l-2 border-[#D4AF37] shadow-[inset_0_0_10px_rgba(212,175,55,0.1)]";
+      }
+
+      // Show target viewport
+      const targetView = document.getElementById(`view-${tabId}`);
+      if (targetView) targetView.classList.remove('hidden');
+
+      recalculateGlobalFinancials();
+
+      if (tabId === "dashboard") renderDashboardView();
+      if (tabId === "tracker") renderTrackerView();
+      if (tabId === "invoices") renderInvoiceHub();
+      if (tabId === "tasks") renderTasksView();
+      if (tabId === "clients") renderFinancialsView();
+    }
+
+    function renderDashboardView() {
+      const canvasEl = document.getElementById('earningsChart');
+      if (!canvasEl) return;
+      const ctx = canvasEl.getContext('2d');
+      if (earningsChartInstance) earningsChartInstance.destroy();
+
+      earningsChartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+          datasets: [{
+            label: 'Studio Revenues (RM)',
+            data: [5200, 6800, 9400, 8200, 11500, 15400],
+            borderColor: '#D4AF37',
+            borderWidth: 2,
+            backgroundColor: 'rgba(212, 175, 55, 0.05)',
+            fill: true,
+            tension: 0.3
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { grid: { color: '#222' }, ticks: { color: '#888' } },
+            y: { grid: { color: '#222' }, ticks: { color: '#888' } }
+          }
+        }
+      });
+
+      const pipelineContainer = document.getElementById('dashboard-pipeline-list');
+      if (pipelineContainer) {
+        pipelineContainer.innerHTML = '';
+        projects.slice(0, 3).forEach(p => {
+          let badgeClass = "bg-cyan-500/10 text-cyan-400 border-cyan-500/20";
+          if (p.status === 'Completed') badgeClass = "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
+          if (p.status === 'Delayed') badgeClass = "bg-rose-500/10 text-rose-400 border border-rose-500/20";
+          if (p.status === 'Wait for Respond') badgeClass = "bg-amber-500/10 text-amber-400 border border-amber-500/20";
+
+          pipelineContainer.innerHTML += `
+            <div class="flex items-center justify-between p-2.5 bg-[#1A1A1A] rounded border border-white/5 hover:border-[#D4AF37]/30 transition-all">
+              <div class="max-w-[150px] truncate">
+                <h4 class="text-xs font-semibold text-white truncate">${p.projectName}</h4>
+                <p class="text-[10px] text-gray-400 truncate">${p.clientName}</p>
+              </div>
+              <span class="text-[9px] px-2 py-0.5 rounded-full font-bold border ${badgeClass}">
+                ${p.status}
+              </span>
+            </div>
+          `;
+        });
+      }
+
+      const miniChecklist = document.getElementById('dashboard-deliverables-list');
+      if (miniChecklist) {
+        miniChecklist.innerHTML = '';
+        tasks.slice(0, 4).forEach(t => {
+          miniChecklist.innerHTML += `
+            <div 
+              onclick="toggleTaskCompleted('${t.id}')"
+              class="p-3 bg-[#1A1A1A] rounded border border-white/5 flex items-center justify-between cursor-pointer hover:border-[#D4AF37]/30 hover:bg-[#202020] transition-all"
+            >
+              <div class="flex items-center gap-3">
+                <div class="h-4 w-4 rounded border flex items-center justify-center transition-all ${
+                  t.completed ? 'bg-[#D4AF37] border-[#D4AF37]' : 'border-gray-600'
+                }">
+                  ${t.completed ? `<i data-lucide="check" class="text-black h-3 w-3 stroke-[3]"></i>` : ''}
+                </div>
+                <span class="text-xs text-gray-200 ${t.completed ? 'line-through text-gray-500' : ''}">
+                  ${t.text}
+                </span>
+              </div>
+              <span class="text-[9px] bg-white/10 text-gray-400 px-2 py-0.5 rounded font-mono uppercase">
+                ${t.category}
+              </span>
+            </div>
+          `;
+        });
+      }
+      lucide.createIcons();
+    }
+
+    function renderTrackerView() {
+      const tbody = document.getElementById('tracker-table-body');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      projects.forEach(p => {
+        const totalCost = p.cost + p.tax;
+        
+        let filesListHTML = `<div class="space-y-1 max-w-[180px] mx-auto">`;
+        p.files.forEach(file => {
+          filesListHTML += `
+            <div class="flex items-center justify-between text-[10px] bg-black/40 px-2 py-1 rounded border border-white/5">
+              <span class="truncate text-gray-300 mr-2" title="${file.name}">${file.name}</span>
+              <span class="text-[9px] text-gray-500 shrink-0">${file.size}</span>
+            </div>
+          `;
+        });
+        filesListHTML += `
+          <input 
+            type="file" 
+            id="file-upload-input-${p.id}" 
+            onchange="simulateFileUpload('${p.id}', event)" 
+            class="hidden" 
+          />
+          <button 
+            onclick="document.getElementById('file-upload-input-${p.id}').click()"
+            class="w-full flex items-center justify-center gap-1.5 py-1 bg-[#201A0F] hover:bg-[#2D2311] border border-[#D4AF37]/30 hover:border-[#D4AF37] text-xs text-[#D4AF37] rounded transition-all"
+          >
+            <i data-lucide="upload-cloud" class="h-3 w-3"></i> Upload asset
+          </button>
+        </div>`;
+
+        tbody.innerHTML += `
+          <tr class="hover:bg-[#1A1A1A]/50 transition-colors">
+            <td class="p-4">
+              <span class="font-mono text-[10px] text-[#D4AF37] bg-[#221B0F] px-2.5 py-1 rounded border border-[#D4AF37]/20 block w-max mb-1">
+                ${p.invoiceNo}
+              </span>
+              <span class="font-semibold text-white block">${p.clientName}</span>
+            </td>
+            <td class="p-4">
+              <span class="text-white font-medium block">${p.projectName}</span>
+              <span class="text-[10px] text-gray-400 bg-white/5 px-2 py-0.5 rounded block w-max mt-1">${p.category}</span>
+            </td>
+            <td class="p-4 whitespace-nowrap">
+              <div class="flex items-center gap-2 text-[10px]">
+                <span class="text-gray-400">Out:</span> 
+                <span class="font-mono font-semibold">${p.dateOut}</span>
+              </div>
+              <div class="flex items-center gap-2 text-[10px] mt-1">
+                <span class="text-[#D4AF37]">Ship:</span> 
+                <span class="font-mono font-semibold text-white">${p.shippingDate}</span>
+              </div>
+            </td>
+            <td class="p-4">
+              <select 
+                onchange="updateProjectStatus('${p.id}', this.value)"
+                class="text-[10px] font-bold rounded px-2.5 py-1 bg-[#1A1A1A] border cursor-pointer outline-none transition-all ${
+                  p.status === 'Completed' ? 'border-emerald-500/50 text-emerald-400' :
+                  p.status === 'Delayed' ? 'border-rose-500/50 text-rose-400' :
+                  p.status === 'Wait for Respond' ? 'border-amber-500/50 text-amber-400' :
+                  'border-cyan-500/50 text-cyan-400'
+                }"
+              >
+                <option value="In Progress" ${p.status === 'In Progress' ? 'selected' : ''}>In Progress</option>
+                <option value="Delayed" ${p.status === 'Delayed' ? 'selected' : ''}>Delayed</option>
+                <option value="Completed" ${p.status === 'Completed' ? 'selected' : ''}>Completed</option>
+                <option value="Wait for Respond" ${p.status === 'Wait for Respond' ? 'selected' : ''}>Wait for Respond</option>
+              </select>
+            </td>
+            <td class="p-4 text-right font-mono font-semibold text-gray-300">
+              ${p.cost.toFixed(2)}
+            </td>
+            <td class="p-4 text-right font-mono text-[#D4AF37]">
+              ${p.tax.toFixed(2)}
+            </td>
+            <td class="p-4 text-right font-mono font-bold text-white">
+              ${totalCost.toFixed(2)}
+            </td>
+            <td class="p-4">
+              ${filesListHTML}
+            </td>
+            <td class="p-4 text-center">
+              <div class="flex justify-center items-center gap-2">
+                <button 
+                  onclick="viewInvoiceDetail('${p.id}')"
+                  class="p-1.5 bg-[#1F1C16] hover:bg-[#D4AF37] text-[#D4AF37] hover:text-black rounded transition-all"
+                  title="View Invoice Sheet"
+                >
+                  <i data-lucide="file-text" class="h-3.5 w-3.5"></i>
+                </button>
+                <button 
+                  onclick="deleteProject('${p.id}')"
+                  class="p-1.5 bg-rose-950/40 hover:bg-rose-600 text-rose-400 hover:text-white rounded transition-all"
+                  title="Cancel & Delete Invoice"
+                >
+                  <i data-lucide="trash-2" class="h-3.5 w-3.5"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      });
+
+      if (projects.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colSpan="9" class="p-8 text-center text-gray-500">
+              <i data-lucide="alert-circle" class="mx-auto mb-2 text-gray-600 h-7 w-7"></i>
+              No projects or active invoice records found. Create one above to begin.
+            </td>
+          </tr>
+        `;
+      }
+      lucide.createIcons();
+    }
+
+    async function updateProjectStatus(projectId, newStatus) {
+      if (currentUser) {
+        try {
+          updateCloudSyncStatus('saving');
+          const projectDoc = doc(db, 'artifacts', appId, 'public', 'data', 'projects', projectId);
+          await updateDoc(projectDoc, { status: newStatus });
+          showNotification(`Project status updated to "${newStatus}" and saved to Cloud!`);
+          updateCloudSyncStatus('connected');
+        } catch (e) {
+          console.error("Failed to update status in DB:", e);
+        }
+      } else {
+        projects = projects.map(p => p.id === projectId ? { ...p, status: newStatus } : p);
+        showNotification(`Updated project status to ${newStatus} (Local)`);
+        recalculateGlobalFinancials();
+      }
+    }
+
+    async function simulateFileUpload(projectId, event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const formattedSize = file.size > 1024 * 1024 
+        ? `${(file.size / (1024 * 1024)).toFixed(1)} MB` 
+        : `${(file.size / 1024).toFixed(1)} KB`;
+
+      const targetProj = projects.find(p => p.id === projectId);
+      if (!targetProj) return;
+
+      const updatedFiles = [...targetProj.files, { name: file.name, size: formattedSize }];
+
+      if (currentUser) {
+        try {
+          updateCloudSyncStatus('saving');
+          const projectDoc = doc(db, 'artifacts', appId, 'public', 'data', 'projects', projectId);
+          await updateDoc(projectDoc, { files: updatedFiles });
+          showNotification(`Asset "${file.name}" linked and saved to Cloud!`);
+          updateCloudSyncStatus('connected');
+        } catch (e) {
+          console.error("Failed to upload asset:", e);
+        }
+      } else {
+        projects = projects.map(p => p.id === projectId ? { ...p, files: updatedFiles } : p);
+        showNotification(`Asset "${file.name}" linked successfully (Local)`);
+        renderTrackerView();
+      }
+    }
+
+    async function deleteProject(projectId) {
+      const p = projects.find(item => item.id === projectId);
+      if (currentUser) {
+        try {
+          updateCloudSyncStatus('saving');
+          const projectDoc = doc(db, 'artifacts', appId, 'public', 'data', 'projects', projectId);
+          await deleteDoc(projectDoc);
+          showNotification(`Invoice ${p ? p.invoiceNo : ''} removed from Cloud.`);
+          updateCloudSyncStatus('connected');
+        } catch (e) {
+          console.error("Failed to delete project:", e);
+        }
+      } else {
+        projects = projects.filter(item => item.id !== projectId);
+        showNotification(`Invoice ${p ? p.invoiceNo : ''} cancelled and deleted (Local).`);
+        recalculateGlobalFinancials();
+        refreshCurrentTab();
+      }
+    }
+
+    function renderInvoiceHub() {
+      if (selectedInvoice) {
+        document.getElementById('invoice-hub-list-mode').classList.add('hidden');
+        document.getElementById('invoice-hub-detail-mode').classList.remove('hidden');
+        
+        const sheet = document.getElementById('invoice-render-sheet');
+        if (!sheet) return;
+        const totalDue = selectedInvoice.cost + selectedInvoice.tax;
+
+        if (isInvoiceEditing) {
+          const editIcon = document.getElementById('edit-mode-icon');
+          if (editIcon) editIcon.setAttribute('data-lucide', 'save');
+          
+          const editBtnText = document.getElementById('edit-mode-btn-text');
+          if (editBtnText) editBtnText.innerText = "Save & Sync to Cloud";
+
+          sheet.innerHTML = `
+            <div class="flex justify-between items-start gap-6 border-b pb-8">
+              <div>
+                <div class="text-[#9A7B2C] mb-2 font-sans font-bold text-lg tracking-wider">
+                  BRANDWORKZ CO.
+                </div>
+                <p class="text-xs text-gray-600 font-sans not-italic leading-relaxed">
+                  Premium Graphic Design & Branding Suite<br />
+                  158 Jalan Ampang, Level 24 G-Tower<br />
+                  Kuala Lumpur, 50450, Malaysia<br />
+                  Email: creatives@brandworkz.co
+                </p>
+              </div>
+              <div class="text-right font-sans">
+                <h2 class="text-2xl font-bold text-[#9A7B2C] tracking-wide font-serif">TAX INVOICE</h2>
+                <p class="text-xs text-gray-500 mt-1 font-mono">Invoice No: <span class="text-gray-900 font-bold">${selectedInvoice.invoiceNo}</span></p>
+                <div class="mt-1 space-y-1 text-right">
+                  <div class="text-xs text-gray-500">Date Issued:</div>
+                  <input type="date" id="edit-invoice-date" value="${selectedInvoice.dateOut}" class="text-xs text-gray-900 border border-gray-300 rounded px-2 py-0.5 text-right font-mono" />
+                  <div class="text-xs text-gray-500 mt-1">Delivery:</div>
+                  <input type="date" id="edit-invoice-shipping" value="${selectedInvoice.shippingDate}" class="text-xs text-gray-900 border border-gray-300 rounded px-2 py-0.5 text-right font-mono" />
+                </div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-6 my-8 font-sans">
+              <div class="space-y-1.5">
+                <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider block">PREPARED FOR (CLIENT):</span>
+                <input type="text" id="edit-invoice-client" value="${selectedInvoice.clientName}" class="w-full font-bold text-sm text-gray-900 border border-gray-300 rounded px-2.5 py-1 focus:border-[#9A7B2C] focus:outline-none" />
+                <p class="text-[10px] text-gray-500">Authorized client representative</p>
+              </div>
+              <div class="text-right space-y-1.5">
+                <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider block">PROJECT SCOPE & CATEGORY:</span>
+                <input type="text" id="edit-invoice-projectname" value="${selectedInvoice.projectName}" class="w-full font-semibold text-sm text-gray-900 border border-gray-300 rounded px-2.5 py-1 text-right focus:border-[#9A7B2C] focus:outline-none" />
+                <select id="edit-invoice-category" class="text-xs text-[#9A7B2C] font-semibold border border-gray-300 rounded px-2 py-0.5 text-right bg-white focus:outline-none">
+                  <option value="Branding" ${selectedInvoice.category === 'Branding' ? 'selected' : ''}>Branding</option>
+                  <option value="Packaging" ${selectedInvoice.category === 'Packaging' ? 'selected' : ''}>Packaging</option>
+                  <option value="UI/UX" ${selectedInvoice.category === 'UI/UX' ? 'selected' : ''}>UI/UX</option>
+                  <option value="Label Design" ${selectedInvoice.category === 'Label Design' ? 'selected' : ''}>Label Design</option>
+                  <option value="Editorial" ${selectedInvoice.category === 'Editorial' ? 'selected' : ''}>Editorial</option>
+                </select>
+              </div>
+            </div>
+
+            <table class="w-full text-left my-8 font-sans">
+              <thead>
+                <tr class="border-b-2 border-gray-200 text-xs font-bold text-gray-500 uppercase">
+                  <th class="py-2">Design Service Description</th>
+                  <th class="py-2 text-right">Tax Rate Class</th>
+                  <th class="py-2 text-right">Selling Cost (RM)</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y text-xs text-gray-800">
+                <tr>
+                  <td class="py-4">
+                    <span class="font-bold text-gray-900 block">${selectedInvoice.projectName}</span>
+                    <span class="text-[10px] text-gray-500">Customized layout drafts, graphic assets, vector delivery, and visual consultation guidelines.</span>
+                  </td>
+                  <td class="py-4 text-right font-mono text-gray-600">Editable Class</td>
+                  <td class="py-4 text-right font-mono">
+                    <input type="number" step="0.01" id="edit-invoice-cost" value="${selectedInvoice.cost.toFixed(2)}" oninput="recalculateEditTotals()" class="w-24 text-right border border-gray-300 rounded px-1 py-0.5 font-bold focus:outline-none focus:border-[#9A7B2C]" />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="flex justify-end font-sans">
+              <div class="w-80 space-y-2.5 text-xs text-gray-700">
+                <div class="flex justify-between items-center">
+                  <span>Subtotal Cost:</span>
+                  <span id="edit-subtotal-display" class="font-mono font-medium text-gray-900">RM ${selectedInvoice.cost.toFixed(2)}</span>
+                </div>
+                
+                <div class="bg-gray-50 p-2 rounded border border-gray-200 space-y-2 mt-1">
+                  <div class="flex justify-between items-center">
+                    <span class="text-xs text-gray-500">Calculate with % rate:</span>
+                    <div class="flex items-center gap-1.5">
+                      <input type="number" step="0.01" id="edit-invoice-tax-percent" placeholder="29.17" oninput="applyTaxPercentage()" class="w-16 text-right border border-gray-300 rounded px-1 py-0.5 text-xs font-mono focus:outline-none focus:border-[#9A7B2C]" />
+                      <span class="text-xs text-gray-400">%</span>
+                    </div>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <span class="font-bold text-gray-600">Editable Tax (RM):</span>
+                    <input type="number" step="0.01" id="edit-invoice-tax-amount" value="${selectedInvoice.tax.toFixed(2)}" oninput="applyDirectTaxAmount()" class="w-24 text-right border border-[#9A7B2C] rounded px-1 py-0.5 font-semibold text-[#9A7B2C] focus:outline-none bg-yellow-50/50" />
+                  </div>
+                </div>
+
+                <div class="border-t pt-2.5 flex justify-between font-bold text-sm text-gray-900 border-gray-200">
+                  <span>Grand Total Due:</span>
+                  <span id="edit-grandtotal-display" class="font-mono text-[#9A7B2C] text-base font-bold">RM ${totalDue.toFixed(2)}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-12 pt-8 border-t border-gray-100 text-[10px] text-gray-500 space-y-2 font-sans leading-relaxed">
+              <p class="font-semibold text-gray-800 uppercase">Payment Directives & Terms:</p>
+              <p>Please make all bank transfers to <span class="font-bold text-gray-800">Brandworkz Co (Malayan Banking Berhad - Account 514-XXX-XXXX)</span> referencing this invoice number.</p>
+              <p>Receipt or payment confirmations can be uploaded in the asset workspace panel or emailed to accounts@brandworkz.co.</p>
+            </div>
+          `;
+        } else {
+          const editIcon = document.getElementById('edit-mode-icon');
+          if (editIcon) editIcon.setAttribute('data-lucide', 'edit-3');
+
+          const editBtnText = document.getElementById('edit-mode-btn-text');
+          if (editBtnText) editBtnText.innerText = "Enable Edit Mode";
+
+          const percent = ((selectedInvoice.tax / (selectedInvoice.cost || 1)) * 100).toFixed(2);
+
+          sheet.innerHTML = `
+            <div class="flex justify-between items-start gap-6 border-b pb-8">
+              <div>
+                <div class="text-[#9A7B2C] mb-2 font-sans font-bold text-lg tracking-wider">
+                  BRANDWORKZ CO.
+                </div>
+                <p class="text-xs text-gray-600 font-sans not-italic leading-relaxed">
+                  Premium Graphic Design & Branding Suite<br />
+                  158 Jalan Ampang, Level 24 G-Tower<br />
+                  Kuala Lumpur, 50450, Malaysia<br />
+                  Email: creatives@brandworkz.co
+                </p>
+              </div>
+              <div class="text-right font-sans">
+                <h2 class="text-2xl font-bold text-[#9A7B2C] tracking-wide font-serif">TAX INVOICE</h2>
+                <p class="text-xs text-gray-500 mt-1 font-mono">Invoice No: <span class="text-gray-900 font-bold">${selectedInvoice.invoiceNo}</span></p>
+                <p class="text-xs text-gray-500 font-mono">Date Issued: <span class="text-gray-900">${selectedInvoice.dateOut}</span></p>
+                <p class="text-xs text-gray-500 font-mono">Shipping/Delivery: <span class="text-gray-900">${selectedInvoice.shippingDate}</span></p>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-6 my-8 font-sans">
+              <div>
+                <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider block mb-1">PREPARED FOR:</span>
+                <p class="font-bold text-sm text-gray-900">${selectedInvoice.clientName}</p>
+                <p class="text-xs text-gray-600 mt-1">Authorized client representative</p>
+              </div>
+              <div class="text-right">
+                <span class="text-[10px] text-gray-400 uppercase font-bold tracking-wider block mb-1">PROJECT SCOPE:</span>
+                <p class="font-semibold text-sm text-gray-900">${selectedInvoice.projectName}</p>
+                <p class="text-xs text-[#9A7B2C] mt-1 font-semibold">${selectedInvoice.category}</p>
+              </div>
+            </div>
+
+            <table class="w-full text-left my-8 font-sans">
+              <thead>
+                <tr class="border-b-2 border-gray-200 text-xs font-bold text-gray-500 uppercase">
+                  <th class="py-2">Design Service Description</th>
+                  <th class="py-2 text-right">Tax Class</th>
+                  <th class="py-2 text-right">Selling Cost (RM)</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y text-xs text-gray-800">
+                <tr>
+                  <td class="py-4">
+                    <span class="font-bold text-gray-900 block">${selectedInvoice.projectName}</span>
+                    <span class="text-[10px] text-gray-500">Customized layout drafts, graphic assets, vector delivery, and visual consultation guidelines.</span>
+                  </td>
+                  <td class="py-4 text-right font-mono text-gray-600">${percent}% Tax Rate</td>
+                  <td class="py-4 text-right font-mono font-semibold text-gray-900">
+                    RM ${selectedInvoice.cost.toFixed(2)}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="flex justify-end font-sans">
+              <div class="w-80 space-y-2.5 text-xs text-gray-700">
+                <div class="flex justify-between font-medium">
+                  <span>Subtotal:</span>
+                  <span class="font-mono text-gray-900">RM ${selectedInvoice.cost.toFixed(2)}</span>
+                </div>
+                <div class="flex justify-between font-medium">
+                  <span>Services Tax (${percent}%):</span>
+                  <span class="font-mono text-[#9A7B2C]">RM ${selectedInvoice.tax.toFixed(2)}</span>
+                </div>
+                <div class="border-t pt-2.5 flex justify-between font-bold text-sm text-gray-900 border-gray-200">
+                  <span>Grand Total Due:</span>
+                  <span class="font-mono text-[#9A7B2C] text-base font-bold">RM ${totalDue.toFixed(2)}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-12 pt-8 border-t border-gray-100 text-[10px] text-gray-500 space-y-2 font-sans leading-relaxed">
+              <p class="font-semibold text-gray-800 uppercase">Payment Directives & Terms:</p>
+              <p>Please make all bank transfers to <span class="font-bold text-gray-800">Brandworkz Co (Malayan Banking Berhad - Account 514-XXX-XXXX)</span> referencing this invoice number.</p>
+              <p>Receipt or payment confirmations can be uploaded in the asset workspace panel or emailed to accounts@brandworkz.co.</p>
+              <div class="pt-4 text-center border-t border-gray-100 text-gray-400 font-serif italic">
+                Thank you for commissioning our exclusive boutique design studio. We look forward to designing with you again!
+              </div>
+            </div>
+          `;
+        }
+      } else {
+        document.getElementById('invoice-hub-list-mode').classList.remove('hidden');
+        document.getElementById('invoice-hub-detail-mode').classList.add('hidden');
+
+        const grid = document.getElementById('invoice-cards-grid');
+        if (!grid) return;
+        grid.innerHTML = '';
+
+        projects.forEach(p => {
+          const total = p.cost + p.tax;
+          const percent = ((p.tax / (p.cost || 1)) * 100).toFixed(2);
+          grid.innerHTML += `
+            <div class="bg-[#121212] border border-white/5 rounded p-5 flex flex-col justify-between hover:border-[#D4AF37]/40 transition-all shadow-md">
+              <div class="space-y-3">
+                <div class="flex justify-between items-start">
+                  <span class="font-mono text-xs text-[#D4AF37] bg-[#221B0F] px-2.5 py-1 rounded border border-[#D4AF37]/30">
+                    ${p.invoiceNo}
+                  </span>
+                  <span class="text-[10px] font-semibold px-2 py-0.5 rounded ${
+                    p.status === 'Completed' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-cyan-500/10 text-cyan-400'
+                  }">
+                    ${p.status}
+                  </span>
+                </div>
+
+                <div>
+                  <p class="text-[10px] text-gray-500 uppercase tracking-wide">Client</p>
+                  <h3 class="text-sm font-bold text-white">${p.clientName}</h3>
+                  <p class="text-xs text-gray-400 mt-1 italic">${p.projectName}</p>
+                </div>
+
+                <hr class="border-white/5" />
+
+                <div class="grid grid-cols-2 gap-2 text-xs">
+                  <div>
+                    <span class="text-[9px] text-gray-500 block">BASE COST</span>
+                    <span class="font-mono font-medium text-gray-300">RM ${p.cost.toFixed(2)}</span>
+                  </div>
+                  <div>
+                    <span class="text-[9px] text-gray-500 block">TAX (${percent}%)</span>
+                    <span class="font-mono font-medium text-[#D4AF37]">RM ${p.tax.toFixed(2)}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-5 pt-3 border-t border-white/5 flex items-center justify-between">
+                <div>
+                  <span class="text-[9px] text-[#D4AF37] block font-semibold uppercase">TOTAL AMOUNT</span>
+                  <span class="font-mono font-bold text-white text-sm">RM ${total.toFixed(2)}</span>
+                </div>
+                <div class="flex gap-2">
+                  <button 
+                    onclick="viewInvoiceDetail('${p.id}')"
+                    class="px-3 py-1.5 bg-[#D4AF37] hover:bg-[#FCF6BA] text-[#0A0A0A] font-bold rounded text-[11px] transition-all flex items-center gap-1"
+                  >
+                    View & Edit Layout
+                  </button>
+                  <button 
+                    onclick="deleteProject('${p.id}')"
+                    class="p-1.5 bg-rose-950/30 hover:bg-rose-600 text-rose-400 hover:text-white rounded transition-all"
+                  >
+                    <i data-lucide="trash-2" class="h-3.5 w-3.5"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          `;
+        });
+
+        if (projects.length === 0) {
+          grid.innerHTML = `
+            <div class="col-span-full p-12 bg-[#121212] border border-white/5 rounded text-center text-gray-500">
+              <i data-lucide="alert-circle" class="mx-auto mb-2 text-gray-600 h-6 w-6"></i>
+              No dynamic invoices generated yet. Please record a new project!
+            </div>
+          `;
+        }
+      }
+      lucide.createIcons();
+    }
+
+    async function toggleInvoiceEditMode() {
+      if (isInvoiceEditing) {
+        const costInput = parseFloat(document.getElementById('edit-invoice-cost').value) || 0;
+        const taxInput = parseFloat(document.getElementById('edit-invoice-tax-amount').value) || 0;
+        const clientInput = document.getElementById('edit-invoice-client').value.trim();
+        const projectInput = document.getElementById('edit-invoice-projectname').value.trim();
+        const categoryInput = document.getElementById('edit-invoice-category').value;
+        const dateInput = document.getElementById('edit-invoice-date').value;
+        const shippingInput = document.getElementById('edit-invoice-shipping').value;
+
+        if (!clientInput || !projectInput) {
+          showNotification("Client Name and Project Scope cannot be empty", "error");
+          return;
+        }
+
+        const updatedProject = {
+          cost: costInput,
+          tax: taxInput,
+          clientName: clientInput,
+          projectName: projectInput,
+          category: categoryInput,
+          dateOut: dateInput,
+          shippingDate: shippingInput
+        };
+
+        if (currentUser) {
+          try {
+            updateCloudSyncStatus('saving');
+            const projectDoc = doc(db, 'artifacts', appId, 'public', 'data', 'projects', selectedInvoice.id);
+            await updateDoc(projectDoc, updatedProject);
+            showNotification("Invoice updates successfully saved and backed up to Cloud!");
+            updateCloudSyncStatus('connected');
+          } catch (e) {
+            console.error("Failed to update project data:", e);
+          }
+        } else {
+          projects = projects.map(p => p.id === selectedInvoice.id ? { ...p, ...updatedProject } : p);
+          selectedInvoice = projects.find(p => p.id === selectedInvoice.id);
+          showNotification("Invoice tax calculations & labels saved successfully! (Local)");
+          recalculateGlobalFinancials();
+        }
+
+        isInvoiceEditing = false;
+        renderInvoiceHub();
+      } else {
+        isInvoiceEditing = true;
+        renderInvoiceHub();
+      }
+    }
+
+    function recalculateEditTotals() {
+      const cost = parseFloat(document.getElementById('edit-invoice-cost').value) || 0;
+      const tax = parseFloat(document.getElementById('edit-invoice-tax-amount').value) || 0;
+      
+      const subtotalDisp = document.getElementById('edit-subtotal-display');
+      if (subtotalDisp) subtotalDisp.innerText = `RM ${cost.toFixed(2)}`;
+      
+      const totalDisp = document.getElementById('edit-grandtotal-display');
+      if (totalDisp) totalDisp.innerText = `RM ${(cost + tax).toFixed(2)}`;
+    }
+
+    function applyTaxPercentage() {
+      const cost = parseFloat(document.getElementById('edit-invoice-cost').value) || 0;
+      const taxPercent = parseFloat(document.getElementById('edit-invoice-tax-percent').value) || 0;
+      const calculatedTax = (cost * (taxPercent / 100));
+      
+      const taxAmountInput = document.getElementById('edit-invoice-tax-amount');
+      if (taxAmountInput) taxAmountInput.value = calculatedTax.toFixed(2);
+      recalculateEditTotals();
+    }
+
+    function applyDirectTaxAmount() {
+      const taxPercentInput = document.getElementById('edit-invoice-tax-percent');
+      if (taxPercentInput) taxPercentInput.value = '';
+      recalculateEditTotals();
+    }
+
+    function viewInvoiceDetail(projectId) {
+      selectedInvoice = projects.find(p => p.id === projectId);
+      isInvoiceEditing = false;
+      activeTab = "invoices";
+      switchTab("invoices");
+    }
+
+    function closeInvoiceDetail() {
+      selectedInvoice = null;
+      isInvoiceEditing = false;
+      renderInvoiceHub();
+    }
+
+    function triggerPNGExport() {
+      const element = document.getElementById('invoice-render-sheet');
+      if (!element) return;
+
+      if (isInvoiceEditing) {
+        toggleInvoiceEditMode();
+      }
+
+      const progressOverlay = document.getElementById('export-progress');
+      const progressText = document.getElementById('export-step-text');
+      const percentText = document.getElementById('export-percent-text');
+      const progressBar = document.getElementById('export-progress-bar');
+
+      progressOverlay.classList.remove('hidden');
+
+      let currentPercent = 0;
+      const stepIntervals = [
+        { max: 20, text: "Compiling vector assets & layers..." },
+        { max: 50, text: "Applying high-end black & gold styling..." },
+        { max: 75, text: "Calculating sales taxonomies and SST (RM)..." },
+        { max: 95, text: "Generating digital graphic blueprint (PNG)..." },
+        { max: 100, text: "Ready! Saving directly to your device..." }
+      ];
+
+      const timer = setInterval(() => {
+        currentPercent += Math.floor(Math.random() * 5) + 3;
+        if (currentPercent >= 100) {
+          currentPercent = 100;
+          clearInterval(timer);
+
+          progressBar.style.width = '100%';
+          percentText.innerText = '100%';
+          progressText.innerText = "Ready! Saving directly to your device...";
+
+          setTimeout(() => {
+            const renderClone = element.cloneNode(true);
+            renderClone.style.position = 'absolute';
+            renderClone.style.top = '-9999px';
+            renderClone.style.left = '-9999px';
+            renderClone.style.width = '768px';
+            document.body.appendChild(renderClone);
+
+            html2canvas(renderClone, {
+              scale: 2.5, 
+              useCORS: true,
+              allowTaint: true,
+              backgroundColor: "#FFFFFF"
+            }).then(canvas => {
+              const image = canvas.toDataURL("image/png");
+              const link = document.createElement('a');
+              link.href = image;
+              link.download = `${selectedInvoice.invoiceNo}_BrandworkzCo.png`;
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+              document.body.removeChild(renderClone);
+
+              showNotification(`High-Res PNG Saved: ${selectedInvoice.invoiceNo}`);
+              progressOverlay.classList.add('hidden');
+            }).catch(err => {
+              console.error("Renderer error:", err);
+              showNotification("Export failed. Ensure browser is updated.", "error");
+              progressOverlay.classList.add('hidden');
+              if(document.body.contains(renderClone)) {
+                document.body.removeChild(renderClone);
+              }
+            });
+          }, 400);
+
+        } else {
+          progressBar.style.width = `${currentPercent}%`;
+          percentText.innerText = `${currentPercent}%`;
+          const currentStep = stepIntervals.find(s => currentPercent <= s.max);
+          if (currentStep) {
+            progressText.innerText = currentStep.text;
+          }
+        }
+      }, 70);
+    }
+
+    function initTaskHandlers() {
+      const form = document.getElementById('task-addition-form');
+      form.onsubmit = async function(e) {
+        e.preventDefault();
+        const textInput = document.getElementById('new-task-text');
+        const categoryInput = document.getElementById('new-task-category');
+
+        if (!textInput.value.trim()) return;
+
+        const newTask = {
+          id: `task-${Date.now()}`,
+          text: textInput.value.trim(),
+          category: categoryInput.value,
+          completed: false
+        };
+
+        if (currentUser) {
+          try {
+            updateCloudSyncStatus('saving');
+            const taskDoc = doc(db, 'artifacts', appId, 'public', 'data', 'tasks', newTask.id);
+            await setDoc(taskDoc, newTask);
+            showNotification("Deliverable task saved to Cloud!");
+            updateCloudSyncStatus('connected');
+          } catch (err) {
+            console.error("Error writing task to cloud:", err);
+          }
+        } else {
+          tasks.unshift(newTask);
+          showNotification("Deliverable task listed! (Local)");
+          renderTasksView();
+          recalculateGlobalFinancials();
+        }
+
+        textInput.value = '';
+      };
+    }
+
+    function renderTasksView() {
+      const list = document.getElementById('tasks-interactive-list');
+      if (!list) return;
+      list.innerHTML = '';
+
+      tasks.forEach(t => {
+        list.innerHTML += `
+          <div class="flex items-center justify-between p-3 bg-[#1A1A1A] rounded border border-white/5 hover:border-[#D4AF37]/30 transition-all group">
+            <div class="flex items-center gap-3">
+              <button 
+                onclick="toggleTaskCompleted('${t.id}')"
+                class="h-5 w-5 rounded-full border flex items-center justify-center transition-all ${
+                  t.completed 
+                    ? 'bg-gradient-to-r from-[#BF953F] to-[#D4AF37] border-transparent text-[#0A0A0A]' 
+                    : 'border-white/20 hover:border-[#D4AF37]'
+                }"
+              >
+                ${t.completed ? `<i data-lucide="check" class="h-3 w-3 stroke-[3]"></i>` : ''}
+              </button>
+              <span class="text-xs ${t.completed ? 'line-through text-gray-500' : 'text-gray-200'}">
+                ${t.text}
+              </span>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <span class="text-[9px] px-2 py-0.5 rounded font-mono ${
+                t.category === 'High Priority' ? 'bg-rose-500/10 text-rose-400 border border-rose-500/10' :
+                t.category === 'In Progress' ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/10' :
+                t.category === 'Review' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/10' :
+                'bg-white/5 text-gray-400'
+              }">
+                ${t.category}
+              </span>
+              <button 
+                onclick="deleteTask('${t.id}')"
+                class="p-1 text-gray-500 hover:text-rose-500 rounded transition-all"
+              >
+                <i data-lucide="trash-2" class="h-3.5 w-3.5"></i>
+              </button>
+            </div>
+          </div>
+        `;
+      });
+
+      const finished = tasks.filter(t => t.completed).length;
+      const completedFrac = document.getElementById('task-completed-fraction');
+      if (completedFrac) completedFrac.innerText = `Completed: ${finished} / ${tasks.length}`;
+      lucide.createIcons();
+    }
+
+    async function toggleTaskCompleted(taskId) {
+      const targetTask = tasks.find(t => t.id === taskId);
+      if (!targetTask) return;
+
+      if (currentUser) {
+        try {
+          updateCloudSyncStatus('saving');
+          const taskDoc = doc(db, 'artifacts', appId, 'public', 'data', 'tasks', taskId);
+          await updateDoc(taskDoc, { completed: !targetTask.completed });
+          updateCloudSyncStatus('connected');
+        } catch (e) {
+          console.error("Failed to toggle task in DB:", e);
+        }
+      } else {
+        tasks = tasks.map(t => t.id === taskId ? { ...t, completed: !t.completed } : t);
+        recalculateGlobalFinancials();
+        refreshCurrentTab();
+      }
+    }
+
+    async function deleteTask(taskId) {
+      if (currentUser) {
+        try {
+          updateCloudSyncStatus('saving');
+          const taskDoc = doc(db, 'artifacts', appId, 'public', 'data', 'tasks', taskId);
+          await deleteDoc(taskDoc);
+          showNotification("Task removed from Cloud.");
+          updateCloudSyncStatus('connected');
+        } catch (e) {
+          console.error("Failed to delete task from DB:", e);
+        }
+      } else {
+        tasks = tasks.filter(t => t.id !== taskId);
+        showNotification("Task removed (Local).");
+        recalculateGlobalFinancials();
+        renderTasksView();
+      }
+    }
+
+    function renderFinancialsView() {
+      const list = document.getElementById('financial-client-breakdown');
+      if (!list) return;
+      list.innerHTML = '';
+
+      projects.forEach(p => {
+        const total = p.cost + p.tax;
+        list.innerHTML += `
+          <div class="p-4 bg-[#1A1A1A] rounded border border-white/5 flex justify-between items-center hover:border-[#D4AF37]/20 transition-all">
+            <div>
+              <span class="text-[10px] text-gray-500 uppercase font-semibold">CLIENT PORTFOLIO</span>
+              <h4 class="text-sm font-bold text-white">${p.clientName}</h4>
+              <span class="text-[10px] text-[#D4AF37] block mt-1">${p.projectName}</span>
+            </div>
+            <div class="text-right">
+              <span class="text-[10px] text-gray-500 block">TOTAL VOLUME</span>
+              <span class="font-mono font-bold text-white block">RM ${total.toFixed(2)}</span>
+              <span class="text-[9px] bg-white/5 text-gray-400 px-1.5 py-0.5 rounded font-mono mt-1 inline-block">
+                Tax RM ${p.tax.toFixed(2)}
+              </span>
+            </div>
+          </div>
+        `;
+      });
+
+      if (projects.length === 0) {
+        list.innerHTML = `<p class="col-span-full text-center text-xs text-gray-500 py-6">No client portfolios available yet.</p>`;
+      }
+    }
+
+    function initProjectForm() {
+      const form = document.getElementById('add-project-form');
+      form.onsubmit = async function(e) {
+        e.preventDefault();
+
+        const client = document.getElementById('form-client').value;
+        const project = document.getElementById('form-project').value;
+        const category = document.getElementById('form-category').value;
+        const dateout = document.getElementById('form-dateout').value;
+        const shipping = document.getElementById('form-shipping').value;
+        const costVal = parseFloat(document.getElementById('form-cost').value) || 0;
+        const taxValInput = document.getElementById('form-tax').value;
+        const status = document.getElementById('form-status').value;
+
+        const taxVal = taxValInput !== '' ? parseFloat(taxValInput) : parseFloat((costVal * (globalTaxRate / 100)).toFixed(2));
+        const newInvoiceNo = `INV-2026-00${projects.length + 1}`;
+        const newId = `proj-${Date.now()}`;
+
+        const newProjObj = {
+          id: newId,
+          invoiceNo: newInvoiceNo,
+          clientName: client,
+          projectName: project,
+          status: status,
+          dateOut: dateout || new Date().toISOString().split('T')[0],
+          shippingDate: shipping || new Date(Date.now() + 30*24*60*60*1000).toISOString().split('T')[0],
+          cost: costVal,
+          tax: taxVal,
+          category: category,
+          files: []
+        };
+
+        if (currentUser) {
+          try {
+            updateCloudSyncStatus('saving');
+            const projectDoc = doc(db, 'artifacts', appId, 'public', 'data', 'projects', newId);
+            await setDoc(projectDoc, newProjObj);
+            showNotification(`Created Project ${newInvoiceNo} & backed up to Cloud!`);
+            updateCloudSyncStatus('connected');
+          } catch (err) {
+            console.error("Error creating project in Firestore:", err);
+          }
+        } else {
+          projects.unshift(newProjObj);
+          showNotification(`Created Project ${newInvoiceNo} (Local)`);
+        }
+
+        closeAddProjectModal();
+        form.reset();
+        switchTab(activeTab);
+      };
+    }
+
+    function openAddProjectModal() {
+      document.getElementById('add-project-modal').classList.remove('hidden');
+    }
+
+    function closeAddProjectModal() {
+      document.getElementById('add-project-modal').classList.add('hidden');
+    }
+
+    window.openAddProjectModal = openAddProjectModal;
+    window.closeAddProjectModal = closeAddProjectModal;
+    window.updateGlobalTaxRate = updateGlobalTaxRate;
+    window.switchTab = switchTab;
+    window.updateProjectStatus = updateProjectStatus;
+    window.simulateFileUpload = simulateFileUpload;
+    window.deleteProject = deleteProject;
+    window.viewInvoiceDetail = viewInvoiceDetail;
+    window.closeInvoiceDetail = closeInvoiceDetail;
+    window.toggleInvoiceEditMode = toggleInvoiceEditMode;
+    window.recalculateEditTotals = recalculateEditTotals;
+    window.applyTaxPercentage = applyTaxPercentage;
+    window.applyDirectTaxAmount = applyDirectTaxAmount;
+    window.triggerPNGExport = triggerPNGExport;
+    window.toggleTaskCompleted = toggleTaskCompleted;
+    window.deleteTask = deleteTask;
+    window.handleLogout = handleLogout;
+  </script>
+</body>
+</html>

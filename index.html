@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> 
     <title>Brandworkz Co | Premium Graphic Design Store</title> 
     <script src="https://cdn.tailwindcss.com"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mqtt/4.3.7/mqtt.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"> 
     <style> 
         body { 
@@ -732,21 +733,136 @@
         localStorage.setItem("active_users", JSON.stringify({})); 
     } 
 
-    /* INITIALIZE CHAT MESSAGES FROM LOCALSTORAGE */
+    /* MQTT REAL-TIME CROSS-DEVICE COMMUNICATION ENGINE */
+    const MQTT_BROKER = "wss://broker.hivemq.com:8884/mqtt";
+    const TOPIC_PRESENCE = "bw_brandworkz_co/presence/v1";
+    const TOPIC_CHAT = "bw_brandworkz_co/chat/v1";
+    
+    let mqttClient = null;
+    let lastAdminPresenceTimestamp = 0;
+
     let CHAT_MESSAGES = JSON.parse(localStorage.getItem("bw_chat_messages")) || [];
- 
+
+    function initHiveMQRealtime() {
+        const clientID = "bw_client_" + Math.random().toString(16).substring(2, 10);
+        try {
+            mqttClient = mqtt.connect(MQTT_BROKER, {
+                clientId: clientID,
+                clean: true,
+                reconnectPeriod: 2000
+            });
+
+            mqttClient.on('connect', () => {
+                mqttClient.subscribe([TOPIC_PRESENCE, TOPIC_CHAT], (err) => {
+                    if (!err) {
+                        // Publish initial presence broadcast if admin
+                        if (isAdminLoggedIn) broadcastAdminPresence();
+                    }
+                });
+            });
+
+            mqttClient.on('message', (topic, payload) => {
+                try {
+                    const data = JSON.parse(payload.toString());
+                    if (topic === TOPIC_PRESENCE) {
+                        handleRealtimePresenceMessage(data);
+                    } else if (topic === TOPIC_CHAT) {
+                        handleRealtimeChatMessage(data);
+                    }
+                } catch(e) {
+                    console.error("MQTT Message Parsing Error", e);
+                }
+            });
+        } catch(e) {
+            console.error("MQTT Connection Exception", e);
+        }
+    }
+
+    function broadcastAdminPresence() {
+        if (mqttClient && mqttClient.connected && isAdminLoggedIn) {
+            mqttClient.publish(TOPIC_PRESENCE, JSON.stringify({
+                type: 'admin_presence',
+                status: 'online',
+                timestamp: Date.now()
+            }));
+        }
+    }
+
+    function handleRealtimePresenceMessage(data) {
+        if (data && data.type === 'admin_presence' && data.status === 'online') {
+            lastAdminPresenceTimestamp = Date.now();
+            updateAdminPresenceUI(true);
+        }
+    }
+
+    function checkAdminPresenceTimeout() {
+        const isOnline = (Date.now() - lastAdminPresenceTimestamp) < 8000;
+        updateAdminPresenceUI(isOnline);
+    }
+
+    function updateAdminPresenceUI(isOnline) {
+        const dot = document.getElementById("customer-chat-status-dot");
+        const txt = document.getElementById("customer-chat-status-text");
+        if (dot && txt) {
+            if (isOnline) {
+                dot.className = "w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse";
+                txt.innerText = "Admin Online";
+                txt.className = "text-[9px] text-emerald-400 font-bold";
+            } else {
+                dot.className = "w-2.5 h-2.5 rounded-full bg-slate-600";
+                txt.innerText = "Admin Offline";
+                txt.className = "text-[9px] text-slate-400 font-medium";
+            }
+        }
+    }
+
+    function handleRealtimeChatMessage(msgData) {
+        if (!msgData || !msgData.id) return;
+        
+        // Check for message duplication
+        const exists = CHAT_MESSAGES.some(m => m.id === msgData.id);
+        if (!exists) {
+            CHAT_MESSAGES.push(msgData);
+            saveChatMessagesToStorage();
+            
+            renderChatMessagesForCustomer();
+            if (isAdminLoggedIn) {
+                renderAdminChatHub();
+            }
+
+            // Increment unread badge for customer if closed & received admin message
+            if (msgData.sender === 'admin') {
+                const chatPanel = document.getElementById('customer-chat-panel');
+                if (chatPanel && chatPanel.classList.contains('hidden')) {
+                    const badge = document.getElementById('chat-unread-badge');
+                    if (badge) {
+                        badge.classList.remove('hidden');
+                        const cur = parseInt(badge.innerText) || 0;
+                        badge.innerText = cur + 1;
+                    }
+                }
+            }
+        }
+    }
+
     window.onload = function() { 
         saveProductsToStorage(); 
         renderProductCatalog(); 
         loadActiveSession(); 
         renderChatMessagesForCustomer();
-        updateAdminOnlineStatus();
+        
+        // Initialize HiveMQ MQTT real-time network layer
+        initHiveMQRealtime();
+
         if (isAdminLoggedIn) { 
             renderAdminWorkspace(); 
         } 
         
-        // Start live polling thread to synchronize real-time updates between views
-        startRealtimePolling();
+        // Start live heartbeat loops for presence and connection sync
+        setInterval(() => {
+            if (isAdminLoggedIn) broadcastAdminPresence();
+            checkAdminPresenceTimeout();
+        }, 3000);
     } 
  
     function saveProductsToStorage() { 
@@ -795,7 +911,7 @@
             showToast("Admin access cleared safely."); 
             document.getElementById('admin-gate-modal').querySelector('form').reset(); 
             switchView('admin'); 
-            updateAdminOnlineStatus();
+            broadcastAdminPresence();
         } else { 
             showToast("Invalid administrative credentials.", "error"); 
         } 
@@ -808,7 +924,7 @@
         document.getElementById('admin-view').classList.add('hidden'); 
         showToast("Logged out safely from Admin Space."); 
         switchView('store'); 
-        updateAdminOnlineStatus();
+        updateAdminPresenceUI(false);
     } 
  
     function saveWorkflowToStorage() { 
@@ -977,7 +1093,7 @@
         localStorage.setItem("current_session_user", JSON.stringify(userData)); 
         syncAuthenticatedLayout(userData); 
         showToast(`Welcome aboard, ${username}!`); 
-        renderChatMessagesForCustomer();
+        renderChatMessagesForCustomer(); 
     } 
  
     function handleCustomerLogin(event) { 
@@ -997,7 +1113,7 @@
             document.getElementById('customer-login-form').reset(); 
             showToast(`Logged in safely as ${currentUser.username}`); 
             updateCustomerWorkflowUI(); 
-            renderChatMessagesForCustomer();
+            renderChatMessagesForCustomer(); 
         } else { 
             errorDiv.classList.remove('hidden'); 
             showToast("Invalid credentials.", "error"); 
@@ -1044,7 +1160,7 @@
         toggleCustomerAuthTab('login'); 
         showToast("Logged out from customer session."); 
         updateCustomerWorkflowUI(); 
-        renderChatMessagesForCustomer();
+        renderChatMessagesForCustomer(); 
     } 
  
     function toggleCustomerAuthTab(tab) { 
@@ -1603,25 +1719,6 @@
         showToast("Workflow order marked Completed safely."); 
     } 
 
-    /* REALTIME ONLINE STATUS CHECKS */
-    function updateAdminOnlineStatus() {
-        const adminIsOnline = localStorage.getItem("is_admin_active_online") === "true";
-        const dot = document.getElementById("customer-chat-status-dot");
-        const txt = document.getElementById("customer-chat-status-text");
-        
-        if (dot && txt) {
-            if (adminIsOnline) {
-                dot.className = "w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse";
-                txt.innerText = "Admin Online";
-                txt.className = "text-[9px] text-emerald-400 font-bold";
-            } else {
-                dot.className = "w-2.5 h-2.5 rounded-full bg-slate-600";
-                txt.innerText = "Admin Offline";
-                txt.className = "text-[9px] text-slate-400 font-medium";
-            }
-        }
-    }
-
     /* CUSTOMER CHAT ACTIONS */
     function toggleCustomerChatPanel(state) {
         const panel = document.getElementById('customer-chat-panel');
@@ -1653,6 +1750,7 @@
 
         const senderUsername = currentUser ? currentUser.username : "Guest_Client";
         const newMsg = {
+            id: 'msg_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
             sender: 'customer',
             user: senderUsername,
             message: messageVal,
@@ -1664,11 +1762,16 @@
         renderChatMessagesForCustomer();
         input.value = "";
 
+        // Broadcast over MQTT WebSockets for live real-time reception on Admin Phone
+        if (mqttClient && mqttClient.connected) {
+            mqttClient.publish(TOPIC_CHAT, JSON.stringify(newMsg));
+        }
+
         // Scroll customer window
         const win = document.getElementById('customer-chat-window');
         if (win) win.scrollTop = win.scrollHeight;
 
-        // Immediately update admin hub if admin is currently active on workspace
+        // Update admin hub locally if on same browser window instance
         if (isAdminLoggedIn) {
             renderAdminChatHub();
         }
@@ -1687,7 +1790,7 @@
         const relevantMessages = CHAT_MESSAGES.filter(m => m.user === senderUsername);
 
         let html = `
-            <div class="text-center p-3 text-[10px] text-slate-550 bg-slate-950/85 rounded-xl border border-slate-900 leading-relaxed">
+            <div class="text-center p-3 text-[10px] text-slate-500 bg-slate-950/85 rounded-xl border border-slate-900 leading-relaxed">
                 💬 You are connected directly to the studio workspace. Type a brief query below to chat with an admin.
             </div>
         `;
@@ -1728,7 +1831,7 @@
         const messageContainer = document.getElementById('admin-chat-messages-container');
         if (!channelContainer || !messageContainer) return;
 
-        // Group chats dynamically by unique client user channels (Filter out bot default types)
+        // Group chats dynamically by unique client user channels
         const userChannels = [...new Set(CHAT_MESSAGES.map(m => m.user))].filter(u => u && u !== 'system_bot' && u !== 'admin');
 
         channelContainer.innerHTML = `<span class="text-[9px] uppercase tracking-wider font-extrabold text-slate-500 font-mono">Active Users</span>`;
@@ -1821,6 +1924,7 @@
         if (!val || !activeAdminThreadUser) return;
 
         const newReply = {
+            id: 'msg_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
             sender: 'admin',
             user: activeAdminThreadUser,
             message: val,
@@ -1832,39 +1936,13 @@
         renderAdminChatHub();
         input.value = "";
 
-        showToast(`Reply dispatched directly to @${activeAdminThreadUser}.`);
-        
-        // Dynamically notify Customer if Customer Portal is active on same browser instance
-        renderChatMessagesForCustomer();
-
-        // Increment unread badge counts on Customer portal if support card is minimized
-        const chatPanel = document.getElementById('customer-chat-panel');
-        if (chatPanel && chatPanel.classList.contains('hidden')) {
-            const badge = document.getElementById('chat-unread-badge');
-            if (badge) {
-                badge.classList.remove('hidden');
-                const currentUnread = parseInt(badge.innerText) || 0;
-                badge.innerText = currentUnread + 1;
-            }
+        // Broadcast over MQTT WebSockets for live real-time reception on Customer Phone
+        if (mqttClient && mqttClient.connected) {
+            mqttClient.publish(TOPIC_CHAT, JSON.stringify(newReply));
         }
-    }
 
-    /* ACTIVE BROADCAST LISTENER POLLING SYSTEM */
-    function startRealtimePolling() {
-        // Runs every second to check if localStorage state was mutated from another action/window
-        setInterval(() => {
-            // Check Admin active session changes to immediately flip status badges
-            updateAdminOnlineStatus();
-
-            const storedMessages = JSON.parse(localStorage.getItem("bw_chat_messages")) || [];
-            if (storedMessages.length !== CHAT_MESSAGES.length) {
-                CHAT_MESSAGES = storedMessages;
-                renderChatMessagesForCustomer();
-                if (isAdminLoggedIn) {
-                    renderAdminChatHub();
-                }
-            }
-        }, 1000);
+        showToast(`Reply dispatched directly to @${activeAdminThreadUser}.`);
+        renderChatMessagesForCustomer();
     }
     </script> 
 </body> 

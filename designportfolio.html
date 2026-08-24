@@ -1,7 +1,7 @@
 <html lang="en"><head><script>window["__codeletBootstrap__"]=JSON.parse('{"A":"A","B":"20260814-05-a1b2e7b","C":{"Abril Fatface":"YACgEZbkUVE,0","Alfa Slab One":"YACgEYS9sJU,0","Anton":"YACgEcYqQ-A,0","Archivo":"YAHO2-t-jNE,0","Arial":"YAGyDvJ_4Ts,0","Bebas Neue":"YACgESME5ew,0","Bricolage Grotesque":"YAFyMcdwzpc,0","Canva Sans":"YAFLd8sKbwc,2","Caveat":"YALBs2ploWQ,0","Comic Sans MS":"YAHO2VMiyZo,0","Cormorant Garamond":"YAFdJhX-538,0","Courier New":"YAGzXiGs0_8,0","DM Sans":"YAD1aU3sLnI,0","DM Serif Display":"YAD1aYG82rc,0","Forum":"YACgEcnnqB4,0","Fraunces":"YAEul-FRQw4,0","Georgia":"YAGzXkO0pEM,0","Helvetica Neue":"YAFcf6CtJfI,0","Impact":"YAFcfnjI7Vk,0","Inter":"YAFdJvSyp_k,3","Iowan Old Style":"YAGNIFa8j9o,0","Jacques Francois":"YAHO2a5g66Q,0","JetBrains Mono":"YAFdJksXcAk,0","Libre Baskerville":"YACgEUFdPdA,0","Manrope":"YAHO2b2feC4,0","Merriweather":"YACgEXvHxxs,0","Montserrat":"YADLjI9qxTA,0","Nunito":"YACgEX8C5Gg,0","Oleo Script":"YACgEQQ14jI,0","Phantom Sans":"YAHO2E8Pb88,0","Playfair Display":"YACgEYmuCJE,0","Poppins":"YAFdJjbTu24,1","Press Start 2P":"YAFyGr-8pmQ,0","Quicksand":"YADWjpfPmdk,0","Raleway":"YACgEVg3xZg,0","Segoe UI":"YAHNdRD1Klw,0","Source Sans 3":"YAG4lO1Mj10,0","Spectral":"YAHO2rVUHIM,0","Times New Roman":"YAGzXW3gftg,0","Times":"YAGzXW3gftg,0","Ubuntu":"YACgERDU--Q,0","Work Sans":"YAGXhLOKv44,0","Yellowtail":"YACgEYG4kG4,0","ui-monospace":"YADlN8CFZ8Q,0","ui-sans-serif":"YACkoN-xg4g,0"}}');</script><script src="/_sdk/7949ff62d67710d5.telemetry_sdk.js" integrity="sha512-KIvXA82Di44YY/RH9/63A9MuTuavYgDFG8PfErJn7Wli4K0LAOk+coo/aPXk3+ZNL96nHh9VYD4PE+fLes+laQ=="></script>
   <meta charset="UTF-8">
-  <!-- FIX 1: Set a fixed viewport width so mobile forces desktop scaling -->
-  <meta name="viewport" content="width=1200, initial-scale=1.0">
+  <!-- Fixed viewport width to desktop standard (1280px) to force desktop sizing on mobile -->
+  <meta name="viewport" content="width=1280">
   <title>Brand Portfolio with Cyber Glitch Slider</title>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
@@ -10,7 +10,7 @@
     :root { --ink: #111111; --paper: #f4f0e8; --acid: #d8ff3e; --orange: #ff6b35; }
     html { scroll-behavior: smooth; box-sizing: border-box; }
     *, *:before, *:after { box-sizing: inherit; }
-    body { font-family: "DM Sans", sans-serif; background: var(--paper); color: var(--ink); overflow-x: auto; width: 1200px; max-width: none; }
+    body { font-family: "DM Sans", sans-serif; background: var(--paper); color: var(--ink); overflow-x: auto; width: 1280px; min-width: 1280px; }
     .display-face { font-family: "Fraunces", serif; }
     .noise { background-image: radial-gradient(rgba(17,17,17,.18) .65px, transparent .65px); background-size: 5px 5px; }
     .hero-grid { background-image: linear-gradient(rgba(255,255,255,.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.08) 1px, transparent 1px); background-size: 34px 34px; }
@@ -56,121 +56,115 @@
   <script src="/_sdk/eba18683f23e5798.resizing_sdk.js" type="text/javascript"></script>
 </head>
 <body data-template-id="__page-root" style="background: rgb(244, 240, 232);">
-  <!-- FIX 2: Forced desktop wrapper container -->
-  <div style="width: 1200px; margin: 0 auto;">
-    <header class="sticky top-0 z-50 border-b-2 border-black bg-[#f4f0e8]/95 backdrop-blur">
-     <nav aria-label="Primary navigation" class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-      <a href="#top" data-template-id="brand-name" class="canva-link font-bold tracking-tight text-lg" style="color: rgb(17, 17, 17); font-weight: 700;">BRANDWORKZ CO</a> 
-      <button id="menu-toggle" type="button" aria-label="Toggle navigation menu" aria-expanded="false" class="rounded-full border-2 border-black p-2 hidden" onclick="document.getElementById('nav-menu').classList.toggle('hidden'); document.getElementById('nav-menu').classList.toggle('flex');"> 
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5"><line x1="4" x2="20" y1="12" y2="12"></line><line x1="4" x2="20" y1="6" y2="6"></line><line x1="4" x2="20" y1="18" y2="18"></line></svg> 
-      </button>
-      <div id="nav-menu" class="static flex w-auto flex-row items-center border-0 bg-transparent p-0 gap-4 text-sm font-bold">
-       <a class="nav-link" href="#work" data-template-id="nav-work" style="color: rgb(17, 17, 17); font-weight: 700; font-size: 16px;">Work</a> 
-       <a class="nav-link" href="#services" data-template-id="nav-services" style="color: rgb(17, 17, 17); font-weight: 700; font-size: 16px;">Services</a> 
-       <a class="nav-link" href="#tools" data-template-id="nav-tools" style="color: rgb(17, 17, 17); font-weight: 700; font-size: 16px;">Tools</a> 
-       <a class="rounded-full bg-black px-4 py-2 text-white transition hover:bg-[#ff6b35] text-center" href="#contact" data-template-id="nav-contact" style="background: rgb(17, 17, 17); color: rgb(255, 255, 255); font-weight: 700; font-size: 16px;">Let’s talk</a>
-      </div>
-     </nav>
-    </header>
+  <header class="sticky top-0 z-50 border-b-2 border-black bg-[#f4f0e8]/95 backdrop-blur">
+   <nav aria-label="Primary navigation" class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+    <a href="#top" data-template-id="brand-name" class="canva-link font-bold tracking-tight text-lg" style="color: rgb(17, 17, 17); font-weight: 700;">BRANDWORKZ CO</a> 
+    <div id="nav-menu" class="flex items-center gap-6 text-sm font-bold">
+     <a class="nav-link" href="#work" data-template-id="nav-work" style="color: rgb(17, 17, 17); font-weight: 700; font-size: 16px;">Work</a> 
+     <a class="nav-link" href="#services" data-template-id="nav-services" style="color: rgb(17, 17, 17); font-weight: 700; font-size: 16px;">Services</a> 
+     <a class="nav-link" href="#tools" data-template-id="nav-tools" style="color: rgb(17, 17, 17); font-weight: 700; font-size: 16px;">Tools</a> 
+     <a class="rounded-full bg-black px-4 py-2 text-white transition hover:bg-[#ff6b35] text-center" href="#contact" data-template-id="nav-contact" style="background: rgb(17, 17, 17); color: rgb(255, 255, 255); font-weight: 700; font-size: 16px;">Let’s talk</a>
+    </div>
+   </nav>
+  </header>
 
-    <main id="top" class="w-full">
-     <!-- CYBER GLITCH SLIDER SECTION -->
-     <section id="glitch-slider-section" class="relative w-full bg-[#09090b] text-white scanlines border-y-2 border-black overflow-hidden">
-         <div class="relative w-full min-h-[85vh] py-10 px-6 flex flex-col justify-between items-center">
-              <!-- Background Image Container -->
-              <div id="slide-bg" class="absolute inset-0 bg-cover bg-center transition-all duration-700 filter brightness-75 scale-105" style="background-image: url('file:///C:/Users/PC/Documents/Portfolio/funksasa.svg');"></div>
-              <div class="absolute inset-0 bg-gradient-to-t from-[#09090b] via-black/40 to-black/60"></div>
+  <main id="top" class="w-full">
+   <!-- CYBER GLITCH SLIDER SECTION -->
+   <section id="glitch-slider-section" class="relative w-full bg-[#09090b] text-white scanlines border-y-2 border-black overflow-hidden">
+        <div class="relative w-full min-h-[85vh] py-10 px-6 flex flex-col justify-between items-center">
+             <!-- Background Image Container -->
+             <div id="slide-bg" class="absolute inset-0 bg-cover bg-center transition-all duration-700 filter brightness-75 scale-105" style="background-image: url('file:///C:/Users/PC/Documents/Portfolio/funksasa.svg');"></div>
+             <div class="absolute inset-0 bg-gradient-to-t from-[#09090b] via-black/40 to-black/60"></div>
 
-              <!-- Content Box -->
-              <div class="relative z-10 max-w-4xl w-full mx-auto my-auto py-6">
-                 <div id="slide-content-box" class="bg-black/60 backdrop-blur-xl border border-white/10 p-8 rounded-lg relative overflow-hidden shadow-2xl">
+             <!-- Content Box -->
+             <div class="absolute bottom-6 left-0 z-20 w-[80px] mt-0 flex flex-col space-y-2 overflow-hidden">
+                <div class="relative z-10 w-full py-6">
+                 <div id="slide-content-box" class="bg-black/60 backdrop-blur-xl border border-white/10 p-2 rounded-lg relative overflow-hidden shadow-2xl">
                      <div class="absolute top-0 left-0 w-full h-1 bg-yellow-400 animate-pulse"></div>
                      
-                     <span id="slide-subtitle" class="text-yellow-400 text-sm tracking-widest font-semibold uppercase block mb-2">About</span>
-                     <h2 id="slide-title" class="text-5xl font-extrabold text-white mb-4 orbitron tracking-tight">Founder</h2>
-                     <p id="slide-desc" class="text-zinc-300 text-base mb-3 leading-relaxed">Get the dystopian vibes of a cyberfunk future in your WordPress projects with this exclusive Slider Revolution template.</p>
-                     <p class="text-zinc-300 text-base mb-5 leading-relaxed">I spent five years of my professional life helping clients find their visual identities and bring them to light in the best way possible.</p>    
+                     <span id="slide-subtitle" class="text-yellow-400 text-[10px] tracking-widest font-semibold uppercase block mb-2 truncate">About</span>
+                     <h2 id="slide-title" class="text-sm font-extrabold text-white mb-4 orbitron tracking-tight truncate">Founder</h2>
+                     <p id="slide-desc" class="text-zinc-300 text-xs mb-3 leading-relaxed">Get the dystopian vibes...</p>
                      
-                     <div class="flex flex-wrap items-center gap-4">
-                         <button id="action-btn" onclick="nextSlide()" class="bg-yellow-400 text-black px-8 py-3 font-bold orbitron text-sm tracking-wider uppercase hover:bg-white transition-all shadow-[0_0_20px_rgba(248,246,44,0.5)] cursor-pointer">Continue</button>
-                         <span id="slide-counter" class="text-zinc-500 font-mono text-sm">01 / 05</span>
+                     <div class="flex flex-col items-start gap-2">
+                         <button id="action-btn" onclick="nextSlide()" class="bg-yellow-400 text-black px-2 py-1 font-bold orbitron text-[10px] tracking-wider uppercase hover:bg-white transition-all cursor-pointer">Continue</button>
+                         <span id="slide-counter" class="text-zinc-500 font-mono text-[10px]">01 / 05</span>
                      </div>
                  </div>
-              </div>
+                </div>
+             </div>
 
-              <!-- Custom Navigation Tabs -->
-              <div class="absolute bottom-6 right-6 z-20 w-80 flex flex-col space-y-2">
-                 <div id="tab-container" class="flex flex-col space-y-2">
-                     <!-- Tabs dynamically populated -->
-                 </div>
-              </div>
-         </div>
-    </section>
+             <!-- Custom Navigation Tabs -->
+             <div class="absolute top-6 left-0 z-20 w-[80px] flex flex-col space-y-2">
+                <div id="tab-container" class="flex flex-col space-y-2"></div>
+             </div>
+        </div>
+   </section>
 
-    <section id="about" class="px-8 py-12 max-w-7xl mx-auto">
-     <div class="grid gap-8 grid-cols-12 items-center">
-      <div class="col-span-5 space-y-4">
+   <section id="about" class="px-8 py-12 max-w-7xl mx-auto">
+    <div class="grid gap-8 md:grid-cols-12 md:items-center">
+     <div class="md:col-span-5 space-y-4">
       <p data-template-id="about-eyebrow" class="canva-text text-xs font-bold uppercase tracking-[.2em] text-[#e34a1b]">About me</p>
       <h2 data-template-id="about-title" class="canva-text display-face font-bold leading-none tracking-[-.05em] text-3xl" style="color: rgb(17, 17, 17);">Design with a point of view.</h2>
-      <div class="relative w-fit max-w-full pt-4 pl-4">
+      <div class="relative w-fit max-w-full pt-4 pl-4 mx-0">
           <div class="absolute bottom-0 left-0 w-4/5 h-4/5 bg-amber-200/50 rounded-sm z-0 translate-y-4 -translate-x-4"></div>
           <div class="relative z-10 shadow-sm overflow-hidden rounded-sm w-72 h-96">
               <img src="C:\Users\PC\Downloads\Nur1.png" alt="Designer working on moodboard" class="w-full h-full object-cover object-center" onerror="this.onerror=null; this.src='https://placehold.co/400x500/c59d8e/ffffff?text=Designer+Bio';">
           </div>
       </div>
-      </div>
-      <div class="col-span-7 border-l-2 border-black pl-10 space-y-4">
+     </div>
+     <div class="md:col-span-7 md:border-l-2 md:border-black md:pl-10 space-y-4">
       <p data-template-id="about-copy" class="canva-text text-lg leading-relaxed text-stone-700">I build brands that feel like people: distinctive, expressive and easy to remember. My work brings strategy and personality together, turning big ideas into visual systems that can live everywhere.</p>
       <p data-template-id="about-copy-2" class="canva-text text-lg leading-relaxed text-stone-700">I spent five years of my professional life helping clients find their visual identities and bring them to light in the best way possible.</p>
       <p data-template-id="about-copy-3" class="canva-text text-lg leading-relaxed text-stone-700">I have worked with small and large businesses including BH Bikers Sdn. Bhd., Lembaga Perindustrian Nanas Malaysia, Public Gold, SIGPA, MOOMAA, Cuckoo, Proton, AIA Takaful, small Pulau Perhentian resort, Jabatan Tanah dan Survei (JTS) Sarawak, Dermal Seep Sdn. Bhd., Shafaz Shajarah Sdn. Bhd., and more.</p>
       <p data-template-id="about-note" class="canva-text text-sm font-bold uppercase tracking-[.12em] text-[#e34a1b]">Strategy · Character · Craft</p>
-      </div>
      </div>
-    </section>
+    </div>
+   </section>
 
-    <section aria-label="Creative disciplines" class="overflow-hidden border-y-2 border-black bg-[#d8ff3e] py-3">
-     <div class="marquee-track flex gap-10 whitespace-nowrap text-sm font-bold uppercase tracking-[.16em]">
-      <span>Mascots • Identity Systems • Logos • Visual Worlds • </span><span>Mascots • Identity Systems • Logos • Visual Worlds • </span>
-     </div>
-    </section>
+   <section aria-label="Creative disciplines" class="overflow-hidden border-y-2 border-black bg-[#d8ff3e] py-3">
+    <div class="marquee-track flex gap-10 whitespace-nowrap text-sm font-bold uppercase tracking-[.16em]">
+     <span>Mascots • Identity Systems • Logos • Visual Worlds • </span><span>Mascots • Identity Systems • Logos • Visual Worlds • </span>
+    </div>
+   </section>
 
-    <section id="work" class="mx-auto max-w-7xl px-8 py-12">
-     <div class="mb-10 flex flex-row items-end justify-between">
-      <div>
+   <section id="work" class="mx-auto max-w-7xl px-8 py-12">
+    <div class="mb-10 flex items-end justify-between">
+     <div>
       <p data-template-id="logo-eyebrow" class="canva-text text-xs font-bold uppercase tracking-[.2em] text-[#e34a1b]">01 — Selected logo work</p>
       <h2 data-template-id="logo-title" class="canva-text display-face mt-2 font-bold tracking-[-.04em] text-3xl" style="color: rgb(17, 17, 17);">A logo should have a pulse.</h2>
+     </div>
+     <p data-template-id="logo-description" class="canva-text max-w-md text-base leading-relaxed text-stone-700">Distinctive identities built to connect at a glance and keep working everywhere.</p>
+    </div>
+    <div class="grid gap-5 md:grid-cols-12">
+     <article data-template-id="logo-card-one" class="canva-card group relative min-h-[410px] overflow-hidden bg-[#ff6b35] md:col-span-7">
+      <img data-template-id="logo-image-one" loading="lazy" class="canva-image h-full w-full object-cover mix-blend-multiply opacity-80" src="C:\Users\PC\Documents\Portfolio\cookizzacostume.jpg" alt="A lively mascot character">
+      <div class="absolute inset-x-0 bottom-0 bg-[#ff6b35] p-6 text-black">
+       <p class="text-xs font-bold uppercase tracking-[.18em]">Mascot character</p>
+       <h3 class="display-face mt-1 font-bold text-xl">Friendly. Fearless. Familiar.</h3>
       </div>
-      <p data-template-id="logo-description" class="canva-text max-w-md text-base leading-relaxed text-stone-700">Distinctive identities built to connect at a glance and keep working everywhere.</p>
-     </div>
-     <div class="grid gap-5 grid-cols-12">
-      <article data-template-id="logo-card-one" class="canva-card group relative min-h-[410px] overflow-hidden bg-[#ff6b35] col-span-7">
-       <img data-template-id="logo-image-one" loading="lazy" class="canva-image h-full w-full object-cover mix-blend-multiply opacity-80" src="C:\Users\PC\Documents\Portfolio\cookizzacostume.jpg" alt="A lively mascot character in Ajolotes Lerma costume, waving in a bright indoor setting.">
-       <div class="absolute inset-x-0 bottom-0 bg-[#ff6b35] p-6 text-black">
-        <p class="text-xs font-bold uppercase tracking-[.18em]">Mascot character</p>
-        <h3 class="display-face mt-1 font-bold text-xl">Friendly. Fearless. Familiar.</h3>
-       </div>
-      </article>
-      <article data-template-id="logo-card-two" class="canva-card relative min-h-[410px] overflow-hidden bg-[#111111] text-white col-span-5">
-       <img data-template-id="logo-image-two" loading="lazy" class="canva-image h-full w-full object-cover opacity-75" src="C:\Users\PC\Documents\Portfolio\kns_team.jpg" alt="Vibrant tiger logo on a white pinstriped baseball jersey, emphasizing team spirit.">
-       <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black to-transparent p-6 pt-20">
-        <p class="text-xs font-bold uppercase tracking-[.18em] text-[#d8ff3e]">Team identity</p>
-        <h3 class="display-face mt-1 font-bold text-xl text-white">Built for the roar.</h3>
-       </div>
-      </article>
-      <article data-template-id="logo-card-three" class="canva-card relative overflow-hidden border-2 border-black bg-white p-6 col-span-12 grid grid-cols-2 items-center gap-10">
-       <img data-template-id="logo-image-three" loading="lazy" class="canva-image h-80 w-full object-cover" src="C:\Users\PC\Documents\rhs logo\Free_Business_Card_Mockup_3.jpg" alt="Overhead shot of business cards and stationery on a dark desk with modern accessories.">
-       <div>
-        <p class="text-xs font-bold uppercase tracking-[.18em] text-[#e34a1b]">Brand foundations</p>
-        <h3 class="display-face mt-2 font-bold tracking-[-.04em] text-xl" style="color: rgb(17, 17, 17);">Marks made to move.</h3>
-        <p class="mt-4 max-w-md leading-relaxed text-stone-700 text-base">Every identity begins with a strategic core, then develops into an unmistakable visual signature.</p>
-       </div>
-      </article>
-     </div>
-    </section>
+     </article>
+     <article data-template-id="logo-card-two" class="canva-card relative min-h-[410px] overflow-hidden bg-[#111111] text-white md:col-span-5">
+      <img data-template-id="logo-image-two" loading="lazy" class="canva-image h-full w-full object-cover opacity-75" src="C:\Users\PC\Documents\Portfolio\kns_team.jpg" alt="Team identity">
+      <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black to-transparent p-6 pt-20">
+       <p class="text-xs font-bold uppercase tracking-[.18em] text-[#d8ff3e]">Team identity</p>
+       <h3 class="display-face mt-1 font-bold text-xl text-white">Built for the roar.</h3>
+      </div>
+     </article>
+     <article data-template-id="logo-card-three" class="canva-card relative overflow-hidden border-2 border-black bg-white p-6 md:col-span-12 md:grid md:grid-cols-2 md:items-center md:gap-10">
+      <img data-template-id="logo-image-three" loading="lazy" class="canva-image h-80 w-full object-cover" src="C:\Users\PC\Documents\rhs logo\Free_Business_Card_Mockup_3.jpg" alt="Business cards">
+      <div class="py-0">
+       <p class="text-xs font-bold uppercase tracking-[.18em] text-[#e34a1b]">Brand foundations</p>
+       <h3 class="display-face mt-2 font-bold tracking-[-.04em] text-xl" style="color: rgb(17, 17, 17);">Marks made to move.</h3>
+       <p class="mt-4 max-w-md leading-relaxed text-stone-700 text-base">Every identity begins with a strategic core, then develops into an unmistakable visual signature.</p>
+      </div>
+     </article>
+    </div>
+   </section>
 
-    <section class="border-y-2 border-black bg-[#1e3d35] text-white">
-     <div class="mx-auto grid max-w-7xl gap-10 px-8 py-12 grid-cols-2">
-      <div>
+   <section class="border-y-2 border-black bg-[#1e3d35] text-white">
+    <div class="mx-auto grid max-w-7xl gap-10 px-8 py-12 md:grid-cols-2">
+     <div>
       <p class="text-xs font-bold uppercase tracking-[.2em] text-[#d8ff3e]">02 — Visual identity</p>
       <h2 class="display-face mt-3 font-bold leading-none tracking-[-.05em] text-3xl text-white">A system, not just a symbol.</h2>
       <p class="mt-6 max-w-lg leading-relaxed text-stone-200 text-base">The best brands are recognisable before you read their name. I build flexible visual systems with colour, type, graphic assets and rules that let every touchpoint feel unmistakably yours.</p>
@@ -179,199 +173,163 @@
        <span class="rounded-full border border-white px-3 py-1 text-sm font-semibold text-white">Typography</span> 
        <span class="rounded-full border border-white px-3 py-1 text-sm font-semibold text-white">Brand toolkits</span>
       </div>
-      </div>
-      <div class="grid gap-5 grid-cols-2">
-       <img loading="lazy" class="h-72 w-full border-2 border-white object-cover" src="https://images.pexels.com/photos/37663437/pexels-photo-37663437.jpeg" alt="Workspace palette"> 
-       <img loading="lazy" class="h-72 w-full border-2 border-[#d8ff3e] object-cover mt-10" src="https://images.pexels.com/photos/5706009/pexels-photo-5706009.jpeg" alt="Minimalist stationery">
-      </div>
      </div>
-    </section>
+     <div class="grid gap-5 sm:grid-cols-2">
+      <img loading="lazy" class="h-72 w-full border-2 border-white object-cover" src="https://images.pexels.com/photos/37663437/pexels-photo-37663437.jpeg" alt="Workspace palette"> 
+      <img loading="lazy" class="h-72 w-full border-2 border-[#d8ff3e] object-cover mt-10" src="https://images.pexels.com/photos/5706009/pexels-photo-5706009.jpeg" alt="Minimalist stationery">
+     </div>
+    </div>
+   </section>
 
-    <section class="mx-auto max-w-7xl px-8 py-12">
-     <div class="grid gap-8 grid-cols-12 items-center">
-      <div class="col-span-5">
+   <section class="mx-auto max-w-7xl px-8 py-12">
+    <div class="grid gap-8 md:grid-cols-12 md:items-center">
+     <div class="md:col-span-5">
       <p class="text-xs font-bold uppercase tracking-[.2em] text-[#e34a1b]">03 — Mascot brand worlds</p>
       <h2 class="display-face mt-3 font-bold leading-none tracking-[-.05em] text-3xl" style="color: rgb(17, 17, 17);">Give your brand a face people remember.</h2>
       <p class="mt-6 leading-relaxed text-stone-700 text-base">Mascots create an emotional shortcut: they turn values into someone audiences can cheer for, trust, and share. I shape characters that are expressive, scalable and ready for every application.</p>
-      </div>
-      <div class="grid gap-5 grid-cols-2 col-span-7">
-       <img loading="lazy" class="h-72 w-full border-2 border-black object-cover" src="https://images.pexels.com/photos/36809724/pexels-photo-36809724.jpeg" alt="Mascots stage">
-       <div class="flex min-h-72 flex-col justify-between bg-[#d8ff3e] p-6 text-black border-2 border-black">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-8 w-8"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"></path></svg>
-        <div>
-         <p class="text-xs font-bold uppercase tracking-[.2em]">From concept to campaign</p>
-         <p class="display-face mt-2 font-bold leading-none text-2xl">Character is strategy.</p>
-        </div>
-       </div>
-       <img loading="lazy" class="h-72 w-full border-2 border-black object-cover col-span-2" src="https://images.pexels.com/photos/9456721/pexels-photo-9456721.jpeg" alt="Packaging">
-      </div>
      </div>
-    </section>
+     <div class="grid gap-5 sm:grid-cols-2 md:col-span-7">
+      <img loading="lazy" class="h-72 w-full border-2 border-black object-cover" src="https://images.pexels.com/photos/36809724/pexels-photo-36809724.jpeg" alt="Mascots stage">
+      <div class="flex min-h-72 flex-col justify-between bg-[#d8ff3e] p-6 text-black border-2 border-black">
+       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-8 w-8"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"></path></svg>
+       <div>
+        <p class="text-xs font-bold uppercase tracking-[.2em]">From concept to campaign</p>
+        <p class="display-face mt-2 font-bold leading-none text-2xl">Character is strategy.</p>
+       </div>
+      </div>
+      <img loading="lazy" class="h-72 w-full border-2 border-black object-cover col-span-2" src="https://images.pexels.com/photos/9456721/pexels-photo-9456721.jpeg" alt="Packaging">
+     </div>
+    </div>
+   </section>
 
-    <section class="bg-[#111111] px-8 py-12 text-white">
-     <div class="mx-auto max-w-7xl">
-      <div class="mb-10">
+   <section class="bg-[#111111] px-8 py-12 text-white">
+    <div class="mx-auto max-w-7xl">
+     <div class="mb-10">
       <p class="text-xs font-bold uppercase tracking-[.2em] text-[#d8ff3e]">04 — Beyond the logo</p>
       <h2 class="display-face mt-3 font-bold tracking-[-.05em] text-3xl text-white">Design built for the real world.</h2>
-      </div>
-      <div class="grid gap-4 grid-cols-4">
-       <article class="reveal-card relative h-72 overflow-hidden border border-stone-700">
-         <a href="file:///C:/Users/PC/Documents/Portfolio/logofolio.html"><img loading="lazy" class="h-full w-full object-cover" src="https://images.pexels.com/photos/28905721/pexels-photo-28905721.jpeg" alt="Logo"></a>
-         <div class="card-caption absolute inset-x-0 bottom-0 bg-[#ff6b35] p-5 text-black"><p class="font-bold text-lg">Logo</p></div>
-       </article>
-       <article class="reveal-card relative h-72 overflow-hidden border border-stone-700">
-         <a href="file:///C:/Users/PC/Documents/Portfolio/mascotfolio.html"><img loading="lazy" class="h-full w-full object-cover" src="https://images.pexels.com/photos/18094459/pexels-photo-18094459.jpeg" alt="Mascot Logo"></a>
-         <div class="card-caption absolute inset-x-0 bottom-0 bg-[#d8ff3e] p-5 text-black"><p class="font-bold text-lg">Mascot Logo</p></div>
-       </article>
-       <article class="reveal-card relative h-72 overflow-hidden border border-stone-700">
-         <a href="file:///C:/Users/PC/Documents/Portfolio/posterfolio.html"><img loading="lazy" class="h-full w-full object-cover" src="https://images.pexels.com/photos/3964737/pexels-photo-3964737.jpeg" alt="Posters"></a>
-         <div class="card-caption absolute inset-x-0 bottom-0 bg-[#ff6b35] p-5 text-black"><p class="font-bold text-lg">Posters</p></div>
-       </article>
-       <article class="reveal-card relative h-72 overflow-hidden border border-stone-700">
-         <img loading="lazy" class="h-full w-full object-cover" src="https://images.pexels.com/photos/6114589/pexels-photo-6114589.jpeg" alt="Flyers">
-         <div class="card-caption absolute inset-x-0 bottom-0 bg-[#d8ff3e] p-5 text-black"><p class="font-bold text-lg">Flyers</p></div>
-       </article>
-       <article class="reveal-card relative h-72 overflow-hidden border border-stone-700">
-         <img loading="lazy" class="h-full w-full object-cover" src="https://images.pexels.com/photos/7648514/pexels-photo-7648514.jpeg" alt="Brochures">
-         <div class="card-caption absolute inset-x-0 bottom-0 bg-white p-5 text-black"><p class="font-bold text-lg">Brochures</p></div>
-       </article>
-       <article class="reveal-card relative h-72 overflow-hidden border border-stone-700">
-         <img loading="lazy" class="h-full w-full object-cover" src="https://images.pexels.com/photos/9594428/pexels-photo-9594428.jpeg" alt="Packaging">
-         <div class="card-caption absolute inset-x-0 bottom-0 bg-[#ff6b35] p-5 text-black"><p class="font-bold text-lg">Packaging & labels</p></div>
-       </article>
-       <article class="reveal-card relative h-72 overflow-hidden border border-stone-700">
-         <img loading="lazy" class="h-full w-full object-cover" src="https://images.pexels.com/photos/18833783/pexels-photo-18833783.jpeg" alt="Banners">
-         <div class="card-caption absolute inset-x-0 bottom-0 bg-[#d8ff3e] p-5 text-black"><p class="font-bold text-lg">Banners</p></div>
-       </article>
-       <article class="reveal-card relative h-72 overflow-hidden border border-stone-700">
-         <img loading="lazy" class="h-full w-full object-cover" src="https://images.pexels.com/photos/12955615/pexels-photo-12955615.jpeg" alt="Menus">
-         <div class="card-caption absolute inset-x-0 bottom-0 bg-white p-5 text-black"><p class="font-bold text-lg">Menus</p></div>
-       </article>
-       <article class="reveal-card relative h-72 overflow-hidden border border-stone-700 col-span-2">
-         <img loading="lazy" class="h-full w-full object-cover" src="https://images.pexels.com/photos/15258903/pexels-photo-15258903.png" alt="Shirts">
-         <div class="card-caption absolute inset-x-0 bottom-0 bg-[#ff6b35] p-5 text-black"><p class="font-bold text-lg">Shirts & merchandise</p></div>
-       </article>
-      </div>
      </div>
-    </section>
+     <div class="grid gap-4 sm:grid-cols-4">
+      <article class="reveal-card relative h-72 overflow-hidden border border-stone-700">
+        <a href="file:///C:/Users/PC/Documents/Portfolio/logofolio.html"><img loading="lazy" class="h-full w-full object-cover" src="https://images.pexels.com/photos/28905721/pexels-photo-28905721.jpeg" alt="Logo"></a>
+        <div class="card-caption absolute inset-x-0 bottom-0 bg-[#ff6b35] p-5 text-black"><p class="font-bold text-lg">Logo</p></div>
+      </article>
+      <article class="reveal-card relative h-72 overflow-hidden border border-stone-700">
+        <a href="file:///C:/Users/PC/Documents/Portfolio/mascotfolio.html"><img loading="lazy" class="h-full w-full object-cover" src="https://images.pexels.com/photos/18094459/pexels-photo-18094459.jpeg" alt="Mascot Logo"></a>
+        <div class="card-caption absolute inset-x-0 bottom-0 bg-[#d8ff3e] p-5 text-black"><p class="font-bold text-lg">Mascot Logo</p></div>
+      </article>
+      <article class="reveal-card relative h-72 overflow-hidden border border-stone-700">
+        <a href="file:///C:/Users/PC/Documents/Portfolio/posterfolio.html"><img loading="lazy" class="h-full w-full object-cover" src="https://images.pexels.com/photos/3964737/pexels-photo-3964737.jpeg" alt="Posters"></a>
+        <div class="card-caption absolute inset-x-0 bottom-0 bg-[#ff6b35] p-5 text-black"><p class="font-bold text-lg">Posters</p></div>
+      </article>
+      <article class="reveal-card relative h-72 overflow-hidden border border-stone-700">
+        <img loading="lazy" class="h-full w-full object-cover" src="https://images.pexels.com/photos/6114589/pexels-photo-6114589.jpeg" alt="Flyers">
+        <div class="card-caption absolute inset-x-0 bottom-0 bg-[#d8ff3e] p-5 text-black"><p class="font-bold text-lg">Flyers</p></div>
+      </article>
+      <article class="reveal-card relative h-72 overflow-hidden border border-stone-700">
+        <img loading="lazy" class="h-full w-full object-cover" src="https://images.pexels.com/photos/7648514/pexels-photo-7648514.jpeg" alt="Brochures">
+        <div class="card-caption absolute inset-x-0 bottom-0 bg-white p-5 text-black"><p class="font-bold text-lg">Brochures</p></div>
+      </article>
+      <article class="reveal-card relative h-72 overflow-hidden border border-stone-700">
+        <img loading="lazy" class="h-full w-full object-cover" src="https://images.pexels.com/photos/9594428/pexels-photo-9594428.jpeg" alt="Packaging">
+        <div class="card-caption absolute inset-x-0 bottom-0 bg-[#ff6b35] p-5 text-black"><p class="font-bold text-lg">Packaging &amp; labels</p></div>
+      </article>
+      <article class="reveal-card relative h-72 overflow-hidden border border-stone-700">
+        <img loading="lazy" class="h-full w-full object-cover" src="https://images.pexels.com/photos/18833783/pexels-photo-18833783.jpeg" alt="Banners">
+        <div class="card-caption absolute inset-x-0 bottom-0 bg-[#d8ff3e] p-5 text-black"><p class="font-bold text-lg">Banners</p></div>
+      </article>
+      <article class="reveal-card relative h-72 overflow-hidden border border-stone-700">
+        <img loading="lazy" class="h-full w-full object-cover" src="https://images.pexels.com/photos/12955615/pexels-photo-12955615.jpeg" alt="Menus">
+        <div class="card-caption absolute inset-x-0 bottom-0 bg-white p-5 text-black"><p class="font-bold text-lg">Menus</p></div>
+      </article>
+      <article class="reveal-card relative h-72 overflow-hidden border border-stone-700 col-span-2">
+        <img loading="lazy" class="h-full w-full object-cover" src="https://images.pexels.com/photos/15258903/pexels-photo-15258903.png" alt="Shirts">
+        <div class="card-caption absolute inset-x-0 bottom-0 bg-[#ff6b35] p-5 text-black"><p class="font-bold text-lg">Shirts &amp; merchandise</p></div>
+      </article>
+     </div>
+    </div>
+   </section>
 
-    <section id="services" class="mx-auto max-w-7xl px-8 py-12">
-     <p class="text-xs font-bold uppercase tracking-[.2em] text-[#e34a1b]">05 — Ways to work together</p>
-     <h2 class="display-face mt-3 font-bold tracking-[-.05em] text-3xl" style="color: rgb(17, 17, 17);">Useful creativity, with a little bite.</h2>
-     <div class="mt-8 grid gap-4 grid-cols-2">
+   <section id="services" class="mx-auto max-w-7xl px-8 py-12">
+    <p class="text-xs font-bold uppercase tracking-[.2em] text-[#e34a1b]">05 — Ways to work together</p>
+    <h2 class="display-face mt-3 font-bold tracking-[-.05em] text-3xl" style="color: rgb(17, 17, 17);">Useful creativity, with a little bite.</h2>
+    <div class="mt-8 grid gap-4 md:grid-cols-2">
+     <article class="border-2 border-black bg-white p-6">
+      <span class="text-sm font-bold text-[#e34a1b]">01</span>
+      <h3 class="mt-6 font-bold text-2xl" style="color: rgb(17, 17, 17);">Mascot Logo Design</h3>
+      <p class="mt-2 leading-relaxed text-stone-700 text-base">Original characters and logo marks designed to make your business instantly recognisable.</p>
+     </article>
+     <article class="border-2 border-black bg-white p-6">
+      <span class="text-sm font-bold text-[#e34a1b]">02</span>
+      <h3 class="mt-6 font-bold text-2xl" style="color: rgb(17, 17, 17);">Identity Systems</h3>
+      <p class="mt-2 leading-relaxed text-stone-700 text-base">Clear visual foundations, brand guidelines and expressive assets for a consistent presence.</p>
+     </article>
+     <article class="border-2 border-black bg-white p-6">
+      <span class="text-sm font-bold text-[#e34a1b]">03</span>
+      <h3 class="mt-6 font-bold text-2xl" style="color: rgb(17, 17, 17);">Campaign Design</h3>
+      <p class="mt-2 leading-relaxed text-stone-700 text-base">Poster, print, packaging and social assets that take your new identity into the wild.</p>
+     </article>
+     <article class="border-2 border-black bg-[#d8ff3e] p-6">
+      <span class="text-sm font-bold text-black">04</span>
+      <h3 class="mt-6 font-bold text-2xl text-black">Creative Direction</h3>
+      <p class="mt-2 leading-relaxed text-black text-base">A sharp visual point of view for teams with a story worth telling.</p>
+     </article>
+    </div>
+   </section>
+
+   <section id="tools" class="border-y-2 border-black bg-[#ff6b35] px-8 py-12">
+    <div class="mx-auto max-w-7xl">
+     <p class="text-xs font-bold uppercase tracking-[.2em] text-black">06 — Creative toolkit</p>
+     <h2 class="display-face mt-2 font-bold tracking-[-.05em] text-3xl text-black">Tools I use to make the magic.</h2>
+     <div class="mt-6 flex flex-wrap gap-3">
+      <span class="rounded-full border-2 border-black px-4 py-2 font-bold text-sm bg-[#ff6b35] text-black">Adobe Illustrator</span>
+      <span class="rounded-full border-2 border-black px-4 py-2 font-bold text-sm bg-[#ff6b35] text-black">Photoshop</span>
+      <span class="rounded-full border-2 border-black px-4 py-2 font-bold text-sm bg-[#ff6b35] text-black">Github</span>
+      <span class="rounded-full border-2 border-black px-4 py-2 font-bold text-sm bg-[#ff6b35] text-black">Pixellab</span>
+      <span class="rounded-full border-2 border-black px-4 py-2 font-bold text-sm bg-[#ff6b35] text-black">Microsoft Word</span>
+      <span class="rounded-full border-2 border-black px-4 py-2 font-bold text-sm bg-[#ff6b35] text-black">Microsoft Excel</span>
+     </div>
+    </div>
+   </section>
+
+   <section id="testimonials" class="border-y-2 border-black bg-[#f4f0e8] px-8 py-12">
+    <div class="mx-auto max-w-7xl">
+     <div class="mb-10 max-w-2xl">
+      <p class="text-xs font-bold uppercase tracking-[.2em] text-[#e34a1b]">What clients say</p>
+      <h2 class="display-face mt-3 font-bold leading-none tracking-[-.05em] text-3xl" style="color: rgb(17, 17, 17);">Good work leaves a mark.</h2>
+     </div>
+     <div class="grid gap-5 md:grid-cols-3">
       <article class="border-2 border-black bg-white p-6">
-       <span class="text-sm font-bold text-[#e34a1b]">01</span>
-       <h3 class="mt-6 font-bold text-2xl" style="color: rgb(17, 17, 17);">Mascot Logo Design</h3>
-       <p class="mt-2 leading-relaxed text-stone-700 text-base">Original characters and logo marks designed to make your business instantly recognisable.</p>
-      </article>
-      <article class="border-2 border-black bg-white p-6">
-       <span class="text-sm font-bold text-[#e34a1b]">02</span>
-       <h3 class="mt-6 font-bold text-2xl" style="color: rgb(17, 17, 17);">Identity Systems</h3>
-       <p class="mt-2 leading-relaxed text-stone-700 text-base">Clear visual foundations, brand guidelines and expressive assets for a consistent presence.</p>
-      </article>
-      <article class="border-2 border-black bg-white p-6">
-       <span class="text-sm font-bold text-[#e34a1b]">03</span>
-       <h3 class="mt-6 font-bold text-2xl" style="color: rgb(17, 17, 17);">Campaign Design</h3>
-       <p class="mt-2 leading-relaxed text-stone-700 text-base">Poster, print, packaging and social assets that take your new identity into the wild.</p>
+       <p class="text-lg leading-relaxed text-stone-700">The new identity finally feels as bold and clear as the business behind it.</p>
+       <p class="mt-6 text-sm font-bold uppercase tracking-[.12em] text-[#e34a1b]">— Maya, founder</p>
       </article>
       <article class="border-2 border-black bg-[#d8ff3e] p-6">
-       <span class="text-sm font-bold text-black">04</span>
-       <h3 class="mt-6 font-bold text-2xl text-black">Creative Direction</h3>
-       <p class="mt-2 leading-relaxed text-black text-base">A sharp visual point of view for teams with a story worth telling.</p>
+       <p class="text-lg leading-relaxed text-stone-700">A thoughtful creative partner who turned a loose idea into a brand people instantly understood.</p>
+       <p class="mt-6 text-sm font-bold uppercase tracking-[.12em] text-black">— Alex, creative lead</p>
+      </article>
+      <article class="border-2 border-black bg-[#ff6b35] p-6">
+       <p class="text-lg leading-relaxed text-stone-700">The mascot gave our team a personality — and our audience something to rally around.</p>
+       <p class="mt-6 text-sm font-bold uppercase tracking-[.12em] text-black">— Jordan, brand director</p>
       </article>
      </div>
-    </section>
+    </div>
+   </section>
 
-    <section id="tools" class="border-y-2 border-black bg-[#ff6b35] px-8 py-12">
-     <div class="mx-auto max-w-7xl">
-      <p class="text-xs font-bold uppercase tracking-[.2em] text-black">06 — Creative toolkit</p>
-      <h2 class="display-face mt-2 font-bold tracking-[-.05em] text-3xl text-black">Tools I use to make the magic.</h2>
-      <div class="mt-6 flex flex-wrap gap-3">
-       <span class="rounded-full border-2 border-black px-4 py-2 font-bold text-sm bg-[#ff6b35] text-black">Adobe Illustrator</span>
-       <span class="rounded-full border-2 border-black px-4 py-2 font-bold text-sm bg-[#ff6b35] text-black">Photoshop</span>
-       <span class="rounded-full border-2 border-black px-4 py-2 font-bold text-sm bg-[#ff6b35] text-black">Github</span>
-       <span class="rounded-full border-2 border-black px-4 py-2 font-bold text-sm bg-[#ff6b35] text-black">Pixellab</span>
-       <span class="rounded-full border-2 border-black px-4 py-2 font-bold text-sm bg-[#ff6b35] text-black">Microsoft Word</span>
-       <span class="rounded-full border-2 border-black px-4 py-2 font-bold text-sm bg-[#ff6b35] text-black">Microsoft Excel</span>
-      </div>
-     </div>
-    </section>
-
-    <section id="testimonials" class="border-y-2 border-black bg-[#f4f0e8] px-8 py-12">
-     <div class="mx-auto max-w-7xl">
-      <div class="mb-10 max-w-2xl">
-       <p class="text-xs font-bold uppercase tracking-[.2em] text-[#e34a1b]">What clients say</p>
-       <h2 class="display-face mt-3 font-bold leading-none tracking-[-.05em] text-3xl" style="color: rgb(17, 17, 17);">Good work leaves a mark.</h2>
-      </div>
-      <div class="grid gap-5 grid-cols-3">
-       <article class="border-2 border-black bg-white p-6">
-        <p class="text-lg leading-relaxed text-stone-700">The new identity finally feels as bold and clear as the business behind it.</p>
-        <p class="mt-6 text-sm font-bold uppercase tracking-[.12em] text-[#e34a1b]">— Maya, founder</p>
-       </article>
-       <article class="border-2 border-black bg-[#d8ff3e] p-6">
-        <p class="text-lg leading-relaxed text-stone-700">A thoughtful creative partner who turned a loose idea into a brand people instantly understood.</p>
-        <p class="mt-6 text-sm font-bold uppercase tracking-[.12em] text-black">— Alex, creative lead</p>
-       </article>
-       <article class="border-2 border-black bg-[#ff6b35] p-6">
-        <p class="text-lg leading-relaxed text-stone-700">The mascot gave our team a personality — and our audience something to rally around.</p>
-        <p class="mt-6 text-sm font-bold uppercase tracking-[.12em] text-black">— Jordan, brand director</p>
-       </article>
-      </div>
-     </div>
-    </section>
-
-    <section id="contact" class="bg-[#111111] px-8 py-16 text-white text-center">
-     <div class="mx-auto max-w-4xl">
-      <p class="text-xs font-bold uppercase tracking-[.2em] text-[#d8ff3e]">Get in touch</p>
-      <h2 class="display-face mt-3 font-bold text-3xl">Let's create something memorable.</h2>
-      <a href="mailto:contact@brandworkzco.com" class="mt-6 inline-block rounded-full bg-[#d8ff3e] px-8 py-4 font-bold text-black text-base transition hover:bg-white break-all">contact@brandworkzco.com</a>
-     </div>
-    </section>
-   </main>
-  </div>
+   <section id="contact" class="bg-[#111111] px-8 py-16 text-white text-center">
+    <div class="mx-auto max-w-4xl">
+     <p class="text-xs font-bold uppercase tracking-[.2em] text-[#d8ff3e]">Get in touch</p>
+     <h2 class="display-face mt-3 font-bold text-3xl">Let's create something memorable.</h2>
+     <a href="mailto:contact@brandworkzco.com" class="mt-6 inline-block rounded-full bg-[#d8ff3e] px-8 py-4 font-bold text-black text-base transition hover:bg-white break-all">contact@brandworkzco.com</a>
+    </div>
+   </section>
+  </main>
 
   <script>
       const slides = [
-          {
-              number: "01",
-              subtitle: "About",
-              title: "Founder",
-              desc: "Get the dystopian vibes of a cyberfunk future in your WordPress projects with this exclusive Slider Revolution template.",
-              bg: "file:///C:/Users/PC/Documents/Portfolio/funksasa.svg",
-              btnText: "Continue"
-          },
-          {
-              number: "02",
-              subtitle: "Meet The Future",
-              title: "Next Gen GFX",
-              desc: "This template uses our brand new advanced slide transition addon, guaranteed to blow your visitors' minds and draw maximum attention.",
-              bg: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?q=80&w=1600&auto=format&fit=crop",
-              btnText: "Explore"
-          },
-          {
-              number: "03",
-              subtitle: "Visual Builder",
-              title: "High Edge",
-              desc: "Slider Revolution is a unique visual content builder for WordPress that helps you keep an edge over your competitors effortlessly.",
-              bg: "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1600&auto=format&fit=crop",
-              btnText: "Discover"
-          },
-          {
-              number: "04",
-              subtitle: "Team of Teams",
-              title: "Pro Content",
-              desc: "Choose Slider Revolution as your trusted partner for building exclusive, pro-level content for your WordPress website.",
-              bg: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=1600&auto=format&fit=crop",
-              btnText: "Engage Now"
-          },
-          {
-              number: "05",
-              subtitle: "Be Prepared",
-              title: "Stay Updated",
-              desc: "Make sure to subscribe to the Slider Revolution newsletter to always receive the latest updates right to your mailbox!",
-              bg: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=1600&auto=format&fit=crop",
-              btnText: "Subscribe"
-          }
+          { number: "01", subtitle: "About", title: "Founder", desc: "Get the dystopian vibes...", bg: "file:///C:/Users/PC/Documents/Portfolio/funksasa.svg", btnText: "Continue" },
+          { number: "02", subtitle: "Future", title: "Next Gen", desc: "Advanced slide transition...", bg: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?q=80&w=1600&auto=format&fit=crop", btnText: "Explore" },
+          { number: "03", subtitle: "Builder", title: "High Edge", desc: "Unique visual content...", bg: "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1600&auto=format&fit=crop", btnText: "Discover" },
+          { number: "04", subtitle: "Content", title: "Pro Content", desc: "Trusted partner...", bg: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=1600&auto=format&fit=crop", btnText: "Engage" },
+          { number: "05", subtitle: "Updates", title: "Stay Updated", desc: "Make sure to subscribe...", bg: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=1600&auto=format&fit=crop", btnText: "Subscribe" }
       ];
 
       let currentSlide = 0;
@@ -406,13 +364,12 @@
           slides.forEach((s, idx) => {
               const isActive = idx === currentSlide;
               const tab = document.createElement('div');
-              tab.className = `cyber-clip p-3 cursor-pointer flex items-center justify-between border transition-all ${
+              tab.className = `cyber-clip p-2 cursor-pointer flex items-center justify-between border transition-all ${
                   isActive ? 'bg-yellow-400 text-black border-yellow-400 font-bold' : 'bg-black/60 text-white border-white/20 hover:border-yellow-400'
               }`;
               tab.innerHTML = `
-                  <div class="flex items-center space-x-3">
-                      <span class="font-mono text-xs opacity-75">${s.number}</span>
-                      <span class="text-sm orbitron">${s.title}</span>
+                  <div class="flex items-center space-x-1 overflow-hidden">
+                      <span class="font-mono text-[10px] opacity-75">${s.number}</span>
                   </div>
               `;
               tab.onclick = () => updateSlide(idx);
@@ -420,7 +377,6 @@
           });
       }
 
-      // Initialize
       renderTabs();
   </script>
 </body></html>

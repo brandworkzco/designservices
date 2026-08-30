@@ -108,7 +108,7 @@
                         Designed <span class="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-yellow-300 to-amber-500 drop-shadow">To Stand Out.</span> 
                     </h1> 
                     <p class="text-slate-300 text-sm sm:text-base max-w-xl mx-auto lg:mx-0 font-light leading-relaxed"> 
-                        Choose Cash (Direct Admin Approval) or Online Transfer (FPX with Formspree) with auto-filled Order IDs and profile tracking. 
+                        Choose Cash (Direct Admin Approval) or Online Transfer via Secure FPX with Formspree auto-fill and tracking. 
                     </p> 
                     <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 pt-2"> 
                         <button onclick="document.getElementById('storefront-section').scrollIntoView();" class="w-full sm:w-auto px-6 py-3 bg-yellow-400 text-slate-950 font-extrabold text-xs rounded-xl hover:bg-yellow-500 transition-all text-center uppercase tracking-wider"> 
@@ -128,8 +128,8 @@
                             <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 flex items-center gap-3"> 
                                 <div class="text-2xl">⚡</div> 
                                 <div class="flex-grow"> 
-                                    <h4 class="font-bold text-white text-xs">Cash & Online Transfer</h4> 
-                                    <p class="text-[10px] text-slate-400">Direct Admin approval or FPX Formspree</p> 
+                                    <h4 class="font-bold text-white text-xs">Cash & Online Transfer FPX</h4> 
+                                    <p class="text-[10px] text-slate-400">Direct Admin approval or Formspree FPX Form</p> 
                                 </div> 
                             </div> 
                         </div> 
@@ -167,7 +167,7 @@
                     <div class="bg-slate-950 p-5 rounded-2xl border border-slate-880 relative group hover:border-yellow-400/40 transition-all"> 
                         <div class="w-10 h-10 rounded-xl bg-yellow-400 text-slate-950 font-black flex items-center justify-center text-lg mx-auto mb-3">2</div> 
                         <h4 class="text-base font-bold text-white mb-1.5">Choose Payment Method</h4> 
-                        <p class="text-slate-400 text-xs leading-relaxed">Select 'Cash' for direct admin approval or 'Online Transfer' for FPX form submission with auto-filled Order ID.</p> 
+                        <p class="text-slate-400 text-xs leading-relaxed">Select 'Cash' for direct admin approval or 'Online Transfer (FPX)' for Formspree form submission with auto-filled Order ID.</p> 
                     </div> 
                     <div class="bg-slate-950 p-5 rounded-2xl border border-slate-880 relative group hover:border-yellow-400/40 transition-all"> 
                         <div class="w-10 h-10 rounded-xl bg-yellow-400 text-slate-950 font-black flex items-center justify-center text-lg mx-auto mb-3">3</div> 
@@ -497,7 +497,7 @@
                 <label class="block text-[10px] font-bold text-slate-300 uppercase tracking-wider">Select Payment Method</label> 
                 <select id="checkout-term-selector" class="w-full bg-slate-900 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs text-white outline-none transition-colors"> 
                     <option value="cash">Cash (Direct Admin Approval)</option> 
-                    <option value="online_transfer">Online Transfer (FPX Payment & Form)</option> 
+                    <option value="online_transfer">Online Transfer (FPX Secure Formspree)</option> 
                 </select> 
             </div> 
             <div class="space-y-1.5 pt-1"> 
@@ -510,12 +510,13 @@
         </div> 
     </div> 
  
+    <!-- FPX SECURE CHECKOUT FORM MODAL -->
     <div id="fpx-form-modal" class="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-md hidden flex items-center justify-center p-4"> 
         <div class="bg-slate-900 border border-yellow-400/40 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-6 animate-fadeIn"> 
             <div class="flex items-center justify-between border-b border-slate-800 pb-3"> 
                 <div class="flex items-center space-x-2"> 
                     <span class="text-yellow-400 font-extrabold text-base bg-slate-950 px-2.5 py-1.5 rounded border border-yellow-400/30">FPX</span> 
-                    <span class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Online Transfer Verification Form</span> 
+                    <span class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Secure Online Transfer Checkout</span> 
                 </div> 
                 <button onclick="closeFpxFormModal()" class="text-slate-400 hover:text-white text-xs font-bold uppercase tracking-wider bg-slate-950 border border-slate-800 px-3 py-1.5 rounded">Cancel</button> 
             </div> 
@@ -523,7 +524,7 @@
             <form action="https://formspree.io/f/xqpzgvzv" method="POST" onsubmit="handleFpxFormSubmit(event)" class="space-y-4"> 
                 <div class="bg-slate-950 p-4 rounded-xl border border-slate-850 flex items-center justify-between"> 
                     <div> 
-                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Order ID</span> 
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Auto-filled Order ID</span> 
                         <input type="text" id="fpx-form-order-id-display" name="order_id" readonly class="bg-transparent font-black text-sm text-yellow-400 outline-none w-full cursor-default"> 
                     </div> 
                     <div class="text-right"> 
@@ -533,22 +534,17 @@
                 </div> 
 
                 <div class="space-y-1"> 
-                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Email Address</label> 
-                    <input type="email" id="fpx-form-email" name="email" required placeholder="your.email@domain.com" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs sm:text-sm text-white outline-none transition-colors"> 
+                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Auto-filled Customer Email</label> 
+                    <input type="email" id="fpx-form-email" name="email" readonly class="w-full bg-slate-950 border border-slate-800 text-yellow-400 font-bold rounded-lg p-2.5 text-xs sm:text-sm outline-none cursor-default"> 
                 </div> 
 
                 <div class="space-y-1"> 
-                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Account Username (Auto-filled)</label> 
-                    <input type="text" id="fpx-form-username" name="username" readonly class="w-full bg-slate-950 border border-slate-800 text-yellow-400 font-bold rounded-lg p-2.5 text-xs sm:text-sm outline-none cursor-default"> 
-                </div> 
-
-                <div class="space-y-2"> 
-                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Select Bank for FPX Payment</label> 
-                    <div class="grid grid-cols-2 gap-2" id="bank-selectors-grid"></div> 
+                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Auto-filled Billing Address & Username</label> 
+                    <textarea id="fpx-form-billing" name="billing_address" readonly rows="2" class="w-full bg-slate-950 border border-slate-800 text-slate-300 rounded-lg p-2.5 text-xs outline-none cursor-default resize-none"></textarea> 
                 </div> 
 
                 <button type="submit" id="fpx-form-submit-btn" class="w-full py-4 bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-black rounded-xl transition-all text-xs uppercase tracking-widest flex items-center justify-center space-x-2 shadow-lg shadow-yellow-400/10"> 
-                    <span>Proceed to FPX Payment & Submit Form</span> 
+                    <span>Confirm to Buy (FPX)</span> 
                 </button> 
             </form> 
         </div> 
@@ -610,7 +606,6 @@
     </footer> 
  
     <script> 
-    // TODO: PASTE YOUR FIREBASE CONFIGURATION OBJECT HERE
     const firebaseConfig = {
         apiKey: "YOUR_FIREBASE_API_KEY",
         authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
@@ -620,7 +615,6 @@
         appId: "YOUR_APP_ID"
     };
 
-    // Initialize Firebase Compat
     if (!firebase.apps.length) {
         firebase.initializeApp(firebaseConfig);
     }
@@ -734,16 +728,8 @@
           } 
     ]; 
  
-    const BANK_OPTIONS = [ 
-        { id: "maybank", name: "Maybank2u" }, 
-        { id: "cimb", name: "CIMB Clicks" }, 
-        { id: "publicbank", name: "Public Bank" }, 
-        { id: "rhb", name: "RHB Now" } 
-    ]; 
- 
     let cart = []; 
     let currentUser = null; 
-    let selectedTermId = ""; 
     let isAdminLoggedIn = false; 
     let activeAdminThreadUser = null; 
     let currentOrderId = "BZ-" + Math.floor(100000 + Math.random() * 900000);
@@ -768,13 +754,9 @@
     let lastAdminPresenceTimestamp = 0;
     let CHAT_MESSAGES = [];
 
-    // Sync state with Firebase Auth changes
     auth.onAuthStateChanged(async (firebaseUser) => {
         if (firebaseUser) {
-            // Check if user is admin
             isAdminLoggedIn = firebaseUser.email === "admin@domain.com" || firebaseUser.email === "admin@brandworkzco.com";
-            
-            // Fetch additional profile info from Firestore
             const userDoc = await db.collection("users").doc(firebaseUser.uid).get();
             let profileData = {};
             if (userDoc.exists) {
@@ -1431,7 +1413,7 @@
             } else { 
                 area.innerHTML = ` 
                     <button onclick="triggerFpxPaymentForm()" class="w-full py-2.5 bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow-lg shadow-yellow-400/20"> 
-                        Proceed to FPX Form & Payment 
+                        Proceed to Secure FPX Form 
                     </button> 
                 `; 
             } 
@@ -1448,41 +1430,10 @@
     function triggerFpxPaymentForm() { 
         document.getElementById('fpx-form-bill-amount').innerText = `RM ${WORKFLOW_STATE.amount.toFixed(2)}`; 
         document.getElementById('fpx-form-order-id-display').value = WORKFLOW_STATE.orderId || "BZ-123456";
-        document.getElementById('fpx-form-username').value = currentUser ? currentUser.username : "";
         document.getElementById('fpx-form-email').value = currentUser ? currentUser.email : "";
+        document.getElementById('fpx-form-billing').value = `User: ${currentUser ? currentUser.username : "N/A"}\nAddress: ${currentUser ? currentUser.billing : "N/A"}`;
 
-        const bankGrid = document.getElementById('bank-selectors-grid'); 
-        bankGrid.innerHTML = ""; 
-        selectedTermId = ""; 
- 
-        BANK_OPTIONS.forEach(bank => { 
-            const btn = document.createElement('button'); 
-            btn.id = `bank-btn-${bank.id}`; 
-            btn.type = "button"; 
-            btn.onclick = () => selectBankOption(bank.id); 
-            btn.className = "p-3 bg-slate-950 border border-slate-800 rounded-xl hover:border-yellow-400/40 text-left transition-all duration-300 flex items-center space-x-2 w-full"; 
-            btn.innerHTML = ` 
-                <div class="w-3.5 h-3.5 rounded-full border border-slate-700 flex items-center justify-center p-0.5" id="bank-radio-${bank.id}"> 
-                    <div class="w-full h-full rounded-full bg-transparent" id="bank-radio-dot-${bank.id}"></div> 
-                </div> 
-                <span class="text-[11px] font-bold text-white">${bank.name}</span> 
-            `; 
-            bankGrid.appendChild(btn); 
-        }); 
- 
         document.getElementById('fpx-form-modal').classList.remove('hidden'); 
-    } 
- 
-    function selectBankOption(bankId) { 
-        selectedTermId = bankId; 
-        BANK_OPTIONS.forEach(b => { 
-            document.getElementById(`bank-radio-${b.id}`).className = "w-3.5 h-3.5 rounded-full border border-slate-700 flex items-center justify-center p-0.5"; 
-            document.getElementById(`bank-radio-dot-${b.id}`).className = "w-full h-full rounded-full bg-transparent"; 
-            document.getElementById(`bank-btn-${b.id}`).className = "p-3 bg-slate-950 border border-slate-800 rounded-xl text-left w-full"; 
-        }); 
-        document.getElementById(`bank-radio-${bankId}`).className = "w-3.5 h-3.5 rounded-full border border-yellow-400 flex items-center justify-center p-0.5"; 
-        document.getElementById(`bank-radio-dot-${bankId}`).className = "w-full h-full rounded-full bg-yellow-400"; 
-        document.getElementById(`bank-btn-${bankId}`).className = "p-3 bg-slate-950 border border-yellow-400/50 rounded-xl text-left w-full shadow shadow-yellow-400/5"; 
     } 
  
     function closeFpxFormModal() { 
@@ -1490,12 +1441,7 @@
     } 
  
     function handleFpxFormSubmit(event) { 
-        if(!selectedTermId) { 
-            event.preventDefault();
-            showToast("Please select your bank for online transfer authorization.", "error"); 
-            return; 
-        } 
-        showToast("Form successfully submitted to Formspree & redirecting to FPX payment...");
+        showToast("Form successfully submitted to Formspree & routed via FPX."); 
         closeFpxFormModal();
     } 
  

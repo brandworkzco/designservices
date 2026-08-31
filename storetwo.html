@@ -76,13 +76,13 @@
                             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75"></span>
                             <span class="relative inline-flex rounded-full h-2 w-2 bg-yellow-500"></span>
                         </span>
-                        <span>Official Cash & Online Transfer Storefront</span>
+                        <span>Official Cash & FPX Secure Storefront</span>
                     </div>
                     <h1 class="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight leading-tight text-white">
                         Creative Layouts <br class="hidden sm:inline"> Designed <span class="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-yellow-300 to-amber-500 drop-shadow">To Stand Out.</span>
                     </h1>
                     <p class="text-slate-300 text-sm sm:text-base max-w-xl mx-auto lg:mx-0 font-light leading-relaxed">
-                        Choose Cash (Direct Admin Approval) or Online Transfer via Secure FPX with Formspree auto-fill and tracking.
+                        Choose Cash (Direct Admin Approval) or Secure FPX Online Transfer with Formspree auto-fill and real-time order tracking.
                     </p>
                     <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 pt-2">
                         <button onclick="document.getElementById('storefront-section').scrollIntoView();" class="w-full sm:w-auto px-6 py-3 bg-yellow-400 text-slate-950 font-extrabold text-xs rounded-xl hover:bg-yellow-500 transition-all text-center uppercase tracking-wider">
@@ -101,7 +101,7 @@
                             <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 flex items-center gap-3">
                                 <div class="text-2xl">⚡</div>
                                 <div class="flex-grow">
-                                    <h4 class="font-bold text-white text-xs">Cash & Online Transfer FPX</h4>
+                                    <h4 class="font-bold text-white text-xs">Cash & Secure FPX Checkout</h4>
                                     <p class="text-[10px] text-slate-400">Direct Admin approval or Formspree FPX Form</p>
                                 </div>
                             </div>
@@ -140,12 +140,12 @@
                     <div class="bg-slate-950 p-5 rounded-2xl border border-slate-880 relative group hover:border-yellow-400/40 transition-all">
                         <div class="w-10 h-10 rounded-xl bg-yellow-400 text-slate-950 font-black flex items-center justify-center text-lg mx-auto mb-3">2</div>
                         <h4 class="text-base font-bold text-white mb-1.5">Choose Payment Method</h4>
-                        <p class="text-slate-400 text-xs leading-relaxed">Select 'Cash' for direct admin approval or 'Online Transfer (FPX)' for Formspree form submission with auto-filled Order ID.</p>
+                        <p class="text-slate-400 text-xs leading-relaxed">Select 'Cash' for direct admin approval or 'FPX' for secure Formspree submission with auto-filled Order ID, email, and username.</p>
                     </div>
                     <div class="bg-slate-950 p-5 rounded-2xl border border-slate-880 relative group hover:border-yellow-400/40 transition-all">
                         <div class="w-10 h-10 rounded-xl bg-yellow-400 text-slate-950 font-black flex items-center justify-center text-lg mx-auto mb-3">3</div>
                         <h4 class="text-base font-bold text-white mb-1.5">Admin Space Alert</h4>
-                        <p class="text-slate-400 text-xs leading-relaxed">Orders instantly alert the admin workspace with phone numbers and billing addresses.</p>
+                        <p class="text-slate-400 text-xs leading-relaxed">Orders instantly alert the live admin workflow tracker with usernames, email addresses, and order IDs.</p>
                     </div>
                 </div>
             </div>
@@ -155,7 +155,7 @@
             <div class="w-12 h-12 rounded-full bg-yellow-400/10 flex items-center justify-center text-2xl mx-auto">🔒</div>
             <h3 class="text-xl sm:text-2xl font-black text-white">Flexible Payment Options</h3>
             <p class="text-slate-400 max-w-xl mx-auto text-xs sm:text-sm leading-relaxed">
-                Choose between Cash (direct admin approval workflow) or Online Transfer with Formspree submission (`https://formspree.io/f/xqpzgvzv`).
+                Choose between Cash (direct admin approval workflow) or Secure FPX Online Transfer with Formspree submission (`https://formspree.io/f/xqpzgvzv`).
             </p>
         </section>
     </div>
@@ -347,7 +347,7 @@
                             <table class="w-full text-left border-collapse text-xs">
                                 <thead>
                                     <tr class="border-b border-slate-900 text-slate-400">
-                                        <th class="pb-2 font-bold uppercase">Order ID / Customer / Contact</th>
+                                        <th class="pb-2 font-bold uppercase">Order ID / Username / Email</th>
                                         <th class="pb-2 font-bold uppercase">Billing Address</th>
                                         <th class="pb-2 font-bold uppercase">Payment Choice</th>
                                         <th class="pb-2 font-bold uppercase">Status</th>
@@ -457,7 +457,7 @@
                 <label class="block text-[10px] font-bold text-slate-300 uppercase tracking-wider">Select Payment Method</label>
                 <select id="checkout-term-selector" class="w-full bg-slate-900 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs text-white outline-none transition-colors">
                     <option value="cash">Cash (Direct Admin Approval)</option>
-                    <option value="online_transfer">Online Transfer (FPX Secure Formspree)</option>
+                    <option value="online_transfer">FPX (Secure Online Transfer)</option>
                 </select>
             </div>
             <div class="space-y-1.5 pt-1">
@@ -491,12 +491,18 @@
                         <span id="fpx-form-bill-amount" class="font-black text-base text-yellow-400">RM 0.00</span>
                     </div>
                 </div>
-                <div class="space-y-1">
-                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Auto-filled Customer Email</label>
-                    <input type="email" id="fpx-form-email" name="email" readonly class="w-full bg-slate-950 border border-slate-800 text-yellow-400 font-bold rounded-lg p-2.5 text-xs sm:text-sm outline-none cursor-default">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="space-y-1">
+                        <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Auto-filled Username</label>
+                        <input type="text" id="fpx-form-username" name="username" readonly class="w-full bg-slate-950 border border-slate-800 text-yellow-400 font-bold rounded-lg p-2.5 text-xs outline-none cursor-default">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Auto-filled Email Address</label>
+                        <input type="email" id="fpx-form-email" name="email" readonly class="w-full bg-slate-950 border border-slate-800 text-yellow-400 font-bold rounded-lg p-2.5 text-xs outline-none cursor-default">
+                    </div>
                 </div>
                 <div class="space-y-1">
-                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Auto-filled Billing Address & Username</label>
+                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Auto-filled Billing Address</label>
                     <textarea id="fpx-form-billing" name="billing_address" readonly rows="2" class="w-full bg-slate-950 border border-slate-800 text-slate-300 rounded-lg p-2.5 text-xs outline-none cursor-default resize-none"></textarea>
                 </div>
                 <button type="submit" id="fpx-form-submit-btn" class="w-full py-4 bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-black rounded-xl transition-all text-xs uppercase tracking-widest flex items-center justify-center space-x-2 shadow-lg shadow-yellow-400/10">
@@ -640,7 +646,7 @@
         let isAdminLoggedIn = false;
         let activeAdminThreadUser = null;
         let currentOrderId = "BZ-" + Math.floor(100000 + Math.random() * 900000);
-        let WORKFLOW_STATE = { hasRequest: false, customerUsername: "", customerPhone: "", customerBilling: "", orderId: "", status: "None", amount: 0.00, brief: "", selectedTerm: "cash" };
+        let WORKFLOW_STATE = { hasRequest: false, customerUsername: "", customerEmail: "", customerPhone: "", customerBilling: "", orderId: "", status: "None", amount: 0.00, brief: "", selectedTerm: "cash" };
 
         const MQTT_BROKER = "wss://broker.hivemq.com:8884/mqtt";
         const TOPIC_PRESENCE = "bw_brandworkz_co/presence/v1";
@@ -1204,6 +1210,7 @@
             let totalAmount = cart.reduce((sum, item) => sum + (item.singlePrice * item.quantity), 0);
             WORKFLOW_STATE.hasRequest = true;
             WORKFLOW_STATE.customerUsername = currentUser.username;
+            WORKFLOW_STATE.customerEmail = currentUser.email;
             WORKFLOW_STATE.customerPhone = currentUser.phone || "No phone";
             WORKFLOW_STATE.customerBilling = currentUser.billing || "No address";
             WORKFLOW_STATE.orderId = currentOrderId;
@@ -1226,7 +1233,7 @@
             const badge = document.getElementById('customer-status-badge');
             const termLabel = document.getElementById('cust-det-term');
             if(currentUser && termLabel) {
-                termLabel.innerText = WORKFLOW_STATE.hasRequest && WORKFLOW_STATE.customerUsername === currentUser.username ? (WORKFLOW_STATE.selectedTerm === 'cash' ? "Cash (Admin Approval)" : "Online Transfer (FPX)") : "Not Selected";
+                termLabel.innerText = WORKFLOW_STATE.hasRequest && WORKFLOW_STATE.customerUsername === currentUser.username ? (WORKFLOW_STATE.selectedTerm === 'cash' ? "Cash (Admin Approval)" : "FPX (Secure Online Transfer)") : "Not Selected";
             }
             if(!area || !badge) return;
             if (!currentUser || !WORKFLOW_STATE.hasRequest || WORKFLOW_STATE.customerUsername !== currentUser.username) {
@@ -1251,7 +1258,7 @@
                 } else {
                     area.innerHTML = `
                         <div class="p-3 bg-amber-500/10 border border-amber-500/20 text-amber-400 font-bold text-center text-xs rounded-xl">
-                            Awaiting Admin approval for Online Transfer.
+                            Awaiting Admin approval for FPX Secure Transfer.
                         </div>
                     `;
                 }
@@ -1283,8 +1290,9 @@
         function triggerFpxPaymentForm() {
             document.getElementById('fpx-form-bill-amount').innerText = `RM ${WORKFLOW_STATE.amount.toFixed(2)}`;
             document.getElementById('fpx-form-order-id-display').value = WORKFLOW_STATE.orderId || "BZ-123456";
+            document.getElementById('fpx-form-username').value = currentUser ? currentUser.username : "";
             document.getElementById('fpx-form-email').value = currentUser ? currentUser.email : "";
-            document.getElementById('fpx-form-billing').value = `User: ${currentUser ? currentUser.username : "N/A"}\nAddress: ${currentUser ? currentUser.billing : "N/A"}`;
+            document.getElementById('fpx-form-billing').value = currentUser ? currentUser.billing : "N/A";
             document.getElementById('fpx-form-modal').classList.remove('hidden');
         }
 
@@ -1316,7 +1324,7 @@
             tr.className = "border-b border-slate-900/60 font-medium";
             let actionsHTML = "";
             if (WORKFLOW_STATE.status === "Pending Confirmation") {
-                const btnLabel = WORKFLOW_STATE.selectedTerm === 'cash' ? "Approve Cash Order" : "Approve Online Transfer";
+                const btnLabel = WORKFLOW_STATE.selectedTerm === 'cash' ? "Approve Cash Order" : "Approve FPX Order";
                 actionsHTML = `
                     <button onclick="adminApproveWorkflowOrder()" class="px-3 py-1 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-black rounded uppercase text-[10px] tracking-wider transition-colors">
                         ${btnLabel}
@@ -1331,13 +1339,14 @@
             } else {
                 actionsHTML = `<span class="text-slate-500 text-[10px] uppercase font-bold tracking-widest">Workflow Settled</span>`;
             }
-            const displayTerm = WORKFLOW_STATE.selectedTerm === 'cash' ? 'Cash (No FPX)' : 'Online Transfer (FPX)';
-            const phoneDisplay = WORKFLOW_STATE.customerPhone || 'N/A';
+            const displayTerm = WORKFLOW_STATE.selectedTerm === 'cash' ? 'Cash (No FPX)' : 'FPX Secure Transfer';
+            const emailDisplay = WORKFLOW_STATE.customerEmail || 'N/A';
             const billingDisplay = WORKFLOW_STATE.customerBilling || 'No address specified';
             tr.innerHTML = `
                 <td class="py-3 text-white font-bold">
                     <span class="block text-yellow-400 font-mono">${WORKFLOW_STATE.orderId || 'BZ-000000'}</span>
-                    <span class="text-[11px] text-slate-300">${WORKFLOW_STATE.customerUsername} (${phoneDisplay})</span>
+                    <span class="text-[11px] text-slate-300">User: ${WORKFLOW_STATE.customerUsername}</span>
+                    <span class="text-[10px] text-slate-400 font-mono block">Email: ${emailDisplay}</span>
                     <span class="text-[10px] text-slate-500 font-light block truncate">${WORKFLOW_STATE.brief}</span>
                 </td>
                 <td class="py-3 text-slate-300 text-[11px] max-w-[200px] truncate" title="${billingDisplay}">${billingDisplay}</td>

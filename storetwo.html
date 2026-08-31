@@ -1110,19 +1110,36 @@
         const phone = document.getElementById('cust-reg-phone').value.trim(); 
         const pass = document.getElementById('cust-reg-pass').value; 
         const billing = document.getElementById('cust-reg-billing').value.trim(); 
- 
+
+        if (!username || !email || !phone || !pass || !billing) {
+            showToast("Please fill in all required registration fields.", "error");
+            return;
+        }
+
         try {
             const cred = await auth.createUserWithEmailAndPassword(email, pass);
             await db.collection("users").doc(cred.user.uid).set({
-                username,
-                email,
-                phone,
-                billing
+                username: username,
+                email: email,
+                phone: phone,
+                billing: billing,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
             });
 
-            showToast(`Welcome aboard, ${username}!`); 
-            renderChatMessagesForCustomer(); 
+            currentUser = {
+                uid: cred.user.uid,
+                email: email,
+                username: username,
+                phone: phone,
+                billing: billing
+            };
+
+            showToast(`Welcome aboard, ${username}! Account created successfully.`); 
+            document.getElementById('customer-register-form').reset();
+            syncAuthenticatedLayout(currentUser);
+            loadChatMessages();
         } catch (e) {
+            console.error("Registration Error:", e);
             showToast("Registration error: " + e.message, "error");
         }
     } 

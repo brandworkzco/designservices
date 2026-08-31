@@ -557,7 +557,7 @@
         </div>
     </footer>
 
-    <!-- Firebase SDK Imports (v12.18.0 Modular Integration) -->
+    <!-- Firebase SDK Integration Block using version 12.18.0 modules -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-analytics.js";
@@ -597,7 +597,6 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // Make Firebase handlers globally accessible for application functions
         window.FB_AUTH = auth;
         window.FB_DB = db;
         window.FB_METHODS = {
@@ -617,7 +616,6 @@
             serverTimestamp
         };
 
-        // Fire initialization once Firebase modules load
         if (typeof window.onFirebaseReady === 'function') {
             window.onFirebaseReady();
         }

@@ -7,12 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mqtt/4.3.7/mqtt.min.js"></script>
     
-    <!-- Firebase SDKs (Compat v10.12.0 for stable global integration with your codebase) -->
-    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics-compat.js"></script>
-
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; }
@@ -155,7 +149,7 @@
             <div class="w-12 h-12 rounded-full bg-yellow-400/10 flex items-center justify-center text-2xl mx-auto">🔒</div>
             <h3 class="text-xl sm:text-2xl font-black text-white">Flexible Payment Options</h3>
             <p class="text-slate-400 max-w-xl mx-auto text-xs sm:text-sm leading-relaxed">
-                Choose between Cash (direct admin approval workflow) or Secure FPX Online Transfer with Formspree submission (`https://formspree.io/f/xqpzgvzv`).
+                Choose between Cash (direct admin approval workflow) or Secure FPX Online Transfer with Formspree submission (<code class="text-yellow-400">https://formspree.io/f/xqpzgvzv</code>).
             </p>
         </section>
     </div>
@@ -243,7 +237,7 @@
         <div id="customer-authenticated-card" class="bg-slate-900 border border-slate-800 rounded-2xl p-5 sm:p-8 shadow-2xl space-y-5 hidden animate-fadeIn">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-800 pb-4 gap-4">
                 <div class="flex items-center space-x-3">
-                    <div class="w-12 h-12 rounded-full bg-yellow-400 flex items-center justify-center text-slate-950 text-xl font-bold">👤</div>
+                    <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-blue-600 via-indigo-500 to-cyan-400 flex items-center justify-center text-white text-xl font-bold shadow-lg shadow-blue-500/20">👤</div>
                     <div>
                         <span class="text-yellow-400 text-[10px] font-bold uppercase tracking-wider block">Verified Customer Profile</span>
                         <h3 id="authenticated-cust-username" class="text-lg sm:text-xl font-black text-white">Welcome back!</h3>
@@ -563,7 +557,31 @@
         </div>
     </footer>
 
-    <script>
+    <!-- Firebase SDK Imports (v12.18.0 Modular Integration) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-analytics.js";
+        import { 
+            getAuth, 
+            signInWithEmailAndPassword, 
+            createUserWithEmailAndPassword, 
+            signOut, 
+            onAuthStateChanged, 
+            sendPasswordResetEmail 
+        } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+        import { 
+            getFirestore, 
+            doc, 
+            getDoc, 
+            setDoc, 
+            collection, 
+            addDoc, 
+            orderBy, 
+            query, 
+            getDocs, 
+            serverTimestamp 
+        } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+
         const firebaseConfig = {
             apiKey: "AIzaSyByw5BIO5tMz08i2y9OOay0dBGbwJmiKEw",
             authDomain: "testsite-f794d.firebaseapp.com",
@@ -574,14 +592,38 @@
             measurementId: "G-W7EKTV8TCV"
         };
 
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-            firebase.analytics();
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Make Firebase handlers globally accessible for application functions
+        window.FB_AUTH = auth;
+        window.FB_DB = db;
+        window.FB_METHODS = {
+            signInWithEmailAndPassword,
+            createUserWithEmailAndPassword,
+            signOut,
+            onAuthStateChanged,
+            sendPasswordResetEmail,
+            doc,
+            getDoc,
+            setDoc,
+            collection,
+            addDoc,
+            orderBy,
+            query,
+            getDocs,
+            serverTimestamp
+        };
+
+        // Fire initialization once Firebase modules load
+        if (typeof window.onFirebaseReady === 'function') {
+            window.onFirebaseReady();
         }
+    </script>
 
-        const auth = firebase.auth();
-        const db = firebase.firestore();
-
+    <script>
         let PRODUCTS = JSON.parse(localStorage.getItem("bw_products")) || [
             { id: "p_frame_1", title: "Menu Design", dropdownLabel: "All", poster: "previousmenu.png", dropdowns: [
                 { name: "Basic A4", price: 25.00, info: "- 1 Side\n- A4 Only\n- Not Provide Image Retouching" },
@@ -655,29 +697,33 @@
         let lastAdminPresenceTimestamp = 0;
         let CHAT_MESSAGES = [];
 
-        auth.onAuthStateChanged(async (firebaseUser) => {
-            if (firebaseUser) {
-                isAdminLoggedIn = firebaseUser.email === "admin@domain.com" || firebaseUser.email === "admin@brandworkzco.com";
-                const userDoc = await db.collection("users").doc(firebaseUser.uid).get();
-                let profileData = {};
-                if (userDoc.exists) {
-                    profileData = userDoc.data();
+        window.onFirebaseReady = function() {
+            const { onAuthStateChanged } = window.FB_METHODS;
+            onAuthStateChanged(window.FB_AUTH, async (firebaseUser) => {
+                if (firebaseUser) {
+                    isAdminLoggedIn = firebaseUser.email === "admin@domain.com" || firebaseUser.email === "admin@brandworkzco.com";
+                    const { doc, getDoc } = window.FB_METHODS;
+                    const userDoc = await getDoc(doc(window.FB_DB, "users", firebaseUser.uid));
+                    let profileData = {};
+                    if (userDoc.exists()) {
+                        profileData = userDoc.data();
+                    }
+                    currentUser = {
+                        uid: firebaseUser.uid,
+                        email: firebaseUser.email,
+                        username: profileData.username || firebaseUser.email.split('@')[0],
+                        phone: profileData.phone || "",
+                        billing: profileData.billing || ""
+                    };
+                    syncAuthenticatedLayout(currentUser);
+                    loadUserWorkflow(firebaseUser.uid);
+                    loadChatMessages();
+                } else {
+                    currentUser = null;
+                    isAdminLoggedIn = false;
                 }
-                currentUser = {
-                    uid: firebaseUser.uid,
-                    email: firebaseUser.email,
-                    username: profileData.username || firebaseUser.email.split('@')[0],
-                    phone: profileData.phone || "",
-                    billing: profileData.billing || ""
-                };
-                syncAuthenticatedLayout(currentUser);
-                loadUserWorkflow(firebaseUser.uid);
-                loadChatMessages();
-            } else {
-                currentUser = null;
-                isAdminLoggedIn = false;
-            }
-        });
+            });
+        };
 
         function initHiveMQRealtime() {
             try {
@@ -772,9 +818,11 @@
         }
 
         async function loadChatMessages() {
-            if (!currentUser) return;
+            if (!currentUser || !window.FB_DB) return;
             try {
-                const snapshot = await db.collection("chats").orderBy("timestamp", "asc").get();
+                const { collection, getDocs, query, orderBy } = window.FB_METHODS;
+                const q = query(collection(window.FB_DB, "chats"), orderBy("timestamp", "asc"));
+                const snapshot = await getDocs(q);
                 CHAT_MESSAGES = [];
                 snapshot.forEach(doc => {
                     CHAT_MESSAGES.push(doc.data());
@@ -785,10 +833,12 @@
         }
 
         async function loadUserWorkflow(uid) {
+            if (!window.FB_DB) return;
             try {
-                const doc = await db.collection("workflows").doc(uid).get();
-                if (doc.exists) {
-                    WORKFLOW_STATE = doc.data();
+                const { doc, getDoc } = window.FB_METHODS;
+                const docSnap = await getDoc(doc(window.FB_DB, "workflows", uid));
+                if (docSnap.exists()) {
+                    WORKFLOW_STATE = docSnap.data();
                     updateCustomerWorkflowUI();
                 }
             } catch(e) { console.error("Error loading workflow", e); }
@@ -822,7 +872,8 @@
             const email = document.getElementById('gate-admin-user').value.trim();
             const pass = document.getElementById('gate-admin-pass').value;
             try {
-                await auth.signInWithEmailAndPassword(email, pass);
+                const { signInWithEmailAndPassword } = window.FB_METHODS;
+                await signInWithEmailAndPassword(window.FB_AUTH, email, pass);
                 if (email === "admin@domain.com" || email === "admin@brandworkzco.com" || isAdminLoggedIn) {
                     isAdminLoggedIn = true;
                     closeAdminGateModal();
@@ -840,7 +891,8 @@
 
         async function logoutAdmin() {
             try {
-                await auth.signOut();
+                const { signOut } = window.FB_METHODS;
+                await signOut(window.FB_AUTH);
                 isAdminLoggedIn = false;
                 document.getElementById('admin-view').classList.add('hidden');
                 showToast("Logged out safely from Admin Space.");
@@ -850,9 +902,10 @@
         }
 
         async function saveWorkflowToFirebase() {
-            if (!currentUser) return;
+            if (!currentUser || !window.FB_DB) return;
             try {
-                await db.collection("workflows").doc(currentUser.uid).set(WORKFLOW_STATE);
+                const { doc, setDoc } = window.FB_METHODS;
+                await setDoc(doc(window.FB_DB, "workflows", currentUser.uid), WORKFLOW_STATE);
             } catch(e) { console.error("Error saving workflow", e); }
         }
 
@@ -983,13 +1036,14 @@
                 return;
             }
             try {
-                const cred = await auth.createUserWithEmailAndPassword(email, pass);
-                await db.collection("users").doc(cred.user.uid).set({
+                const { createUserWithEmailAndPassword, setDoc, doc, serverTimestamp } = window.FB_METHODS;
+                const cred = await createUserWithEmailAndPassword(window.FB_AUTH, email, pass);
+                await setDoc(doc(window.FB_DB, "users", cred.user.uid), {
                     username: username,
                     email: email,
                     phone: phone,
                     billing: billing,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    createdAt: serverTimestamp()
                 });
                 currentUser = {
                     uid: cred.user.uid,
@@ -1014,7 +1068,8 @@
             const pass = document.getElementById('cust-login-pass').value;
             const errorDiv = document.getElementById('cust-login-error');
             try {
-                await auth.signInWithEmailAndPassword(email, pass);
+                const { signInWithEmailAndPassword } = window.FB_METHODS;
+                await signInWithEmailAndPassword(window.FB_AUTH, email, pass);
                 errorDiv.classList.add('hidden');
                 document.getElementById('customer-login-form').reset();
                 showToast(`Logged in successfully`);
@@ -1031,7 +1086,8 @@
             const email = document.getElementById('cust-recovery-input').value.trim();
             const successDiv = document.getElementById('cust-recovery-success');
             try {
-                await auth.sendPasswordResetEmail(email);
+                const { sendPasswordResetEmail } = window.FB_METHODS;
+                await sendPasswordResetEmail(window.FB_AUTH, email);
                 successDiv.classList.remove('hidden');
                 showToast("Password reset link sent to your email.");
             } catch(e) {
@@ -1042,7 +1098,8 @@
 
         async function logoutCustomer() {
             try {
-                await auth.signOut();
+                const { signOut } = window.FB_METHODS;
+                await signOut(window.FB_AUTH);
                 currentUser = null;
                 document.getElementById('customer-authenticated-card').classList.add('hidden');
                 document.getElementById('customer-unauthenticated-card').classList.remove('hidden');
@@ -1546,7 +1603,7 @@
         async function handleCustomerSendMessage(event) {
             event.preventDefault();
             const input = document.getElementById('customer-chat-input');
-            if (!input) return;
+            if (!input || !window.FB_DB) return;
             const messageVal = input.value.trim();
             if (!messageVal) return;
             const senderUsername = currentUser ? currentUser.username : "Guest_Client";
@@ -1556,10 +1613,11 @@
                 user: senderUsername,
                 message: messageVal,
                 time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                timestamp: window.FB_METHODS.serverTimestamp()
             };
             try {
-                await db.collection("chats").add(newMsg);
+                const { collection, addDoc } = window.FB_METHODS;
+                await addDoc(collection(window.FB_DB, "chats"), newMsg);
                 CHAT_MESSAGES.push(newMsg);
                 renderChatMessagesForCustomer();
                 input.value = "";
@@ -1679,7 +1737,7 @@
         async function handleAdminSendMessage(event) {
             event.preventDefault();
             const input = document.getElementById('admin-chat-input');
-            if (!input) return;
+            if (!input || !window.FB_DB) return;
             const val = input.value.trim();
             if (!val || !activeAdminThreadUser) return;
             const newReply = {
@@ -1688,10 +1746,11 @@
                 user: activeAdminThreadUser,
                 message: val,
                 time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                timestamp: window.FB_METHODS.serverTimestamp()
             };
             try {
-                await db.collection("chats").add(newReply);
+                const { collection, addDoc } = window.FB_METHODS;
+                await addDoc(collection(window.FB_DB, "chats"), newReply);
                 CHAT_MESSAGES.push(newReply);
                 renderAdminChatHub();
                 input.value = "";

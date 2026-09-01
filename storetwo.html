@@ -197,21 +197,22 @@
                     <h2 class="text-xl font-extrabold text-white flex items-center gap-2"><span>Customer Portal</span></h2> 
                     <p class="text-slate-400 text-[11px] sm:text-xs mt-0.5">Access or create your persistent custom checkout profile.</p> 
                 </div> 
-                <div class="flex bg-slate-950 p-1 rounded-lg border border-slate-800 self-start gap-1"> 
-                    <button id="tab-cust-login" onclick="toggleCustomerAuthTab('login')" class="px-3.5 py-1.5 text-xs font-bold rounded-md bg-yellow-400 text-slate-950 transition-all">Sign In (Email)</button> 
-                    <button id="tab-cust-phone" onclick="toggleCustomerAuthTab('phone')" class="px-3.5 py-1.5 text-xs font-bold rounded-md text-slate-400 hover:text-white transition-all">Sign In (Phone OTP)</button> 
+                <div class="flex bg-slate-950 p-1 rounded-lg border border-slate-800 self-start"> 
+                    <button id="tab-cust-login" onclick="toggleCustomerAuthTab('login')" class="px-3.5 py-1.5 text-xs font-bold rounded-md bg-yellow-400 text-slate-950 transition-all">Sign In</button> 
                     <button id="tab-cust-register" onclick="toggleCustomerAuthTab('register')" class="px-3.5 py-1.5 text-xs font-bold rounded-md text-slate-400 hover:text-white transition-all">Sign Up</button> 
                 </div> 
             </div> 
 
-            <!-- Method 1: Email & Password Sign In Form -->
             <form id="customer-login-form" onsubmit="handleCustomerLogin(event)" class="space-y-4"> 
                 <div class="space-y-1"> 
                     <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Email Address</label> 
                     <input type="email" id="cust-login-email" required placeholder="your.email@domain.com" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs sm:text-sm text-white outline-none transition-colors"> 
                 </div> 
                 <div class="space-y-1"> 
-                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Password</label> 
+                    <div class="flex justify-between items-center"> 
+                        <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Password</label> 
+                        <button type="button" onclick="openForgotPasswordModal()" class="text-[11px] font-bold text-yellow-400 hover:underline">Forgot Password?</button>
+                    </div> 
                     <input type="password" id="cust-login-pass" required placeholder="••••••••" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs sm:text-sm text-white outline-none transition-colors"> 
                 </div> 
                 <div id="cust-login-error" class="text-rose-500 text-xs font-semibold hidden bg-rose-500/10 p-2.5 rounded border border-rose-500/20 text-center"> 
@@ -222,27 +223,6 @@
                 </button> 
             </form> 
 
-            <!-- Method 2: Phone Number & OTP Sign In Form -->
-            <form id="customer-phone-form" onsubmit="handlePhoneAuthSubmit(event)" class="space-y-4 hidden"> 
-                <div class="space-y-1"> 
-                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Registered Phone Number</label> 
-                    <div class="flex gap-2">
-                        <input type="tel" id="cust-phone-input" required placeholder="+60123456789" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs sm:text-sm text-white outline-none transition-colors"> 
-                        <button type="button" onclick="sendPhoneVerificationOTP()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-yellow-400 font-bold text-xs rounded-lg whitespace-nowrap">Send OTP</button>
-                    </div>
-                    <p class="text-[10px] text-slate-500 mt-0.5">Must be an existing registered phone number from Sign Up.</p>
-                </div> 
-                <div class="space-y-1" id="otp-input-container" style="display:none;"> 
-                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Enter OTP Verification Code</label> 
-                    <input type="text" id="cust-otp-code" placeholder="123456" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs sm:text-sm text-white outline-none tracking-widest text-center font-bold"> 
-                </div> 
-                <div id="recaptcha-container"></div>
-                <button type="submit" id="phone-submit-btn" class="w-full py-3 bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-black rounded-lg transition-all text-xs uppercase tracking-widest" style="display:none;"> 
-                    Access Profile 
-                </button> 
-            </form> 
-
-            <!-- Sign Up Form -->
             <form id="customer-register-form" onsubmit="handleCustomerRegister(event)" class="space-y-4 hidden"> 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4"> 
                     <div class="space-y-1"> 
@@ -349,6 +329,7 @@
                 </div> 
             </div> 
 
+            <!-- DYNAMIC SANDBOX -->
             <div class="bg-slate-950 rounded-xl p-5 border border-slate-850 space-y-4"> 
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-900 pb-3"> 
                     <div> 
@@ -359,10 +340,13 @@
                         (+) New Product Frame 
                     </button> 
                 </div> 
+                 
                 <div id="admin-scratch-frames-container" class="grid grid-cols-1 md:grid-cols-2 gap-8 pt-2"></div> 
             </div> 
 
+            <!-- TWO-COLUMN WORKFLOW & CHAT HUB GRID -->
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- CLIENT WORKFLOW PANEL -->
                 <div class="lg:col-span-7 bg-slate-950 border border-slate-850 p-5 rounded-xl space-y-4 flex flex-col justify-between"> 
                     <div>
                         <h3 class="text-sm font-black text-white uppercase tracking-wider border-b border-slate-900 pb-2 flex items-center justify-between"> 
@@ -388,6 +372,7 @@
                     </div>
                 </div> 
 
+                <!-- ADMIN REALTIME CHAT DESK -->
                 <div class="lg:col-span-5 bg-slate-950 border border-slate-850 p-5 rounded-xl flex flex-col h-[380px] lg:h-[420px]">
                     <div class="border-b border-slate-900 pb-2 flex items-center justify-between">
                         <div class="flex items-center space-x-2">
@@ -401,11 +386,13 @@
                     </div>
 
                     <div class="flex flex-grow overflow-hidden mt-3 gap-3">
+                        <!-- Left Side: Chat Channels List -->
                         <div class="w-1/3 border-r border-slate-900 pr-2 overflow-y-auto flex flex-col gap-1.5" id="admin-chat-channels">
                             <span class="text-[9px] uppercase tracking-wider font-extrabold text-slate-500">Active Users</span>
                             <div class="text-[10px] text-slate-500 italic text-center py-4">No active users</div>
                         </div>
 
+                        <!-- Right Side: Active Messages Window -->
                         <div class="w-2/3 flex flex-col justify-between h-full">
                             <div id="admin-chat-messages-container" class="flex-grow overflow-y-auto space-y-3 p-2 bg-slate-900/40 rounded-lg border border-slate-900 text-xs flex flex-col">
                                 <div class="text-center text-slate-500 italic py-8">Select a customer thread to read incoming messages and respond.</div>
@@ -419,6 +406,43 @@
                     </div>
                 </div>
             </div> 
+        </div> 
+    </div> 
+
+    <!-- FORGOT PASSWORD MODAL -->
+    <div id="forgot-password-modal" class="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-md flex items-center justify-center p-4 hidden"> 
+        <div class="bg-slate-900 border border-yellow-400/40 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 animate-fadeIn"> 
+            <div class="text-center border-b border-slate-800 pb-3"> 
+                <h3 class="text-lg font-black text-white">Reset Account Password</h3> 
+                <p class="text-xs text-slate-400 mt-1">Enter your registered email address to receive a secure password reset link.</p> 
+            </div> 
+            <form onsubmit="handleSendPasswordReset(event)" class="space-y-4"> 
+                <div class="space-y-1"> 
+                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Account Email</label> 
+                    <input type="email" id="reset-email-input" required placeholder="your.email@domain.com" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs text-white outline-none"> 
+                </div> 
+                <div class="flex items-center gap-2 pt-2"> 
+                    <button type="button" onclick="closeForgotPasswordModal()" class="w-1/3 py-2.5 bg-slate-950 text-slate-400 border border-slate-800 font-bold rounded-xl text-xs hover:text-white">Cancel</button> 
+                    <button type="submit" class="w-2/3 py-2.5 bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-black rounded-xl text-xs uppercase tracking-wider">Send Reset Link</button> 
+                </div> 
+            </form> 
+        </div> 
+    </div> 
+
+    <!-- CONFIRM PASSWORD RESET MODAL (Triggered via oobCode URL param) -->
+    <div id="confirm-reset-modal" class="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-md flex items-center justify-center p-4 hidden"> 
+        <div class="bg-slate-900 border border-yellow-400/40 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 animate-fadeIn"> 
+            <div class="text-center border-b border-slate-800 pb-3"> 
+                <h3 class="text-lg font-black text-white">Set New Password</h3> 
+                <p class="text-xs text-slate-400 mt-1">Please enter your new secure password below.</p> 
+            </div> 
+            <form onsubmit="handleConfirmPasswordReset(event)" class="space-y-4"> 
+                <div class="space-y-1"> 
+                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">New Password</label> 
+                    <input type="password" id="new-password-input" required placeholder="••••••••" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs text-white outline-none"> 
+                </div> 
+                <button type="submit" class="w-full py-2.5 bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-black rounded-xl text-xs uppercase tracking-wider">Update Password</button> 
+            </form> 
         </div> 
     </div> 
 
@@ -537,7 +561,9 @@
 
     <!-- PERSISTENT CUSTOMER CHAT FLOATING WIDGET -->
     <div class="fixed bottom-6 right-6 z-40 flex flex-col items-end">
+        <!-- Floating Chat Box Panel -->
         <div id="customer-chat-panel" class="hidden w-80 sm:w-96 bg-slate-900 border border-yellow-400/30 rounded-2xl shadow-2xl flex flex-col h-96 overflow-hidden mb-4 animate-fadeIn">
+            <!-- Panel Header with live dynamic Admin Online Status -->
             <div class="bg-slate-950 border-b border-slate-800 p-3.5 flex items-center justify-between">
                 <div class="flex items-center space-x-2">
                     <div id="customer-chat-status-dot" class="w-2.5 h-2.5 rounded-full bg-slate-500"></div>
@@ -551,15 +577,21 @@
                 </button>
             </div>
 
-            <div id="customer-chat-window" class="flex-grow p-4 overflow-y-auto space-y-3 bg-slate-950/50 flex flex-col scroll-smooth"></div>
+            <!-- Chat Message Window -->
+            <div id="customer-chat-window" class="flex-grow p-4 overflow-y-auto space-y-3 bg-slate-950/50 flex flex-col scroll-smooth">
+                <!-- Message elements generated dynamically -->
+            </div>
 
+            <!-- Input Form Section -->
             <form onsubmit="handleCustomerSendMessage(event)" class="p-3 bg-slate-950 border-t border-slate-850 flex gap-2">
                 <input type="text" id="customer-chat-input" placeholder="Ask about menus, packages, logos..." class="flex-grow bg-slate-900 border border-slate-800 text-xs text-white rounded-lg px-3 py-2 outline-none focus:border-yellow-400 transition-colors">
                 <button type="submit" class="bg-yellow-400 hover:bg-yellow-500 text-slate-950 px-3.5 rounded-lg text-xs font-bold transition-all uppercase tracking-wide">Send</button>
             </form>
         </div>
 
+        <!-- Floating Action Button -->
         <div class="flex items-center gap-3">
+            <!-- WhatsApp Button -->
             <a href="https://wa.me/60138973700" target="_blank" rel="noopener noreferrer" class="bg-green-500 hover:bg-green-600 text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center transition-all hover:scale-105 relative border-2 border-slate-950">
                 <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.571-.012c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"></path>
@@ -590,7 +622,7 @@
     <!-- FIREBASE MODULE & STORE LOGIC -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, RecaptchaVerifier, signInWithPhoneNumber } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail, confirmPasswordReset } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyByw5BIO5tMz08i2y9OOay0dBGbwJmiKEw",
@@ -605,12 +637,26 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
 
+        // Make Firebase Auth functions globally available
         window.FB_AUTH = auth;
         window.FB_createUser = createUserWithEmailAndPassword;
         window.FB_signIn = signInWithEmailAndPassword;
         window.FB_signOut = signOut;
-        window.FB_RecaptchaVerifier = RecaptchaVerifier;
-        window.FB_signInWithPhoneNumber = signInWithPhoneNumber;
+        window.FB_sendPasswordResetEmail = sendPasswordResetEmail;
+        window.FB_confirmPasswordReset = confirmPasswordReset;
+
+        // Check if user landed back via email with oobCode for password reset
+        const urlParams = new URLSearchParams(window.location.search);
+        const mode = urlParams.get('mode');
+        const oobCode = urlParams.get('oobCode');
+        
+        // Updated handler to catch Firebase Action URL redirects (support custom action modes like "action" or "resetPassword")
+        if (oobCode) {
+            window.activeOobCode = oobCode;
+            document.addEventListener("DOMContentLoaded", () => {
+                document.getElementById('confirm-reset-modal').classList.remove('hidden');
+            });
+        }
     </script>
 
     <script> 
@@ -725,8 +771,6 @@
     let currentUser = JSON.parse(localStorage.getItem("current_session_user")) || null; 
     let isAdminLoggedIn = JSON.parse(sessionStorage.getItem("is_admin_session")) || false; 
     let activeAdminThreadUser = null; 
-    let windowConfirmationResult = null;
-    let registeredUsersDatabase = JSON.parse(localStorage.getItem("bw_registered_users")) || [];
 
     let WORKFLOW_STATE = JSON.parse(localStorage.getItem("bw_workflow_state")) || { 
         hasRequest: false, 
@@ -739,12 +783,14 @@
         selectedTerm: "fpx" 
     }; 
 
+    /* MQTT REAL-TIME CROSS-DEVICE COMMUNICATION ENGINE */
     const MQTT_BROKER = "wss://broker.hivemq.com:8884/mqtt";
     const TOPIC_PRESENCE = "bw_brandworkz_co/presence/v1";
     const TOPIC_CHAT = "bw_brandworkz_co/chat/v1";
      
     let mqttClient = null;
     let lastAdminPresenceTimestamp = 0;
+
     let CHAT_MESSAGES = JSON.parse(localStorage.getItem("bw_chat_messages")) || [];
 
     function initHiveMQRealtime() {
@@ -758,23 +804,36 @@
 
             mqttClient.on('connect', () => {
                 mqttClient.subscribe([TOPIC_PRESENCE, TOPIC_CHAT], (err) => {
-                    if (!err && isAdminLoggedIn) broadcastAdminPresence();
+                    if (!err) {
+                        if (isAdminLoggedIn) broadcastAdminPresence();
+                    }
                 });
             });
 
             mqttClient.on('message', (topic, payload) => {
                 try {
                     const data = JSON.parse(payload.toString());
-                    if (topic === TOPIC_PRESENCE) handleRealtimePresenceMessage(data);
-                    else if (topic === TOPIC_CHAT) handleRealtimeChatMessage(data);
-                } catch(e) {}
+                    if (topic === TOPIC_PRESENCE) {
+                        handleRealtimePresenceMessage(data);
+                    } else if (topic === TOPIC_CHAT) {
+                        handleRealtimeChatMessage(data);
+                    }
+                } catch(e) {
+                    console.error("MQTT Message Parsing Error", e);
+                }
             });
-        } catch(e) {}
+        } catch(e) {
+            console.error("MQTT Connection Exception", e);
+        }
     }
 
     function broadcastAdminPresence() {
         if (mqttClient && mqttClient.connected && isAdminLoggedIn) {
-            mqttClient.publish(TOPIC_PRESENCE, JSON.stringify({ type: 'admin_presence', status: 'online', timestamp: Date.now() }));
+            mqttClient.publish(TOPIC_PRESENCE, JSON.stringify({
+                type: 'admin_presence',
+                status: 'online',
+                timestamp: Date.now()
+            }));
         }
     }
 
@@ -786,7 +845,8 @@
     }
 
     function checkAdminPresenceTimeout() {
-        updateAdminPresenceUI((Date.now() - lastAdminPresenceTimestamp) < 8000);
+        const isOnline = (Date.now() - lastAdminPresenceTimestamp) < 8000;
+        updateAdminPresenceUI(isOnline);
     }
 
     function updateAdminPresenceUI(isOnline) {
@@ -807,11 +867,25 @@
 
     function handleRealtimeChatMessage(msgData) {
         if (!msgData || !msgData.id) return;
-        if (!CHAT_MESSAGES.some(m => m.id === msgData.id)) {
+        const exists = CHAT_MESSAGES.some(m => m.id === msgData.id);
+        if (!exists) {
             CHAT_MESSAGES.push(msgData);
             saveChatMessagesToStorage();
             renderChatMessagesForCustomer();
-            if (isAdminLoggedIn) renderAdminChatHub();
+            if (isAdminLoggedIn) {
+                renderAdminChatHub();
+            }
+            if (msgData.sender === 'admin') {
+                const chatPanel = document.getElementById('customer-chat-panel');
+                if (chatPanel && chatPanel.classList.contains('hidden')) {
+                    const badge = document.getElementById('chat-unread-badge');
+                    if (badge) {
+                        badge.classList.remove('hidden');
+                        const cur = parseInt(badge.innerText) || 0;
+                        badge.innerText = cur + 1;
+                    }
+                }
+            }
         }
     }
 
@@ -822,22 +896,30 @@
         renderChatMessagesForCustomer();
         initHiveMQRealtime();
 
-        if (isAdminLoggedIn) renderAdminWorkspace(); 
-        
+        if (isAdminLoggedIn) { 
+            renderAdminWorkspace(); 
+        } 
+         
         setInterval(() => {
             if (isAdminLoggedIn) broadcastAdminPresence();
             checkAdminPresenceTimeout();
         }, 3000);
     } 
 
-    function saveProductsToStorage() { localStorage.setItem("bw_products", JSON.stringify(PRODUCTS)); } 
-    function saveChatMessagesToStorage() { localStorage.setItem("bw_chat_messages", JSON.stringify(CHAT_MESSAGES)); }
+    function saveProductsToStorage() { 
+        localStorage.setItem("bw_products", JSON.stringify(PRODUCTS)); 
+    } 
+
+    function saveChatMessagesToStorage() {
+        localStorage.setItem("bw_chat_messages", JSON.stringify(CHAT_MESSAGES));
+    }
 
     function switchView(viewName) { 
         if (viewName === 'admin' && !isAdminLoggedIn) { 
             document.getElementById('admin-gate-modal').classList.remove('hidden'); 
             return; 
         } 
+
         document.getElementById('store-view').classList.add('hidden'); 
         document.getElementById('customer-auth-view').classList.add('hidden'); 
         document.getElementById('admin-view').classList.add('hidden'); 
@@ -853,16 +935,22 @@
         } 
     } 
 
-    function closeAdminGateModal() { document.getElementById('admin-gate-modal').classList.add('hidden'); } 
+    function closeAdminGateModal() { 
+        document.getElementById('admin-gate-modal').classList.add('hidden'); 
+    } 
 
     function challengeAdminCredentials(event) { 
         event.preventDefault(); 
-        if (document.getElementById('gate-admin-user').value.trim() === 'admin' && document.getElementById('gate-admin-pass').value === '134228') { 
+        const user = document.getElementById('gate-admin-user').value.trim(); 
+        const pass = document.getElementById('gate-admin-pass').value; 
+
+        if (user === 'admin' && pass === '134228') { 
             isAdminLoggedIn = true; 
             sessionStorage.setItem("is_admin_session", JSON.stringify(true)); 
             localStorage.setItem("is_admin_active_online", "true");
             closeAdminGateModal(); 
             showToast("Admin access cleared safely."); 
+            document.getElementById('admin-gate-modal').querySelector('form').reset(); 
             switchView('admin'); 
             broadcastAdminPresence();
         } else { 
@@ -880,32 +968,58 @@
         updateAdminPresenceUI(false);
     } 
 
-    function saveWorkflowToStorage() { localStorage.setItem("bw_workflow_state", JSON.stringify(WORKFLOW_STATE)); } 
+    function saveWorkflowToStorage() { 
+        localStorage.setItem("bw_workflow_state", JSON.stringify(WORKFLOW_STATE)); 
+    } 
 
     function showToast(message, type = "success") { 
         const container = document.getElementById('toast-container'); 
         if (!container) return;
         const toast = document.createElement('div'); 
-        toast.className = `p-4 rounded-xl shadow-2xl flex items-center space-x-3 text-xs font-bold border transform scale-95 translate-y-2 opacity-0 transition-all duration-300 pointer-events-auto ${type === "success" ? "bg-slate-900 border-yellow-400 text-yellow-400" : "bg-slate-900 border-rose-500 text-rose-500"}`; 
+        toast.className = `p-4 rounded-xl shadow-2xl flex items-center space-x-3 text-xs font-bold border transform scale-95 translate-y-2 opacity-0 transition-all duration-300 pointer-events-auto ${ 
+            type === "success" ? "bg-slate-900 border-yellow-400 text-yellow-400" : "bg-slate-900 border-rose-500 text-rose-500" }`; 
         toast.innerHTML = `<span>${type === 'success' ? '⚡' : '⚠️'}</span><span>${message}</span>`; 
         container.appendChild(toast); 
-        setTimeout(() => { toast.classList.remove('opacity-0', 'scale-95', 'translate-y-2'); toast.classList.add('opacity-100', 'scale-100', 'translate-y-0'); }, 10); 
-        setTimeout(() => { toast.classList.add('opacity-0', 'scale-95', 'translate-y-2'); setTimeout(() => { toast.remove(); }, 300); }, 4000); 
+        setTimeout(() => { 
+            toast.classList.remove('opacity-0', 'scale-95', 'translate-y-2'); 
+            toast.classList.add('opacity-100', 'scale-100', 'translate-y-0'); 
+        }, 10); 
+        setTimeout(() => { 
+            toast.classList.add('opacity-0', 'scale-95', 'translate-y-2'); 
+            setTimeout(() => { toast.remove(); }, 300); 
+        }, 4000); 
     } 
 
+    /* FRONT-END CLIENT CATALOG RENDERING */ 
     function renderProductCatalog() { 
         const container = document.getElementById('products-grid'); 
         if(!container) return; 
         container.innerHTML = ""; 
+
+        if (PRODUCTS.length === 0) { 
+            container.innerHTML = `<div class="col-span-full text-center text-slate-500 py-12 italic text-xs">No live inventory entries detected in space matrix.</div>`; 
+            return; 
+        } 
+
         PRODUCTS.forEach(product => { 
             const card = document.createElement('div'); 
-            card.className = "bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-xl flex flex-col justify-between"; 
-            card.innerHTML = ` 
-                <div> 
-                    <div class="relative aspect-video w-full bg-slate-950 flex items-center justify-center overflow-hidden border-b border-slate-800"> 
-                        <img src="${product.poster}" class="w-full h-full object-contain p-2" alt="${product.title}" onerror="this.src='https://placehold.co/600x400/1e293b/facc15?text=Product+Photo'"> 
-                        <span class="absolute top-3 left-3 bg-yellow-400 text-slate-950 font-black text-[9px] uppercase px-2.5 py-1 rounded-full shadow-lg">DESIGN WORK</span> 
+            card.className = "bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-xl transition-all hover:scale-[1.01] hover:border-yellow-500/30 flex flex-col justify-between"; 
+             
+            let selectionTierHTML = ""; 
+            if (product.dropdowns && product.dropdowns.length > 0) { 
+                const infoLines = (product.dropdowns[0].info || '').split('\n').filter(l => l.trim() !== ''); 
+                const inlineListHTML = infoLines.map(line => ` 
+                    <div class="flex items-center space-x-2 text-xs text-slate-300"> 
+                        <div class="w-4 h-4 rounded-full bg-yellow-400 flex items-center justify-center flex-shrink-0"> 
+                            <svg class="w-2.5 h-2.5 text-slate-950" fill="none" stroke="currentColor" stroke-width="4" viewBox="0 0 24 24"> 
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path> 
+                            </svg> 
+                        </div> 
+                        <span>${line.replace(/^-\s*/, '')}</span> 
                     </div> 
+                `).join(''); 
+
+                selectionTierHTML = ` 
                     <div class="p-5 space-y-4"> 
                         <div class="flex items-center justify-between border-b border-slate-800/60 pb-3"> 
                             <div> 
@@ -917,18 +1031,38 @@
                                 <span id="frontend-price-badge-${product.id}" class="text-2xl font-black text-yellow-400">RM ${product.dropdowns[0].price.toFixed(2)}</span> 
                             </div> 
                         </div> 
-                        <select id="frontend-select-${product.id}" onchange="updateFrontendSelectedPrice('${product.id}')" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs text-white outline-none"> 
-                            ${product.dropdowns.map((drop, dIdx) => `<option value="${dIdx}">[RM ${drop.price.toFixed(2)}] ${drop.name}</option>`).join('')} 
-                        </select> 
-                        <div id="frontend-info-box-${product.id}" class="space-y-2 pt-2 text-xs text-slate-300"></div> 
+
+                        <div class="space-y-2"> 
+                            <select id="frontend-select-${product.id}" onchange="updateFrontendSelectedPrice('${product.id}')" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs text-white outline-none transition-colors"> 
+                                ${product.dropdowns.map((drop, dIdx) => `<option value="${dIdx}">[RM ${drop.price.toFixed(2)}] ${drop.name}</option>`).join('')} 
+                            </select> 
+                            <div id="frontend-info-box-${product.id}" class="space-y-2 pt-2"> 
+                                ${inlineListHTML || '<span class="text-slate-500 italic text-[11px]">- standard tier summary</span>'} 
+                            </div> 
+                        </div> 
                     </div> 
+                `; 
+            } else { 
+                selectionTierHTML = `<div class="p-5 text-[11px] text-slate-500 italic">No configuration variants parsed.</div>`; 
+            } 
+
+            card.innerHTML = ` 
+                <div> 
+                    <div class="relative aspect-video w-full bg-slate-950 flex items-center justify-center overflow-hidden border-b border-slate-800"> 
+                        <img src="${product.poster}" class="w-full h-full object-contain p-2" alt="${product.title}" onerror="this.src='https://placehold.co/600x400/1e293b/facc15?text=Product+Photo'"> 
+                        <span class="absolute top-3 left-3 bg-yellow-400 text-slate-950 font-black text-[9px] uppercase px-2.5 py-1 rounded-full shadow-lg"> 
+                            DESIGN WORK 
+                        </span> 
+                    </div> 
+                    ${selectionTierHTML} 
                 </div> 
                 <div class="p-5 pt-0"> 
-                    <button onclick="addProductToBasket('${product.id}')" class="w-full py-3 bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-black text-xs rounded-xl transition-all uppercase tracking-wider">Add Package variant</button> 
+                    <button onclick="addProductToBasket('${product.id}')" class="w-full py-3 bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-black text-xs rounded-xl transition-all uppercase tracking-wider shadow-md"> 
+                        Add Package variant to basket 
+                    </button> 
                 </div> 
             `; 
             container.appendChild(card); 
-            updateFrontendSelectedPrice(product.id);
         }); 
     } 
 
@@ -936,26 +1070,42 @@
         const product = PRODUCTS.find(p => p.id === productId); 
         const dropdownIdx = document.getElementById(`frontend-select-${productId}`).value; 
         const selectedDropdown = product.dropdowns[dropdownIdx]; 
+         
         if (selectedDropdown) { 
             document.getElementById(`frontend-price-badge-${productId}`).innerText = `RM ${selectedDropdown.price.toFixed(2)}`; 
             const infoBox = document.getElementById(`frontend-info-box-${productId}`); 
-            infoBox.innerHTML = (selectedDropdown.info || '').split('\n').map(l => `<div>• ${l.replace(/^-\s*/, '')}</div>`).join(''); 
+             
+            const infoLines = (selectedDropdown.info || '').split('\n').filter(l => l.trim() !== ''); 
+            infoBox.innerHTML = infoLines.map(line => ` 
+                <div class="flex items-center space-x-2 text-xs text-slate-300 animate-fadeIn"> 
+                    <div class="w-4 h-4 rounded-full bg-yellow-400 flex items-center justify-center flex-shrink-0"> 
+                        <svg class="w-2.5 h-2.5 text-slate-950" fill="none" stroke="currentColor" stroke-width="4" viewBox="0 0 24 24"> 
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path> 
+                        </svg> 
+                    </div> 
+                    <span>${line.replace(/^-\s*/, '')}</span> 
+                </div> 
+            `).join('') || '<span class="text-slate-500 italic text-[11px]">- standard tier summary</span>'; 
         } 
     } 
 
     function loadActiveSession() { 
-        if (currentUser) syncAuthenticatedLayout(currentUser); 
+        if (currentUser) { 
+            syncAuthenticatedLayout(currentUser); 
+        } 
         updateCustomerWorkflowUI(); 
     } 
 
     function syncAuthenticatedLayout(user) { 
         document.getElementById('customer-portal-text').classList.add('hidden'); 
         const userBadge = document.getElementById('customer-portal-username'); 
-        userBadge.innerText = user.username || user.phone; 
+        userBadge.innerText = user.username; 
         userBadge.classList.remove('hidden'); 
-        document.getElementById('authenticated-cust-username').innerText = `Welcome back, ${user.username || user.phone}!`; 
-        document.getElementById('cust-det-email').innerText = user.email || 'Phone Verified Account'; 
-        document.getElementById('cust-det-phone').innerText = user.phone || 'N/A'; 
+
+        document.getElementById('authenticated-cust-username').innerText = `Welcome back, ${user.username}!`; 
+        document.getElementById('cust-det-email').innerText = user.email; 
+        document.getElementById('cust-det-phone').innerText = user.phone; 
+
         document.getElementById('customer-unauthenticated-card').classList.add('hidden'); 
         document.getElementById('customer-authenticated-card').classList.remove('hidden'); 
     } 
@@ -966,100 +1116,53 @@
         const email = document.getElementById('cust-reg-email').value.trim(); 
         const phone = document.getElementById('cust-reg-phone').value.trim(); 
         const pass = document.getElementById('cust-reg-pass').value; 
+
         try {
             const userCredential = await window.FB_createUser(window.FB_AUTH, email, pass);
-            const userData = { username, email, phone, uid: userCredential.user.uid }; 
-            
-            // Save to registered database list for verification validation
-            registeredUsersDatabase.push(userData);
-            localStorage.setItem("bw_registered_users", JSON.stringify(registeredUsersDatabase));
+            const user = userCredential.user;
 
+            const userData = { username, email, phone, uid: user.uid }; 
             currentUser = userData; 
             localStorage.setItem("current_session_user", JSON.stringify(userData)); 
             syncAuthenticatedLayout(userData); 
-            showToast(`Welcome aboard, ${username}! Account Created.`); 
-        } catch (error) { showToast(error.message, "error"); }
+            showToast(`Welcome aboard, ${username}! Firebase Account Created.`); 
+            renderChatMessagesForCustomer(); 
+        } catch (error) {
+            showToast(error.message, "error");
+        }
     } 
 
     async function handleCustomerLogin(event) { 
         event.preventDefault(); 
         const email = document.getElementById('cust-login-email').value.trim(); 
         const pass = document.getElementById('cust-login-pass').value; 
+        const errorDiv = document.getElementById('cust-login-error'); 
+
         try {
             const userCredential = await window.FB_signIn(window.FB_AUTH, email, pass);
-            const matchedUser = registeredUsersDatabase.find(u => u.email === email) || { username: email.split('@')[0], email, phone: "+60123456789", uid: userCredential.user.uid };
-            currentUser = matchedUser; 
-            localStorage.setItem("current_session_user", JSON.stringify(currentUser)); 
-            syncAuthenticatedLayout(currentUser); 
+            const user = userCredential.user;
+
+            errorDiv.classList.add('hidden'); 
+            const userData = { username: email.split('@')[0], email: user.email, phone: "+60123456789", uid: user.uid };
+            currentUser = userData; 
+            localStorage.setItem("current_session_user", JSON.stringify(userData)); 
+            syncAuthenticatedLayout(userData); 
+            document.getElementById('customer-login-form').reset(); 
             showToast(`Logged in safely as ${currentUser.username}`); 
             updateCustomerWorkflowUI(); 
-        } catch (error) { 
-            document.getElementById('cust-login-error').classList.remove('hidden'); 
+            renderChatMessagesForCustomer(); 
+        } catch (error) {
+            errorDiv.classList.remove('hidden'); 
             showToast("Invalid credentials or user not found.", "error"); 
         } 
     } 
 
-    /* METHOD 2: PHONE NUMBER & OTP SIGN IN LOGIC (STRICTLY RESTRICTED TO REGISTERED USERS) */
-    function initRecaptcha(containerId) {
-        if (!window.recaptchaVerifier) {
-            window.recaptchaVerifier = new window.FB_RecaptchaVerifier(window.FB_AUTH, containerId, {
-                'size': 'invisible',
-                'callback': (response) => {}
-            });
-        }
-    }
-
-    async function sendPhoneVerificationOTP() {
-        const phoneNumber = document.getElementById('cust-phone-input').value.trim();
-        if (!phoneNumber) {
-            showToast("Please enter your registered phone number.", "error");
-            return;
-        }
-
-        // Validate if phone number exists in registered accounts database
-        const isRegistered = registeredUsersDatabase.some(u => u.phone === phoneNumber);
-        if (!isRegistered) {
-            showToast("Phone number not found. Please sign up first!", "error");
-            return;
-        }
-
-        initRecaptcha('recaptcha-container');
-        try {
-            const appVerifier = window.recaptchaVerifier;
-            windowConfirmationResult = await window.FB_signInWithPhoneNumber(window.FB_AUTH, phoneNumber, appVerifier);
-            document.getElementById('otp-input-container').style.display = 'block';
-            document.getElementById('phone-submit-btn').style.display = 'block';
-            showToast("SMS OTP verification code sent successfully!");
-        } catch (error) {
-            showToast("Error sending OTP: " + error.message, "error");
-        }
-    }
-
-    async function handlePhoneAuthSubmit(event) {
-        event.preventDefault();
-        const code = document.getElementById('cust-otp-code').value.trim();
-        const phoneNumber = document.getElementById('cust-phone-input').value.trim();
-        if (!code || !windowConfirmationResult) {
-            showToast("Please enter the received OTP verification code.", "error");
-            return;
-        }
-        try {
-            const result = await windowConfirmationResult.confirm(code);
-            const user = result.user;
-            const matchedUser = registeredUsersDatabase.find(u => u.phone === phoneNumber) || { username: "PhoneUser", email: "phone.verified@brandworkz.co", phone: phoneNumber, uid: user.uid };
-            
-            currentUser = matchedUser;
-            localStorage.setItem("current_session_user", JSON.stringify(currentUser));
-            syncAuthenticatedLayout(currentUser);
-            showToast("Phone authentication verified successfully!");
-            updateCustomerWorkflowUI();
-        } catch (error) {
-            showToast("Invalid OTP verification code.", "error");
-        }
-    }
-
     async function logoutCustomer() { 
-        try { await window.FB_signOut(window.FB_AUTH); } catch(e) {}
+        try {
+            await window.FB_signOut(window.FB_AUTH);
+        } catch(e) {
+            console.error(e);
+        }
         currentUser = null; 
         localStorage.removeItem("current_session_user"); 
         document.getElementById('customer-authenticated-card').classList.add('hidden'); 
@@ -1068,29 +1171,73 @@
         document.getElementById('customer-portal-text').classList.remove('hidden'); 
         toggleCustomerAuthTab('login'); 
         showToast("Logged out from customer session."); 
+        updateCustomerWorkflowUI(); 
+        renderChatMessagesForCustomer(); 
     } 
 
     function toggleCustomerAuthTab(tab) { 
-        document.getElementById('customer-login-form').classList.add('hidden'); 
-        document.getElementById('customer-phone-form').classList.add('hidden');
-        document.getElementById('customer-register-form').classList.add('hidden'); 
-        
-        document.getElementById('tab-cust-login').className = "px-3.5 py-1.5 text-xs font-bold rounded-md text-slate-400 hover:text-white transition-all";
-        document.getElementById('tab-cust-phone').className = "px-3.5 py-1.5 text-xs font-bold rounded-md text-slate-400 hover:text-white transition-all";
-        document.getElementById('tab-cust-register').className = "px-3.5 py-1.5 text-xs font-bold rounded-md text-slate-400 hover:text-white transition-all";
-
-        if (tab === 'login') { 
-            document.getElementById('customer-login-form').classList.remove('hidden'); 
-            document.getElementById('tab-cust-login').className = "px-3.5 py-1.5 text-xs font-bold rounded-md bg-yellow-400 text-slate-950 transition-all"; 
-        } else if (tab === 'phone') {
-            document.getElementById('customer-phone-form').classList.remove('hidden'); 
-            document.getElementById('tab-cust-phone').className = "px-3.5 py-1.5 text-xs font-bold rounded-md bg-yellow-400 text-slate-950 transition-all"; 
-        } else if (tab === 'register') { 
-            document.getElementById('customer-register-form').classList.remove('hidden'); 
-            document.getElementById('tab-cust-register').className = "px-3.5 py-1.5 text-xs font-bold rounded-md bg-yellow-400 text-slate-950 transition-all"; 
+        const loginForm = document.getElementById('customer-login-form'); 
+        const registerForm = document.getElementById('customer-register-form'); 
+        const tabLoginBtn = document.getElementById('tab-cust-login'); 
+        const tabRegBtn = document.getElementById('tab-cust-register'); 
+         
+        loginForm.classList.add('hidden'); 
+        registerForm.classList.add('hidden'); 
+         
+        if (tab === 'register') { 
+            registerForm.classList.remove('hidden'); 
+            tabRegBtn.className = "px-3.5 py-1.5 text-xs font-bold rounded-md bg-yellow-400 text-slate-950 transition-all"; 
+            tabLoginBtn.className = "px-3.5 py-1.5 text-xs font-bold rounded-md text-slate-400 hover:text-white transition-all"; 
+        } else if (tab === 'login') { 
+            loginForm.classList.remove('hidden'); 
+            tabLoginBtn.className = "px-3.5 py-1.5 text-xs font-bold rounded-md bg-yellow-400 text-slate-950 transition-all"; 
+            tabRegBtn.className = "px-3.5 py-1.5 text-xs font-bold rounded-md text-slate-400 hover:text-white transition-all"; 
         } 
     } 
 
+    /* PASSWORD RESET ACTIONS */
+    function openForgotPasswordModal() {
+        document.getElementById('forgot-password-modal').classList.remove('hidden');
+    }
+
+    function closeForgotPasswordModal() {
+        document.getElementById('forgot-password-modal').classList.add('hidden');
+    }
+
+    async function handleSendPasswordReset(event) {
+        event.preventDefault();
+        const email = document.getElementById('reset-email-input').value.trim();
+        try {
+            await window.FB_sendPasswordResetEmail(window.FB_AUTH, email);
+            showToast("Password reset email sent successfully!");
+            closeForgotPasswordModal();
+            document.getElementById('forgot-password-modal').querySelector('form').reset();
+        } catch (error) {
+            showToast("Error sending reset email: " + error.message, "error");
+        }
+    }
+
+    async function handleConfirmPasswordReset(event) {
+        event.preventDefault();
+        const newPassword = document.getElementById('new-password-input').value;
+        const oobCode = window.activeOobCode;
+
+        if (!oobCode) {
+            showToast("Invalid or missing reset code.", "error");
+            return;
+        }
+
+        try {
+            await window.FB_confirmPasswordReset(window.FB_AUTH, oobCode, newPassword);
+            showToast("Password reset complete! You can now sign in.");
+            document.getElementById('confirm-reset-modal').classList.add('hidden');
+            switchView('customer-auth');
+        } catch (error) {
+            showToast("Error resetting password: " + error.message, "error");
+        }
+    }
+
+    /* CHECKOUT CART CONTROLS */ 
     function toggleCartDrawer(state) { 
         const backdrop = document.getElementById('cart-drawer-backdrop'); 
         const panel = document.getElementById('cart-drawer-panel'); 
@@ -1110,13 +1257,27 @@
         const product = PRODUCTS.find(p => p.id === productId); 
         const dropdownIdx = document.getElementById(`frontend-select-${productId}`).value; 
         const selectedDropdown = product.dropdowns[dropdownIdx]; 
+
+        if(!selectedDropdown) { 
+            showToast("Please choose an option first.", "error"); 
+            return; 
+        } 
+
         const existing = cart.find(item => item.id === productId && item.optionSelected === selectedDropdown.name); 
 
-        if (existing) existing.quantity += 1; 
-        else cart.push({ id: product.id, title: product.title, optionSelected: selectedDropdown.name, singlePrice: selectedDropdown.price, quantity: 1 }); 
-        
+        if (existing) { 
+            existing.quantity += 1; 
+        } else { 
+            cart.push({ 
+                id: product.id, 
+                title: product.title, 
+                optionSelected: selectedDropdown.name, 
+                singlePrice: selectedDropdown.price, 
+                quantity: 1 
+            }); 
+        } 
         updateCartBadgeCount(); 
-        showToast(`Added ${product.title} to basket!`); 
+        showToast(`Added ${product.title} (${selectedDropdown.name}) to basket!`); 
     } 
 
     function updateCartBadgeCount() { 
@@ -1125,14 +1286,18 @@
         if (totalQty > 0) { 
             badge.innerText = totalQty; 
             badge.classList.remove('opacity-0', 'scale-90'); 
+            badge.classList.add('opacity-100', 'scale-100'); 
         } else { 
             badge.classList.add('opacity-0', 'scale-90'); 
         } 
     } 
 
     function changeCartItemQty(index, increment) { 
-        cart[index].quantity += increment; 
-        if (cart[index].quantity <= 0) cart.splice(index, 1); 
+        const targetCartItem = cart[index]; 
+        targetCartItem.quantity += increment; 
+        if (targetCartItem.quantity <= 0) { 
+            cart.splice(index, 1); 
+        } 
         updateCartBadgeCount(); 
         renderCartContent(); 
     } 
@@ -1140,16 +1305,24 @@
     function renderCartContent() { 
         const listContainer = document.getElementById('cart-drawer-list'); 
         listContainer.innerHTML = ""; 
+
         if (cart.length === 0) { 
-            listContainer.innerHTML = `<div class="h-64 flex flex-col items-center justify-center text-slate-500 space-y-2"><span class="text-3xl">🏜️</span><p class="text-xs">Your basket is currently empty.</p></div>`; 
+            listContainer.innerHTML = ` 
+                <div class="h-64 flex flex-col items-center justify-center text-slate-500 space-y-2"> 
+                    <span class="text-3xl">🏜️</span> 
+                    <p class="text-xs">Your basket is currently empty.</p> 
+                </div> 
+            `; 
             document.getElementById('cart-subtotal').innerText = "RM 0.00"; 
             document.getElementById('cart-total-price').innerText = "RM 0.00"; 
             return; 
         } 
+
         let runningSubtotal = 0; 
         cart.forEach((item, index) => { 
             const cost = item.singlePrice * item.quantity; 
             runningSubtotal += cost; 
+
             const div = document.createElement('div'); 
             div.className = "bg-slate-950 border border-slate-850 p-3.5 rounded-xl space-y-2"; 
             div.innerHTML = ` 
@@ -1174,6 +1347,7 @@
             `; 
             listContainer.appendChild(div); 
         }); 
+
         document.getElementById('cart-subtotal').innerText = `RM ${runningSubtotal.toFixed(2)}`; 
         document.getElementById('cart-total-price').innerText = `RM ${runningSubtotal.toFixed(2)}`; 
     } 
@@ -1185,20 +1359,28 @@
             toggleCartDrawer(false); 
             return; 
         } 
-        if (cart.length === 0) { showToast("Basket is empty.", "error"); return; } 
+        if (cart.length === 0) { 
+            showToast("Basket is empty.", "error"); 
+            return; 
+        } 
         const briefVal = document.getElementById('checkout-brief-text').value.trim(); 
-        if(!briefVal) { showToast("Please include structural design requirements.", "error"); return; } 
+        if(!briefVal) { 
+            showToast("Please include structural design requirements or project reference notes.", "error"); 
+            return; 
+        } 
 
-        WORKFLOW_STATE = { 
-            hasRequest: true, 
-            customerUsername: currentUser.username || currentUser.phone, 
-            customerEmail: currentUser.email || 'Phone Verified',
-            orderId: "BZ-ORD-" + Math.floor(1000 + Math.random() * 9000),
-            status: "Pending Confirmation", 
-            amount: cart.reduce((sum, item) => sum + (item.singlePrice * item.quantity), 0), 
-            brief: briefVal, 
-            selectedTerm: document.getElementById('checkout-term-selector').value 
-        }; 
+        const selectedTerm = document.getElementById('checkout-term-selector').value; 
+        let totalAmount = cart.reduce((sum, item) => sum + (item.singlePrice * item.quantity), 0); 
+        const generatedOrderId = "BZ-ORD-" + Math.floor(1000 + Math.random() * 9000);
+         
+        WORKFLOW_STATE.hasRequest = true; 
+        WORKFLOW_STATE.customerUsername = currentUser.username; 
+        WORKFLOW_STATE.customerEmail = currentUser.email;
+        WORKFLOW_STATE.orderId = generatedOrderId;
+        WORKFLOW_STATE.status = "Pending Confirmation"; 
+        WORKFLOW_STATE.amount = totalAmount; 
+        WORKFLOW_STATE.brief = briefVal; 
+        WORKFLOW_STATE.selectedTerm = selectedTerm; 
 
         saveWorkflowToStorage(); 
         updateCustomerWorkflowUI(); 
@@ -1206,34 +1388,81 @@
         toggleCartDrawer(false); 
         cart = []; 
         updateCartBadgeCount(); 
-        showToast("Order pre-purchase details auto-saved & synced!"); 
+        showToast("Order pre-purchase details auto-saved & synced to Admin Workspace!"); 
     } 
 
+    /* REALTIME CUSTOMER PROFILE PORTAL ACTION CONTROL */ 
     function updateCustomerWorkflowUI() { 
         const area = document.getElementById('dynamic-workflow-btn-placeholder'); 
         const badge = document.getElementById('customer-status-badge'); 
         const termLabel = document.getElementById('cust-det-term'); 
+         
         if(currentUser && termLabel) { 
-            termLabel.innerText = WORKFLOW_STATE.hasRequest ? (WORKFLOW_STATE.selectedTerm === 'cash' ? "Cash Only" : "FPX Transfer") : "Not Selected"; 
+            termLabel.innerText = WORKFLOW_STATE.hasRequest && WORKFLOW_STATE.customerUsername === currentUser.username 
+                ? (WORKFLOW_STATE.selectedTerm === 'cash' ? "Cash Only" : "Online Transfer with FPX") 
+                : "Not Selected"; 
         } 
+
         if(!area || !badge) return; 
-        if (!currentUser || !WORKFLOW_STATE.hasRequest) { 
+
+        if (!currentUser || !WORKFLOW_STATE.hasRequest || WORKFLOW_STATE.customerUsername !== currentUser.username) { 
             badge.innerText = "No Active Order"; 
             badge.className = "px-3 py-1 rounded text-xs font-bold bg-slate-950 text-slate-400 border border-slate-800"; 
-            area.innerHTML = `<div class="text-center p-2 text-xs text-slate-500 italic">Add catalog items to basket and submit requirements.</div>`; 
+            area.innerHTML = ` 
+                <div class="text-center p-2 text-xs text-slate-500 italic"> 
+                    Add catalog items to basket and submit requirements brief to start workflow loop. 
+                </div> 
+            `; 
             return; 
         } 
+
         badge.innerText = WORKFLOW_STATE.status; 
+
         if (WORKFLOW_STATE.status === "Pending Confirmation") { 
             badge.className = "px-3 py-1 rounded text-xs font-bold bg-amber-500/10 text-amber-400 border border-amber-500/30"; 
-            area.innerHTML = `<button disabled class="w-full py-2.5 bg-slate-800 text-slate-500 cursor-not-allowed font-bold text-xs uppercase rounded-xl">Awaiting Admin Approval...</button>`; 
+            area.innerHTML = ` 
+                <button disabled class="w-full py-2.5 bg-slate-800 text-slate-500 cursor-not-allowed font-bold text-xs uppercase tracking-wider rounded-xl border border-slate-700"> 
+                    Awaiting Admin Approval... 
+                </button> 
+            `; 
         } else if (WORKFLOW_STATE.status === "Approved") { 
             badge.className = "px-3 py-1 rounded text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30"; 
-            area.innerHTML = `<button onclick="triggerToyyibpayFPXPaymentLink()" class="w-full py-2.5 bg-yellow-400 text-slate-950 font-black text-xs uppercase rounded-xl">Proceed Secure Checkout</button>`; 
-        } else { 
+            if (WORKFLOW_STATE.selectedTerm === "cash") { 
+                area.innerHTML = ` 
+                    <button onclick="executeCashQuotationApproval()" class="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow-lg shadow-blue-600/20"> 
+                        Approve for a Quotation 
+                    </button> 
+                `; 
+            } else { 
+                area.innerHTML = ` 
+                    <button onclick="triggerToyyibpayFPXPaymentLink()" class="w-full py-2.5 bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow-lg shadow-yellow-400/20"> 
+                        Buy Now with FPX 
+                    </button> 
+                `; 
+            } 
+        } else if (WORKFLOW_STATE.status === "Quotation Processed") { 
             badge.className = "px-3 py-1 rounded text-xs font-bold bg-blue-500/10 text-blue-400 border border-blue-500/30"; 
-            area.innerHTML = `<div class="p-3 bg-blue-500/10 text-blue-400 font-bold text-center text-xs rounded-xl">Order Processed & Completed!</div>`; 
+            area.innerHTML = ` 
+                <div class="p-3 bg-blue-500/10 border border-blue-500/20 text-blue-400 font-bold text-center text-xs rounded-xl"> 
+                    Awaiting Project Completion by Studio Admin... 
+                </div> 
+            `; 
+        } else if (WORKFLOW_STATE.status === "Completed") { 
+            badge.className = "px-3 py-1 rounded text-xs font-bold bg-blue-500/10 text-blue-400 border border-blue-500/30"; 
+            area.innerHTML = ` 
+                <div class="p-3 bg-blue-500/10 border border-blue-500/20 text-blue-400 font-bold text-center text-xs rounded-xl"> 
+                    🎉 Order Processed &amp; Marked Completed by Studio Admin! 
+                </div> 
+            `; 
         } 
+    } 
+
+    function executeCashQuotationApproval() { 
+        WORKFLOW_STATE.status = "Quotation Processed"; 
+        saveWorkflowToStorage(); 
+        updateCustomerWorkflowUI(); 
+        if (isAdminLoggedIn) renderAdminWorkflowPanel();
+        showToast("Quotation request submitted directly back to Studio Admin."); 
     } 
 
     function triggerToyyibpayFPXPaymentLink() { 
@@ -1241,15 +1470,25 @@
         document.getElementById('toyyibpay-modal').classList.remove('hidden'); 
     } 
 
-    function closeToyyibpayModal() { document.getElementById('toyyibpay-modal').classList.add('hidden'); } 
+    function closeToyyibpayModal() { 
+        document.getElementById('toyyibpay-modal').classList.add('hidden'); 
+    } 
 
     function processToyyibPaySimulation() { 
+        const submitBtn = document.getElementById('toyyibpay-submit-btn'); 
+        submitBtn.disabled = true; 
+        submitBtn.innerText = "Processing secure FPX gateway redirection..."; 
+
         setTimeout(() => { 
+            submitBtn.disabled = false; 
+            submitBtn.innerText = "Proceed Authorization Transfer"; 
             closeToyyibpayModal(); 
+            showToast("Redirection initialized to Toyyibpay active FPX payment gateway."); 
             window.location.href = "https://toyyibpay.com/brandworks"; 
         }, 1200); 
     } 
 
+    /* ADMINISTRATIVE CORE WORKSPACE CONTROL */ 
     function renderAdminWorkspace() { 
         if(!isAdminLoggedIn) return; 
         renderAdminWorkflowPanel(); 
@@ -1259,16 +1498,228 @@
 
     function renderAdminWorkflowPanel() { 
         const tbody = document.getElementById('admin-workflow-table-body'); 
-        if(!tbody || !WORKFLOW_STATE.hasRequest) return; 
-        tbody.innerHTML = ` 
-            <tr class="border-b border-slate-900/60 font-medium"> 
-                <td class="py-3 text-white font-bold"><span class="text-yellow-400 font-mono text-[11px] block">${WORKFLOW_STATE.orderId}</span><span>${WORKFLOW_STATE.customerUsername}</span></td> 
-                <td class="py-3 text-slate-300 font-mono text-[11px]">${WORKFLOW_STATE.customerEmail}</td>
-                <td class="py-3 text-slate-300 font-medium"><span>${WORKFLOW_STATE.selectedTerm}</span><span class="block text-[10px] text-yellow-400 font-black">RM ${WORKFLOW_STATE.amount.toFixed(2)}</span></td> 
-                <td class="py-3"><span class="px-2 py-0.5 rounded text-[10px] font-black uppercase bg-amber-500/10 text-amber-400">${WORKFLOW_STATE.status}</span></td> 
-                <td class="py-3 text-right"><button onclick="adminApproveWorkflowOrder()" class="px-3 py-1 bg-emerald-500 text-slate-950 font-black rounded uppercase text-[10px]">Approve</button></td> 
-            </tr> 
+        if(!tbody) return; 
+        tbody.innerHTML = ""; 
+
+        if (!WORKFLOW_STATE.hasRequest) { 
+            tbody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-slate-500 italic">No incoming confirmation client requests detected.</td></tr>`; 
+            return; 
+        } 
+
+        const tr = document.createElement('tr'); 
+        tr.className = "border-b border-slate-900/60 font-medium"; 
+
+        let actionsHTML = ""; 
+        if (WORKFLOW_STATE.status === "Pending Confirmation") { 
+            const btnLabel = WORKFLOW_STATE.selectedTerm === 'cash' ? "Approve Quotation" : "Approve Request"; 
+            actionsHTML = ` 
+                <button onclick="adminApproveWorkflowOrder()" class="px-3 py-1 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-black rounded uppercase text-[10px] tracking-wider transition-colors"> 
+                    ${btnLabel} 
+                </button> 
+            `; 
+        } else if (WORKFLOW_STATE.status === "Approved" && WORKFLOW_STATE.selectedTerm === "fpx") { 
+            actionsHTML = `<span class="text-slate-400 text-[10px] italic">Awaiting User FPX payment</span>`; 
+        } else if (WORKFLOW_STATE.status === "Approved" && WORKFLOW_STATE.selectedTerm === "cash") { 
+            actionsHTML = `<span class="text-slate-400 text-[10px] italic">Awaiting User Quote Approval</span>`; 
+        } else if (WORKFLOW_STATE.status === "Quotation Processed" || WORKFLOW_STATE.status === "Approved") { 
+            actionsHTML = ` 
+                <button onclick="adminCompleteWorkflowOrder()" class="px-3 py-1 bg-blue-500 hover:bg-blue-600 text-slate-950 font-black rounded uppercase text-[10px] tracking-wider transition-colors"> 
+                    Mark Completed 
+                </button> 
+            `; 
+        } else { 
+            actionsHTML = `<span class="text-slate-500 text-[10px] uppercase font-bold tracking-widest">Workflow Settled</span>`; 
+        } 
+
+        const displayTerm = WORKFLOW_STATE.selectedTerm === 'cash' ? 'Cash / Quotation' : 'FPX Transfer'; 
+
+        tr.innerHTML = ` 
+            <td class="py-3 text-white font-bold"> 
+                <span class="text-yellow-400 font-mono text-[11px] block">${WORKFLOW_STATE.orderId || 'BZ-ORD-NEW'}</span>
+                <span class="block">${WORKFLOW_STATE.customerUsername}</span> 
+            </td> 
+            <td class="py-3 text-slate-300 font-mono text-[11px]">${WORKFLOW_STATE.customerEmail || 'N/A'}</td>
+            <td class="py-3 text-slate-300 font-medium">
+                <span class="block">${displayTerm}</span>
+                <span class="text-[10px] text-yellow-400 font-black">RM ${WORKFLOW_STATE.amount.toFixed(2)}</span>
+            </td> 
+            <td class="py-3"> 
+                <span class="px-2 py-0.5 rounded text-[10px] font-black uppercase ${ 
+                    WORKFLOW_STATE.status === 'Pending Confirmation' ? 'bg-amber-500/10 text-amber-400' : 
+                    WORKFLOW_STATE.status === 'Approved' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-blue-500/10 text-blue-400' 
+                }">${WORKFLOW_STATE.status}</span> 
+            </td> 
+            <td class="py-3 text-right">${actionsHTML}</td> 
         `; 
+        tbody.appendChild(tr); 
+    } 
+
+    /* DYNAMIC ADMIN SANDBOX PANELS */ 
+    function renderAdminScratchSandbox() { 
+        const container = document.getElementById('admin-scratch-frames-container'); 
+        if (!container) return; 
+        container.innerHTML = ""; 
+
+        PRODUCTS.forEach((product, pIdx) => { 
+            const block = document.createElement('div'); 
+            block.className = "bg-slate-900 border-2 border-slate-800 rounded-2xl p-6 relative space-y-4 shadow-xl"; 
+             
+            let nestedDropdownsHTML = ""; 
+            product.dropdowns.forEach((drop, dIdx) => { 
+                nestedDropdownsHTML += ` 
+                    <div class="bg-slate-950 p-3 rounded-xl border border-slate-850 space-y-2 relative group"> 
+                        <div class="flex items-center justify-between gap-2"> 
+                            <span class="text-[10px] text-yellow-500 font-bold uppercase tracking-wider">List Drop-down ${dIdx + 1}</span> 
+                            <button onclick="removeScratchDropdown(${pIdx}, ${dIdx})" class="text-[10px] font-bold text-rose-500 hover:underline">Remove Option</button> 
+                        </div> 
+                        <div class="grid grid-cols-2 gap-2"> 
+                            <div> 
+                                <label class="block text-[9px] uppercase font-bold text-slate-500">Tier Name</label> 
+                                <input type="text" value="${drop.name}" onchange="updateScratchDropdownValue(${pIdx}, ${dIdx}, 'name', this.value)" class="w-full bg-slate-900 border border-slate-800 text-white rounded p-1 text-xs font-semibold outline-none focus:border-yellow-400" /> 
+                            </div> 
+                            <div> 
+                                <label class="block text-[9px] uppercase font-bold text-slate-500">Price (RM)</label> 
+                                <input type="number" step="0.01" value="${drop.price}" onchange="updateScratchDropdownValue(${pIdx}, ${dIdx}, 'price', this.value)" class="w-full bg-slate-900 border border-slate-800 text-yellow-400 rounded p-1 text-xs font-bold outline-none focus:border-yellow-400" /> 
+                            </div> 
+                        </div> 
+                        <div> 
+                            <label class="block text-[9px] uppercase font-bold text-slate-500">*Small Font Info*</label> 
+                            <textarea rows="2" onchange="updateScratchDropdownValue(${pIdx}, ${dIdx}, 'info', this.value)" class="w-full bg-slate-900 border border-slate-800 text-slate-400 font-mono rounded p-1.5 text-[10px] outline-none focus:border-yellow-400 resize-none">${drop.info || ''}</textarea> 
+                        </div> 
+                    </div> 
+                `; 
+            }); 
+
+            block.innerHTML = ` 
+                <div class="flex items-center justify-between border-b border-slate-800 pb-2"> 
+                    <span class="text-xs font-mono font-bold text-slate-500">FRAME CODE: ${product.id}</span> 
+                    <button onclick="deleteProductFrame(${pIdx})" class="w-6 h-6 rounded-full bg-rose-600/20 hover:bg-rose-600 text-rose-400 hover:text-white flex items-center justify-center text-xs font-black transition-all">X</button> 
+                </div> 
+
+                <div class="space-y-1.5"> 
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Product Image (Upload from device or PC) ! Editable</label> 
+                    <div class="flex items-center gap-4 bg-slate-950 p-3 rounded-xl border border-slate-850"> 
+                        <img id="scratch-preview-${product.id}" src="${product.poster}" class="w-14 h-14 object-cover rounded bg-slate-900 border border-slate-800" /> 
+                        <input type="file" accept="image/*" onchange="handleScratchPosterStream(event, ${pIdx})" class="text-[11px] text-slate-400 file:mr-2 file:py-1 file:px-2.5 file:rounded file:border-0 file:text-[10px] file:font-black file:bg-slate-800 file:text-white hover:file:bg-slate-750 cursor-pointer" /> 
+                    </div> 
+                </div> 
+
+                <hr class="border-slate-800" /> 
+
+                <div class="space-y-1"> 
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">*Big Font* Product Title ! Editable</label> 
+                    <input type="text" value="${product.title}" onchange="PRODUCTS[pIdx].title = this.value; saveProductsToStorage();" class="w-full bg-slate-950 border border-slate-800 text-white rounded-lg p-2.5 text-sm font-black outline-none focus:border-yellow-400" /> 
+                </div> 
+
+                <hr class="border-slate-800" /> 
+
+                <div class="space-y-1"> 
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Drop-down Base Group Label ! Editable</label> 
+                    <input type="text" value="${product.dropdownLabel}" onchange="PRODUCTS[pIdx].dropdownLabel = this.value; saveProductsToStorage();" class="w-full bg-slate-950 border border-slate-800 text-yellow-400 font-bold rounded-lg p-2 text-xs outline-none focus:border-yellow-400" /> 
+                </div> 
+
+                <div class="space-y-3 max-h-[220px] overflow-y-auto pr-1 hide-scrollbar"> 
+                    ${nestedDropdownsHTML} 
+                </div> 
+
+                <div class="grid grid-cols-2 gap-2 pt-2"> 
+                    <button onclick="appendNewScratchDropdown(${pIdx})" class="py-2 bg-slate-950 border border-slate-800 hover:border-yellow-400/40 text-slate-300 font-bold text-xs rounded-xl transition-all"> 
+                        (+) New Drop-down 
+                    </button> 
+                    <button onclick="popLastScratchDropdown(${pIdx})" class="py-2 bg-slate-950 border border-slate-800 hover:border-rose-500/40 text-rose-400 font-bold text-xs rounded-xl transition-all"> 
+                        (-) Delete Drop-down 
+                    </button> 
+                </div> 
+
+                <div class="pt-4 border-t border-slate-800/80"> 
+                    <button onclick="commitScratchChangesLive(${pIdx})" class="w-full py-2.5 bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow-md"> 
+                        Apply committed changes live 
+                    </button> 
+                </div> 
+            `; 
+            container.appendChild(block); 
+        }); 
+    } 
+
+    function appendBlankProductFrame() { 
+        const nextId = "p_frame_" + (PRODUCTS.length + 1); 
+        PRODUCTS.push({ 
+            id: nextId, 
+            title: "New Custom Title Frame", 
+            dropdownLabel: "All", 
+            poster: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100%' height='100%' fill='%231e293b'/><text x='50%' y='55%' font-weight='bold' font-size='10' fill='%23eab308' dominant-baseline='middle' text-anchor='middle'>BLANK FRAME</text></svg>", 
+            dropdowns: [ 
+                { name: "Default Option Package", price: 10.00, info: "- custom guidelines info entry" } 
+            ] 
+        }); 
+        saveProductsToStorage(); 
+        renderAdminScratchSandbox(); 
+        showToast("Appended new editable product layout frame."); 
+    } 
+
+    function deleteProductFrame(index) { 
+        PRODUCTS.splice(index, 1); 
+        saveProductsToStorage(); 
+        renderAdminScratchSandbox(); 
+        showToast("Removed product frame safely."); 
+    } 
+
+    function handleScratchPosterStream(event, pIdx) { 
+        const file = event.target.files[0]; 
+        if (!file) return; 
+
+        const reader = new FileReader(); 
+        reader.onload = function(e) { 
+            PRODUCTS[pIdx].poster = e.target.result; 
+            document.getElementById(`scratch-preview-${PRODUCTS[pIdx].id}`).src = e.target.result; 
+            showToast("Encoded file stream asset successfully."); 
+        } 
+        reader.readAsDataURL(file); 
+    } 
+
+    function appendNewScratchDropdown(pIdx) { 
+        PRODUCTS[pIdx].dropdowns.push({ 
+            name: "Custom tier option variant", 
+            price: 50.00, 
+            info: "- 1 side\n- provide edit image\n- digital design" 
+        }); 
+        saveProductsToStorage(); 
+        renderAdminScratchSandbox(); 
+    } 
+
+    function popLastScratchDropdown(pIdx) { 
+        if(PRODUCTS[pIdx].dropdowns.length <= 1) { 
+            showToast("At least one drop-down option variant configuration is mandated.", "error"); 
+            return; 
+        } 
+        PRODUCTS[pIdx].dropdowns.pop(); 
+        saveProductsToStorage(); 
+        renderAdminScratchSandbox(); 
+    } 
+
+    function removeScratchDropdown(pIdx, dIdx) { 
+        if(PRODUCTS[pIdx].dropdowns.length <= 1) { 
+            showToast("At least one drop-down option variant configuration is mandated.", "error"); 
+            return; 
+        } 
+        PRODUCTS[pIdx].dropdowns.splice(dIdx, 1); 
+        saveProductsToStorage(); 
+        renderAdminScratchSandbox(); 
+    } 
+
+    function updateScratchDropdownValue(pIdx, dIdx, field, val) { 
+        if (field === 'price') { 
+            PRODUCTS[pIdx].dropdowns[dIdx].price = Math.max(0, parseFloat(val) || 0.00); 
+        } else { 
+            PRODUCTS[pIdx].dropdowns[dIdx][field] = val; 
+        } 
+        saveProductsToStorage(); 
+    } 
+
+    function commitScratchChangesLive(pIdx) { 
+        saveProductsToStorage(); 
+        renderProductCatalog(); 
+        showToast(`🎉 Changes for frame "${PRODUCTS[pIdx].title}" committed successfully live!`); 
     } 
 
     function adminApproveWorkflowOrder() { 
@@ -1276,42 +1727,226 @@
         saveWorkflowToStorage(); 
         renderAdminWorkspace(); 
         updateCustomerWorkflowUI(); 
-        showToast("Client request approved successfully."); 
+        showToast("Client request approved. Customer dashboard layout updated."); 
     } 
 
-    function renderAdminScratchSandbox() { 
-        const container = document.getElementById('admin-scratch-frames-container'); 
-        if (!container) return; 
-        container.innerHTML = PRODUCTS.map((p, pIdx) => ` 
-            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-3"> 
-                <h4 class="text-xs font-bold text-white">${p.title}</h4> 
-                <p class="text-[10px] text-slate-400">${p.dropdowns.length} Pricing Tiers Configured</p> 
-            </div> 
-        `).join(''); 
+    function adminCompleteWorkflowOrder() { 
+        WORKFLOW_STATE.status = "Completed"; 
+        saveWorkflowToStorage(); 
+        renderAdminWorkspace(); 
+        updateCustomerWorkflowUI(); 
+        showToast("Workflow order marked Completed safely."); 
     } 
 
-    function toggleCustomerChatPanel(state) { 
-        const panel = document.getElementById('customer-chat-panel'); 
-        if (panel) panel.classList.toggle('hidden', !state); 
-    } 
+    /* CUSTOMER CHAT ACTIONS */
+    function toggleCustomerChatPanel(state) {
+        const panel = document.getElementById('customer-chat-panel');
+        if (!panel) return;
+        if (state) {
+            panel.classList.remove('hidden');
+            const badge = document.getElementById('chat-unread-badge');
+            if (badge) {
+                badge.classList.add('hidden');
+                badge.innerText = "0";
+            }
+            renderChatMessagesForCustomer();
+            setTimeout(() => {
+                const win = document.getElementById('customer-chat-window');
+                if (win) win.scrollTop = win.scrollHeight;
+            }, 50);
+        } else {
+            panel.classList.add('hidden');
+        }
+    }
 
-    function handleCustomerSendMessage(event) { 
-        event.preventDefault(); 
-        const input = document.getElementById('customer-chat-input'); 
-        if (!input || !input.value.trim()) return; 
-        CHAT_MESSAGES.push({ id: 'msg_' + Date.now(), sender: 'customer', user: currentUser ? currentUser.username : "Guest", message: input.value.trim(), time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) });
+    function handleCustomerSendMessage(event) {
+        event.preventDefault();
+        const input = document.getElementById('customer-chat-input');
+        if (!input) return;
+        const messageVal = input.value.trim();
+        if (!messageVal) return;
+
+        const senderUsername = currentUser ? currentUser.username : "Guest_Client";
+        const newMsg = {
+            id: 'msg_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+            sender: 'customer',
+            user: senderUsername,
+            message: messageVal,
+            time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+        };
+
+        CHAT_MESSAGES.push(newMsg);
         saveChatMessagesToStorage();
         renderChatMessagesForCustomer();
         input.value = "";
-    } 
+
+        if (mqttClient && mqttClient.connected) {
+            mqttClient.publish(TOPIC_CHAT, JSON.stringify(newMsg));
+        }
+
+        const win = document.getElementById('customer-chat-window');
+        if (win) win.scrollTop = win.scrollHeight;
+
+        if (isAdminLoggedIn) {
+            renderAdminChatHub();
+        }
+        showToast("Message sent to studio admin.");
+    }
 
     function renderChatMessagesForCustomer() {
         const win = document.getElementById('customer-chat-window');
         if (!win) return;
-        win.innerHTML = CHAT_MESSAGES.map(m => `<div class="p-2 bg-slate-900 rounded text-xs text-white"><b>${m.user}:</b> ${m.message}</div>`).join('');
+
+        const senderUsername = currentUser ? currentUser.username : "Guest_Client";
+        const relevantMessages = CHAT_MESSAGES.filter(m => m.user === senderUsername);
+
+        let html = `
+            <div class="text-center p-3 text-[10px] text-slate-500 bg-slate-950/85 rounded-xl border border-slate-900 leading-relaxed">
+                💬 You are connected directly to the studio workspace. Type a brief query below to chat with an admin.
+            </div>
+        `;
+
+        relevantMessages.forEach(msg => {
+            if (msg.sender === 'customer') {
+                html += `
+                    <div class="self-end max-w-[80%] flex flex-col items-end animate-fadeIn space-y-1">
+                        <span class="text-[8px] text-yellow-400 font-extrabold uppercase tracking-wider">You</span>
+                        <div class="bg-yellow-400 text-slate-950 px-3 py-2 rounded-2xl rounded-tr-none text-xs shadow-md">
+                            <p class="leading-relaxed font-semibold">${msg.message}</p>
+                            <span class="text-[8px] font-bold text-slate-900/60 block text-right mt-1">${msg.time}</span>
+                        </div>
+                    </div>
+                `;
+            } else {
+                html += `
+                    <div class="self-start max-w-[80%] flex flex-col items-start animate-fadeIn space-y-1">
+                        <span class="text-[8px] text-slate-400 font-bold uppercase tracking-wider">Lead Designer (Admin)</span>
+                        <div class="bg-slate-900 border border-slate-800 text-slate-100 px-3 py-2 rounded-2xl rounded-tl-none text-xs shadow-md">
+                            <p class="leading-relaxed text-slate-200 font-light">${msg.message}</p>
+                            <span class="text-[8px] text-slate-500 block text-right mt-1">${msg.time}</span>
+                        </div>
+                    </div>
+                `;
+            }
+        });
+
+        win.innerHTML = html;
+        win.scrollTop = win.scrollHeight;
     }
 
-    function renderAdminChatHub() {}
+    function renderAdminChatHub() {
+        const channelContainer = document.getElementById('admin-chat-channels');
+        const messageContainer = document.getElementById('admin-chat-messages-container');
+        if (!channelContainer || !messageContainer) return;
+
+        const userChannels = [...new Set(CHAT_MESSAGES.map(m => m.user))].filter(u => u && u !== 'system_bot' && u !== 'admin');
+
+        channelContainer.innerHTML = `<span class="text-[9px] uppercase tracking-wider font-extrabold text-slate-500 font-mono">Active Users</span>`;
+         
+        if (userChannels.length === 0) {
+            channelContainer.innerHTML += `
+                <div class="text-[10px] text-slate-500 italic text-center py-4">No active users</div>
+            `;
+            messageContainer.innerHTML = `
+                <div class="text-center text-slate-500 italic py-8 font-light">Select a customer thread to read incoming messages and respond.</div>
+            `;
+            return;
+        }
+
+        userChannels.forEach(userChan => {
+            const btn = document.createElement('button');
+            const isActive = activeAdminThreadUser === userChan;
+            btn.className = `w-full text-left p-2 rounded-lg text-xs font-semibold transition-all flex items-center justify-between border ${
+                isActive 
+                ? 'bg-yellow-400 text-slate-950 border-yellow-400' 
+                : 'bg-slate-900 hover:bg-slate-850 text-slate-300 border-slate-800'
+            }`;
+             
+            const userMessages = CHAT_MESSAGES.filter(m => m.user === userChan);
+            const lastMsg = userMessages[userMessages.length - 1]?.message || "No messages";
+
+            btn.innerHTML = `
+                <div class="truncate max-w-[100px]">
+                    <span class="block font-black truncate">${userChan}</span>
+                    <span class="text-[9px] opacity-75 block truncate">${lastMsg}</span>
+                </div>
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            `;
+
+            btn.onclick = () => selectAdminChatThread(userChan);
+            channelContainer.appendChild(btn);
+        });
+
+        if (activeAdminThreadUser) {
+            document.getElementById('admin-active-thread-user').innerText = `@${activeAdminThreadUser}`;
+            document.getElementById('admin-chat-input').disabled = false;
+            document.getElementById('admin-chat-send-btn').disabled = false;
+
+            const targetMessages = CHAT_MESSAGES.filter(m => m.user === activeAdminThreadUser);
+             
+            let messagesHTML = "";
+            targetMessages.forEach(msg => {
+                const isAdminMsg = msg.sender === 'admin';
+                if (isAdminMsg) {
+                    messagesHTML += `
+                        <div class="self-end max-w-[85%] flex flex-col items-end animate-fadeIn space-y-0.5">
+                            <span class="text-[8px] text-slate-500 font-bold uppercase tracking-wider">You (Admin)</span>
+                            <div class="bg-slate-900 border border-slate-800 text-slate-200 px-3 py-2 rounded-2xl rounded-tr-none text-xs shadow-md">
+                                <p class="leading-relaxed font-light">${msg.message}</p>
+                                <span class="text-[7px] text-slate-500 block text-right mt-1">${msg.time}</span>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    messagesHTML += `
+                        <div class="self-start max-w-[85%] flex flex-col items-start animate-fadeIn space-y-0.5">
+                            <span class="text-[8px] text-yellow-400 font-extrabold uppercase tracking-wider">${msg.user} (Customer)</span>
+                            <div class="bg-yellow-400 text-slate-950 px-3 py-2 rounded-2xl rounded-tl-none text-xs shadow-md font-semibold">
+                                <p class="leading-relaxed">${msg.message}</p>
+                                <span class="text-[7px] text-slate-900/60 block text-right mt-1">${msg.time}</span>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+
+            messageContainer.innerHTML = messagesHTML || `<div class="text-slate-500 italic text-center py-8">Thread is empty.</div>`;
+            setTimeout(() => { messageContainer.scrollTop = messageContainer.scrollHeight; }, 20);
+        }
+    }
+
+    function selectAdminChatThread(username) {
+        activeAdminThreadUser = username;
+        renderAdminChatHub();
+    }
+
+    function handleAdminSendMessage(event) {
+        event.preventDefault();
+        const input = document.getElementById('admin-chat-input');
+        if (!input) return;
+        const val = input.value.trim();
+        if (!val || !activeAdminThreadUser) return;
+
+        const newReply = {
+            id: 'msg_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+            sender: 'admin',
+            user: activeAdminThreadUser,
+            message: val,
+            time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+        };
+
+        CHAT_MESSAGES.push(newReply);
+        saveChatMessagesToStorage();
+        renderAdminChatHub();
+        input.value = "";
+
+        if (mqttClient && mqttClient.connected) {
+            mqttClient.publish(TOPIC_CHAT, JSON.stringify(newReply));
+        }
+
+        showToast(`Reply dispatched directly to @${activeAdminThreadUser}.`);
+        renderChatMessagesForCustomer();
+    }
     </script> 
 </body> 
 </html>

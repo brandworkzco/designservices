@@ -197,24 +197,21 @@
                     <h2 class="text-xl font-extrabold text-white flex items-center gap-2"><span>Customer Portal</span></h2> 
                     <p class="text-slate-400 text-[11px] sm:text-xs mt-0.5">Access or create your persistent custom checkout profile.</p> 
                 </div> 
-                <div class="flex flex-wrap bg-slate-950 p-1 rounded-lg border border-slate-800 self-start gap-1"> 
-                    <button id="tab-cust-login" onclick="toggleCustomerAuthTab('login')" class="px-3 py-1.5 text-xs font-bold rounded-md bg-yellow-400 text-slate-950 transition-all">Sign In</button> 
-                    <button id="tab-cust-phone" onclick="toggleCustomerAuthTab('phone')" class="px-3 py-1.5 text-xs font-bold rounded-md text-slate-400 hover:text-white transition-all">Phone OTP</button> 
-                    <button id="tab-cust-register" onclick="toggleCustomerAuthTab('register')" class="px-3 py-1.5 text-xs font-bold rounded-md text-slate-400 hover:text-white transition-all">Sign Up</button> 
+                <div class="flex bg-slate-950 p-1 rounded-lg border border-slate-800 self-start gap-1"> 
+                    <button id="tab-cust-login" onclick="toggleCustomerAuthTab('login')" class="px-3.5 py-1.5 text-xs font-bold rounded-md bg-yellow-400 text-slate-950 transition-all">Sign In (Email)</button> 
+                    <button id="tab-cust-phone" onclick="toggleCustomerAuthTab('phone')" class="px-3.5 py-1.5 text-xs font-bold rounded-md text-slate-400 hover:text-white transition-all">Sign In (Phone OTP)</button> 
+                    <button id="tab-cust-register" onclick="toggleCustomerAuthTab('register')" class="px-3.5 py-1.5 text-xs font-bold rounded-md text-slate-400 hover:text-white transition-all">Sign Up</button> 
                 </div> 
             </div> 
 
-            <!-- Email/Password Sign In Form -->
+            <!-- Method 1: Email & Password Sign In Form -->
             <form id="customer-login-form" onsubmit="handleCustomerLogin(event)" class="space-y-4"> 
                 <div class="space-y-1"> 
                     <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Email Address</label> 
                     <input type="email" id="cust-login-email" required placeholder="your.email@domain.com" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs sm:text-sm text-white outline-none transition-colors"> 
                 </div> 
                 <div class="space-y-1"> 
-                    <div class="flex justify-between items-center"> 
-                        <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Password</label> 
-                        <button type="button" onclick="showForgotPasswordModal()" class="text-[11px] text-yellow-400 hover:underline">Forgot password?</button> 
-                    </div> 
+                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Password</label> 
                     <input type="password" id="cust-login-pass" required placeholder="••••••••" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs sm:text-sm text-white outline-none transition-colors"> 
                 </div> 
                 <div id="cust-login-error" class="text-rose-500 text-xs font-semibold hidden bg-rose-500/10 p-2.5 rounded border border-rose-500/20 text-center"> 
@@ -225,26 +222,27 @@
                 </button> 
             </form> 
 
-            <!-- Phone OTP Authentication Form -->
+            <!-- Method 2: Phone Number & OTP Sign In Form -->
             <form id="customer-phone-form" onsubmit="handlePhoneAuthSubmit(event)" class="space-y-4 hidden"> 
                 <div class="space-y-1"> 
-                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Phone Number (with country code)</label> 
+                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Registered Phone Number</label> 
                     <div class="flex gap-2">
-                        <input type="tel" id="cust-phone-input" placeholder="+60123456789" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs sm:text-sm text-white outline-none transition-colors"> 
+                        <input type="tel" id="cust-phone-input" required placeholder="+60123456789" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs sm:text-sm text-white outline-none transition-colors"> 
                         <button type="button" onclick="sendPhoneVerificationOTP()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-yellow-400 font-bold text-xs rounded-lg whitespace-nowrap">Send OTP</button>
                     </div>
+                    <p class="text-[10px] text-slate-500 mt-0.5">Must be an existing registered phone number from Sign Up.</p>
                 </div> 
                 <div class="space-y-1" id="otp-input-container" style="display:none;"> 
-                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Enter SMS OTP Code</label> 
+                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Enter OTP Verification Code</label> 
                     <input type="text" id="cust-otp-code" placeholder="123456" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs sm:text-sm text-white outline-none tracking-widest text-center font-bold"> 
                 </div> 
                 <div id="recaptcha-container"></div>
                 <button type="submit" id="phone-submit-btn" class="w-full py-3 bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-black rounded-lg transition-all text-xs uppercase tracking-widest" style="display:none;"> 
-                    Verify OTP & Sign In 
+                    Access Profile 
                 </button> 
             </form> 
 
-            <!-- Registration Form -->
+            <!-- Sign Up Form -->
             <form id="customer-register-form" onsubmit="handleCustomerRegister(event)" class="space-y-4 hidden"> 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4"> 
                     <div class="space-y-1"> 
@@ -327,34 +325,6 @@
                     </div> 
                 </div> 
             </div> 
-        </div> 
-    </div> 
-
-    <!-- FORGOT PASSWORD MODAL -->
-    <div id="forgot-password-modal" class="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-md hidden flex items-center justify-center p-4"> 
-        <div class="bg-slate-900 border border-yellow-400/40 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 animate-fadeIn"> 
-            <div class="text-center border-b border-slate-800 pb-3"> 
-                <h3 class="text-lg font-black text-white">Recover Password/Email</h3> 
-                <p class="text-xs text-slate-400 mt-1">Verify your phone number with an SMS OTP to automatically generate a temporary access code.</p> 
-            </div> 
-            <div class="space-y-3"> 
-                <div> 
-                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Registered Phone Number</label> 
-                    <div class="flex gap-2 mt-1">
-                        <input type="tel" id="recovery-phone-input" placeholder="+60123456789" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs text-white outline-none"> 
-                        <button type="button" onclick="sendRecoveryOTP()" class="px-3 py-2 bg-slate-800 text-yellow-400 font-bold text-xs rounded-lg whitespace-nowrap">Send OTP</button>
-                    </div>
-                </div> 
-                <div id="recovery-otp-section" style="display:none;" class="space-y-3"> 
-                    <div> 
-                        <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Enter OTP Code</label> 
-                        <input type="text" id="recovery-otp-code" placeholder="123456" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2 text-xs text-white text-center font-bold tracking-widest mt-1"> 
-                    </div> 
-                    <button type="button" onclick="verifyRecoveryOTPAndLogin()" class="w-full py-3 bg-yellow-400 text-slate-950 font-black rounded-xl text-xs uppercase tracking-wider">Verify & Auto-Sign In</button>
-                </div> 
-                <div id="recovery-recaptcha"></div>
-            </div> 
-            <button onclick="closeForgotPasswordModal()" class="w-full py-2 bg-slate-950 text-slate-400 border border-slate-800 rounded-xl text-xs font-bold">Cancel</button> 
         </div> 
     </div> 
 
@@ -756,6 +726,7 @@
     let isAdminLoggedIn = JSON.parse(sessionStorage.getItem("is_admin_session")) || false; 
     let activeAdminThreadUser = null; 
     let windowConfirmationResult = null;
+    let registeredUsersDatabase = JSON.parse(localStorage.getItem("bw_registered_users")) || [];
 
     let WORKFLOW_STATE = JSON.parse(localStorage.getItem("bw_workflow_state")) || { 
         hasRequest: false, 
@@ -980,11 +951,11 @@
     function syncAuthenticatedLayout(user) { 
         document.getElementById('customer-portal-text').classList.add('hidden'); 
         const userBadge = document.getElementById('customer-portal-username'); 
-        userBadge.innerText = user.username || user.phoneNumber; 
+        userBadge.innerText = user.username || user.phone; 
         userBadge.classList.remove('hidden'); 
-        document.getElementById('authenticated-cust-username').innerText = `Welcome back, ${user.username || user.phoneNumber}!`; 
+        document.getElementById('authenticated-cust-username').innerText = `Welcome back, ${user.username || user.phone}!`; 
         document.getElementById('cust-det-email').innerText = user.email || 'Phone Verified Account'; 
-        document.getElementById('cust-det-phone').innerText = user.phone || user.phoneNumber || 'N/A'; 
+        document.getElementById('cust-det-phone').innerText = user.phone || 'N/A'; 
         document.getElementById('customer-unauthenticated-card').classList.add('hidden'); 
         document.getElementById('customer-authenticated-card').classList.remove('hidden'); 
     } 
@@ -998,6 +969,11 @@
         try {
             const userCredential = await window.FB_createUser(window.FB_AUTH, email, pass);
             const userData = { username, email, phone, uid: userCredential.user.uid }; 
+            
+            // Save to registered database list for verification validation
+            registeredUsersDatabase.push(userData);
+            localStorage.setItem("bw_registered_users", JSON.stringify(registeredUsersDatabase));
+
             currentUser = userData; 
             localStorage.setItem("current_session_user", JSON.stringify(userData)); 
             syncAuthenticatedLayout(userData); 
@@ -1011,10 +987,10 @@
         const pass = document.getElementById('cust-login-pass').value; 
         try {
             const userCredential = await window.FB_signIn(window.FB_AUTH, email, pass);
-            const userData = { username: email.split('@')[0], email: userCredential.user.email, phone: "+60123456789", uid: userCredential.user.uid };
-            currentUser = userData; 
-            localStorage.setItem("current_session_user", JSON.stringify(userData)); 
-            syncAuthenticatedLayout(userData); 
+            const matchedUser = registeredUsersDatabase.find(u => u.email === email) || { username: email.split('@')[0], email, phone: "+60123456789", uid: userCredential.user.uid };
+            currentUser = matchedUser; 
+            localStorage.setItem("current_session_user", JSON.stringify(currentUser)); 
+            syncAuthenticatedLayout(currentUser); 
             showToast(`Logged in safely as ${currentUser.username}`); 
             updateCustomerWorkflowUI(); 
         } catch (error) { 
@@ -1023,7 +999,7 @@
         } 
     } 
 
-    /* PHONE NUMBER OTP AUTHENTICATION & RECOVERY LOGIC */
+    /* METHOD 2: PHONE NUMBER & OTP SIGN IN LOGIC (STRICTLY RESTRICTED TO REGISTERED USERS) */
     function initRecaptcha(containerId) {
         if (!window.recaptchaVerifier) {
             window.recaptchaVerifier = new window.FB_RecaptchaVerifier(window.FB_AUTH, containerId, {
@@ -1036,9 +1012,17 @@
     async function sendPhoneVerificationOTP() {
         const phoneNumber = document.getElementById('cust-phone-input').value.trim();
         if (!phoneNumber) {
-            showToast("Please enter a valid phone number with country code.", "error");
+            showToast("Please enter your registered phone number.", "error");
             return;
         }
+
+        // Validate if phone number exists in registered accounts database
+        const isRegistered = registeredUsersDatabase.some(u => u.phone === phoneNumber);
+        if (!isRegistered) {
+            showToast("Phone number not found. Please sign up first!", "error");
+            return;
+        }
+
         initRecaptcha('recaptcha-container');
         try {
             const appVerifier = window.recaptchaVerifier;
@@ -1054,6 +1038,7 @@
     async function handlePhoneAuthSubmit(event) {
         event.preventDefault();
         const code = document.getElementById('cust-otp-code').value.trim();
+        const phoneNumber = document.getElementById('cust-phone-input').value.trim();
         if (!code || !windowConfirmationResult) {
             showToast("Please enter the received OTP verification code.", "error");
             return;
@@ -1061,53 +1046,15 @@
         try {
             const result = await windowConfirmationResult.confirm(code);
             const user = result.user;
-            currentUser = { username: "PhoneUser", email: "fpx@phone.auth", phoneNumber: user.phoneNumber, uid: user.uid };
+            const matchedUser = registeredUsersDatabase.find(u => u.phone === phoneNumber) || { username: "PhoneUser", email: "phone.verified@brandworkz.co", phone: phoneNumber, uid: user.uid };
+            
+            currentUser = matchedUser;
             localStorage.setItem("current_session_user", JSON.stringify(currentUser));
             syncAuthenticatedLayout(currentUser);
             showToast("Phone authentication verified successfully!");
             updateCustomerWorkflowUI();
         } catch (error) {
             showToast("Invalid OTP verification code.", "error");
-        }
-    }
-
-    function showForgotPasswordModal() {
-        document.getElementById('forgot-password-modal').classList.remove('hidden');
-    }
-
-    function closeForgotPasswordModal() {
-        document.getElementById('forgot-password-modal').classList.add('hidden');
-    }
-
-    async function sendRecoveryOTP() {
-        const phone = document.getElementById('recovery-phone-input').value.trim();
-        if (!phone) {
-            showToast("Enter registered recovery phone number.", "error");
-            return;
-        }
-        if (!window.recoveryRecaptcha) {
-            window.recoveryRecaptcha = new window.FB_RecaptchaVerifier(window.FB_AUTH, 'recovery-recaptcha', { 'size': 'invisible' });
-        }
-        try {
-            window.recoveryConfirmationResult = await window.FB_signInWithPhoneNumber(window.FB_AUTH, phone, window.recoveryRecaptcha);
-            document.getElementById('recovery-otp-section').style.display = 'block';
-            showToast("Recovery OTP dispatched to phone.");
-        } catch(e) {
-            showToast("Failed to dispatch code: " + e.message, "error");
-        }
-    }
-
-    async function verifyRecoveryOTPAndLogin() {
-        const code = document.getElementById('recovery-otp-code').value.trim();
-        try {
-            const result = await window.recoveryConfirmationResult.confirm(code);
-            currentUser = { username: "RecoveredUser", email: "recovery@brandworkz.co", phoneNumber: result.user.phoneNumber, uid: result.user.uid };
-            localStorage.setItem("current_session_user", JSON.stringify(currentUser));
-            syncAuthenticatedLayout(currentUser);
-            closeForgotPasswordModal();
-            showToast("Account access recovered successfully with temporary verification code!");
-        } catch(e) {
-            showToast("Invalid verification recovery code.", "error");
         }
     }
 
@@ -1128,9 +1075,9 @@
         document.getElementById('customer-phone-form').classList.add('hidden');
         document.getElementById('customer-register-form').classList.add('hidden'); 
         
-        document.getElementById('tab-cust-login').className = "px-3 py-1.5 text-xs font-bold rounded-md text-slate-400 hover:text-white transition-all";
-        document.getElementById('tab-cust-phone').className = "px-3 py-1.5 text-xs font-bold rounded-md text-slate-400 hover:text-white transition-all";
-        document.getElementById('tab-cust-register').className = "px-3 py-1.5 text-xs font-bold rounded-md text-slate-400 hover:text-white transition-all";
+        document.getElementById('tab-cust-login').className = "px-3.5 py-1.5 text-xs font-bold rounded-md text-slate-400 hover:text-white transition-all";
+        document.getElementById('tab-cust-phone').className = "px-3.5 py-1.5 text-xs font-bold rounded-md text-slate-400 hover:text-white transition-all";
+        document.getElementById('tab-cust-register').className = "px-3.5 py-1.5 text-xs font-bold rounded-md text-slate-400 hover:text-white transition-all";
 
         if (tab === 'login') { 
             document.getElementById('customer-login-form').classList.remove('hidden'); 
@@ -1244,7 +1191,7 @@
 
         WORKFLOW_STATE = { 
             hasRequest: true, 
-            customerUsername: currentUser.username || currentUser.phoneNumber, 
+            customerUsername: currentUser.username || currentUser.phone, 
             customerEmail: currentUser.email || 'Phone Verified',
             orderId: "BZ-ORD-" + Math.floor(1000 + Math.random() * 9000),
             status: "Pending Confirmation", 

@@ -621,17 +621,16 @@
 
     <!-- FIREBASE MODULE & STORE LOGIC -->
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail, confirmPasswordReset } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail, confirmPasswordReset } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 
         const firebaseConfig = {
-            apiKey: "AIzaSyByw5BIO5tMz08i2y9OOay0dBGbwJmiKEw",
-            authDomain: "testsite-f794d.firebaseapp.com",
-            projectId: "testsite-f794d",
-            storageBucket: "testsite-f794d.firebasestorage.app",
-            messagingSenderId: "1047644879292",
-            appId: "1:1047644879292:web:b8a8c281f5ec4b2de313b9",
-            measurementId: "G-89M6YRTMJ8"
+            apiKey: "AIzaSyCQFwjATNzHKwP9e46om1pPJb4ZkHkpdc8",
+            authDomain: "brandworkzco-694fa.firebaseapp.com",
+            projectId: "brandworkzco-694fa",
+            storageBucket: "brandworkzco-694fa.firebasestorage.app",
+            messagingSenderId: "593299452333",
+            appId: "1:593299452333:web:3b88e25af78cc354197124"
         };
 
         const app = initializeApp(firebaseConfig);
@@ -650,7 +649,6 @@
         const mode = urlParams.get('mode');
         const oobCode = urlParams.get('oobCode');
         
-        // Updated handler to catch Firebase Action URL redirects (support custom action modes like "action" or "resetPassword")
         if (oobCode) {
             window.activeOobCode = oobCode;
             document.addEventListener("DOMContentLoaded", () => {

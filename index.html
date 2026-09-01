@@ -6,7 +6,7 @@
     <title>Brandworkz Co | Premium Graphic Design Store</title> 
     <script src="https://cdn.tailwindcss.com"></script> 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mqtt/4.3.7/mqtt.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"> 
     <style> 
         body { 
             font-family: 'Inter', sans-serif; 
@@ -42,7 +42,7 @@
     </style> 
 </head> 
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-yellow-400 selection:text-slate-950 overflow-x-hidden"> 
- 
+
     <!-- STICKY HEADER -->
     <header class="sticky top-0 z-40 bg-slate-900/95 backdrop-blur-md border-b border-yellow-400/30 px-3 py-3 sm:px-6"> 
         <div class="max-w-7xl mx-auto flex flex-col gap-3"> 
@@ -56,28 +56,28 @@
                         <p class="text-[9px] text-slate-400 tracking-widest uppercase font-semibold">Design Studio</p> 
                     </div> 
                 </button> 
- 
+
                 <div class="flex items-center space-x-1.5 sm:space-x-3"> 
                     <button id="customer-portal-btn" onclick="switchView('customer-auth')" class="flex items-center space-x-1 px-2.5 py-2 text-xs font-bold rounded-lg border border-slate-800 bg-slate-950 text-slate-300 hover:border-yellow-400/40 transition-all"> 
                         <svg class="w-3.5 h-3.5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg> 
                         <span id="customer-portal-text">Profile Portal</span> 
                         <span id="customer-portal-username" class="max-w-[120px] truncate text-[11px] text-yellow-400 font-bold hidden"></span> 
                     </button> 
- 
+
                     <button onclick="switchView('admin')" class="flex items-center space-x-1 px-2.5 py-2 text-xs font-bold rounded-lg border border-yellow-400/30 bg-slate-900 text-yellow-400 hover:bg-yellow-400 hover:text-slate-950 transition-all shadow shadow-yellow-400/10"> 
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"> 
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path> 
                         </svg> 
                         <span>Admin Space</span> 
                     </button> 
- 
+
                     <button onclick="toggleCartDrawer(true)" class="relative p-2 rounded-lg bg-yellow-400 hover:bg-yellow-500 text-slate-950 transition-all font-bold flex items-center justify-center shadow-md shadow-yellow-400/20"> 
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg> 
                         <span id="cart-badge" class="absolute -top-1.5 -right-1.5 bg-rose-600 text-white text-[9px] font-black w-5 h-5 rounded-full flex items-center justify-center opacity-0 scale-90 transition-all duration-300">0</span> 
                     </button> 
                 </div> 
             </div> 
- 
+
             <nav class="flex items-center justify-start space-x-2 overflow-x-auto py-1.5 border-t border-slate-800/60 text-xs font-bold tracking-wide hide-scrollbar"> 
                 <button onclick="switchView('store'); setTimeout(() => document.getElementById('storefront-section').scrollIntoView(), 50);" class="text-yellow-400 hover:text-yellow-300 transition-colors whitespace-nowrap bg-slate-950 py-1.5 px-3 rounded-md border border-slate-800">Browse Services</button> 
                 <button onclick="switchView('store'); setTimeout(() => document.getElementById('how-it-works').scrollIntoView(), 50);" class="text-slate-300 hover:text-yellow-400 transition-colors whitespace-nowrap bg-slate-950/40 py-1.5 px-3 rounded-md">Our Process</button> 
@@ -85,7 +85,7 @@
             </nav> 
         </div> 
     </header> 
- 
+
     <!-- MAIN STORE VIEW -->
     <div id="store-view" class="flex-grow animate-fadeIn"> 
         <section class="relative bg-slate-900 border-b border-yellow-500/10 overflow-hidden py-10 px-4 sm:px-8"> 
@@ -112,7 +112,7 @@
                         </button> 
                     </div> 
                 </div> 
- 
+
                 <div class="lg:col-span-5 relative flex justify-center w-full"> 
                     <div class="relative w-full max-w-sm"> 
                         <div class="absolute -inset-1 bg-gradient-to-r from-yellow-400 to-amber-500 rounded-2xl blur opacity-25 animate-pulse"></div> 
@@ -133,7 +133,7 @@
                 </div> 
             </div> 
         </section> 
- 
+
         <section id="storefront-section" class="max-w-7xl mx-auto py-12 px-4 sm:px-8"> 
             <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4"> 
                 <div> 
@@ -147,7 +147,7 @@
             </div> 
             <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div> 
         </section> 
- 
+
         <section id="how-it-works" class="bg-slate-900 border-t border-b border-yellow-500/10 py-12 px-4 sm:px-8"> 
             <div class="max-w-7xl mx-auto"> 
                 <div class="text-center max-w-xl mx-auto mb-8"> 
@@ -173,7 +173,7 @@
                 </div> 
             </div> 
         </section> 
- 
+
         <section id="payment-methods" class="max-w-7xl mx-auto py-12 px-4 sm:px-8 text-center space-y-4"> 
             <div class="w-12 h-12 rounded-full bg-yellow-400/10 flex items-center justify-center text-2xl mx-auto">🔒</div> 
             <h3 class="text-xl sm:text-2xl font-black text-white">Direct ToyyibPay FPX Processing</h3> 
@@ -182,7 +182,7 @@
             </p> 
         </section> 
     </div> 
- 
+
     <!-- CUSTOMER PROFILE DASHBOARD -->
     <div id="customer-auth-view" class="hidden flex-grow px-3 sm:px-8 py-8 max-w-4xl mx-auto w-full animate-fadeIn"> 
         <div class="mb-4"> 
@@ -190,7 +190,7 @@
                 ← Back to Front Page 
             </button> 
         </div> 
- 
+
         <div id="customer-unauthenticated-card" class="bg-slate-900 border border-slate-800 rounded-2xl p-5 sm:p-8 shadow-2xl space-y-6"> 
             <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-800 pb-4 gap-3"> 
                 <div> 
@@ -202,16 +202,15 @@
                     <button id="tab-cust-register" onclick="toggleCustomerAuthTab('register')" class="px-3.5 py-1.5 text-xs font-bold rounded-md text-slate-400 hover:text-white transition-all">Sign Up</button> 
                 </div> 
             </div> 
- 
+
             <form id="customer-login-form" onsubmit="handleCustomerLogin(event)" class="space-y-4"> 
                 <div class="space-y-1"> 
-                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Username</label> 
-                    <input type="text" id="cust-login-user" required placeholder="Your username" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs sm:text-sm text-white outline-none transition-colors"> 
+                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Email Address</label> 
+                    <input type="email" id="cust-login-email" required placeholder="your.email@domain.com" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs sm:text-sm text-white outline-none transition-colors"> 
                 </div> 
                 <div class="space-y-1"> 
                     <div class="flex justify-between items-center"> 
                         <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Password</label> 
-                        <button type="button" onclick="toggleCustomerAuthTab('forgot')" class="text-[11px] text-yellow-400 hover:underline font-medium bg-transparent border-0 p-0 cursor-pointer">Forgot Credentials?</button> 
                     </div> 
                     <input type="password" id="cust-login-pass" required placeholder="••••••••" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs sm:text-sm text-white outline-none transition-colors"> 
                 </div> 
@@ -222,54 +221,34 @@
                     Access Profile 
                 </button> 
             </form> 
- 
+
             <form id="customer-register-form" onsubmit="handleCustomerRegister(event)" class="space-y-4 hidden"> 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4"> 
                     <div class="space-y-1"> 
                         <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Username <span class="text-rose-500">*</span></label> 
-                        <input type="text" id="cust-reg-user" required placeholder="Choose username" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs sm:text-sm text-white outline-none transition-colors"> 
+                        <input type="text" id="cust-reg-user" name="username" required placeholder="Choose username" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs sm:text-sm text-white outline-none transition-colors"> 
                     </div> 
                     <div class="space-y-1"> 
                         <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Email Address <span class="text-rose-500">*</span></label> 
-                        <input type="email" id="cust-reg-email" required placeholder="brandworkzco@gmail.com" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs sm:text-sm text-white outline-none transition-colors"> 
+                        <input type="email" id="cust-reg-email" name="email" required placeholder="brandworkzco@gmail.com" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs sm:text-sm text-white outline-none transition-colors"> 
                     </div> 
                 </div> 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4"> 
                     <div class="space-y-1"> 
                         <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Phone Number <span class="text-rose-500">*</span></label> 
-                        <input type="tel" id="cust-reg-phone" required placeholder="e.g. +60123456789" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs sm:text-sm text-white outline-none transition-colors"> 
+                        <input type="tel" id="cust-reg-phone" name="phone" required placeholder="e.g. +60123456789" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs sm:text-sm text-white outline-none transition-colors"> 
                     </div> 
                     <div class="space-y-1"> 
                         <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Password <span class="text-rose-500">*</span></label> 
-                        <input type="password" id="cust-reg-pass" required placeholder="Password" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs sm:text-sm text-white outline-none transition-colors"> 
+                        <input type="password" id="cust-reg-pass" name="password" required placeholder="Password" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs sm:text-sm text-white outline-none transition-colors"> 
                     </div> 
-                </div> 
-                <div class="space-y-1"> 
-                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Billing Address <span class="text-rose-500">*</span></label> 
-                    <textarea id="cust-reg-billing" required rows="3" placeholder="Enter full billing address details" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs sm:text-sm text-white outline-none transition-colors resize-none"></textarea> 
                 </div> 
                 <button type="submit" class="w-full py-3.5 bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-black rounded-lg transition-all text-xs uppercase tracking-widest"> 
                     Register Profile &amp; Submit details 
                 </button> 
             </form> 
- 
-            <form id="customer-forgot-form" onsubmit="handleCustomerRecovery(event)" class="space-y-4 hidden animate-fadeIn"> 
-                <div class="space-y-1"> 
-                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Account Username or Registered Email</label> 
-                    <input type="text" id="cust-recovery-input" required placeholder="Enter username or email address" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs sm:text-sm text-white outline-none transition-colors"> 
-                </div> 
-                <div id="cust-recovery-success" class="text-slate-100 text-xs hidden bg-slate-950 border border-yellow-400/40 p-4 rounded-xl space-y-2"> 
-                    <p class="font-extrabold text-yellow-400 uppercase tracking-wide">✨ Temporary Redirection Key Generated!</p> 
-                    <p class="text-slate-300 leading-relaxed font-mono">Use your account username alongside this temporary tracking code to log in directly:</p> 
-                    <div class="bg-slate-900 border border-slate-800 px-3 py-2 rounded text-center text-white font-black text-sm tracking-widest select-all" id="cust-recovery-code-display"></div> 
-                </div> 
-                <div class="flex items-center gap-2 pt-2"> 
-                    <button type="button" onclick="toggleCustomerAuthTab('login')" class="w-1/3 py-3 bg-slate-950 text-slate-400 border border-slate-800 font-bold rounded-lg text-xs hover:text-white uppercase tracking-wider">Cancel</button> 
-                    <button type="submit" class="w-2/3 py-3 bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-black rounded-lg text-xs uppercase tracking-wider">Request Access Code</button> 
-                </div> 
-            </form> 
         </div> 
- 
+
         <div id="customer-authenticated-card" class="bg-slate-900 border border-slate-800 rounded-2xl p-5 sm:p-8 shadow-2xl space-y-5 hidden animate-fadeIn"> 
             <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-800 pb-4 gap-4"> 
                 <div class="flex items-center space-x-3"> 
@@ -283,7 +262,7 @@
                     Logout Portal 
                 </button> 
             </div> 
- 
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5 pt-1"> 
                 <div class="bg-slate-950 p-5 rounded-xl border border-slate-850 space-y-3"> 
                     <h4 class="text-xs font-bold text-white border-b border-slate-900 pb-1.5 flex items-center justify-between"> 
@@ -303,17 +282,9 @@
                             <span class="text-slate-400">Selected Terms:</span> 
                             <span id="cust-det-term" class="font-semibold text-yellow-400 uppercase tracking-wide">Not Selected</span> 
                         </div> 
-                        <div class="flex justify-between"> 
-                            <span class="text-slate-400">Product Size Target:</span> 
-                            <span class="font-semibold text-white">5 cm × 2 cm</span> 
-                        </div> 
-                        <div class="flex flex-col space-y-1 pt-1.5"> 
-                            <span class="text-slate-400 font-bold">Default Billing Address:</span> 
-                            <p id="cust-det-billing" class="text-slate-300 font-light bg-slate-900 p-2 rounded border border-slate-800 mt-1 leading-relaxed text-[11px]">No address configured.</p> 
-                        </div> 
                     </div> 
                 </div> 
- 
+
                 <div class="bg-slate-950 p-5 rounded-xl border border-slate-850 space-y-3 flex flex-col justify-between"> 
                     <div> 
                         <h4 class="text-xs font-black uppercase text-yellow-400 tracking-wider flex items-center justify-between"> 
@@ -335,7 +306,7 @@
             </div> 
         </div> 
     </div> 
- 
+
     <!-- ADMIN WORKSPACE VIEW -->
     <div id="admin-view" class="flex-grow px-3 sm:px-8 py-8 max-w-7xl mx-auto w-full animate-fadeIn hidden"> 
         <div class="bg-slate-900 border border-yellow-400/30 rounded-2xl p-4 sm:p-8 shadow-2xl space-y-6"> 
@@ -356,7 +327,7 @@
                     </button> 
                 </div> 
             </div> 
- 
+
             <!-- DYNAMIC SANDBOX -->
             <div class="bg-slate-950 rounded-xl p-5 border border-slate-850 space-y-4"> 
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-900 pb-3"> 
@@ -371,7 +342,7 @@
                  
                 <div id="admin-scratch-frames-container" class="grid grid-cols-1 md:grid-cols-2 gap-8 pt-2"></div> 
             </div> 
- 
+
             <!-- TWO-COLUMN WORKFLOW & CHAT HUB GRID -->
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
                 <!-- CLIENT WORKFLOW PANEL -->
@@ -385,10 +356,10 @@
                             <table class="w-full text-left border-collapse text-xs"> 
                                 <thead> 
                                     <tr class="border-b border-slate-900 text-slate-400"> 
-                                        <th class="pb-2 font-bold uppercase">Customer Session</th> 
+                                        <th class="pb-2 font-bold uppercase">Order ID / User</th> 
+                                        <th class="pb-2 font-bold uppercase">Email</th> 
                                         <th class="pb-2 font-bold uppercase">Payment Choice</th> 
                                         <th class="pb-2 font-bold uppercase">Order Flow Status</th> 
-                                        <th class="pb-2 font-bold uppercase">Approval Matrix</th> 
                                         <th class="pb-2 font-bold uppercase text-right">Job Execution</th> 
                                     </tr> 
                                 </thead> 
@@ -417,7 +388,6 @@
                         <!-- Left Side: Chat Channels List -->
                         <div class="w-1/3 border-r border-slate-900 pr-2 overflow-y-auto flex flex-col gap-1.5" id="admin-chat-channels">
                             <span class="text-[9px] uppercase tracking-wider font-extrabold text-slate-500">Active Users</span>
-                            <!-- Dynamically generated channel buttons -->
                             <div class="text-[10px] text-slate-500 italic text-center py-4">No active users</div>
                         </div>
 
@@ -437,7 +407,7 @@
             </div> 
         </div> 
     </div> 
- 
+
     <!-- ADMIN ACCESS SECURITY CHALLENGE MODAL -->
     <div id="admin-gate-modal" class="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-md flex items-center justify-center p-4 hidden"> 
         <div class="bg-slate-900 border border-yellow-400/40 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 animate-fadeIn"> 
@@ -461,7 +431,7 @@
             </form> 
         </div> 
     </div> 
- 
+
     <!-- CART DRAWER PANEL -->
     <div id="cart-drawer-backdrop" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm transition-opacity duration-300 opacity-0 hidden" onclick="toggleCartDrawer(false)"></div> 
     <div class="fixed inset-y-0 right-0 max-w-md w-full bg-slate-900 border-l border-yellow-400/20 shadow-2xl z-50 flex flex-col justify-between transform transition-transform duration-300 translate-x-full" id="cart-drawer-panel"> 
@@ -474,14 +444,14 @@
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg> 
             </button> 
         </div> 
- 
+
         <div class="flex-grow p-5 overflow-y-auto space-y-4" id="cart-drawer-list"> 
             <div class="h-64 flex flex-col items-center justify-center text-slate-500 space-y-2"> 
                 <span class="text-3xl">🏜️</span> 
                 <p class="text-xs">Your basket is currently empty.</p> 
             </div> 
         </div> 
- 
+
         <div class="p-5 border-t border-slate-800 bg-slate-950 space-y-4" id="cart-drawer-summary"> 
             <div class="space-y-1.5"> 
                 <div class="flex justify-between text-xs"> 
@@ -509,7 +479,7 @@
             </button> 
         </div> 
     </div> 
- 
+
     <!-- TOYYIBPAY PORTAL MODAL -->
     <div id="toyyibpay-modal" class="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-md hidden flex items-center justify-center p-4"> 
         <div class="bg-slate-900 border border-yellow-400/40 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-6 animate-fadeIn"> 
@@ -532,8 +502,14 @@
                     </div> 
                 </div> 
                 <div class="space-y-2"> 
-                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Term</label> 
-                    <div class="grid grid-cols-2 gap-2" id="bank-selectors-grid"></div> 
+                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Payment Method Selection</label> 
+                    <div class="p-4 bg-slate-950 border border-yellow-400/50 rounded-xl flex items-center space-x-3"> 
+                        <div class="w-4 h-4 rounded-full border-2 border-yellow-400 flex items-center justify-center"><div class="w-2 h-2 rounded-full bg-yellow-400"></div></div> 
+                        <div> 
+                            <span class="text-xs font-extrabold text-white block">FPX Online Banking Transfer</span> 
+                            <span class="text-[10px] text-slate-400">Secure automated gateway checkout via ToyyibPay</span> 
+                        </div> 
+                    </div> 
                 </div> 
             </div> 
             <button onclick="processToyyibPaySimulation()" id="toyyibpay-submit-btn" class="w-full py-4 bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-black rounded-xl transition-all text-xs uppercase tracking-widest flex items-center justify-center space-x-2 shadow-lg shadow-yellow-400/10"> 
@@ -541,10 +517,10 @@
             </button> 
         </div> 
     </div> 
- 
+
     <!-- TOAST POPUP NOTIFICATION PLATFORM -->
     <div id="toast-container" class="fixed bottom-4 right-4 z-50 space-y-2 pointer-events-none"></div> 
- 
+
     <!-- PERSISTENT CUSTOMER CHAT FLOATING WIDGET -->
     <div class="fixed bottom-6 right-6 z-40 flex flex-col items-end">
         <!-- Floating Chat Box Panel -->
@@ -583,11 +559,11 @@
                     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.571-.012c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"></path>
                 </svg>
             </a>
-    <button id="customer-chat-toggle" onclick="toggleCustomerChatPanel(true)" class="bg-yellow-400 hover:bg-yellow-500 text-slate-950 w-14 h-14 rounded-full shadow-2xl flex items-center justify-center transition-all hover:scale-105 relative border-2 border-slate-950">
-            <!-- Pulsing Badge Counter -->
-            <span id="chat-unread-badge" class="absolute -top-1 -right-1 bg-rose-600 text-white text-[9px] font-black w-5 h-5 rounded-full flex items-center justify-center hidden animate-bounce">0</span>
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
-        </button></div>
+            <button id="customer-chat-toggle" onclick="toggleCustomerChatPanel(true)" class="bg-yellow-400 hover:bg-yellow-500 text-slate-950 w-14 h-14 rounded-full shadow-2xl flex items-center justify-center transition-all hover:scale-105 relative border-2 border-slate-950">
+                <span id="chat-unread-badge" class="absolute -top-1 -right-1 bg-rose-600 text-white text-[9px] font-black w-5 h-5 rounded-full flex items-center justify-center hidden animate-bounce">0</span>
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+            </button>
+        </div>
     </div>
 
     <!-- MAIN FOOTER BLOCK -->
@@ -604,9 +580,33 @@
             </div> 
         </div> 
     </footer> 
- 
+
+    <!-- FIREBASE MODULE & STORE LOGIC -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyByw5BIO5tMz08i2y9OOay0dBGbwJmiKEw",
+            authDomain: "testsite-f794d.firebaseapp.com",
+            projectId: "testsite-f794d",
+            storageBucket: "testsite-f794d.firebasestorage.app",
+            messagingSenderId: "1047644879292",
+            appId: "1:1047644879292:web:b8a8c281f5ec4b2de313b9",
+            measurementId: "G-89M6YRTMJ8"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // Make Firebase Auth functions globally available to your vanilla JS handlers below
+        window.FB_AUTH = auth;
+        window.FB_createUser = createUserWithEmailAndPassword;
+        window.FB_signIn = signInWithEmailAndPassword;
+        window.FB_signOut = signOut;
+    </script>
+
     <script> 
-    /* DYNAMIC STORE DATA MATRIX WITH NESTED DROPDOWNS */ 
     let PRODUCTS = JSON.parse(localStorage.getItem("bw_products")) || [ 
         { 
             id: "p_frame_1", 
@@ -701,7 +701,7 @@
             poster: "biztracker.png", 
             dropdowns: [ 
                 { name: "Business Tracker", price: 25.00, info: "- Html Site Size Format\n- Generate Bill IN PNG, PDF" } 
-            ]
+            ] 
         },
         { 
             id: "p_frame_8", 
@@ -710,41 +710,31 @@
             poster: "lifeplanner.png", 
             dropdowns: [ 
                 { name: "Life Planner", price: 35.00, info: "- Html Site Size Format\n- Malay & English Language\n- Stylus On & Off Mode" } 
-            ]    
-         }       
+             ]  
+         }   
     ]; 
- 
-    const BANK_OPTIONS = [ 
-        { id: "maybank", name: "Maybank2u" }, 
-        { id: "cimb", name: "CIMB Clicks" }, 
-        { id: "publicbank", name: "Public Bank" }, 
-        { id: "rhb", name: "RHB Now" } 
-    ]; 
- 
+
     let cart = []; 
     let currentUser = JSON.parse(localStorage.getItem("current_session_user")) || null; 
-    let selectedTermId = ""; 
     let isAdminLoggedIn = JSON.parse(sessionStorage.getItem("is_admin_session")) || false; 
     let activeAdminThreadUser = null; 
- 
+
     let WORKFLOW_STATE = JSON.parse(localStorage.getItem("bw_workflow_state")) || { 
         hasRequest: false, 
         customerUsername: "", 
+        customerEmail: "",
+        orderId: "",
         status: "None", 
         amount: 0.00, 
         brief: "", 
         selectedTerm: "fpx" 
     }; 
- 
-    if (!localStorage.getItem("active_users")) { 
-        localStorage.setItem("active_users", JSON.stringify({})); 
-    } 
 
     /* MQTT REAL-TIME CROSS-DEVICE COMMUNICATION ENGINE */
     const MQTT_BROKER = "wss://broker.hivemq.com:8884/mqtt";
     const TOPIC_PRESENCE = "bw_brandworkz_co/presence/v1";
     const TOPIC_CHAT = "bw_brandworkz_co/chat/v1";
-    
+     
     let mqttClient = null;
     let lastAdminPresenceTimestamp = 0;
 
@@ -762,7 +752,6 @@
             mqttClient.on('connect', () => {
                 mqttClient.subscribe([TOPIC_PRESENCE, TOPIC_CHAT], (err) => {
                     if (!err) {
-                        // Publish initial presence broadcast if admin
                         if (isAdminLoggedIn) broadcastAdminPresence();
                     }
                 });
@@ -825,19 +814,14 @@
 
     function handleRealtimeChatMessage(msgData) {
         if (!msgData || !msgData.id) return;
-        
-        // Check for message duplication
         const exists = CHAT_MESSAGES.some(m => m.id === msgData.id);
         if (!exists) {
             CHAT_MESSAGES.push(msgData);
             saveChatMessagesToStorage();
-            
             renderChatMessagesForCustomer();
             if (isAdminLoggedIn) {
                 renderAdminChatHub();
             }
-
-            // Increment unread badge for customer if closed & received admin message
             if (msgData.sender === 'admin') {
                 const chatPanel = document.getElementById('customer-chat-panel');
                 if (chatPanel && chatPanel.classList.contains('hidden')) {
@@ -857,21 +841,18 @@
         renderProductCatalog(); 
         loadActiveSession(); 
         renderChatMessagesForCustomer();
-        
-        // Initialize HiveMQ MQTT real-time network layer
         initHiveMQRealtime();
 
         if (isAdminLoggedIn) { 
             renderAdminWorkspace(); 
         } 
         
-        // Start live heartbeat loops for presence and connection sync
         setInterval(() => {
             if (isAdminLoggedIn) broadcastAdminPresence();
             checkAdminPresenceTimeout();
         }, 3000);
     } 
- 
+
     function saveProductsToStorage() { 
         localStorage.setItem("bw_products", JSON.stringify(PRODUCTS)); 
     } 
@@ -879,17 +860,17 @@
     function saveChatMessagesToStorage() {
         localStorage.setItem("bw_chat_messages", JSON.stringify(CHAT_MESSAGES));
     }
- 
+
     function switchView(viewName) { 
         if (viewName === 'admin' && !isAdminLoggedIn) { 
             document.getElementById('admin-gate-modal').classList.remove('hidden'); 
             return; 
         } 
- 
+
         document.getElementById('store-view').classList.add('hidden'); 
         document.getElementById('customer-auth-view').classList.add('hidden'); 
         document.getElementById('admin-view').classList.add('hidden'); 
- 
+
         if (viewName === 'store') { 
             document.getElementById('store-view').classList.remove('hidden'); 
             renderProductCatalog(); 
@@ -900,16 +881,16 @@
             renderAdminWorkspace(); 
         } 
     } 
- 
+
     function closeAdminGateModal() { 
         document.getElementById('admin-gate-modal').classList.add('hidden'); 
     } 
- 
+
     function challengeAdminCredentials(event) { 
         event.preventDefault(); 
         const user = document.getElementById('gate-admin-user').value.trim(); 
         const pass = document.getElementById('gate-admin-pass').value; 
- 
+
         if (user === 'admin' && pass === '134228') { 
             isAdminLoggedIn = true; 
             sessionStorage.setItem("is_admin_session", JSON.stringify(true)); 
@@ -923,7 +904,7 @@
             showToast("Invalid administrative credentials.", "error"); 
         } 
     } 
- 
+
     function logoutAdmin() { 
         isAdminLoggedIn = false; 
         sessionStorage.removeItem("is_admin_session"); 
@@ -933,18 +914,17 @@
         switchView('store'); 
         updateAdminPresenceUI(false);
     } 
- 
+
     function saveWorkflowToStorage() { 
         localStorage.setItem("bw_workflow_state", JSON.stringify(WORKFLOW_STATE)); 
     } 
- 
+
     function showToast(message, type = "success") { 
         const container = document.getElementById('toast-container'); 
         if (!container) return;
         const toast = document.createElement('div'); 
         toast.className = `p-4 rounded-xl shadow-2xl flex items-center space-x-3 text-xs font-bold border transform scale-95 translate-y-2 opacity-0 transition-all duration-300 pointer-events-auto ${ 
-            type === "success" ? "bg-slate-900 border-yellow-400 text-yellow-400" : "bg-slate-900 border-rose-500 text-rose-500" 
-        }`; 
+            type === "success" ? "bg-slate-900 border-yellow-400 text-yellow-400" : "bg-slate-900 border-rose-500 text-rose-500" }`; 
         toast.innerHTML = `<span>${type === 'success' ? '⚡' : '⚠️'}</span><span>${message}</span>`; 
         container.appendChild(toast); 
         setTimeout(() => { 
@@ -956,18 +936,18 @@
             setTimeout(() => { toast.remove(); }, 300); 
         }, 4000); 
     } 
- 
+
     /* FRONT-END CLIENT CATALOG RENDERING */ 
     function renderProductCatalog() { 
         const container = document.getElementById('products-grid'); 
         if(!container) return; 
         container.innerHTML = ""; 
- 
+
         if (PRODUCTS.length === 0) { 
             container.innerHTML = `<div class="col-span-full text-center text-slate-500 py-12 italic text-xs">No live inventory entries detected in space matrix.</div>`; 
             return; 
         } 
- 
+
         PRODUCTS.forEach(product => { 
             const card = document.createElement('div'); 
             card.className = "bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-xl transition-all hover:scale-[1.01] hover:border-yellow-500/30 flex flex-col justify-between"; 
@@ -985,7 +965,7 @@
                         <span>${line.replace(/^-\s*/, '')}</span> 
                     </div> 
                 `).join(''); 
- 
+
                 selectionTierHTML = ` 
                     <div class="p-5 space-y-4"> 
                         <div class="flex items-center justify-between border-b border-slate-800/60 pb-3"> 
@@ -998,7 +978,7 @@
                                 <span id="frontend-price-badge-${product.id}" class="text-2xl font-black text-yellow-400">RM ${product.dropdowns[0].price.toFixed(2)}</span> 
                             </div> 
                         </div> 
- 
+
                         <div class="space-y-2"> 
                             <select id="frontend-select-${product.id}" onchange="updateFrontendSelectedPrice('${product.id}')" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs text-white outline-none transition-colors"> 
                                 ${product.dropdowns.map((drop, dIdx) => `<option value="${dIdx}">[RM ${drop.price.toFixed(2)}] ${drop.name}</option>`).join('')} 
@@ -1012,7 +992,7 @@
             } else { 
                 selectionTierHTML = `<div class="p-5 text-[11px] text-slate-500 italic">No configuration variants parsed.</div>`; 
             } 
- 
+
             card.innerHTML = ` 
                 <div> 
                     <div class="relative aspect-video w-full bg-slate-950 flex items-center justify-center overflow-hidden border-b border-slate-800"> 
@@ -1032,7 +1012,7 @@
             container.appendChild(card); 
         }); 
     } 
- 
+
     function updateFrontendSelectedPrice(productId) { 
         const product = PRODUCTS.find(p => p.id === productId); 
         const dropdownIdx = document.getElementById(`frontend-select-${productId}`).value; 
@@ -1055,109 +1035,83 @@
             `).join('') || '<span class="text-slate-500 italic text-[11px]">- standard tier summary</span>'; 
         } 
     } 
- 
+
     function loadActiveSession() { 
         if (currentUser) { 
             syncAuthenticatedLayout(currentUser); 
         } 
         updateCustomerWorkflowUI(); 
     } 
- 
+
     function syncAuthenticatedLayout(user) { 
         document.getElementById('customer-portal-text').classList.add('hidden'); 
         const userBadge = document.getElementById('customer-portal-username'); 
         userBadge.innerText = user.username; 
         userBadge.classList.remove('hidden'); 
- 
+
         document.getElementById('authenticated-cust-username').innerText = `Welcome back, ${user.username}!`; 
         document.getElementById('cust-det-email').innerText = user.email; 
         document.getElementById('cust-det-phone').innerText = user.phone; 
-        document.getElementById('cust-det-billing').innerText = user.billing; 
- 
+
         document.getElementById('customer-unauthenticated-card').classList.add('hidden'); 
         document.getElementById('customer-authenticated-card').classList.remove('hidden'); 
     } 
- 
-    function handleCustomerRegister(event) { 
+
+    async function handleCustomerRegister(event) { 
         event.preventDefault(); 
         const username = document.getElementById('cust-reg-user').value.trim(); 
         const email = document.getElementById('cust-reg-email').value.trim(); 
         const phone = document.getElementById('cust-reg-phone').value.trim(); 
         const pass = document.getElementById('cust-reg-pass').value; 
-        const billing = document.getElementById('cust-reg-billing').value.trim(); 
- 
-        const registeredUsers = JSON.parse(localStorage.getItem("active_users")); 
-        if (registeredUsers[username]) { 
-            showToast("Username already exists.", "error"); 
-            return; 
-        } 
- 
-        const userData = { username, email, phone, pass, billing }; 
-        registeredUsers[username] = userData; 
-        localStorage.setItem("active_users", JSON.stringify(registeredUsers)); 
- 
-        currentUser = userData; 
-        localStorage.setItem("current_session_user", JSON.stringify(userData)); 
-        syncAuthenticatedLayout(userData); 
-        showToast(`Welcome aboard, ${username}!`); 
-        renderChatMessagesForCustomer(); 
+
+        try {
+            // Register with Firebase Auth
+            const userCredential = await window.FB_createUser(window.FB_AUTH, email, pass);
+            const user = userCredential.user;
+
+            const userData = { username, email, phone, uid: user.uid }; 
+            currentUser = userData; 
+            localStorage.setItem("current_session_user", JSON.stringify(userData)); 
+            syncAuthenticatedLayout(userData); 
+            showToast(`Welcome aboard, ${username}! Firebase Account Created.`); 
+            renderChatMessagesForCustomer(); 
+        } catch (error) {
+            showToast(error.message, "error");
+        }
     } 
- 
-    function handleCustomerLogin(event) { 
+
+    async function handleCustomerLogin(event) { 
         event.preventDefault(); 
-        const user = document.getElementById('cust-login-user').value.trim(); 
+        const email = document.getElementById('cust-login-email').value.trim(); 
         const pass = document.getElementById('cust-login-pass').value; 
         const errorDiv = document.getElementById('cust-login-error'); 
- 
-        const registeredUsers = JSON.parse(localStorage.getItem("active_users")); 
-        const savedUser = registeredUsers[user]; 
- 
-        if (savedUser && savedUser.pass === pass) { 
+
+        try {
+            // Sign in with Firebase Auth
+            const userCredential = await window.FB_signIn(window.FB_AUTH, email, pass);
+            const user = userCredential.user;
+
             errorDiv.classList.add('hidden'); 
-            currentUser = savedUser; 
-            localStorage.setItem("current_session_user", JSON.stringify(savedUser)); 
-            syncAuthenticatedLayout(savedUser); 
+            const userData = { username: email.split('@')[0], email: user.email, phone: "+60123456789", uid: user.uid };
+            currentUser = userData; 
+            localStorage.setItem("current_session_user", JSON.stringify(userData)); 
+            syncAuthenticatedLayout(userData); 
             document.getElementById('customer-login-form').reset(); 
             showToast(`Logged in safely as ${currentUser.username}`); 
             updateCustomerWorkflowUI(); 
             renderChatMessagesForCustomer(); 
-        } else { 
+        } catch (error) {
             errorDiv.classList.remove('hidden'); 
-            showToast("Invalid credentials.", "error"); 
-        } 
+            showToast("Invalid credentials or user not found.", "error"); 
+        }
     } 
- 
-    function handleCustomerRecovery(event) { 
-        event.preventDefault(); 
-        const inputVal = document.getElementById('cust-recovery-input').value.trim(); 
-        const successDiv = document.getElementById('cust-recovery-success'); 
-        const codeDisplay = document.getElementById('cust-recovery-code-display'); 
-         
-        const registeredUsers = JSON.parse(localStorage.getItem("active_users")) || {}; 
-        let targetUserKey = null; 
- 
-        for (const username in registeredUsers) { 
-            if (username.toLowerCase() === inputVal.toLowerCase() || registeredUsers[username].email.toLowerCase() === inputVal.toLowerCase()) { 
-                targetUserKey = username; 
-                break; 
-            } 
-        } 
- 
-        if (targetUserKey) { 
-            const generatedCode = "BZ-" + Math.floor(100000 + Math.random() * 900000); 
-            registeredUsers[targetUserKey].pass = generatedCode; 
-            localStorage.setItem("active_users", JSON.stringify(registeredUsers)); 
-             
-            codeDisplay.innerText = generatedCode; 
-            successDiv.classList.remove('hidden'); 
-            showToast("Temporary structural code processed safely."); 
-        } else { 
-            successDiv.classList.add('hidden'); 
-            showToast("No verified profile records match credentials.", "error"); 
-        } 
-    } 
- 
-    function logoutCustomer() { 
+
+    async function logoutCustomer() { 
+        try {
+            await window.FB_signOut(window.FB_AUTH);
+        } catch(e) {
+            console.error(e);
+        }
         currentUser = null; 
         localStorage.removeItem("current_session_user"); 
         document.getElementById('customer-authenticated-card').classList.add('hidden'); 
@@ -1169,17 +1123,15 @@
         updateCustomerWorkflowUI(); 
         renderChatMessagesForCustomer(); 
     } 
- 
+
     function toggleCustomerAuthTab(tab) { 
         const loginForm = document.getElementById('customer-login-form'); 
         const registerForm = document.getElementById('customer-register-form'); 
-        const forgotForm = document.getElementById('customer-forgot-form'); 
         const tabLoginBtn = document.getElementById('tab-cust-login'); 
         const tabRegBtn = document.getElementById('tab-cust-register'); 
          
         loginForm.classList.add('hidden'); 
         registerForm.classList.add('hidden'); 
-        forgotForm.classList.add('hidden'); 
          
         if (tab === 'register') { 
             registerForm.classList.remove('hidden'); 
@@ -1189,15 +1141,9 @@
             loginForm.classList.remove('hidden'); 
             tabLoginBtn.className = "px-3.5 py-1.5 text-xs font-bold rounded-md bg-yellow-400 text-slate-950 transition-all"; 
             tabRegBtn.className = "px-3.5 py-1.5 text-xs font-bold rounded-md text-slate-400 hover:text-white transition-all"; 
-        } else if (tab === 'forgot') { 
-            forgotForm.classList.remove('hidden'); 
-            document.getElementById('cust-recovery-success').classList.add('hidden'); 
-            document.getElementById('customer-forgot-form').reset(); 
-            tabLoginBtn.className = "px-3.5 py-1.5 text-xs font-bold rounded-md text-slate-400 hover:text-white transition-all"; 
-            tabRegBtn.className = "px-3.5 py-1.5 text-xs font-bold rounded-md text-slate-400 hover:text-white transition-all"; 
         } 
     } 
- 
+
     /* CHECKOUT CART CONTROLS */ 
     function toggleCartDrawer(state) { 
         const backdrop = document.getElementById('cart-drawer-backdrop'); 
@@ -1213,19 +1159,19 @@
             setTimeout(() => { backdrop.classList.add('hidden'); }, 300); 
         } 
     } 
- 
+
     function addProductToBasket(productId) { 
         const product = PRODUCTS.find(p => p.id === productId); 
         const dropdownIdx = document.getElementById(`frontend-select-${productId}`).value; 
         const selectedDropdown = product.dropdowns[dropdownIdx]; 
- 
+
         if(!selectedDropdown) { 
             showToast("Please choose an option first.", "error"); 
             return; 
         } 
- 
+
         const existing = cart.find(item => item.id === productId && item.optionSelected === selectedDropdown.name); 
- 
+
         if (existing) { 
             existing.quantity += 1; 
         } else { 
@@ -1240,7 +1186,7 @@
         updateCartBadgeCount(); 
         showToast(`Added ${product.title} (${selectedDropdown.name}) to basket!`); 
     } 
- 
+
     function updateCartBadgeCount() { 
         const totalQty = cart.reduce((acc, item) => acc + item.quantity, 0); 
         const badge = document.getElementById('cart-badge'); 
@@ -1252,7 +1198,7 @@
             badge.classList.add('opacity-0', 'scale-90'); 
         } 
     } 
- 
+
     function changeCartItemQty(index, increment) { 
         const targetCartItem = cart[index]; 
         targetCartItem.quantity += increment; 
@@ -1262,11 +1208,11 @@
         updateCartBadgeCount(); 
         renderCartContent(); 
     } 
- 
+
     function renderCartContent() { 
         const listContainer = document.getElementById('cart-drawer-list'); 
         listContainer.innerHTML = ""; 
- 
+
         if (cart.length === 0) { 
             listContainer.innerHTML = ` 
                 <div class="h-64 flex flex-col items-center justify-center text-slate-500 space-y-2"> 
@@ -1278,12 +1224,12 @@
             document.getElementById('cart-total-price').innerText = "RM 0.00"; 
             return; 
         } 
- 
+
         let runningSubtotal = 0; 
         cart.forEach((item, index) => { 
             const cost = item.singlePrice * item.quantity; 
             runningSubtotal += cost; 
- 
+
             const div = document.createElement('div'); 
             div.className = "bg-slate-950 border border-slate-850 p-3.5 rounded-xl space-y-2"; 
             div.innerHTML = ` 
@@ -1308,11 +1254,11 @@
             `; 
             listContainer.appendChild(div); 
         }); 
- 
+
         document.getElementById('cart-subtotal').innerText = `RM ${runningSubtotal.toFixed(2)}`; 
         document.getElementById('cart-total-price').innerText = `RM ${runningSubtotal.toFixed(2)}`; 
     } 
- 
+
     function executeBasketSubmission() { 
         if (!currentUser) { 
             showToast("Please sign in to lock selections to your profile.", "error"); 
@@ -1329,25 +1275,29 @@
             showToast("Please include structural design requirements or project reference notes.", "error"); 
             return; 
         } 
- 
+
         const selectedTerm = document.getElementById('checkout-term-selector').value; 
         let totalAmount = cart.reduce((sum, item) => sum + (item.singlePrice * item.quantity), 0); 
+        const generatedOrderId = "BZ-ORD-" + Math.floor(1000 + Math.random() * 9000);
          
         WORKFLOW_STATE.hasRequest = true; 
         WORKFLOW_STATE.customerUsername = currentUser.username; 
+        WORKFLOW_STATE.customerEmail = currentUser.email;
+        WORKFLOW_STATE.orderId = generatedOrderId;
         WORKFLOW_STATE.status = "Pending Confirmation"; 
         WORKFLOW_STATE.amount = totalAmount; 
         WORKFLOW_STATE.brief = briefVal; 
         WORKFLOW_STATE.selectedTerm = selectedTerm; 
- 
+
         saveWorkflowToStorage(); 
         updateCustomerWorkflowUI(); 
+        if (isAdminLoggedIn) renderAdminWorkflowPanel();
         toggleCartDrawer(false); 
         cart = []; 
         updateCartBadgeCount(); 
-        showToast("Design selection successfully locked down to your profile dashboard!"); 
+        showToast("Order pre-purchase details auto-saved & synced to Admin Workspace!"); 
     } 
- 
+
     /* REALTIME CUSTOMER PROFILE PORTAL ACTION CONTROL */ 
     function updateCustomerWorkflowUI() { 
         const area = document.getElementById('dynamic-workflow-btn-placeholder'); 
@@ -1359,9 +1309,9 @@
                 ? (WORKFLOW_STATE.selectedTerm === 'cash' ? "Cash Only" : "Online Transfer with FPX") 
                 : "Not Selected"; 
         } 
- 
+
         if(!area || !badge) return; 
- 
+
         if (!currentUser || !WORKFLOW_STATE.hasRequest || WORKFLOW_STATE.customerUsername !== currentUser.username) { 
             badge.innerText = "No Active Order"; 
             badge.className = "px-3 py-1 rounded text-xs font-bold bg-slate-950 text-slate-400 border border-slate-800"; 
@@ -1372,9 +1322,9 @@
             `; 
             return; 
         } 
- 
+
         badge.innerText = WORKFLOW_STATE.status; 
- 
+
         if (WORKFLOW_STATE.status === "Pending Confirmation") { 
             badge.className = "px-3 py-1 rounded text-xs font-bold bg-amber-500/10 text-amber-400 border border-amber-500/30"; 
             area.innerHTML = ` 
@@ -1413,72 +1363,38 @@
             `; 
         } 
     } 
- 
+
     function executeCashQuotationApproval() { 
         WORKFLOW_STATE.status = "Quotation Processed"; 
         saveWorkflowToStorage(); 
         updateCustomerWorkflowUI(); 
+        if (isAdminLoggedIn) renderAdminWorkflowPanel();
         showToast("Quotation request submitted directly back to Studio Admin."); 
     } 
- 
+
     function triggerToyyibpayFPXPaymentLink() { 
         document.getElementById('toyyibpay-bill-amount').innerText = `RM ${WORKFLOW_STATE.amount.toFixed(2)}`; 
-        const bankGrid = document.getElementById('bank-selectors-grid'); 
-        bankGrid.innerHTML = ""; 
-        selectedTermId = ""; 
- 
-        BANK_OPTIONS.forEach(bank => { 
-            const btn = document.createElement('button'); 
-            btn.id = `bank-btn-${bank.id}`; 
-            btn.type = "button"; 
-            btn.onclick = () => selectBankOption(bank.id); 
-            btn.className = "p-3 bg-slate-950 border border-slate-800 rounded-xl hover:border-yellow-400/40 text-left transition-all duration-300 flex items-center space-x-2 w-full"; 
-            btn.innerHTML = ` 
-                <div class="w-3.5 h-3.5 rounded-full border border-slate-700 flex items-center justify-center p-0.5" id="bank-radio-${bank.id}"> 
-                    <div class="w-full h-full rounded-full bg-transparent" id="bank-radio-dot-${bank.id}"></div> 
-                </div> 
-                <span class="text-[11px] font-bold text-white">${bank.name}</span> 
-            `; 
-            bankGrid.appendChild(btn); 
-        }); 
- 
         document.getElementById('toyyibpay-modal').classList.remove('hidden'); 
     } 
- 
-    function selectBankOption(bankId) { 
-        selectedTermId = bankId; 
-        BANK_OPTIONS.forEach(b => { 
-            document.getElementById(`bank-radio-${b.id}`).className = "w-3.5 h-3.5 rounded-full border border-slate-700 flex items-center justify-center p-0.5"; 
-            document.getElementById(`bank-radio-dot-${b.id}`).className = "w-full h-full rounded-full bg-transparent"; 
-            document.getElementById(`bank-btn-${b.id}`).className = "p-3 bg-slate-950 border border-slate-800 rounded-xl text-left w-full"; 
-        }); 
-        document.getElementById(`bank-radio-${bankId}`).className = "w-3.5 h-3.5 rounded-full border border-yellow-400 flex items-center justify-center p-0.5"; 
-        document.getElementById(`bank-radio-dot-${bankId}`).className = "w-full h-full rounded-full bg-yellow-400"; 
-        document.getElementById(`bank-btn-${bankId}`).className = "p-3 bg-slate-950 border border-yellow-400/50 rounded-xl text-left w-full shadow shadow-yellow-400/5"; 
-    } 
- 
+
     function closeToyyibpayModal() { 
         document.getElementById('toyyibpay-modal').classList.add('hidden'); 
     } 
- 
+
     function processToyyibPaySimulation() { 
-        if(!selectedTermId) { 
-            showToast("Please select your bank for online transfer authorization.", "error"); 
-            return; 
-        } 
         const submitBtn = document.getElementById('toyyibpay-submit-btn'); 
         submitBtn.disabled = true; 
-        submitBtn.innerText = "Processing secure bank redirection..."; 
- 
+        submitBtn.innerText = "Processing secure FPX gateway redirection..."; 
+
         setTimeout(() => { 
             submitBtn.disabled = false; 
             submitBtn.innerText = "Proceed Authorization Transfer"; 
             closeToyyibpayModal(); 
-            showToast("Redirection initialized to Toyyibpay active payment gateway."); 
+            showToast("Redirection initialized to Toyyibpay active FPX payment gateway."); 
             window.location.href = "https://toyyibpay.com/brandworks"; 
         }, 1200); 
     } 
- 
+
     /* ADMINISTRATIVE CORE WORKSPACE CONTROL */ 
     function renderAdminWorkspace() { 
         if(!isAdminLoggedIn) return; 
@@ -1486,20 +1402,20 @@
         renderAdminScratchSandbox(); 
         renderAdminChatHub();
     } 
- 
+
     function renderAdminWorkflowPanel() { 
         const tbody = document.getElementById('admin-workflow-table-body'); 
         if(!tbody) return; 
         tbody.innerHTML = ""; 
- 
+
         if (!WORKFLOW_STATE.hasRequest) { 
             tbody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-slate-500 italic">No incoming confirmation client requests detected.</td></tr>`; 
             return; 
         } 
- 
+
         const tr = document.createElement('tr'); 
         tr.className = "border-b border-slate-900/60 font-medium"; 
- 
+
         let actionsHTML = ""; 
         if (WORKFLOW_STATE.status === "Pending Confirmation") { 
             const btnLabel = WORKFLOW_STATE.selectedTerm === 'cash' ? "Approve Quotation" : "Approve Request"; 
@@ -1521,16 +1437,19 @@
         } else { 
             actionsHTML = `<span class="text-slate-500 text-[10px] uppercase font-bold tracking-widest">Workflow Settled</span>`; 
         } 
- 
-        const displayTerm = WORKFLOW_STATE.selectedTerm === 'cash' ? 'Cash Only' : 'FPX Transfer'; 
- 
+
+        const displayTerm = WORKFLOW_STATE.selectedTerm === 'cash' ? 'Cash / Quotation' : 'FPX Transfer'; 
+
         tr.innerHTML = ` 
             <td class="py-3 text-white font-bold"> 
+                <span class="text-yellow-400 font-mono text-[11px] block">${WORKFLOW_STATE.orderId || 'BZ-ORD-NEW'}</span>
                 <span class="block">${WORKFLOW_STATE.customerUsername}</span> 
-                <span class="text-[10px] text-slate-500 font-light max-w-[180px] block truncate">${WORKFLOW_STATE.brief}</span> 
             </td> 
-            <td class="py-3 text-slate-300 font-medium">${displayTerm}</td> 
-            <td class="py-3 text-yellow-400 font-extrabold">RM ${WORKFLOW_STATE.amount.toFixed(2)}</td> 
+            <td class="py-3 text-slate-300 font-mono text-[11px]">${WORKFLOW_STATE.customerEmail || 'N/A'}</td>
+            <td class="py-3 text-slate-300 font-medium">
+                <span class="block">${displayTerm}</span>
+                <span class="text-[10px] text-yellow-400 font-black">RM ${WORKFLOW_STATE.amount.toFixed(2)}</span>
+            </td> 
             <td class="py-3"> 
                 <span class="px-2 py-0.5 rounded text-[10px] font-black uppercase ${ 
                     WORKFLOW_STATE.status === 'Pending Confirmation' ? 'bg-amber-500/10 text-amber-400' : 
@@ -1541,13 +1460,13 @@
         `; 
         tbody.appendChild(tr); 
     } 
- 
+
     /* DYNAMIC ADMIN SANDBOX PANELS */ 
     function renderAdminScratchSandbox() { 
         const container = document.getElementById('admin-scratch-frames-container'); 
         if (!container) return; 
         container.innerHTML = ""; 
- 
+
         PRODUCTS.forEach((product, pIdx) => { 
             const block = document.createElement('div'); 
             block.className = "bg-slate-900 border-2 border-slate-800 rounded-2xl p-6 relative space-y-4 shadow-xl"; 
@@ -1577,13 +1496,13 @@
                     </div> 
                 `; 
             }); 
- 
+
             block.innerHTML = ` 
                 <div class="flex items-center justify-between border-b border-slate-800 pb-2"> 
                     <span class="text-xs font-mono font-bold text-slate-500">FRAME CODE: ${product.id}</span> 
                     <button onclick="deleteProductFrame(${pIdx})" class="w-6 h-6 rounded-full bg-rose-600/20 hover:bg-rose-600 text-rose-400 hover:text-white flex items-center justify-center text-xs font-black transition-all">X</button> 
                 </div> 
- 
+
                 <div class="space-y-1.5"> 
                     <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Product Image (Upload from device or PC) ! Editable</label> 
                     <div class="flex items-center gap-4 bg-slate-950 p-3 rounded-xl border border-slate-850"> 
@@ -1591,25 +1510,25 @@
                         <input type="file" accept="image/*" onchange="handleScratchPosterStream(event, ${pIdx})" class="text-[11px] text-slate-400 file:mr-2 file:py-1 file:px-2.5 file:rounded file:border-0 file:text-[10px] file:font-black file:bg-slate-800 file:text-white hover:file:bg-slate-750 cursor-pointer" /> 
                     </div> 
                 </div> 
- 
+
                 <hr class="border-slate-800" /> 
- 
+
                 <div class="space-y-1"> 
                     <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">*Big Font* Product Title ! Editable</label> 
                     <input type="text" value="${product.title}" onchange="PRODUCTS[pIdx].title = this.value; saveProductsToStorage();" class="w-full bg-slate-950 border border-slate-800 text-white rounded-lg p-2.5 text-sm font-black outline-none focus:border-yellow-400" /> 
                 </div> 
- 
+
                 <hr class="border-slate-800" /> 
- 
+
                 <div class="space-y-1"> 
                     <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Drop-down Base Group Label ! Editable</label> 
                     <input type="text" value="${product.dropdownLabel}" onchange="PRODUCTS[pIdx].dropdownLabel = this.value; saveProductsToStorage();" class="w-full bg-slate-950 border border-slate-800 text-yellow-400 font-bold rounded-lg p-2 text-xs outline-none focus:border-yellow-400" /> 
                 </div> 
- 
+
                 <div class="space-y-3 max-h-[220px] overflow-y-auto pr-1 hide-scrollbar"> 
                     ${nestedDropdownsHTML} 
                 </div> 
- 
+
                 <div class="grid grid-cols-2 gap-2 pt-2"> 
                     <button onclick="appendNewScratchDropdown(${pIdx})" class="py-2 bg-slate-950 border border-slate-800 hover:border-yellow-400/40 text-slate-300 font-bold text-xs rounded-xl transition-all"> 
                         (+) New Drop-down 
@@ -1618,7 +1537,7 @@
                         (-) Delete Drop-down 
                     </button> 
                 </div> 
- 
+
                 <div class="pt-4 border-t border-slate-800/80"> 
                     <button onclick="commitScratchChangesLive(${pIdx})" class="w-full py-2.5 bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow-md"> 
                         Apply committed changes live 
@@ -1628,7 +1547,7 @@
             container.appendChild(block); 
         }); 
     } 
- 
+
     function appendBlankProductFrame() { 
         const nextId = "p_frame_" + (PRODUCTS.length + 1); 
         PRODUCTS.push({ 
@@ -1644,18 +1563,18 @@
         renderAdminScratchSandbox(); 
         showToast("Appended new editable product layout frame."); 
     } 
- 
+
     function deleteProductFrame(index) { 
         PRODUCTS.splice(index, 1); 
         saveProductsToStorage(); 
         renderAdminScratchSandbox(); 
         showToast("Removed product frame safely."); 
     } 
- 
+
     function handleScratchPosterStream(event, pIdx) { 
         const file = event.target.files[0]; 
         if (!file) return; 
- 
+
         const reader = new FileReader(); 
         reader.onload = function(e) { 
             PRODUCTS[pIdx].poster = e.target.result; 
@@ -1664,7 +1583,7 @@
         } 
         reader.readAsDataURL(file); 
     } 
- 
+
     function appendNewScratchDropdown(pIdx) { 
         PRODUCTS[pIdx].dropdowns.push({ 
             name: "Custom tier option variant", 
@@ -1674,7 +1593,7 @@
         saveProductsToStorage(); 
         renderAdminScratchSandbox(); 
     } 
- 
+
     function popLastScratchDropdown(pIdx) { 
         if(PRODUCTS[pIdx].dropdowns.length <= 1) { 
             showToast("At least one drop-down option variant configuration is mandated.", "error"); 
@@ -1684,7 +1603,7 @@
         saveProductsToStorage(); 
         renderAdminScratchSandbox(); 
     } 
- 
+
     function removeScratchDropdown(pIdx, dIdx) { 
         if(PRODUCTS[pIdx].dropdowns.length <= 1) { 
             showToast("At least one drop-down option variant configuration is mandated.", "error"); 
@@ -1694,7 +1613,7 @@
         saveProductsToStorage(); 
         renderAdminScratchSandbox(); 
     } 
- 
+
     function updateScratchDropdownValue(pIdx, dIdx, field, val) { 
         if (field === 'price') { 
             PRODUCTS[pIdx].dropdowns[dIdx].price = Math.max(0, parseFloat(val) || 0.00); 
@@ -1703,13 +1622,13 @@
         } 
         saveProductsToStorage(); 
     } 
- 
+
     function commitScratchChangesLive(pIdx) { 
         saveProductsToStorage(); 
         renderProductCatalog(); 
         showToast(`🎉 Changes for frame "${PRODUCTS[pIdx].title}" committed successfully live!`); 
     } 
- 
+
     function adminApproveWorkflowOrder() { 
         WORKFLOW_STATE.status = "Approved"; 
         saveWorkflowToStorage(); 
@@ -1717,7 +1636,7 @@
         updateCustomerWorkflowUI(); 
         showToast("Client request approved. Customer dashboard layout updated."); 
     } 
- 
+
     function adminCompleteWorkflowOrder() { 
         WORKFLOW_STATE.status = "Completed"; 
         saveWorkflowToStorage(); 
@@ -1732,7 +1651,6 @@
         if (!panel) return;
         if (state) {
             panel.classList.remove('hidden');
-            // Clear unread badge
             const badge = document.getElementById('chat-unread-badge');
             if (badge) {
                 badge.classList.add('hidden');
@@ -1769,31 +1687,24 @@
         renderChatMessagesForCustomer();
         input.value = "";
 
-        // Broadcast over MQTT WebSockets for live real-time reception on Admin Phone
         if (mqttClient && mqttClient.connected) {
             mqttClient.publish(TOPIC_CHAT, JSON.stringify(newMsg));
         }
 
-        // Scroll customer window
         const win = document.getElementById('customer-chat-window');
         if (win) win.scrollTop = win.scrollHeight;
 
-        // Update admin hub locally if on same browser window instance
         if (isAdminLoggedIn) {
             renderAdminChatHub();
         }
-        
         showToast("Message sent to studio admin.");
     }
 
-    /* RENDER CUSTOMER MESSAGES: Aligned Left (Admin) & Right (Customer) */
     function renderChatMessagesForCustomer() {
         const win = document.getElementById('customer-chat-window');
         if (!win) return;
 
         const senderUsername = currentUser ? currentUser.username : "Guest_Client";
-        
-        // Filter messages belonging to this current client
         const relevantMessages = CHAT_MESSAGES.filter(m => m.user === senderUsername);
 
         let html = `
@@ -1804,7 +1715,6 @@
 
         relevantMessages.forEach(msg => {
             if (msg.sender === 'customer') {
-                // Customer's own message aligned RIGHT (Yellow Bubble)
                 html += `
                     <div class="self-end max-w-[80%] flex flex-col items-end animate-fadeIn space-y-1">
                         <span class="text-[8px] text-yellow-400 font-extrabold uppercase tracking-wider">You</span>
@@ -1815,7 +1725,6 @@
                     </div>
                 `;
             } else {
-                // Administrative reply aligned LEFT (Slate Bubble)
                 html += `
                     <div class="self-start max-w-[80%] flex flex-col items-start animate-fadeIn space-y-1">
                         <span class="text-[8px] text-slate-400 font-bold uppercase tracking-wider">Lead Designer (Admin)</span>
@@ -1832,17 +1741,15 @@
         win.scrollTop = win.scrollHeight;
     }
 
-    /* ADMIN CHAT CHANNEL SELECTION & RESPONSE ENGINE */
     function renderAdminChatHub() {
         const channelContainer = document.getElementById('admin-chat-channels');
         const messageContainer = document.getElementById('admin-chat-messages-container');
         if (!channelContainer || !messageContainer) return;
 
-        // Group chats dynamically by unique client user channels
         const userChannels = [...new Set(CHAT_MESSAGES.map(m => m.user))].filter(u => u && u !== 'system_bot' && u !== 'admin');
 
         channelContainer.innerHTML = `<span class="text-[9px] uppercase tracking-wider font-extrabold text-slate-500 font-mono">Active Users</span>`;
-        
+         
         if (userChannels.length === 0) {
             channelContainer.innerHTML += `
                 <div class="text-[10px] text-slate-500 italic text-center py-4">No active users</div>
@@ -1861,7 +1768,7 @@
                 ? 'bg-yellow-400 text-slate-950 border-yellow-400' 
                 : 'bg-slate-900 hover:bg-slate-850 text-slate-300 border-slate-800'
             }`;
-            
+             
             const userMessages = CHAT_MESSAGES.filter(m => m.user === userChan);
             const lastMsg = userMessages[userMessages.length - 1]?.message || "No messages";
 
@@ -1877,19 +1784,17 @@
             channelContainer.appendChild(btn);
         });
 
-        // Render current thread dialogue bubbles
         if (activeAdminThreadUser) {
             document.getElementById('admin-active-thread-user').innerText = `@${activeAdminThreadUser}`;
             document.getElementById('admin-chat-input').disabled = false;
             document.getElementById('admin-chat-send-btn').disabled = false;
 
             const targetMessages = CHAT_MESSAGES.filter(m => m.user === activeAdminThreadUser);
-            
+             
             let messagesHTML = "";
             targetMessages.forEach(msg => {
                 const isAdminMsg = msg.sender === 'admin';
                 if (isAdminMsg) {
-                    // Admin's own message aligned RIGHT (Slate Bubble)
                     messagesHTML += `
                         <div class="self-end max-w-[85%] flex flex-col items-end animate-fadeIn space-y-0.5">
                             <span class="text-[8px] text-slate-500 font-bold uppercase tracking-wider">You (Admin)</span>
@@ -1900,7 +1805,6 @@
                         </div>
                     `;
                 } else {
-                    // Client message aligned LEFT with Username prominently displayed (Yellow Bubble)
                     messagesHTML += `
                         <div class="self-start max-w-[85%] flex flex-col items-start animate-fadeIn space-y-0.5">
                             <span class="text-[8px] text-yellow-400 font-extrabold uppercase tracking-wider">${msg.user} (Customer)</span>
@@ -1943,7 +1847,6 @@
         renderAdminChatHub();
         input.value = "";
 
-        // Broadcast over MQTT WebSockets for live real-time reception on Customer Phone
         if (mqttClient && mqttClient.connected) {
             mqttClient.publish(TOPIC_CHAT, JSON.stringify(newReply));
         }

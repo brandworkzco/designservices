@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Brandworkz Co. Premium Black & Gold Digital Planner</title>
+  <title>Nur - Brandworkz Co. Premium Black & Gold Digital Planner</title>
   
   <!-- Inter & Playfair Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -228,7 +228,7 @@
       <div class="flex items-center gap-3">
         <div>
           <span id="header-user-email" class="text-[10px] uppercase tracking-[0.2em] text-[#D4AF37] font-bold block">user@brandworkz.co</span>
-          <h1 class="text-lg font-serif font-semibold tracking-wide text-white">BRANDWORKZ CO.</h1>
+          <h1 class="text-lg font-serif font-semibold tracking-wide text-white">Nur — Brandworkz Co.</h1>
         </div>
       </div>
 
@@ -2211,16 +2211,21 @@
     function initProjectForm() {
       const form = document.getElementById('add-project-form');
       form.onsubmit = async function(e) {
-        e.preventDefault();
+        e.preventDefault(); // CRITICAL: Prevents page reload
 
-        const client = document.getElementById('form-client').value;
-        const project = document.getElementById('form-project').value;
+        const client = document.getElementById('form-client').value.trim();
+        const project = document.getElementById('form-project').value.trim();
         const category = document.getElementById('form-category').value;
         const dateout = document.getElementById('form-dateout').value;
         const shipping = document.getElementById('form-shipping').value;
         const costVal = parseFloat(document.getElementById('form-cost').value) || 0;
         const taxValInput = document.getElementById('form-tax').value;
         const status = document.getElementById('form-status').value;
+
+        if (!client || !project) {
+          showNotification("Client Name and Project Scope are required.", "error");
+          return;
+        }
 
         const taxVal = taxValInput !== '' ? parseFloat(taxValInput) : parseFloat((costVal * (globalTaxRate / 100)).toFixed(2));
         const newInvoiceNo = `INV-2026-00${projects.length + 1}`;
@@ -2251,15 +2256,18 @@
             showNotification(`Created Project & ${newInvoiceNo} Successfully!`);
           } catch (err) {
             console.error("Error creating project in Firestore:", err);
+            showNotification("Failed to save project to cloud database.", "error");
+            return;
           }
         } else {
           projects.unshift(newProjObj);
           showNotification(`Created Project & ${newInvoiceNo} Successfully! (Local)`);
+          recalculateGlobalFinancials();
+          refreshCurrentTab();
         }
 
         closeAddProjectModal();
         form.reset();
-        switchTab(activeTab);
       };
     }
 

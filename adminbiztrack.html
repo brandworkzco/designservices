@@ -481,6 +481,15 @@
                 <i data-lucide="x" class="h-4 w-4"></i> Back to Invoices
               </button>
               <div class="flex items-center gap-3">
+                <!-- Viewer Mode Switcher: Admin vs Client View -->
+                <div class="flex items-center gap-2 bg-[#1C1C1C] px-3 py-1.5 rounded border border-white/10">
+                  <span class="text-[10px] uppercase text-gray-400 font-bold">Viewing As:</span>
+                  <select id="invoice-viewer-role-select" onchange="switchInvoiceViewerRole(this.value)" class="text-xs bg-[#121212] text-[#D4AF37] font-semibold border border-[#D4AF37]/30 rounded px-2 py-1 outline-none">
+                    <option value="admin">Admin (Full Control)</option>
+                    <option value="client">Client Portal View</option>
+                  </select>
+                </div>
+
                 <button 
                   id="invoice-edit-toggle-btn"
                   onclick="toggleInvoiceEditMode()"
@@ -489,7 +498,6 @@
                   <i id="edit-mode-icon" data-lucide="edit-3" class="h-4 w-4"></i>
                   <span id="edit-mode-btn-text">Enable Edit Mode</span>
                 </button>
-                <span class="text-xs text-gray-500 italic hidden md:inline">💡 Works beautifully with Chrome, Firefox, and Safari</span>
                 <button 
                   onclick="triggerPNGExport()"
                   class="flex items-center gap-2 bg-gradient-to-r from-[#BF953F] to-[#D4AF37] text-black font-bold text-xs px-5 py-2.5 rounded shadow-lg hover:from-[#FCF6BA] hover:to-[#B38728] transition-all"
@@ -835,6 +843,7 @@
     let earningsChartInstance = null;
     let isInvoiceEditing = false;
     let globalTaxRate = 29.17; 
+    let invoiceViewerRole = "admin"; // 'admin' or 'client'
 
     let projectsListener = null;
     let tasksListener = null;
@@ -1462,21 +1471,32 @@
       }
     }
 
-    // SUB-RENDERER: INVOICES HUB VIEW (With editable Brandworkz address)
+    function switchInvoiceViewerRole(role) {
+      invoiceViewerRole = role;
+      renderInvoiceHub();
+    }
+
+    // SUB-RENDERER: INVOICES HUB VIEW (With Admin vs Client Visibility Rules & Fully Editable Description / Payment Directives)
     function renderInvoiceHub() {
       if (selectedInvoice) {
         document.getElementById('invoice-hub-list-mode').classList.add('hidden');
         document.getElementById('invoice-hub-detail-mode').classList.remove('hidden');
         
+        const roleSelect = document.getElementById('invoice-viewer-role-select');
+        if (roleSelect) roleSelect.value = invoiceViewerRole;
+
         const sheet = document.getElementById('invoice-render-sheet');
         if (!sheet) return;
         const totalDue = selectedInvoice.cost + selectedInvoice.tax;
 
-        // Default fallback address values if not yet customized
         const studioName = selectedInvoice.studioName || "BRANDWORKZ CO.";
         const studioAddress = selectedInvoice.studioAddress || "158 Jalan Ampang, Level 24 G-Tower\nKuala Lumpur, 50450, Malaysia\nEmail: creatives@brandworkz.co";
+        
+        // Default editable description and terms if not yet defined on the project object
+        const serviceDescription = selectedInvoice.serviceDescription !== undefined ? selectedInvoice.serviceDescription : "Customized layout drafts, graphic assets, vector delivery, and visual consultation guidelines.";
+        const paymentDirectives = selectedInvoice.paymentDirectives !== undefined ? selectedInvoice.paymentDirectives : "Please make all bank transfers to Brandworkz Co (Malayan Banking Berhad - Account 514-XXX-XXXX) referencing this invoice number.\nReceipt or payment confirmations can be uploaded in the asset workspace panel or emailed to accounts@brandworkz.co.";
 
-        if (isInvoiceEditing) {
+        if (isInvoiceEditing && invoiceViewerRole === 'admin') {
           const editIcon = document.getElementById('edit-mode-icon');
           if (editIcon) editIcon.setAttribute('data-lucide', 'save');
           
@@ -1530,12 +1550,12 @@
               </thead>
               <tbody class="divide-y text-xs text-gray-800">
                 <tr>
-                  <td class="py-4">
-                    <span class="font-bold text-gray-900 block">${selectedInvoice.projectName}</span>
-                    <span class="text-[10px] text-gray-500">Customized layout drafts, graphic assets, vector delivery, and visual consultation guidelines.</span>
+                  <td class="py-4 space-y-2">
+                    <input type="text" id="edit-invoice-service-title" value="${selectedInvoice.projectName}" class="w-full font-bold text-gray-900 border border-gray-300 rounded px-2 py-1 focus:outline-none focus:border-[#9A7B2C]" />
+                    <textarea id="edit-invoice-service-desc" rows="2" class="w-full text-xs text-gray-600 border border-gray-300 rounded px-2 py-1 focus:outline-none focus:border-[#9A7B2C]">${serviceDescription}</textarea>
                   </td>
-                  <td class="py-4 text-right font-mono text-gray-600">Editable Class</td>
-                  <td class="py-4 text-right font-mono">
+                  <td class="py-4 text-right font-mono text-gray-600 align-top">Editable Class</td>
+                  <td class="py-4 text-right font-mono align-top">
                     <input type="number" step="0.01" id="edit-invoice-cost" value="${selectedInvoice.cost.toFixed(2)}" oninput="recalculateEditTotals()" class="w-24 text-right border border-gray-300 rounded px-1 py-0.5 font-bold focus:outline-none focus:border-[#9A7B2C]" />
                   </td>
                 </tr>
@@ -1572,8 +1592,7 @@
 
             <div class="mt-12 pt-8 border-t border-gray-100 text-[10px] text-gray-500 space-y-2 font-sans leading-relaxed">
               <p class="font-semibold text-gray-800 uppercase">Payment Directives & Terms:</p>
-              <p>Please make all bank transfers to <span class="font-bold text-gray-800">Brandworkz Co (Malayan Banking Berhad - Account 514-XXX-XXXX)</span> referencing this invoice number.</p>
-              <p>Receipt or payment confirmations can be uploaded in the asset workspace panel or emailed to accounts@brandworkz.co.</p>
+              <textarea id="edit-payment-directives" rows="4" class="w-full text-xs text-gray-700 font-sans border border-gray-300 rounded px-2.5 py-1.5 focus:outline-none focus:border-[#9A7B2C]">${paymentDirectives}</textarea>
             </div>
           `;
         } else {
@@ -1581,10 +1600,36 @@
           if (editIcon) editIcon.setAttribute('data-lucide', 'edit-3');
 
           const editBtnText = document.getElementById('edit-mode-btn-text');
-          if (editBtnText) editBtnText.innerText = "Enable Edit Mode";
+          if (editBtnText) editBtnText.innerText = invoiceViewerRole === 'admin' ? "Enable Edit Mode" : "Client View Mode";
 
           const percent = ((selectedInvoice.tax / (selectedInvoice.cost || 1)) * 100).toFixed(2);
           const formattedAddress = studioAddress.replace(/\n/g, '<br />');
+          const formattedDirectives = paymentDirectives.replace(/\n/g, '<br />');
+
+          let summarySectionHTML = '';
+          if (invoiceViewerRole === 'admin') {
+            summarySectionHTML = `
+              <div class="flex justify-between font-medium">
+                <span>Subtotal:</span>
+                <span class="font-mono text-gray-900">RM ${selectedInvoice.cost.toFixed(2)}</span>
+              </div>
+              <div class="flex justify-between font-medium">
+                <span>Services Tax (${percent}%):</span>
+                <span class="font-mono text-[#9A7B2C]">RM ${selectedInvoice.tax.toFixed(2)}</span>
+              </div>
+              <div class="border-t pt-2.5 flex justify-between font-bold text-sm text-gray-900 border-gray-200">
+                <span>Grand Total Due:</span>
+                <span class="font-mono text-[#9A7B2C] text-base font-bold">RM ${totalDue.toFixed(2)}</span>
+              </div>
+            `;
+          } else {
+            summarySectionHTML = `
+              <div class="border-t pt-2.5 flex justify-between font-bold text-sm text-gray-900 border-gray-200">
+                <span class="font-bold text-gray-900 text-base">Subtotal:</span>
+                <span class="font-mono font-bold text-gray-900 text-base">RM ${selectedInvoice.cost.toFixed(2)}</span>
+              </div>
+            `;
+          }
 
           sheet.innerHTML = `
             <div class="flex justify-between items-start gap-6 border-b pb-8">
@@ -1629,9 +1674,9 @@
                 <tr>
                   <td class="py-4">
                     <span class="font-bold text-gray-900 block">${selectedInvoice.projectName}</span>
-                    <span class="text-[10px] text-gray-500">Customized layout drafts, graphic assets, vector delivery, and visual consultation guidelines.</span>
+                    <span class="text-[10px] text-gray-500">${serviceDescription}</span>
                   </td>
-                  <td class="py-4 text-right font-mono text-gray-600">${percent}% Tax Rate</td>
+                  <td class="py-4 text-right font-mono text-gray-600">${invoiceViewerRole === 'admin' ? `${percent}% Tax Rate` : 'Standard Rate'}</td>
                   <td class="py-4 text-right font-mono font-semibold text-gray-900">
                     RM ${selectedInvoice.cost.toFixed(2)}
                   </td>
@@ -1641,25 +1686,13 @@
 
             <div class="flex justify-end font-sans">
               <div class="w-80 space-y-2.5 text-xs text-gray-700">
-                <div class="flex justify-between font-medium">
-                  <span>Subtotal:</span>
-                  <span class="font-mono text-gray-900">RM ${selectedInvoice.cost.toFixed(2)}</span>
-                </div>
-                <div class="flex justify-between font-medium">
-                  <span>Services Tax (${percent}%):</span>
-                  <span class="font-mono text-[#9A7B2C]">RM ${selectedInvoice.tax.toFixed(2)}</span>
-                </div>
-                <div class="border-t pt-2.5 flex justify-between font-bold text-sm text-gray-900 border-gray-200">
-                  <span>Grand Total Due:</span>
-                  <span class="font-mono text-[#9A7B2C] text-base font-bold">RM ${totalDue.toFixed(2)}</span>
-                </div>
+                ${summarySectionHTML}
               </div>
             </div>
 
             <div class="mt-12 pt-8 border-t border-gray-100 text-[10px] text-gray-500 space-y-2 font-sans leading-relaxed">
               <p class="font-semibold text-gray-800 uppercase">Payment Directives & Terms:</p>
-              <p>Please make all bank transfers to <span class="font-bold text-gray-800">Brandworkz Co (Malayan Banking Berhad - Account 514-XXX-XXXX)</span> referencing this invoice number.</p>
-              <p>Receipt or payment confirmations can be uploaded in the asset workspace panel or emailed to accounts@brandworkz.co.</p>
+              <div>${formattedDirectives}</div>
               <div class="pt-4 text-center border-t border-gray-100 text-gray-400 font-serif italic">
                 Thank you for commissioning our exclusive boutique design studio. We look forward to designing with you again!
               </div>
@@ -1748,6 +1781,11 @@
     }
 
     async function toggleInvoiceEditMode() {
+      if (invoiceViewerRole !== 'admin') {
+        showNotification("Edit mode is restricted to Admin role.", "error");
+        return;
+      }
+
       if (isInvoiceEditing) {
         const costInput = parseFloat(document.getElementById('edit-invoice-cost').value) || 0;
         const taxInput = parseFloat(document.getElementById('edit-invoice-tax-amount').value) || 0;
@@ -1758,6 +1796,10 @@
         const shippingInput = document.getElementById('edit-invoice-shipping').value;
         const studioNameInput = document.getElementById('edit-studio-name').value.trim();
         const studioAddressInput = document.getElementById('edit-studio-address').value.trim();
+        
+        // Retrieve the newly editable description and payment terms fields
+        const serviceDescInput = document.getElementById('edit-invoice-service-desc').value.trim();
+        const paymentDirectivesInput = document.getElementById('edit-payment-directives').value.trim();
 
         if (!clientInput || !projectInput) {
           showNotification("Client Name and Project Scope cannot be empty", "error");
@@ -1773,14 +1815,16 @@
           dateOut: dateInput,
           shippingDate: shippingInput,
           studioName: studioNameInput,
-          studioAddress: studioAddressInput
+          studioAddress: studioAddressInput,
+          serviceDescription: serviceDescInput,
+          paymentDirectives: paymentDirectivesInput
         };
 
         if (currentUser) {
           try {
             const projectDoc = doc(db, 'artifacts', appId, 'public', 'data', 'projects', selectedInvoice.id);
             await updateDoc(projectDoc, updatedProject);
-            showNotification("Invoice address & tax details saved successfully!");
+            showNotification("Invoice description, payment terms & details saved successfully!");
           } catch (e) {
             console.error("Failed to update project data:", e);
           }
@@ -1793,7 +1837,7 @@
           });
 
           selectedInvoice = projects.find(p => p.id === selectedInvoice.id);
-          showNotification("Invoice address & tax details saved successfully! (Local)");
+          showNotification("Invoice description, payment terms & details saved successfully! (Local)");
           recalculateGlobalFinancials();
         }
 
@@ -2110,7 +2154,9 @@
           category: category,
           files: [],
           studioName: "BRANDWORKZ CO.",
-          studioAddress: "158 Jalan Ampang, Level 24 G-Tower\nKuala Lumpur, 50450, Malaysia\nEmail: creatives@brandworkz.co"
+          studioAddress: "158 Jalan Ampang, Level 24 G-Tower\nKuala Lumpur, 50450, Malaysia\nEmail: creatives@brandworkz.co",
+          serviceDescription: "Customized layout drafts, graphic assets, vector delivery, and visual consultation guidelines.",
+          paymentDirectives: "Please make all bank transfers to Brandworkz Co (Malayan Banking Berhad - Account 514-XXX-XXXX) referencing this invoice number.\nReceipt or payment confirmations can be uploaded in the asset workspace panel or emailed to accounts@brandworkz.co."
         };
 
         if (currentUser) {
@@ -2157,6 +2203,7 @@
     window.toggleTaskCompleted = toggleTaskCompleted;
     window.deleteTask = deleteTask;
     window.handleLogout = handleLogout;
+    window.switchInvoiceViewerRole = switchInvoiceViewerRole;
   </script>
 </body>
 </html>

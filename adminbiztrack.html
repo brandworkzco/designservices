@@ -168,7 +168,7 @@
               type="button" 
               id="forgot-password-link"
               onclick="switchToForgotPassword()" 
-              class="text-[10px] text-[#D4AF37] hover:underline hidden"
+              class="text-[10px] text-[#D4AF37] hover:underline"
             >
               Forgot Password?
             </button>
@@ -1290,13 +1290,25 @@
         earningsChartInstance.destroy();
       }
 
+      const monthlyTotals = [0, 0, 0, 0, 0, 0];
+      projects.forEach(p => {
+        if (p.dateOut) {
+          const date = new Date(p.dateOut);
+          const month = date.getMonth(); // 0 = Jan, 1 = Feb, etc.
+          if (month >= 0 && month < 6) {
+            const projectTotal = (Number(p.cost) || 0) + (Number(p.tax) || 0);
+            monthlyTotals[month] += projectTotal;
+          }
+        }
+      });
+
       earningsChartInstance = new Chart(ctx, {
         type: 'line',
         data: {
           labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
           datasets: [{
             label: 'Studio Revenues (RM)',
-            data: [0, 0, 0, 0, 0, 0],
+            data: monthlyTotals,
             borderColor: '#D4AF37',
             borderWidth: 2,
             backgroundColor: 'rgba(212, 175, 55, 0.05)',

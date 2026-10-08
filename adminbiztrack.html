@@ -117,7 +117,7 @@
     </div>
   </div>
 
-  <!-- SECURE GATEWAY (LOGIN OVERLAY) -->
+  <!-- SECURE GATEWAY (FIREBASE AUTH OVERLAY) -->
   <div id="login-overlay" class="min-h-screen bg-[#070707] flex items-center justify-center p-4 relative overflow-hidden font-sans">
     <div class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-[#D4AF37]/5 blur-[120px] pointer-events-none"></div>
     <div class="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-[#D4AF37]/5 blur-[120px] pointer-events-none"></div>
@@ -125,7 +125,7 @@
     <div class="max-w-md w-full bg-gradient-to-b from-[#0F0F0F] to-[#141414] border border-[#D4AF37]/25 rounded-2xl p-8 shadow-[0_20px_50px_rgba(0,0,0,0.9)] relative z-10 transition-all duration-300">
       <div class="text-center mb-8">
         <h1 class="text-xl font-serif font-semibold tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-[#FCF6BA] via-[#D4AF37] to-[#BF953F]">BRANDWORKZ CO.</h1>
-        <p class="text-[10px] text-gray-400 uppercase tracking-[0.2em] font-medium mt-1">Creative Suite Secure Gateway</p>
+        <p id="auth-subtitle" class="text-[10px] text-gray-400 uppercase tracking-[0.2em] font-medium mt-1">Creative Suite Secure Gateway</p>
       </div>
 
       <div class="bg-[#181818] border border-white/5 rounded-xl p-4 mb-6 flex items-start gap-3">
@@ -133,8 +133,8 @@
           <i data-lucide="shield-check" class="animate-pulse h-[18px] w-[18px]"></i>
         </div>
         <div>
-          <p class="text-xs font-semibold text-white">Public Hosting Shield Active</p>
-          <p class="text-[10px] text-gray-400 mt-0.5 leading-relaxed">This business workspace is encrypted. Verify your credential keys to open your planner dashboard.</p>
+          <p class="text-xs font-semibold text-white">Firebase Authentication Active</p>
+          <p class="text-[10px] text-gray-400 mt-0.5 leading-relaxed">Sign in or sign up with your real email and password to securely load your workspace data.</p>
         </div>
       </div>
 
@@ -143,34 +143,44 @@
         <p id="login-error-msg" class="text-xs text-rose-300 font-medium"></p>
       </div>
 
-      <form id="login-form" class="space-y-5">
+      <!-- AUTH FORM -->
+      <form id="auth-form" class="space-y-5">
         <div class="space-y-1.5">
-          <label class="text-[10px] text-gray-400 uppercase tracking-widest block font-semibold">Workspace Username</label>
+          <label class="text-[10px] text-gray-400 uppercase tracking-widest block font-semibold">Email Address</label>
           <div class="relative">
             <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500">
-              <i data-lucide="user" class="h-[15px] w-[15px]"></i>
+              <i data-lucide="mail" class="h-[15px] w-[15px]"></i>
             </span>
             <input 
-              type="text" 
-              id="login-username"
+              type="email" 
+              id="auth-email"
               required
-              placeholder="Enter username" 
+              placeholder="name@example.com" 
               class="w-full bg-[#181818] border border-white/10 rounded-xl pl-10 pr-4 py-3 text-xs text-white focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/30 transition-all font-sans"
             />
           </div>
         </div>
 
-        <div class="space-y-1.5">
-          <label class="text-[10px] text-gray-400 uppercase tracking-widest block font-semibold">Security Access Key</label>
+        <div class="space-y-1.5" id="password-field-wrapper">
+          <div class="flex justify-between items-center">
+            <label class="text-[10px] text-gray-400 uppercase tracking-widest block font-semibold">Password</label>
+            <button 
+              type="button" 
+              id="forgot-password-link"
+              onclick="switchToForgotPassword()" 
+              class="text-[10px] text-[#D4AF37] hover:underline hidden"
+            >
+              Forgot Password?
+            </button>
+          </div>
           <div class="relative">
             <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500">
               <i data-lucide="lock" class="h-[15px] w-[15px]"></i>
             </span>
             <input 
               type="password" 
-              id="login-password"
-              required
-              placeholder="Enter password" 
+              id="auth-password"
+              placeholder="••••••••" 
               class="w-full bg-[#181818] border border-white/10 rounded-xl pl-10 pr-11 py-3 text-xs text-white focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/30 transition-all font-sans"
             />
             <button 
@@ -185,16 +195,27 @@
 
         <button 
           type="submit" 
-          id="login-submit-btn"
+          id="auth-submit-btn"
           class="w-full mt-2 bg-gradient-to-r from-[#BF953F] via-[#D4AF37] to-[#FCF6BA] hover:brightness-110 text-[#0A0A0A] font-bold text-xs py-3.5 rounded-xl shadow-[0_4px_20px_rgba(212,175,55,0.25)] transition-all flex items-center justify-center gap-2 tracking-wider"
         >
-          <i data-lucide="lock" class="h-3.5 w-3.5"></i>
-          UNLOCK WORKSPACE
+          <i data-lucide="log-in" class="h-3.5 w-3.5"></i>
+          SIGN IN TO WORKSPACE
         </button>
       </form>
 
+      <!-- SWITCH BETWEEN SIGN IN, SIGN UP, AND FORGOT PASSWORD -->
+      <div class="mt-6 flex flex-col items-center justify-center gap-2 text-xs text-gray-400">
+        <div id="auth-mode-switch-container">
+          <span id="auth-mode-text">Don't have a workspace account?</span> 
+          <button onclick="toggleAuthMode()" id="auth-mode-toggle-btn" class="text-[#D4AF37] font-semibold hover:underline ml-1">Create Account</button>
+        </div>
+        <button id="back-to-login-btn" onclick="switchToSignIn()" class="text-gray-400 hover:text-white text-[11px] underline hidden mt-1">
+          Back to Sign In
+        </button>
+      </div>
+
       <div class="text-center mt-8 pt-6 border-t border-white/5">
-        <p class="text-[9px] text-gray-600 uppercase tracking-widest">Brandworkz Co. • Enterprise Suite Security v2.6</p>
+        <p class="text-[9px] text-gray-600 uppercase tracking-widest">Brandworkz Co. • Enterprise Suite Security v2.7</p>
       </div>
     </div>
   </div>
@@ -206,7 +227,7 @@
     <header class="border-b border-[#D4AF37]/20 bg-[#0F0F0F] px-6 py-4 flex flex-wrap justify-between items-center gap-4 sticky top-0 z-40 shadow-lg print:hidden">
       <div class="flex items-center gap-3">
         <div>
-          <span class="text-xs uppercase tracking-[0.2em] text-[#D4AF37] font-bold block">Exclusive Suite</span>
+          <span id="header-user-email" class="text-[10px] uppercase tracking-[0.2em] text-[#D4AF37] font-bold block">user@brandworkz.co</span>
           <h1 class="text-lg font-serif font-semibold tracking-wide text-white">BRANDWORKZ CO.</h1>
         </div>
       </div>
@@ -288,11 +309,11 @@
             onclick="handleLogout()"
             class="w-full flex items-center justify-center gap-2 py-2 bg-rose-950/20 hover:bg-rose-950/40 border border-rose-500/20 hover:border-rose-500/40 text-rose-400 text-xs rounded transition-all"
           >
-            <i data-lucide="lock" class="h-3 w-3"></i> Lock Workspace
+            <i data-lucide="log-out" class="h-3 w-3"></i> Sign Out
           </button>
           <div class="text-center">
-            <span class="text-[10px] tracking-wider text-gray-500 uppercase block">Premium Planner v2.6</span>
-            <span class="text-[9px] text-[#D4AF37]/60 block font-mono">RM Currency Enabled</span>
+            <span class="text-[10px] tracking-wider text-gray-500 uppercase block">Premium Planner v2.7</span>
+            <span class="text-[9px] text-[#D4AF37]/60 block font-mono">Firebase Auth Enabled</span>
           </div>
         </div>
       </nav>
@@ -309,7 +330,7 @@
             </div>
             <div class="flex items-center gap-2 bg-[#141414] border border-white/5 rounded-lg px-4 py-2">
               <div class="h-2 w-2 rounded-full bg-[#D4AF37] animate-pulse"></div>
-              <span class="text-xs text-gray-300 font-mono">Status: Authenticated & Secured Session</span>
+              <span class="text-xs text-gray-300 font-mono">Status: Firebase Secure Session</span>
             </div>
           </div>
 
@@ -801,9 +822,9 @@
 
   <!-- APPLICATION LOGIC & DATA ENGINE -->
   <script type="module">
-    // Import the functions you need from the SDKs you need
+    // Import Firebase SDKs
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
-    import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
     import { getFirestore, doc, setDoc, getDoc, collection, onSnapshot, updateDoc, deleteDoc, addDoc } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 
     // Firestore Integration Setup & Auth guards
@@ -817,7 +838,6 @@
     };
     
     const appId = typeof __app_id !== 'undefined' ? __app_id : 'brandworkz-planner-v2';
-    const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
 
     let app, auth, db;
     let hasFirebase = false;
@@ -844,6 +864,7 @@
     let isInvoiceEditing = false;
     let globalTaxRate = 29.17; 
     let invoiceViewerRole = "admin"; // 'admin' or 'client'
+    let authMode = "signin"; // 'signin', 'signup', 'forgot'
 
     let projectsListener = null;
     let tasksListener = null;
@@ -851,34 +872,17 @@
 
     window.onload = function() {
       lucide.createIcons();
-      initLoginHandshake();
+      initAuthHandlers();
       initTaskHandlers();
       initProjectForm();
       updateTaxInputLabel();
-
-      const existingSession = sessionStorage.getItem('brandworkz_session_auth');
-      if (existingSession === 'active_authenticated') {
-        triggerFirebaseAuthAndSync();
-      }
     };
-
-    async function triggerFirebaseAuthAndSync() {
-      if (!hasFirebase) return;
-      try {
-        if (initialAuthToken) {
-          await signInWithCustomToken(auth, initialAuthToken);
-        } else {
-          await signInAnonymously(auth);
-        }
-      } catch (e) {
-        console.error("Firebase auth initialization failed:", e);
-      }
-    }
 
     if (hasFirebase && auth) {
       onAuthStateChanged(auth, (user) => {
         currentUser = user;
         if (user) {
+          renderAuthWorkspace(user.email);
           subscribeToFirestoreData(user);
         } else {
           if (projectsListener) projectsListener();
@@ -960,7 +964,7 @@
     async function updateGlobalTaxRate(newRate) {
       const rate = parseFloat(newRate);
       if (!isNaN(rate) && rate >= 0) {
-        if (currentUser) {
+        if (currentUser && db) {
           try {
             await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'settings', 'global_settings'), {
               globalTaxRate: rate
@@ -998,15 +1002,77 @@
       }, 4000);
     }
 
-    function initLoginHandshake() {
-      const form = document.getElementById('login-form');
-      const toggleBtn = document.getElementById('toggle-password');
-      const passwordInput = document.getElementById('login-password');
+    // AUTH MODE SWITCHING FUNCTIONS
+    window.toggleAuthMode = function() {
+      const subTitle = document.getElementById('auth-subtitle');
+      const submitBtn = document.getElementById('auth-submit-btn');
+      const modeText = document.getElementById('auth-mode-text');
+      const modeToggleBtn = document.getElementById('auth-mode-toggle-btn');
+      const forgotLink = document.getElementById('forgot-password-link');
+      const errDiv = document.getElementById('login-error-container');
 
-      const existingSession = sessionStorage.getItem('brandworkz_session_auth');
-      if (existingSession === 'active_authenticated') {
-        renderAuthWorkspace();
+      errDiv.classList.add('hidden');
+
+      if (authMode === 'signin') {
+        authMode = 'signup';
+        subTitle.innerText = "Create Your Studio Account";
+        submitBtn.innerHTML = `<i data-lucide="user-plus" class="h-3.5 w-3.5"></i> CREATE ACCOUNT`;
+        modeText.innerText = "Already have an account?";
+        modeToggleBtn.innerText = "Sign In";
+        forgotLink.classList.add('hidden');
+      } else {
+        authMode = 'signin';
+        subTitle.innerText = "Creative Suite Secure Gateway";
+        submitBtn.innerHTML = `<i data-lucide="log-in" class="h-3.5 w-3.5"></i> SIGN IN TO WORKSPACE`;
+        modeText.innerText = "Don't have a workspace account?";
+        modeToggleBtn.innerText = "Create Account";
+        forgotLink.classList.remove('hidden');
       }
+      lucide.createIcons();
+    }
+
+    window.switchToForgotPassword = function() {
+      authMode = 'forgot';
+      const subTitle = document.getElementById('auth-subtitle');
+      const submitBtn = document.getElementById('auth-submit-btn');
+      const passWrapper = document.getElementById('password-field-wrapper');
+      const modeSwitchContainer = document.getElementById('auth-mode-switch-container');
+      const backToLoginBtn = document.getElementById('back-to-login-btn');
+      const errDiv = document.getElementById('login-error-container');
+
+      errDiv.classList.add('hidden');
+      subTitle.innerText = "Password Recovery Service";
+      submitBtn.innerHTML = `<i data-lucide="send" class="h-3.5 w-3.5"></i> SEND RECOVERY EMAIL`;
+      passWrapper.classList.add('hidden');
+      modeSwitchContainer.classList.add('hidden');
+      backToLoginBtn.classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    window.switchToSignIn = function() {
+      authMode = 'signin';
+      const subTitle = document.getElementById('auth-subtitle');
+      const submitBtn = document.getElementById('auth-submit-btn');
+      const passWrapper = document.getElementById('password-field-wrapper');
+      const modeSwitchContainer = document.getElementById('auth-mode-switch-container');
+      const backToLoginBtn = document.getElementById('back-to-login-btn');
+      const forgotLink = document.getElementById('forgot-password-link');
+      const errDiv = document.getElementById('login-error-container');
+
+      errDiv.classList.add('hidden');
+      subTitle.innerText = "Creative Suite Secure Gateway";
+      submitBtn.innerHTML = `<i data-lucide="log-in" class="h-3.5 w-3.5"></i> SIGN IN TO WORKSPACE`;
+      passWrapper.classList.remove('hidden');
+      modeSwitchContainer.classList.remove('hidden');
+      backToLoginBtn.classList.add('hidden');
+      forgotLink.classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function initAuthHandlers() {
+      const form = document.getElementById('auth-form');
+      const toggleBtn = document.getElementById('toggle-password');
+      const passwordInput = document.getElementById('auth-password');
 
       toggleBtn.onclick = function() {
         isPasswordVisible = !isPasswordVisible;
@@ -1017,49 +1083,65 @@
         lucide.createIcons();
       };
 
-      form.onsubmit = function(e) {
+      form.onsubmit = async function(e) {
         e.preventDefault();
-        const username = document.getElementById('login-username').value;
+        const email = document.getElementById('auth-email').value.trim();
         const pass = passwordInput.value;
-        const submitBtn = document.getElementById('login-submit-btn');
+        const submitBtn = document.getElementById('auth-submit-btn');
+        const errDiv = document.getElementById('login-error-container');
+        const errMsg = document.getElementById('login-error-msg');
 
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = `AUTHENTICATING KEY...`;
+        errDiv.classList.add('hidden');
 
-        setTimeout(async () => {
-          if (window.btoa(username) === "YWRtaW4=" && window.btoa(pass) === "MTM0MjI4") {
-            sessionStorage.setItem('brandworkz_session_auth', 'active_authenticated');
-            await triggerFirebaseAuthAndSync();
-            renderAuthWorkspace();
-            showNotification("Access Granted. Welcome back to Brandworkz Co.");
-          } else {
+        if (!hasFirebase || !auth) {
+          errMsg.innerText = "Firebase Auth is not initialized.";
+          errDiv.classList.remove('hidden');
+          return;
+        }
+
+        try {
+          if (authMode === 'forgot') {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = "SENDING LINK...";
+            await sendPasswordResetEmail(auth, email);
+            showNotification("Password reset email sent! Check your inbox.");
             submitBtn.disabled = false;
-            submitBtn.innerHTML = `<i data-lucide="lock" class="h-3.5 w-3.5"></i> UNLOCK WORKSPACE`;
-            lucide.createIcons();
-            const errDiv = document.getElementById('login-error-container');
-            const errMsg = document.getElementById('login-error-msg');
-            errMsg.innerText = "Invalid Studio credentials. Access has been denied.";
-            errDiv.classList.remove('hidden');
+            switchToSignIn();
+            return;
           }
-        }, 700);
+
+          if (authMode === 'signup') {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = "CREATING ACCOUNT...";
+            const userCred = await createUserWithEmailAndPassword(auth, email, pass);
+            showNotification("Account created successfully!");
+            renderAuthWorkspace(userCred.user.email);
+          } else {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = "AUTHENTICATING...";
+            const userCred = await signInWithEmailAndPassword(auth, email, pass);
+            showNotification("Signed in successfully!");
+            renderAuthWorkspace(userCred.user.email);
+          }
+        } catch (error) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = authMode === 'signup' ? `CREATE ACCOUNT` : `SIGN IN TO WORKSPACE`;
+          errMsg.innerText = error.message.replace('Firebase: ', '');
+          errDiv.classList.remove('hidden');
+        }
       };
     }
 
-    function renderAuthWorkspace() {
+    function renderAuthWorkspace(userEmail) {
       document.getElementById('login-overlay').classList.add('hidden');
       document.getElementById('app-workspace').classList.remove('hidden');
+      const emailDisplay = document.getElementById('header-user-email');
+      if (emailDisplay) emailDisplay.innerText = userEmail;
       switchTab(activeTab);
       recalculateGlobalFinancials();
     }
 
     async function handleLogout() {
-      sessionStorage.removeItem('brandworkz_session_auth');
-      document.getElementById('app-workspace').classList.add('hidden');
-      document.getElementById('login-overlay').classList.remove('hidden');
-      document.getElementById('login-username').value = '';
-      document.getElementById('login-password').value = '';
-      document.getElementById('login-error-container').classList.add('hidden');
-      
       if (hasFirebase && auth) {
         try {
           await signOut(auth);
@@ -1068,8 +1150,12 @@
           console.error("Signout error:", e);
         }
       }
-
-      showNotification("Logged out successfully from the secure workspace.", "info");
+      document.getElementById('app-workspace').classList.add('hidden');
+      document.getElementById('login-overlay').classList.remove('hidden');
+      document.getElementById('auth-email').value = '';
+      document.getElementById('auth-password').value = '';
+      document.getElementById('login-error-container').classList.add('hidden');
+      showNotification("Signed out successfully from workspace.", "info");
     }
 
     function recalculateGlobalFinancials() {
@@ -1409,7 +1495,7 @@
     }
 
     async function updateProjectStatus(projectId, newStatus) {
-      if (currentUser) {
+      if (currentUser && db) {
         try {
           const projectDoc = doc(db, 'artifacts', appId, 'public', 'data', 'projects', projectId);
           await updateDoc(projectDoc, { status: newStatus });
@@ -1438,7 +1524,7 @@
       const existingFiles = targetProj.files || [];
       const updatedFiles = [...existingFiles, { name: file.name, size: formattedSize }];
 
-      if (currentUser) {
+      if (currentUser && db) {
         try {
           const projectDoc = doc(db, 'artifacts', appId, 'public', 'data', 'projects', projectId);
           await updateDoc(projectDoc, { files: updatedFiles });
@@ -1455,7 +1541,7 @@
 
     async function deleteProject(projectId) {
       const p = projects.find(item => item.id === projectId);
-      if (currentUser) {
+      if (currentUser && db) {
         try {
           const projectDoc = doc(db, 'artifacts', appId, 'public', 'data', 'projects', projectId);
           await deleteDoc(projectDoc);
@@ -1476,7 +1562,6 @@
       renderInvoiceHub();
     }
 
-    // SUB-RENDERER: INVOICES HUB VIEW (With Admin vs Client Visibility Rules & Fully Editable Description / Payment Directives)
     function renderInvoiceHub() {
       if (selectedInvoice) {
         document.getElementById('invoice-hub-list-mode').classList.add('hidden');
@@ -1492,7 +1577,6 @@
         const studioName = selectedInvoice.studioName || "BRANDWORKZ CO.";
         const studioAddress = selectedInvoice.studioAddress || "158 Jalan Ampang, Level 24 G-Tower\nKuala Lumpur, 50450, Malaysia\nEmail: creatives@brandworkz.co";
         
-        // Default editable description and terms if not yet defined on the project object
         const serviceDescription = selectedInvoice.serviceDescription !== undefined ? selectedInvoice.serviceDescription : "Customized layout drafts, graphic assets, vector delivery, and visual consultation guidelines.";
         const paymentDirectives = selectedInvoice.paymentDirectives !== undefined ? selectedInvoice.paymentDirectives : "Please make all bank transfers to Brandworkz Co (Malayan Banking Berhad - Account 514-XXX-XXXX) referencing this invoice number.\nReceipt or payment confirmations can be uploaded in the asset workspace panel or emailed to accounts@brandworkz.co.";
 
@@ -1797,7 +1881,6 @@
         const studioNameInput = document.getElementById('edit-studio-name').value.trim();
         const studioAddressInput = document.getElementById('edit-studio-address').value.trim();
         
-        // Retrieve the newly editable description and payment terms fields
         const serviceDescInput = document.getElementById('edit-invoice-service-desc').value.trim();
         const paymentDirectivesInput = document.getElementById('edit-payment-directives').value.trim();
 
@@ -1820,13 +1903,15 @@
           paymentDirectives: paymentDirectivesInput
         };
 
-        if (currentUser) {
+        if (currentUser && db) {
           try {
             const projectDoc = doc(db, 'artifacts', appId, 'public', 'data', 'projects', selectedInvoice.id);
             await updateDoc(projectDoc, updatedProject);
             showNotification("Invoice description, payment terms & details saved successfully!");
           } catch (e) {
             console.error("Failed to update project data:", e);
+            showNotification("Failed to save to database.", "error");
+            return;
           }
         } else {
           projects = projects.map(p => {
@@ -1985,7 +2070,7 @@
           completed: false
         };
 
-        if (currentUser) {
+        if (currentUser && db) {
           try {
             const taskDoc = doc(db, 'artifacts', appId, 'public', 'data', 'tasks', newTask.id);
             await setDoc(taskDoc, newTask);
@@ -2062,7 +2147,7 @@
       const targetTask = tasks.find(t => t.id === taskId);
       if (!targetTask) return;
 
-      if (currentUser) {
+      if (currentUser && db) {
         try {
           const taskDoc = doc(db, 'artifacts', appId, 'public', 'data', 'tasks', taskId);
           await updateDoc(taskDoc, { completed: !targetTask.completed });
@@ -2077,7 +2162,7 @@
     }
 
     async function deleteTask(taskId) {
-      if (currentUser) {
+      if (currentUser && db) {
         try {
           const taskDoc = doc(db, 'artifacts', appId, 'public', 'data', 'tasks', taskId);
           await deleteDoc(taskDoc);
@@ -2159,7 +2244,7 @@
           paymentDirectives: "Please make all bank transfers to Brandworkz Co (Malayan Banking Berhad - Account 514-XXX-XXXX) referencing this invoice number.\nReceipt or payment confirmations can be uploaded in the asset workspace panel or emailed to accounts@brandworkz.co."
         };
 
-        if (currentUser) {
+        if (currentUser && db) {
           try {
             const projectDoc = doc(db, 'artifacts', appId, 'public', 'data', 'projects', newId);
             await setDoc(projectDoc, newProjObj);

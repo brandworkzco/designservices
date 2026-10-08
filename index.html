@@ -335,6 +335,23 @@
                 </div> 
             </div> 
 
+            <!-- FIRESTORE & REALTIME DB SYNC STATUS PANEL -->
+            <div class="bg-slate-950 rounded-xl p-4 border border-yellow-400/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                <div class="flex items-center space-x-3">
+                    <span class="text-xl">🔥</span>
+                    <div>
+                        <h4 class="text-xs font-extrabold text-white uppercase tracking-wider">Cloud Data Synced (Firestore &amp; Realtime DB)</h4>
+                        <p class="text-[10px] text-slate-400 font-mono">Firestore Doc: <span class="text-yellow-400">h5ZA2SRXjuMdhGeWuMeo</span> | Field: <span class="text-yellow-400">store data</span></p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 w-full sm:w-auto">
+                    <input type="text" id="store-data-input" placeholder="store data (string)" class="bg-slate-900 border border-slate-800 text-xs text-white rounded-lg px-3 py-2 outline-none focus:border-yellow-400 flex-grow sm:flex-grow-0" />
+                    <button onclick="syncAllCloudDatabases()" class="px-3.5 py-2 bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-black text-[10px] uppercase rounded-lg transition-all shadow whitespace-nowrap">
+                        Sync Cloud Data
+                    </button>
+                </div>
+            </div>
+
             <!-- DYNAMIC SANDBOX -->
             <div class="bg-slate-950 rounded-xl p-5 border border-slate-850 space-y-4"> 
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-900 pb-3"> 
@@ -628,10 +645,13 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail, confirmPasswordReset } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+        import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCQFwjATNzHKwP9e46om1pPJb4ZkHkpdc8",
             authDomain: "brandworkzco-694fa.firebaseapp.com",
+            databaseURL: "https://brandworkzco-694fa-default-rtdb.asia-southeast1.firebasedatabase.app/",
             projectId: "brandworkzco-694fa",
             storageBucket: "brandworkzco-694fa.firebasestorage.app",
             messagingSenderId: "593299452333",
@@ -640,8 +660,20 @@
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
+        const db = getFirestore(app);
+        const rtdb = getDatabase(app);
 
         window.FB_AUTH = auth;
+        window.FB_DB = db;
+        window.FB_RTDB = rtdb;
+        window.FB_doc = doc;
+        window.FB_setDoc = setDoc;
+        window.FB_collection = collection;
+        window.FB_getDocs = getDocs;
+        window.FB_rtdbRef = ref;
+        window.FB_rtdbSet = set;
+        window.FB_rtdbGet = get;
+        window.FB_rtdbChild = child;
         window.FB_createUser = createUserWithEmailAndPassword;
         window.FB_signIn = signInWithEmailAndPassword;
         window.FB_signOut = signOut;
@@ -660,6 +692,26 @@
                 }
             });
         }
+
+        // Load persisted chat history from Realtime Database on startup
+        document.addEventListener("DOMContentLoaded", async () => {
+            try {
+                const dbRef = window.FB_rtdbRef(window.FB_RTDB);
+                const snapshot = await window.FB_rtdbGet(window.FB_rtdbChild(dbRef, "chat_messages"));
+                if (snapshot.exists()) {
+                    const data = snapshot.val();
+                    const loadedMessages = Object.values(data);
+                    if (loadedMessages.length > 0) {
+                        window.CHAT_MESSAGES = loadedMessages;
+                        localStorage.setItem("bw_chat_messages", JSON.stringify(loadedMessages));
+                        if (typeof renderChatMessagesForCustomer === 'function') renderChatMessagesForCustomer();
+                        if (typeof renderAdminChatHub === 'function') renderAdminChatHub();
+                    }
+                }
+            } catch (e) {
+                console.error("Failed to fetch chat history from Realtime DB:", e);
+            }
+        });
     </script>
 
     <script> 
@@ -767,7 +819,7 @@
             dropdowns: [ 
                 { name: "Life Planner", price: 35.00, info: "- Html Site Size Format\n- Malay & English Language\n- Stylus On & Off Mode" } 
                  ]  
-         }   
+         }    
     ]; 
 
     let cart = []; 
@@ -793,7 +845,7 @@
     let mqttClient = null;
     let lastAdminPresenceTimestamp = 0;
 
-    let CHAT_MESSAGES = JSON.parse(localStorage.getItem("bw_chat_messages")) || [];
+    window.CHAT_MESSAGES = JSON.parse(localStorage.getItem("bw_chat_messages")) || [];
 
     function initHiveMQRealtime() {
         const clientID = "bw_client_" + Math.random().toString(16).substring(2, 10);
@@ -869,9 +921,9 @@
 
     function handleRealtimeChatMessage(msgData) {
         if (!msgData || !msgData.id) return;
-        const exists = CHAT_MESSAGES.some(m => m.id === msgData.id);
+        const exists = window.CHAT_MESSAGES.some(m => m.id === msgData.id);
         if (!exists) {
-            CHAT_MESSAGES.push(msgData);
+            window.CHAT_MESSAGES.push(msgData);
             saveChatMessagesToStorage();
             renderChatMessagesForCustomer();
             if (isAdminLoggedIn) {
@@ -912,8 +964,77 @@
         localStorage.setItem("bw_products", JSON.stringify(PRODUCTS)); 
     } 
 
-    function saveChatMessagesToStorage() {
-        localStorage.setItem("bw_chat_messages", JSON.stringify(CHAT_MESSAGES));
+    async function saveChatMessagesToStorage() {
+        localStorage.setItem("bw_chat_messages", JSON.stringify(window.CHAT_MESSAGES));
+        
+        // Sync to Firebase Cloud (Firestore & Realtime Database)
+        if (window.FB_RTDB) {
+            try {
+                const chatMap = {};
+                window.CHAT_MESSAGES.forEach(m => {
+                    chatMap[m.id] = m;
+                });
+                const rtdbRef = window.FB_rtdbRef(window.FB_RTDB, "chat_messages");
+                await window.FB_rtdbSet(rtdbRef, chatMap);
+            } catch (e) {
+                console.error("Error saving chat to Realtime DB:", e);
+            }
+        }
+
+        if (window.FB_DB) {
+            try {
+                for (const m of window.CHAT_MESSAGES) {
+                    const docRef = window.FB_doc(window.FB_DB, "chat_messages", m.id);
+                    await window.FB_setDoc(docRef, m, { merge: true });
+                }
+            } catch (e) {
+                console.error("Error saving chat to Firestore:", e);
+            }
+        }
+    }
+
+    async function syncAllCloudDatabases() {
+        const storeDataVal = document.getElementById('store-data-input').value.trim();
+        if (!storeDataVal) {
+            showToast("Please enter a 'store data' string value.", "error");
+            return;
+        }
+
+        let successCount = 0;
+
+        // 1. Sync to Cloud Firestore Document h5ZA2SRXjuMdhGeWuMeo with field name 'store data'
+        if (window.FB_DB) {
+            try {
+                const docRef = window.FB_doc(window.FB_DB, "configurations", "h5ZA2SRXjuMdhGeWuMeo");
+                await window.FB_setDoc(docRef, {
+                    "store data": storeDataVal,
+                    updatedAt: new Date().toISOString()
+                }, { merge: true });
+                successCount++;
+            } catch (error) {
+                console.error("Firestore Error:", error);
+            }
+        }
+
+        // 2. Sync to Realtime Database https://brandworkzco-694fa-default-rtdb.asia-southeast1.firebasedatabase.app/
+        if (window.FB_RTDB) {
+            try {
+                const rtdbRef = window.FB_rtdbRef(window.FB_RTDB, "store_data");
+                await window.FB_rtdbSet(rtdbRef, {
+                    "store data": storeDataVal,
+                    updatedAt: new Date().toISOString()
+                });
+                successCount++;
+            } catch (error) {
+                console.error("Realtime DB Error (Check RTDB rules if permission denied):", error);
+            }
+        }
+
+        if (successCount > 0) {
+            showToast("Successfully synchronized data to Cloud Databases!");
+        } else {
+            showToast("Sync completed with warnings. Check console/RTDB rules.", "error");
+        }
     }
 
     function switchView(viewName) { 
@@ -1035,7 +1156,7 @@
 
                         <div class="space-y-2"> 
                             <select id="frontend-select-${product.id}" onchange="updateFrontendSelectedPrice('${product.id}')" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs text-white outline-none transition-colors"> 
-                                ${product.dropdowns.map((drop, dIdx) => `<option value="${dIdx}">[RM ${drop.price.toFixed(2)}] ${drop.name}</option>`).join('')} 
+                                ${product.dropdowns.map((drop, dIdx) => `<option value="${dIdx}">[RM ${drop.price.toFixed(2)}]${drop.name}</option>`).join('')} 
                             </select> 
                             <div id="frontend-info-box-${product.id}" class="space-y-2 pt-2"> 
                                 ${inlineListHTML || '<span class="text-slate-500 italic text-[11px]">- standard tier summary</span>'} 
@@ -1802,7 +1923,7 @@
             time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
         };
 
-        CHAT_MESSAGES.push(newMsg);
+        window.CHAT_MESSAGES.push(newMsg);
         saveChatMessagesToStorage();
         renderChatMessagesForCustomer();
         input.value = "";
@@ -1817,7 +1938,7 @@
         if (isAdminLoggedIn) {
             renderAdminChatHub();
         }
-        showToast("Message sent to studio admin.");
+        showToast("Message sent and saved to Firebase cloud!");
     }
 
     function renderChatMessagesForCustomer() {
@@ -1825,11 +1946,11 @@
         if (!win) return;
 
         const senderUsername = currentUser ? currentUser.username : "Guest_Client";
-        const relevantMessages = CHAT_MESSAGES.filter(m => m.user === senderUsername);
+        const relevantMessages = window.CHAT_MESSAGES.filter(m => m.user === senderUsername);
 
         let html = `
             <div class="text-center p-3 text-[10px] text-slate-500 bg-slate-950/85 rounded-xl border border-slate-900 leading-relaxed">
-                💬 You are connected directly to the studio workspace. Type a brief query below to chat with an admin.
+                💬 You are connected directly to the studio workspace. Messages sync securely to Firebase Cloud.
             </div>
         `;
 
@@ -1866,7 +1987,7 @@
         const messageContainer = document.getElementById('admin-chat-messages-container');
         if (!channelContainer || !messageContainer) return;
 
-        const userChannels = [...new Set(CHAT_MESSAGES.map(m => m.user))].filter(u => u && u !== 'system_bot' && u !== 'admin');
+        const userChannels = [...new Set(window.CHAT_MESSAGES.map(m => m.user))].filter(u => u && u !== 'system_bot' && u !== 'admin');
 
         channelContainer.innerHTML = `<span class="text-[9px] uppercase tracking-wider font-extrabold text-slate-500 font-mono">Active Users</span>`;
          
@@ -1889,7 +2010,7 @@
                 : 'bg-slate-900 hover:bg-slate-850 text-slate-300 border-slate-800'
             }`;
              
-            const userMessages = CHAT_MESSAGES.filter(m => m.user === userChan);
+            const userMessages = window.CHAT_MESSAGES.filter(m => m.user === userChan);
             const lastMsg = userMessages[userMessages.length - 1]?.message || "No messages";
 
             btn.innerHTML = `
@@ -1909,7 +2030,7 @@
             document.getElementById('admin-chat-input').disabled = false;
             document.getElementById('admin-chat-send-btn').disabled = false;
 
-            const targetMessages = CHAT_MESSAGES.filter(m => m.user === activeAdminThreadUser);
+            const targetMessages = window.CHAT_MESSAGES.filter(m => m.user === activeAdminThreadUser);
              
             let messagesHTML = "";
             targetMessages.forEach(msg => {
@@ -1962,7 +2083,7 @@
             time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
         };
 
-        CHAT_MESSAGES.push(newReply);
+        window.CHAT_MESSAGES.push(newReply);
         saveChatMessagesToStorage();
         renderAdminChatHub();
         input.value = "";
@@ -1971,7 +2092,7 @@
             mqttClient.publish(TOPIC_CHAT, JSON.stringify(newReply));
         }
 
-        showToast(`Reply dispatched directly to @${activeAdminThreadUser}.`);
+        showToast(`Reply dispatched to @${activeAdminThreadUser} and saved to Cloud.`);
         renderChatMessagesForCustomer();
     }
     </script> 

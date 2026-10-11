@@ -204,7 +204,6 @@
             </div> 
 
             <form id="customer-login-form" onsubmit="handleCustomerLogin(event)" class="space-y-4"> 
-                <!-- SPAM WARNING NOTICE -->
                 <div class="bg-amber-500/10 border border-amber-500/30 rounded-lg p-3 text-amber-400 text-xs flex items-center space-x-2">
                     <span>⚠️</span>
                     <span><strong>Note:</strong> Check your spam folder in your email after receiving the password reset link.</span>
@@ -693,24 +692,40 @@
             });
         }
 
-        // Load persisted chat history from Realtime Database on startup
-        document.addEventListener("DOMContentLoaded", async () => {
+        // Fetch persisted chat history from Realtime Database and Firestore on startup
+        async function loadGlobalChatHistoryFromCloud() {
             try {
-                const dbRef = window.FB_rtdbRef(window.FB_RTDB);
-                const snapshot = await window.FB_rtdbGet(window.FB_rtdbChild(dbRef, "chat_messages"));
-                if (snapshot.exists()) {
-                    const data = snapshot.val();
-                    const loadedMessages = Object.values(data);
-                    if (loadedMessages.length > 0) {
-                        window.CHAT_MESSAGES = loadedMessages;
-                        localStorage.setItem("bw_chat_messages", JSON.stringify(loadedMessages));
-                        if (typeof renderChatMessagesForCustomer === 'function') renderChatMessagesForCustomer();
-                        if (typeof renderAdminChatHub === 'function') renderAdminChatHub();
+                let cloudMessages = [];
+                // 1. Try Realtime Database first
+                if (window.FB_RTDB) {
+                    const dbRef = window.FB_rtdbRef(window.FB_RTDB);
+                    const snapshot = await window.FB_rtdbGet(window.FB_rtdbChild(dbRef, "chat_messages"));
+                    if (snapshot.exists()) {
+                        const data = snapshot.val();
+                        cloudMessages = Object.values(data);
                     }
                 }
+                // 2. Fallback or merge with Firestore if RTDB is empty
+                if (cloudMessages.length === 0 && window.FB_DB) {
+                    const querySnapshot = await window.FB_getDocs(window.FB_collection(window.FB_DB, "chat_messages"));
+                    querySnapshot.forEach((docSnap) => {
+                        cloudMessages.push(docSnap.data());
+                    });
+                }
+
+                if (cloudMessages.length > 0) {
+                    window.CHAT_MESSAGES = cloudMessages;
+                    localStorage.setItem("bw_chat_messages", JSON.stringify(cloudMessages));
+                    if (typeof renderChatMessagesForCustomer === 'function') renderChatMessagesForCustomer();
+                    if (typeof renderAdminChatHub === 'function') renderAdminChatHub();
+                }
             } catch (e) {
-                console.error("Failed to fetch chat history from Realtime DB:", e);
+                console.error("Failed to fetch global chat history from Cloud:", e);
             }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            loadGlobalChatHistoryFromCloud();
         });
     </script>
 
@@ -818,8 +833,8 @@
             poster: "lifeplanner.png", 
             dropdowns: [ 
                 { name: "Life Planner", price: 35.00, info: "- Html Site Size Format\n- Malay & English Language\n- Stylus On & Off Mode" } 
-                 ]  
-         }    
+                   ]  
+       }    
     ]; 
 
     let cart = []; 
@@ -966,8 +981,8 @@
 
     async function saveChatMessagesToStorage() {
         localStorage.setItem("bw_chat_messages", JSON.stringify(window.CHAT_MESSAGES));
-        
-        // Sync to Firebase Cloud (Firestore & Realtime Database)
+         
+        // Sync to Firebase Cloud (Realtime Database & Firestore)
         if (window.FB_RTDB) {
             try {
                 const chatMap = {};
@@ -1002,7 +1017,6 @@
 
         let successCount = 0;
 
-        // 1. Sync to Cloud Firestore Document h5ZA2SRXjuMdhGeWuMeo with field name 'store data'
         if (window.FB_DB) {
             try {
                 const docRef = window.FB_doc(window.FB_DB, "configurations", "h5ZA2SRXjuMdhGeWuMeo");
@@ -1016,7 +1030,6 @@
             }
         }
 
-        // 2. Sync to Realtime Database https://brandworkzco-694fa-default-rtdb.asia-southeast1.firebasedatabase.app/
         if (window.FB_RTDB) {
             try {
                 const rtdbRef = window.FB_rtdbRef(window.FB_RTDB, "store_data");
@@ -1026,14 +1039,14 @@
                 });
                 successCount++;
             } catch (error) {
-                console.error("Realtime DB Error (Check RTDB rules if permission denied):", error);
+                console.error("Realtime DB Error:", error);
             }
         }
 
         if (successCount > 0) {
             showToast("Successfully synchronized data to Cloud Databases!");
         } else {
-            showToast("Sync completed with warnings. Check console/RTDB rules.", "error");
+            showToast("Sync completed with warnings. Check console.", "error");
         }
     }
 
@@ -1955,23 +1968,25 @@
         `;
 
         relevantMessages.forEach(msg => {
-            if (msg.sender === 'customer') {
+            if (msg.sender === 'admin') {
+                // Admin replies appear on the LEFT in a gray box
+                html += `
+                    <div class="self-start max-w-[80%] flex flex-col items-start animate-fadeIn space-y-1">
+                        <span class="text-[8px] text-slate-400 font-bold uppercase tracking-wider">Lead Designer (Admin)</span>
+                        <div class="bg-slate-900 border border-slate-800 text-slate-200 px-3 py-2 rounded-2xl rounded-tl-none text-xs shadow-md">
+                            <p class="leading-relaxed font-light">${msg.message}</p>
+                            <span class="text-[8px] text-slate-500 block text-right mt-1">${msg.time}</span>
+                        </div>
+                    </div>
+                `;
+            } else {
+                // Customer messages appear on the RIGHT in a yellow box
                 html += `
                     <div class="self-end max-w-[80%] flex flex-col items-end animate-fadeIn space-y-1">
                         <span class="text-[8px] text-yellow-400 font-extrabold uppercase tracking-wider">You</span>
                         <div class="bg-yellow-400 text-slate-950 px-3 py-2 rounded-2xl rounded-tr-none text-xs shadow-md">
                             <p class="leading-relaxed font-semibold">${msg.message}</p>
                             <span class="text-[8px] font-bold text-slate-900/60 block text-right mt-1">${msg.time}</span>
-                        </div>
-                    </div>
-                `;
-            } else {
-                html += `
-                    <div class="self-start max-w-[80%] flex flex-col items-start animate-fadeIn space-y-1">
-                        <span class="text-[8px] text-slate-400 font-bold uppercase tracking-wider">Lead Designer (Admin)</span>
-                        <div class="bg-slate-900 border border-slate-800 text-slate-100 px-3 py-2 rounded-2xl rounded-tl-none text-xs shadow-md">
-                            <p class="leading-relaxed text-slate-200 font-light">${msg.message}</p>
-                            <span class="text-[8px] text-slate-500 block text-right mt-1">${msg.time}</span>
                         </div>
                     </div>
                 `;

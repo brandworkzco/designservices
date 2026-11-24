@@ -515,22 +515,16 @@
                         </div>
 
                         <div class="portal-input-box animation" style="--i:20; --j:3;">
-                            <input type="tel" id="cust-reg-phone" name="phone" required autocomplete="tel">
-                            <label for="cust-reg-phone">Phone Number (e.g. +60123456789) *</label>
-                            <i class='bx bxs-phone'></i>
-                        </div>
-
-                        <div class="portal-input-box animation" style="--i:21; --j:4;">
                             <input type="password" id="cust-reg-pass" name="password" required autocomplete="new-password">
                             <label for="cust-reg-pass">Password *</label>
                             <i class='bx bx-show cursor-pointer hover:text-yellow-400' onclick="togglePasswordVisibility('cust-reg-pass', this)" title="Show/Hide Password"></i>
                         </div>
 
-                        <button type="submit" class="portal-btn animation" style="--i:22; --j:5;">
+                        <button type="submit" class="portal-btn animation" style="--i:21; --j:4;">
                             Register Profile
                         </button>
 
-                        <div class="animation text-xs text-slate-300 text-center mt-4" style="--i:23; --j:6;">
+                        <div class="animation text-xs text-slate-300 text-center mt-4" style="--i:22; --j:5;">
                             <p>Already have an account? 
                                 <a href="#" onclick="event.preventDefault(); toggleCustomerAuthTab('login');" class="text-yellow-400 font-bold hover:underline ml-1">
                                     Sign In
@@ -581,10 +575,6 @@
                         <div class="flex justify-between gap-2"> 
                             <span class="text-slate-400">Email:</span> 
                             <span id="cust-det-email" class="font-semibold text-white truncate max-w-[150px]">email@domain.com</span> 
-                        </div> 
-                        <div class="flex justify-between"> 
-                            <span class="text-slate-400">Contact Number:</span> 
-                            <span id="cust-det-phone" class="font-semibold text-white">+601...</span> 
                         </div> 
                         <div class="flex justify-between"> 
                             <span class="text-slate-400">Selected Terms:</span> 
@@ -936,6 +926,45 @@
             <button onclick="processToyyibPaySimulation()" id="toyyibpay-submit-btn" class="w-full py-4 bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-black rounded-xl transition-all text-xs uppercase tracking-widest flex items-center justify-center space-x-2 shadow-lg shadow-yellow-400/10"> 
                 <span>Proceed Authorization Transfer</span> 
             </button> 
+        </div> 
+    </div> 
+
+    <!-- PRODUCT VIDEO PREVIEW MODAL -->
+    <div id="product-video-modal" class="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-md hidden flex items-center justify-center p-4" onclick="if(event.target === this) closeProductVideoModal()"> 
+        <div class="bg-slate-900 border border-yellow-400/40 rounded-2xl max-w-2xl w-full p-5 sm:p-6 shadow-2xl space-y-4 animate-fadeIn"> 
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3"> 
+                <div class="flex items-center space-x-2"> 
+                    <span class="text-yellow-400 text-lg">🎬</span> 
+                    <h3 id="video-modal-title" class="text-sm sm:text-base font-black text-white uppercase tracking-tight">Product Video Showcase</h3> 
+                </div> 
+                <button onclick="closeProductVideoModal()" class="text-slate-400 hover:text-white text-xs font-bold uppercase tracking-wider bg-slate-950 border border-slate-800 px-3 py-1.5 rounded-lg transition-colors">Close</button> 
+            </div> 
+            <div id="video-modal-content" class="w-full aspect-video bg-slate-950 rounded-xl border border-slate-800 overflow-hidden flex items-center justify-center"> 
+            </div> 
+        </div> 
+    </div> 
+
+    <!-- PRODUCT PHOTO ENLARGE LIGHTBOX MODAL -->
+    <div id="product-image-modal" class="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-md hidden flex items-center justify-center p-4" onclick="if(event.target === this) closeProductImageModal()"> 
+        <div class="bg-slate-900 border border-yellow-400/40 rounded-2xl max-w-4xl w-full p-4 sm:p-6 shadow-2xl space-y-4 animate-fadeIn"> 
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3"> 
+                <div class="flex items-center space-x-2"> 
+                    <i class='bx bx-zoom-in text-yellow-400 text-xl'></i> 
+                    <h3 id="image-modal-title" class="text-sm sm:text-base font-black text-white uppercase tracking-tight">Product Photo Preview</h3> 
+                    <span id="image-modal-counter" class="text-[11px] font-mono text-yellow-400 bg-slate-950 border border-slate-800 px-2 py-0.5 rounded-full hidden">1 / 1</span>
+                </div> 
+                <button onclick="closeProductImageModal()" class="text-slate-400 hover:text-white text-xs font-bold uppercase tracking-wider bg-slate-950 border border-slate-800 px-3 py-1.5 rounded-lg transition-colors">Close</button> 
+            </div> 
+            <div id="image-modal-stage" class="relative w-full max-h-[75vh] bg-slate-950 rounded-xl border border-slate-800 overflow-hidden flex items-center justify-center p-2 select-none"> 
+                <button id="image-modal-prev" onclick="stepProductImageModal(-1)" class="hidden absolute left-3 z-10 w-9 h-9 rounded-full bg-slate-900/90 hover:bg-yellow-400 text-yellow-400 hover:text-slate-950 border border-yellow-400/40 flex items-center justify-center transition-colors shadow-lg" aria-label="Previous Photo">
+                    <i class='bx bx-chevron-left text-2xl'></i>
+                </button>
+                <img id="image-modal-preview" src="" alt="Enlarged Product Photo" class="max-w-full max-h-[70vh] object-contain rounded-lg transition-all duration-200" onerror="this.src='https://placehold.co/800x600/1e293b/facc15?text=Product+Photo'">
+                <button id="image-modal-next" onclick="stepProductImageModal(1)" class="hidden absolute right-3 z-10 w-9 h-9 rounded-full bg-slate-900/90 hover:bg-yellow-400 text-yellow-400 hover:text-slate-950 border border-yellow-400/40 flex items-center justify-center transition-colors shadow-lg" aria-label="Next Photo">
+                    <i class='bx bx-chevron-right text-2xl'></i>
+                </button>
+            </div> 
+            <div id="image-modal-dots" class="flex items-center justify-center gap-2 pt-1"></div>
         </div> 
     </div> 
 
@@ -1521,16 +1550,29 @@
     // =========================================================================
     // FIRESTORE COLLECTION SYNC: `creative_products`
     // =========================================================================
+    function getProductImages(product) {
+        if (Array.isArray(product.posters) && product.posters.length > 0) {
+            const clean = product.posters.map(u => (u || '').trim()).filter(Boolean);
+            if (clean.length > 0) return clean;
+        }
+        return [product.poster || 'previousmenu.png'];
+    }
+
     function saveProductsToStorage() { 
         localStorage.setItem("bw_products", JSON.stringify(window.PRODUCTS)); 
     } 
 
     async function saveProductToFirestore(productObj, index = 0) {
+        const imgs = getProductImages(productObj);
+        productObj.posters = imgs;
+        productObj.poster = imgs[0];
         saveProductsToStorage();
         if (!window.FB_DB) return;
         try {
             const payload = {
                 ...productObj,
+                poster: imgs[0],
+                posters: imgs,
                 orderIndex: typeof productObj.orderIndex === "number" ? productObj.orderIndex : index,
                 updatedAt: new Date().toISOString()
             };
@@ -1832,6 +1874,7 @@
         } 
 
         window.PRODUCTS.forEach(product => { 
+            const images = getProductImages(product);
             const card = document.createElement('div'); 
             card.className = "bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-xl transition-all hover:scale-[1.01] hover:border-yellow-500/30 flex flex-col justify-between"; 
              
@@ -1876,17 +1919,53 @@
                 selectionTierHTML = `<div class="p-5 text-[11px] text-slate-500 italic">No configuration variants parsed.</div>`; 
             } 
 
+            const slidesHTML = images.map((imgSrc, idx) => `
+                <div onclick="openProductImageModal('${product.id}', ${idx})" title="Click to enlarge photo (${idx + 1}/${images.length})" class="w-full h-full flex-shrink-0 snap-center flex items-center justify-center cursor-zoom-in relative">
+                    <img src="${imgSrc}" class="w-full h-full object-contain p-2 transition-transform duration-300 group-hover:scale-105" alt="${product.title} ${idx + 1}" onerror="this.src='https://placehold.co/600x400/1e293b/facc15?text=Product+Photo'">
+                </div>
+            `).join('');
+
+            const dotsHTML = images.length > 1 ? `
+                <div class="bg-slate-950/90 border-b border-slate-800 py-2 px-3 flex items-center justify-center gap-2" id="carousel-dots-${product.id}">
+                    ${images.map((_, idx) => `
+                        <button type="button" onclick="goToProductSlide('${product.id}', ${idx})" aria-label="View photo ${idx + 1}" class="h-2 rounded-full transition-all duration-200 ${idx === 0 ? 'w-5 bg-yellow-400' : 'w-2 bg-slate-600 hover:bg-slate-400'}"></button>
+                    `).join('')}
+                </div>
+            ` : `
+                <div class="bg-slate-950/90 border-b border-slate-800 py-2 px-3 flex items-center justify-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-yellow-400 inline-block"></span>
+                </div>
+            `;
+
+            const slideNextBtnHTML = images.length > 1 ? `
+                <button type="button" onclick="event.stopPropagation(); stepProductSlide('${product.id}', 1)" title="Slide right to next photo" class="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-8 h-8 rounded-full bg-slate-900/90 hover:bg-yellow-400 text-yellow-400 hover:text-slate-950 border border-yellow-400/40 flex items-center justify-center transition-colors shadow-lg">
+                    <i class='bx bx-chevron-right text-xl'></i>
+                </button>
+            ` : '';
+
             card.innerHTML = ` 
                 <div> 
-                    <div class="relative aspect-video w-full bg-slate-950 flex items-center justify-center overflow-hidden border-b border-slate-800"> 
-                        <img src="${product.poster}" class="w-full h-full object-contain p-2" alt="${product.title}" onerror="this.src='https://placehold.co/600x400/1e293b/facc15?text=Product+Photo'"> 
-                        <span class="absolute top-3 left-3 bg-yellow-400 text-slate-950 font-black text-[9px] uppercase px-2.5 py-1 rounded-full shadow-lg"> 
+                    <div class="relative aspect-video w-full bg-slate-950 overflow-hidden group"> 
+                        <div id="carousel-track-${product.id}" onscroll="syncProductCarouselDots('${product.id}')" class="w-full h-full flex overflow-x-auto snap-x snap-mandatory scroll-smooth hide-scrollbar">
+                            ${slidesHTML}
+                        </div>
+                        <span class="pointer-events-none absolute top-3 left-3 bg-yellow-400 text-slate-950 font-black text-[9px] uppercase px-2.5 py-1 rounded-full shadow-lg"> 
                             DESIGN WORK 
                         </span> 
+                        ${slideNextBtnHTML}
+                        <button type="button" onclick="event.stopPropagation(); openProductImageModal('${product.id}', getCurrentSlideIndex('${product.id}'))" title="Enlarge photo" class="absolute bottom-3 right-3 z-10 bg-slate-900/90 hover:bg-yellow-400 text-yellow-400 hover:text-slate-950 border border-yellow-400/40 px-2.5 py-1 rounded-full text-[10px] font-bold flex items-center space-x-1 transition-colors shadow-lg"> 
+                            <i class='bx bx-zoom-in text-sm'></i>
+                            <span>Enlarge</span>
+                        </button> 
                     </div> 
+                    ${dotsHTML}
                     ${selectionTierHTML} 
                 </div> 
-                <div class="p-5 pt-0"> 
+                <div class="p-5 pt-0 space-y-2.5"> 
+                    <button onclick="openProductVideoModal('${product.id}')" class="w-full py-2.5 bg-slate-950 hover:bg-slate-800 border border-yellow-400/40 text-yellow-400 font-black text-xs rounded-xl transition-all uppercase tracking-wider flex items-center justify-center space-x-2"> 
+                        <i class='bx bx-play-circle text-base'></i>
+                        <span>Watch Video</span> 
+                    </button> 
                     <button onclick="addProductToBasket('${product.id}')" class="w-full py-3 bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-black text-xs rounded-xl transition-all uppercase tracking-wider shadow-md"> 
                         Add Package variant to basket 
                     </button> 
@@ -1896,8 +1975,183 @@
         }); 
     } 
 
+    function getCurrentSlideIndex(productId) {
+        const track = document.getElementById(`carousel-track-${productId}`);
+        if (!track || !track.clientWidth) return 0;
+        return Math.round(track.scrollLeft / track.clientWidth);
+    }
+
+    function goToProductSlide(productId, slideIdx) {
+        const track = document.getElementById(`carousel-track-${productId}`);
+        if (!track) return;
+        track.scrollTo({
+            left: slideIdx * track.clientWidth,
+            behavior: 'smooth'
+        });
+        updateProductCarouselDotUI(productId, slideIdx);
+    }
+
+    function stepProductSlide(productId, delta) {
+        const product = window.PRODUCTS.find(p => p.id === productId);
+        if (!product) return;
+        const images = getProductImages(product);
+        if (images.length <= 1) return;
+        const current = getCurrentSlideIndex(productId);
+        const next = (current + delta + images.length) % images.length;
+        goToProductSlide(productId, next);
+    }
+
+    function syncProductCarouselDots(productId) {
+        const activeIdx = getCurrentSlideIndex(productId);
+        updateProductCarouselDotUI(productId, activeIdx);
+    }
+
+    function updateProductCarouselDotUI(productId, activeIdx) {
+        const dotsWrap = document.getElementById(`carousel-dots-${productId}`);
+        if (!dotsWrap) return;
+        const buttons = dotsWrap.querySelectorAll('button');
+        buttons.forEach((btn, idx) => {
+            if (idx === activeIdx) {
+                btn.className = "h-2 w-5 rounded-full bg-yellow-400 transition-all duration-200";
+            } else {
+                btn.className = "h-2 w-2 rounded-full bg-slate-600 hover:bg-slate-400 transition-all duration-200";
+            }
+        });
+    }
+
+    let activeLightboxProductId = null;
+    let activeLightboxSlideIndex = 0;
+
+    function openProductImageModal(productId, startIdx = 0) {
+        const product = window.PRODUCTS.find(p => p.id === productId);
+        if (!product) return;
+
+        const images = getProductImages(product);
+        activeLightboxProductId = productId;
+        activeLightboxSlideIndex = Math.max(0, Math.min(startIdx, images.length - 1));
+
+        const modal = document.getElementById('product-image-modal');
+        const titleEl = document.getElementById('image-modal-title');
+        if (titleEl) titleEl.innerText = product.title;
+
+        renderProductImageModalSlide();
+        if (modal) modal.classList.remove('hidden');
+    }
+
+    function renderProductImageModalSlide() {
+        const product = window.PRODUCTS.find(p => p.id === activeLightboxProductId);
+        if (!product) return;
+        const images = getProductImages(product);
+        const imgEl = document.getElementById('image-modal-preview');
+        const counterEl = document.getElementById('image-modal-counter');
+        const prevBtn = document.getElementById('image-modal-prev');
+        const nextBtn = document.getElementById('image-modal-next');
+        const dotsEl = document.getElementById('image-modal-dots');
+
+        if (imgEl) imgEl.src = images[activeLightboxSlideIndex] || product.poster;
+
+        if (images.length > 1) {
+            if (counterEl) {
+                counterEl.innerText = `${activeLightboxSlideIndex + 1} / ${images.length}`;
+                counterEl.classList.remove('hidden');
+            }
+            if (prevBtn) prevBtn.classList.remove('hidden');
+            if (nextBtn) nextBtn.classList.remove('hidden');
+            if (dotsEl) {
+                dotsEl.innerHTML = images.map((_, idx) => `
+                    <button type="button" onclick="activeLightboxSlideIndex = ${idx}; renderProductImageModalSlide();" aria-label="View photo ${idx + 1}" class="h-2.5 rounded-full transition-all ${idx === activeLightboxSlideIndex ? 'w-6 bg-yellow-400' : 'w-2.5 bg-slate-600 hover:bg-slate-400'}"></button>
+                `).join('');
+            }
+        } else {
+            if (counterEl) counterEl.classList.add('hidden');
+            if (prevBtn) prevBtn.classList.add('hidden');
+            if (nextBtn) nextBtn.classList.add('hidden');
+            if (dotsEl) {
+                dotsEl.innerHTML = `<span class="w-2.5 h-2.5 rounded-full bg-yellow-400 inline-block"></span>`;
+            }
+        }
+    }
+
+    function stepProductImageModal(delta) {
+        const product = window.PRODUCTS.find(p => p.id === activeLightboxProductId);
+        if (!product) return;
+        const images = getProductImages(product);
+        if (images.length <= 1) return;
+        activeLightboxSlideIndex = (activeLightboxSlideIndex + delta + images.length) % images.length;
+        renderProductImageModalSlide();
+    }
+
+    function closeProductImageModal() {
+        const modal = document.getElementById('product-image-modal');
+        const imgEl = document.getElementById('image-modal-preview');
+        if (imgEl) imgEl.src = "";
+        activeLightboxProductId = null;
+        if (modal) modal.classList.add('hidden');
+    }
+
+    // Touch swipe support inside the enlarged photo lightbox modal
+    (function attachLightboxSwipe() {
+        let touchStartX = 0;
+        document.addEventListener('touchstart', (e) => {
+            const stage = document.getElementById('image-modal-stage');
+            if (stage && stage.contains(e.target)) {
+                touchStartX = e.changedTouches[0].screenX;
+            }
+        }, { passive: true });
+        document.addEventListener('touchend', (e) => {
+            const stage = document.getElementById('image-modal-stage');
+            if (stage && stage.contains(e.target) && activeLightboxProductId) {
+                const diffX = e.changedTouches[0].screenX - touchStartX;
+                if (Math.abs(diffX) > 40) {
+                    stepProductImageModal(diffX < 0 ? 1 : -1);
+                }
+            }
+        }, { passive: true });
+    })();
+
+    function openProductVideoModal(productId) {
+        const product = window.PRODUCTS.find(p => p.id === productId);
+        if (!product) return;
+
+        const videoUrl = (product.videoUrl || '').trim();
+        if (!videoUrl) {
+            showToast("no video upload edisi by admin", "error");
+            return;
+        }
+
+        const modal = document.getElementById('product-video-modal');
+        const titleEl = document.getElementById('video-modal-title');
+        const contentEl = document.getElementById('video-modal-content');
+        if (!modal || !contentEl) return;
+
+        titleEl.innerText = `${product.title} — Video Showcase`;
+
+        let embedHtml = '';
+        const ytMatch = videoUrl.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+        const vimeoMatch = videoUrl.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+
+        if (ytMatch && ytMatch[1]) {
+            embedHtml = `<iframe class="w-full h-full" src="https://www.youtube.com/embed/${ytMatch[1]}?autoplay=1" title="${product.title}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+        } else if (vimeoMatch && vimeoMatch[1]) {
+            embedHtml = `<iframe class="w-full h-full" src="https://player.vimeo.com/video/${vimeoMatch[1]}?autoplay=1" title="${product.title}" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+        } else {
+            embedHtml = `<video src="${videoUrl}" controls autoplay playsinline class="w-full h-full object-contain bg-black"></video>`;
+        }
+
+        contentEl.innerHTML = embedHtml;
+        modal.classList.remove('hidden');
+    }
+
+    function closeProductVideoModal() {
+        const modal = document.getElementById('product-video-modal');
+        const contentEl = document.getElementById('video-modal-content');
+        if (contentEl) contentEl.innerHTML = '';
+        if (modal) modal.classList.add('hidden');
+    }
+
     function updateFrontendSelectedPrice(productId) { 
         const product = window.PRODUCTS.find(p => p.id === productId); 
+        if (!product) return;
         const dropdownIdx = document.getElementById(`frontend-select-${productId}`).value; 
         const selectedDropdown = product.dropdowns[dropdownIdx]; 
          
@@ -1934,7 +2188,6 @@
 
         document.getElementById('authenticated-cust-username').innerText = `Welcome back, ${user.username}!`; 
         document.getElementById('cust-det-email').innerText = user.email; 
-        document.getElementById('cust-det-phone').innerText = user.phone; 
 
         document.getElementById('customer-unauthenticated-card').classList.add('hidden'); 
         document.getElementById('customer-authenticated-card').classList.remove('hidden'); 
@@ -1944,38 +2197,26 @@
         event.preventDefault(); 
         const username = document.getElementById('cust-reg-user').value.trim(); 
         const email = document.getElementById('cust-reg-email').value.trim(); 
-        const phone = document.getElementById('cust-reg-phone').value.trim(); 
         const pass = document.getElementById('cust-reg-pass').value; 
 
         try {
             const userCredential = await window.FB_createUser(window.FB_AUTH, email, pass);
             const user = userCredential.user;
 
-            // Store pending profile metadata locally so it attaches automatically once verified
-            localStorage.setItem("pending_cust_profile_" + email.toLowerCase(), JSON.stringify({
-                username,
-                email,
-                phone,
-                uid: user.uid
-            }));
-
-            // Dispatch standard Firebase email verification link
             await window.FB_sendEmailVerification(user);
+            window._pendingUnverifiedCustomer = user;
+
+            localStorage.setItem(`bw_cust_meta_${email.toLowerCase()}`, JSON.stringify({ username, email }));
             await window.FB_signOut(window.FB_AUTH);
 
             document.getElementById('customer-register-form').reset();
-            document.getElementById('cust-verification-notice').classList.remove('hidden');
+            const noticeEl = document.getElementById('cust-verification-notice');
+            if (noticeEl) noticeEl.classList.remove('hidden');
             toggleCustomerAuthTab('login');
             document.getElementById('cust-login-email').value = email;
-            showToast(`Account created for ${username}! Please click the confirmation link sent to ${email} before signing in.`); 
+            showToast(`Account created for ${username}! Click the confirmation link sent to ${email} before signing in.`); 
         } catch (error) {
-            if (error.code === 'auth/email-already-in-use') {
-                showToast("This email is already registered. Please Sign In or check your inbox for the confirmation link.", "error");
-                toggleCustomerAuthTab('login');
-                document.getElementById('cust-login-email').value = email;
-            } else {
-                showToast(error.message, "error");
-            }
+            showToast(error.message, "error");
         }
     } 
 
@@ -1992,20 +2233,24 @@
 
             if (!user.emailVerified) {
                 window._pendingUnverifiedCustomer = user;
+                try {
+                    await window.FB_sendEmailVerification(user);
+                } catch (_) {}
+                const noticeEl = document.getElementById('cust-verification-notice');
+                if (noticeEl) noticeEl.classList.remove('hidden');
                 await window.FB_signOut(window.FB_AUTH);
-                document.getElementById('cust-verification-notice').classList.remove('hidden');
-                showToast("Email not verified yet! Please click the confirmation link in your email before signing in.", "error");
+                showToast("Please verify your email first! Check Inbox & Spam for your confirmation link.", "error");
                 return;
             }
 
             errorDiv.classList.add('hidden'); 
-            document.getElementById('cust-verification-notice').classList.add('hidden');
+            const noticeEl = document.getElementById('cust-verification-notice');
+            if (noticeEl) noticeEl.classList.add('hidden');
 
-            const savedMeta = JSON.parse(localStorage.getItem("pending_cust_profile_" + email.toLowerCase()) || "null");
+            const savedMeta = JSON.parse(localStorage.getItem(`bw_cust_meta_${email.toLowerCase()}`) || "null");
             const userData = { 
                 username: savedMeta?.username || email.split('@')[0], 
                 email: user.email, 
-                phone: savedMeta?.phone || "+60123456789", 
                 uid: user.uid 
             };
             currentUser = userData; 
@@ -2476,6 +2721,7 @@
         container.innerHTML = ""; 
 
         window.PRODUCTS.forEach((product, pIdx) => { 
+            const images = getProductImages(product);
             const block = document.createElement('div'); 
             block.className = "bg-slate-900 border-2 border-slate-800 rounded-2xl p-6 relative space-y-4 shadow-xl"; 
              
@@ -2505,6 +2751,19 @@
                 `; 
             }); 
 
+            const imageLinksHTML = images.map((imgUrl, imgIdx) => `
+                <div class="flex items-center gap-2.5 bg-slate-950 p-2.5 rounded-xl border border-slate-850">
+                    <img id="scratch-preview-${product.id}-${imgIdx}" src="${imgUrl}" class="w-12 h-12 object-contain rounded bg-slate-900 border border-slate-800 flex-shrink-0" onerror="this.src='https://placehold.co/100x100/1e293b/facc15?text=Photo+${imgIdx + 1}'" />
+                    <div class="flex-grow space-y-1">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[9px] font-bold uppercase tracking-wider text-yellow-400">Photo ${imgIdx + 1} Link</span>
+                            ${images.length > 1 ? `<button type="button" onclick="removeScratchPosterUrl(${pIdx}, ${imgIdx})" class="text-[9px] font-bold text-rose-400 hover:underline">Remove</button>` : ''}
+                        </div>
+                        <input type="text" value="${imgUrl}" placeholder="e.g. previousmenu.png or https://raw.githubusercontent.com/..." onchange="handleScratchPosterUrl(${pIdx}, ${imgIdx}, this.value)" class="w-full bg-slate-900 border border-slate-800 text-yellow-400 font-mono rounded-lg p-1.5 text-xs outline-none focus:border-yellow-400" />
+                    </div>
+                </div>
+            `).join('');
+
             block.innerHTML = ` 
                 <div class="flex items-center justify-between border-b border-slate-800 pb-2"> 
                     <span class="text-xs font-mono font-bold text-slate-500">DOC ID: ${product.id}</span> 
@@ -2512,21 +2771,29 @@
                 </div> 
 
                 <div class="space-y-2"> 
-                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Product Image Link / GitHub Path ! Editable</label> 
-                    <div class="flex items-center gap-3 bg-slate-950 p-3 rounded-xl border border-slate-850"> 
-                        <img id="scratch-preview-${product.id}" src="${product.poster}" class="w-16 h-16 object-contain rounded bg-slate-900 border border-slate-800 flex-shrink-0" onerror="this.src='https://placehold.co/100x100/1e293b/facc15?text=Image'" /> 
-                        <div class="flex-grow space-y-1.5">
-                            <input type="text" id="scratch-poster-url-${product.id}" value="${product.poster}" placeholder="e.g. previousmenu.png or https://raw.githubusercontent.com/..." onchange="handleScratchPosterUrl(${pIdx}, this.value)" class="w-full bg-slate-900 border border-slate-800 text-yellow-400 font-mono rounded-lg p-2 text-xs outline-none focus:border-yellow-400" />
-                            <p class="text-[9px] text-slate-500">Paste any GitHub raw image link, external URL, or repository image filename.</p>
-                        </div>
+                    <div class="flex items-center justify-between">
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Product Image Links / GitHub Paths (${images.length}) ! Editable</label> 
+                        <button type="button" onclick="appendScratchPosterUrl(${pIdx})" class="px-2.5 py-1 bg-yellow-400/15 hover:bg-yellow-400 text-yellow-400 hover:text-slate-950 border border-yellow-400/40 rounded-lg text-[10px] font-black uppercase transition-colors">
+                            (+) Add Photo Link
+                        </button>
+                    </div>
+                    <div class="space-y-2 max-h-[210px] overflow-y-auto pr-1 hide-scrollbar">
+                        ${imageLinksHTML}
+                    </div>
+                    <p class="text-[9px] text-slate-500">Add multiple GitHub or image URLs. Customers see dotted indicators below the photo and can slide right.</p>
+                </div> 
+
+                <div class="space-y-1.5"> 
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Product Video Link (YouTube / MP4 / GitHub URL) ! Editable</label> 
+                    <div class="bg-slate-950 p-3 rounded-xl border border-slate-850 space-y-1"> 
+                        <input type="text" id="scratch-video-url-${product.id}" value="${product.videoUrl || ''}" placeholder="Paste video URL (leave blank if no video)" onchange="handleScratchVideoUrl(${pIdx}, this.value)" class="w-full bg-slate-900 border border-slate-800 text-emerald-400 font-mono rounded-lg p-2 text-xs outline-none focus:border-yellow-400" />
+                        <p class="text-[9px] text-slate-500">Customers click "Watch Video" above Add to Basket. Empty shows "no video upload edisi by admin".</p>
                     </div> 
                 </div> 
 
-                <hr class="border-slate-800" /> 
-
                 <div class="space-y-1"> 
                     <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">*Big Font* Product Title ! Editable</label> 
-                    <input type="text" value="${product.title}" onchange="window.PRODUCTS[${pIdx}].title = this.value; saveProductToFirestore(window.PRODUCTS[${pIdx}], ${pIdx});" class="w-full bg-slate-950 border border-slate-800 text-white rounded-lg p-2.5 text-sm font-black outline-none focus:border-yellow-400" /> 
+                    <input type="text" value="${product.title}" onchange="window.PRODUCTS[${pIdx}].title = this.value; saveProductToFirestore(window.PRODUCTS[${pIdx}], ${pIdx}); renderProductCatalog();" class="w-full bg-slate-950 border border-slate-800 text-white rounded-lg p-2.5 text-sm font-black outline-none focus:border-yellow-400" /> 
                 </div> 
 
                 <hr class="border-slate-800" /> 
@@ -2567,6 +2834,8 @@
             title: "New Custom Title Frame", 
             dropdownLabel: "All", 
             poster: "previousmenu.png", 
+            posters: ["previousmenu.png"],
+            videoUrl: "",
             dropdowns: [ 
                 { name: "Default Option Package", price: 10.00, info: "- custom guidelines info entry" } 
             ] 
@@ -2590,21 +2859,57 @@
         showToast("Removed product frame from Firestore 'creative_products'."); 
     } 
 
-    async function handleScratchPosterUrl(pIdx, newUrl) { 
+    async function appendScratchPosterUrl(pIdx) {
+        const imgs = getProductImages(window.PRODUCTS[pIdx]);
+        imgs.push("previousmenu.png");
+        window.PRODUCTS[pIdx].posters = imgs;
+        window.PRODUCTS[pIdx].poster = imgs[0];
+        await saveProductToFirestore(window.PRODUCTS[pIdx], pIdx);
+        renderAdminScratchSandbox();
+        renderProductCatalog();
+        showToast("Added new photo slot! Paste your image link in the new field.");
+    }
+
+    async function removeScratchPosterUrl(pIdx, imgIdx) {
+        const imgs = getProductImages(window.PRODUCTS[pIdx]);
+        if (imgs.length <= 1) {
+            showToast("At least one product photo is required.", "error");
+            return;
+        }
+        imgs.splice(imgIdx, 1);
+        window.PRODUCTS[pIdx].posters = imgs;
+        window.PRODUCTS[pIdx].poster = imgs[0];
+        await saveProductToFirestore(window.PRODUCTS[pIdx], pIdx);
+        renderAdminScratchSandbox();
+        renderProductCatalog();
+        showToast("Removed photo link from gallery.");
+    }
+
+    async function handleScratchPosterUrl(pIdx, imgIdx, newUrl) { 
         const trimmedUrl = newUrl.trim();
         if (!trimmedUrl) {
             showToast("Image link cannot be empty.", "error");
             return;
         }
-        window.PRODUCTS[pIdx].poster = trimmedUrl; 
-        const previewEl = document.getElementById(`scratch-preview-${window.PRODUCTS[pIdx].id}`);
+        const imgs = getProductImages(window.PRODUCTS[pIdx]);
+        imgs[imgIdx] = trimmedUrl;
+        window.PRODUCTS[pIdx].posters = imgs;
+        window.PRODUCTS[pIdx].poster = imgs[0]; 
+        const previewEl = document.getElementById(`scratch-preview-${window.PRODUCTS[pIdx].id}-${imgIdx}`);
         if (previewEl) {
             previewEl.src = trimmedUrl;
         }
         await saveProductToFirestore(window.PRODUCTS[pIdx], pIdx);
         renderProductCatalog();
-        showToast("Product image link updated & synced to Firestore 'creative_products'."); 
+        showToast(`Photo ${imgIdx + 1} link updated & synced to Firestore 'creative_products'.`); 
     } 
+
+    async function handleScratchVideoUrl(pIdx, newVideoUrl) {
+        window.PRODUCTS[pIdx].videoUrl = newVideoUrl.trim();
+        await saveProductToFirestore(window.PRODUCTS[pIdx], pIdx);
+        renderProductCatalog();
+        showToast(window.PRODUCTS[pIdx].videoUrl ? "Product video link updated & synced to 'creative_products'." : "Product video link cleared.");
+    }
 
     async function appendNewScratchDropdown(pIdx) { 
         window.PRODUCTS[pIdx].dropdowns.push({ 
@@ -2612,8 +2917,9 @@
             price: 50.00, 
             info: "- 1 side\n- provide edit image\n- digital design" 
         }); 
-        await saveProductToFirestore(window.PRODUCTS[pIdx], pIdx);
+        await saveProductToFirestore(window.PRODUCTS[pIdx], pIdx); 
         renderAdminScratchSandbox(); 
+        renderProductCatalog();
     } 
 
     async function popLastScratchDropdown(pIdx) { 
@@ -2622,8 +2928,9 @@
             return; 
         } 
         window.PRODUCTS[pIdx].dropdowns.pop(); 
-        await saveProductToFirestore(window.PRODUCTS[pIdx], pIdx);
+        await saveProductToFirestore(window.PRODUCTS[pIdx], pIdx); 
         renderAdminScratchSandbox(); 
+        renderProductCatalog();
     } 
 
     async function removeScratchDropdown(pIdx, dIdx) { 
@@ -2632,8 +2939,9 @@
             return; 
         } 
         window.PRODUCTS[pIdx].dropdowns.splice(dIdx, 1); 
-        await saveProductToFirestore(window.PRODUCTS[pIdx], pIdx);
+        await saveProductToFirestore(window.PRODUCTS[pIdx], pIdx); 
         renderAdminScratchSandbox(); 
+        renderProductCatalog();
     } 
 
     async function updateScratchDropdownValue(pIdx, dIdx, field, val) { 
@@ -2642,13 +2950,14 @@
         } else { 
             window.PRODUCTS[pIdx].dropdowns[dIdx][field] = val; 
         } 
-        await saveProductToFirestore(window.PRODUCTS[pIdx], pIdx);
+        await saveProductToFirestore(window.PRODUCTS[pIdx], pIdx); 
+        renderProductCatalog();
     } 
 
     async function commitScratchChangesLive(pIdx) { 
-        await saveProductToFirestore(window.PRODUCTS[pIdx], pIdx);
+        await saveProductToFirestore(window.PRODUCTS[pIdx], pIdx); 
         renderProductCatalog(); 
-        showToast(`🎉 "${window.PRODUCTS[pIdx].title}" saved to Firestore 'creative_products' & live storefront!`); 
+        showToast(`🎉 Changes for frame "${window.PRODUCTS[pIdx].title}" synced to Firestore 'creative_products'!`); 
     } 
 
     function adminApproveWorkflowOrder() { 
@@ -2667,9 +2976,6 @@
         showToast("Workflow order marked Completed safely."); 
     } 
 
-    // =========================================================================
-    // LIVE CHAT WIDGET & ADMIN INBOX (`chat_message2` Collection)
-    // =========================================================================
     function toggleCustomerChatPanel(state) {
         const panel = document.getElementById('customer-chat-panel');
         if (!panel) return;

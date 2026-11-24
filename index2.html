@@ -455,7 +455,7 @@
                         <div class="portal-input-box animation" style="--i:3; --j:24;">
                             <input type="password" id="cust-login-pass" required autocomplete="current-password">
                             <label for="cust-login-pass">Password</label>
-                            <i class='bx bxs-lock-alt'></i>
+                            <i class='bx bx-show cursor-pointer hover:text-yellow-400' onclick="togglePasswordVisibility('cust-login-pass', this)" title="Show/Hide Password"></i>
                         </div>
 
                         <div class="animation flex justify-end -mt-2 mb-3" style="--i:4; --j:25;">
@@ -523,7 +523,7 @@
                         <div class="portal-input-box animation" style="--i:21; --j:4;">
                             <input type="password" id="cust-reg-pass" name="password" required autocomplete="new-password">
                             <label for="cust-reg-pass">Password *</label>
-                            <i class='bx bxs-lock-alt'></i>
+                            <i class='bx bx-show cursor-pointer hover:text-yellow-400' onclick="togglePasswordVisibility('cust-reg-pass', this)" title="Show/Hide Password"></i>
                         </div>
 
                         <button type="submit" class="portal-btn animation" style="--i:22; --j:5;">
@@ -766,7 +766,12 @@
             <form onsubmit="handleConfirmPasswordReset(event)" class="space-y-4"> 
                 <div class="space-y-1"> 
                     <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">New Password</label> 
-                    <input type="password" id="new-password-input" required placeholder="••••••••" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs text-white outline-none"> 
+                    <div class="relative">
+                        <input type="password" id="new-password-input" required placeholder="••••••••" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 pr-9 text-xs text-white outline-none"> 
+                        <button type="button" onclick="togglePasswordVisibility('new-password-input', this.querySelector('i'))" class="absolute inset-y-0 right-2.5 flex items-center text-slate-400 hover:text-yellow-400 bg-transparent border-0 p-0 cursor-pointer" title="Show/Hide Password">
+                            <i class='bx bx-show text-base'></i>
+                        </button>
+                    </div>
                 </div> 
                 <button type="submit" class="w-full py-2.5 bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-black rounded-xl text-xs uppercase tracking-wider">Update Password</button> 
             </form> 
@@ -808,8 +813,17 @@
                 </div> 
                 <div class="space-y-1"> 
                     <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Admin Password</label> 
-                    <input type="password" id="gate-admin-pass" required placeholder="••••••••" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs text-white outline-none"> 
+                    <div class="relative">
+                        <input type="password" id="gate-admin-pass" required placeholder="Enter your email password" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 pr-9 text-xs text-white outline-none"> 
+                        <button type="button" onclick="togglePasswordVisibility('gate-admin-pass', this.querySelector('i'))" class="absolute inset-y-0 right-2.5 flex items-center text-slate-400 hover:text-yellow-400 bg-transparent border-0 p-0 cursor-pointer" title="Show/Hide Password">
+                            <i class='bx bx-show text-base'></i>
+                        </button>
+                    </div>
                 </div> 
+                <div class="flex items-center justify-between text-[11px]">
+                    <span class="text-slate-400">New admin? Use <button type="button" onclick="switchAdminGateTab('register')" class="text-yellow-400 font-bold hover:underline bg-transparent border-0 p-0 cursor-pointer">Admin Sign Up</button> first</span>
+                    <button type="button" onclick="handleAdminResetPassword()" class="text-yellow-400 font-bold hover:underline bg-transparent border-0 p-0 cursor-pointer">Forgot / Set Password?</button>
+                </div>
                 <div class="flex items-center gap-2 pt-2"> 
                     <button type="button" onclick="closeAdminGateModal()" class="w-1/3 py-2.5 bg-slate-950 text-slate-400 border border-slate-800 font-bold rounded-xl text-xs hover:text-white">Cancel</button> 
                     <button type="submit" class="w-2/3 py-2.5 bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-black rounded-xl text-xs uppercase tracking-wider">Sign In as Admin</button> 
@@ -823,8 +837,13 @@
                     <input type="email" id="gate-admin-reg-email" value="brandworkzco@gmail.com" required placeholder="brandworkzco@gmail.com" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs text-white outline-none"> 
                 </div> 
                 <div class="space-y-1"> 
-                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Create Admin Password</label> 
-                    <input type="password" id="gate-admin-reg-pass" required minlength="6" placeholder="Min. 6 characters" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs text-white outline-none"> 
+                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Create Admin Password (Same as Email)</label> 
+                    <div class="relative">
+                        <input type="password" id="gate-admin-reg-pass" required minlength="6" placeholder="Enter your email password" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 pr-9 text-xs text-white outline-none"> 
+                        <button type="button" onclick="togglePasswordVisibility('gate-admin-reg-pass', this.querySelector('i'))" class="absolute inset-y-0 right-2.5 flex items-center text-slate-400 hover:text-yellow-400 bg-transparent border-0 p-0 cursor-pointer" title="Show/Hide Password">
+                            <i class='bx bx-show text-base'></i>
+                        </button>
+                    </div>
                 </div> 
                 <div class="flex items-center gap-2 pt-2"> 
                     <button type="button" onclick="closeAdminGateModal()" class="w-1/3 py-2.5 bg-slate-950 text-slate-400 border border-slate-800 font-bold rounded-xl text-xs hover:text-white">Cancel</button> 
@@ -1675,22 +1694,35 @@
         try {
             const userCredential = await window.FB_createUser(window.FB_AUTH, email, pass);
             const user = userCredential.user;
-            await window.FB_sendEmailVerification(user, {
-                url: window.location.origin + window.location.pathname
-            });
+            // Send standard Firebase verification email without custom redirect domain blocks
+            await window.FB_sendEmailVerification(user);
+            window._pendingUnverifiedAdmin = user;
             await window.FB_signOut(window.FB_AUTH);
 
             document.getElementById('admin-verification-notice').classList.remove('hidden');
             switchAdminGateTab('login');
             document.getElementById('gate-admin-email').value = email;
-            showToast("Admin account created! Click the auth confirmation link sent to brandworkzco@gmail.com.");
+            document.getElementById('gate-admin-pass').value = pass;
+            showToast("Admin account created! Check Inbox & Spam for the verification link.");
         } catch (error) {
             if (error.code === 'auth/email-already-in-use') {
-                showToast("This admin email is already registered. Please Sign In or verify your email.", "error");
+                showToast("brandworkzco@gmail.com is already registered! Switching to Sign In...", "error");
                 switchAdminGateTab('login');
+                document.getElementById('gate-admin-email').value = email;
+                document.getElementById('gate-admin-pass').value = pass;
             } else {
                 showToast("Admin sign-up error: " + error.message, "error");
             }
+        }
+    }
+
+    async function handleAdminResetPassword() {
+        const email = document.getElementById('gate-admin-email').value.trim().toLowerCase() || "brandworkzco@gmail.com";
+        try {
+            await window.FB_sendPasswordResetEmail(window.FB_AUTH, email);
+            showToast(`Password reset email sent to ${email}! Check Inbox & Spam to set your password.`);
+        } catch (error) {
+            showToast("Reset error: " + error.message, "error");
         }
     }
 
@@ -1711,8 +1743,11 @@
 
             if (!user.emailVerified) {
                 window._pendingUnverifiedAdmin = user;
+                try {
+                    await window.FB_sendEmailVerification(user);
+                } catch (_) {}
                 document.getElementById('admin-verification-notice').classList.remove('hidden');
-                showToast("Email not verified yet! Please click the confirmation link sent to brandworkzco@gmail.com.", "error");
+                showToast("Verification email sent to brandworkzco@gmail.com! Click the link in your email (check Spam) then click Sign In again.", "error");
                 return;
             }
 
@@ -1727,7 +1762,11 @@
             switchView('admin'); 
             broadcastAdminPresence();
         } catch (error) {
-            showToast("Admin authentication failed: " + error.message, "error"); 
+            if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+                showToast("Account not created yet or wrong password. Click 'Admin Sign Up' above to register with this password, or click 'Forgot / Set Password?'.", "error");
+            } else {
+                showToast("Admin authentication failed: " + error.message, "error"); 
+            }
         }
     } 
 
@@ -1738,9 +1777,7 @@
                 showToast("Please enter your password and click Sign In first so we can resend your verification email.", "error");
                 return;
             }
-            await window.FB_sendEmailVerification(user, {
-                url: window.location.origin + window.location.pathname
-            });
+            await window.FB_sendEmailVerification(user);
             showToast("Confirmation email resent to brandworkzco@gmail.com! Check Inbox & Spam.");
         } catch (err) {
             showToast("Could not resend email: " + err.message, "error");
@@ -1922,10 +1959,8 @@
                 uid: user.uid
             }));
 
-            // Dispatch Firebase email verification link
-            await window.FB_sendEmailVerification(user, {
-                url: window.location.origin + window.location.pathname
-            });
+            // Dispatch standard Firebase email verification link
+            await window.FB_sendEmailVerification(user);
             await window.FB_signOut(window.FB_AUTH);
 
             document.getElementById('customer-register-form').reset();
@@ -1993,9 +2028,7 @@
                 showToast("Please enter your email & password and click Access Profile first to resend your verification email.", "error");
                 return;
             }
-            await window.FB_sendEmailVerification(user, {
-                url: window.location.origin + window.location.pathname
-            });
+            await window.FB_sendEmailVerification(user);
             showToast("Confirmation email resent! Please check your Inbox & Spam folder.");
         } catch (err) {
             showToast("Could not resend email: " + err.message, "error");
@@ -2030,6 +2063,24 @@
             portalWrapper.classList.remove('active');
         } 
     } 
+
+    function togglePasswordVisibility(inputId, iconEl) {
+        const input = document.getElementById(inputId);
+        if (!input) return;
+        if (input.type === 'password') {
+            input.type = 'text';
+            if (iconEl) {
+                iconEl.classList.remove('bx-show');
+                iconEl.classList.add('bx-hide');
+            }
+        } else {
+            input.type = 'password';
+            if (iconEl) {
+                iconEl.classList.remove('bx-hide');
+                iconEl.classList.add('bx-show');
+            }
+        }
+    }
 
     function openForgotPasswordModal() {
         document.getElementById('forgot-password-modal').classList.remove('hidden');

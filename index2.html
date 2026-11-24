@@ -434,7 +434,15 @@
 
                     <div class="animation bg-amber-500/10 border border-amber-500/30 rounded-lg p-2.5 text-amber-400 text-[11px] flex items-center space-x-2 mb-1" style="--i:1; --j:22;">
                         <span>⚠️</span>
-                        <span><strong>Note:</strong> Check your spam folder after requesting a password reset link.</span>
+                        <span><strong>Note:</strong> Check your spam folder for your email verification or password reset link.</span>
+                    </div>
+
+                    <div id="cust-verification-notice" class="hidden bg-amber-500/10 border border-amber-500/30 rounded-lg p-2.5 text-amber-300 text-[11px] space-y-1.5 mb-2">
+                        <p class="font-bold">📧 Email Confirmation Required</p>
+                        <p class="text-[10px] text-amber-200/90 leading-relaxed">Click the confirmation link sent to your email (check Inbox &amp; Spam), then sign in below.</p>
+                        <button type="button" onclick="resendCustomerVerificationEmail()" class="text-[10px] font-black uppercase tracking-wider text-yellow-400 hover:underline bg-transparent border-0 p-0 cursor-pointer">
+                            Resend Confirmation Email →
+                        </button>
                     </div>
 
                     <form id="customer-login-form" onsubmit="handleCustomerLogin(event)">
@@ -769,21 +777,58 @@
     <div id="admin-gate-modal" class="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-md flex items-center justify-center p-4 hidden"> 
         <div class="bg-slate-900 border border-yellow-400/40 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 animate-fadeIn"> 
             <div class="text-center border-b border-slate-800 pb-3"> 
-                <h3 class="text-lg font-black text-white">Security Access Verification</h3> 
-                <p class="text-xs text-slate-400 mt-1">Please insert verified administrative clearance keys to manage matrix logs.</p> 
+                <h3 class="text-lg font-black text-white">Admin Portal Verification</h3> 
+                <p class="text-xs text-slate-400 mt-1">Authorized exclusively for <span class="text-yellow-400 font-mono font-bold">brandworkzco@gmail.com</span> with email verification.</p> 
             </div> 
-            <form onsubmit="challengeAdminCredentials(event)" class="space-y-4"> 
+
+            <!-- Toggle Tabs: Admin Sign In vs Admin Sign Up -->
+            <div class="grid grid-cols-2 gap-2 bg-slate-950 p-1 rounded-xl border border-slate-800">
+                <button type="button" id="admin-tab-login" onclick="switchAdminGateTab('login')" class="py-2 text-xs font-black uppercase rounded-lg bg-yellow-400 text-slate-950 transition-all">
+                    Admin Sign In
+                </button>
+                <button type="button" id="admin-tab-register" onclick="switchAdminGateTab('register')" class="py-2 text-xs font-black uppercase rounded-lg text-slate-400 hover:text-white transition-all">
+                    Admin Sign Up
+                </button>
+            </div>
+
+            <!-- Verification Pending Notice Box -->
+            <div id="admin-verification-notice" class="hidden bg-amber-500/10 border border-amber-500/30 rounded-xl p-3 text-amber-300 text-xs space-y-2">
+                <p class="font-bold flex items-center gap-1.5"><span>📧</span><span>Email Verification Required</span></p>
+                <p class="text-[11px] text-amber-200/90 leading-relaxed">A confirmation link has been sent to <strong class="font-mono">brandworkzco@gmail.com</strong>. Please click the verification link in your inbox (check Spam/Junk too), then click <strong>Sign In</strong> below.</p>
+                <button type="button" onclick="resendAdminVerificationEmail()" class="text-[11px] font-black uppercase tracking-wider text-yellow-400 hover:underline bg-transparent border-0 p-0 cursor-pointer">
+                    Resend Verification Email →
+                </button>
+            </div>
+
+            <!-- ADMIN SIGN IN FORM -->
+            <form id="admin-login-form" onsubmit="handleAdminFirebaseLogin(event)" class="space-y-4"> 
                 <div class="space-y-1"> 
-                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Admin Username</label> 
-                    <input type="text" id="gate-admin-user" required placeholder="Enter username" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs text-white outline-none"> 
+                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Admin Email</label> 
+                    <input type="email" id="gate-admin-email" value="brandworkzco@gmail.com" required placeholder="brandworkzco@gmail.com" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs text-white outline-none"> 
                 </div> 
                 <div class="space-y-1"> 
-                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Secure Password Key</label> 
+                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Admin Password</label> 
                     <input type="password" id="gate-admin-pass" required placeholder="••••••••" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs text-white outline-none"> 
                 </div> 
                 <div class="flex items-center gap-2 pt-2"> 
                     <button type="button" onclick="closeAdminGateModal()" class="w-1/3 py-2.5 bg-slate-950 text-slate-400 border border-slate-800 font-bold rounded-xl text-xs hover:text-white">Cancel</button> 
-                    <button type="submit" class="w-2/3 py-2.5 bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-black rounded-xl text-xs uppercase tracking-wider">Authorize Space</button> 
+                    <button type="submit" class="w-2/3 py-2.5 bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-black rounded-xl text-xs uppercase tracking-wider">Sign In as Admin</button> 
+                </div> 
+            </form> 
+
+            <!-- ADMIN SIGN UP FORM -->
+            <form id="admin-register-form" onsubmit="handleAdminFirebaseRegister(event)" class="space-y-4 hidden"> 
+                <div class="space-y-1"> 
+                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Admin Email</label> 
+                    <input type="email" id="gate-admin-reg-email" value="brandworkzco@gmail.com" required placeholder="brandworkzco@gmail.com" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs text-white outline-none"> 
+                </div> 
+                <div class="space-y-1"> 
+                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Create Admin Password</label> 
+                    <input type="password" id="gate-admin-reg-pass" required minlength="6" placeholder="Min. 6 characters" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs text-white outline-none"> 
+                </div> 
+                <div class="flex items-center gap-2 pt-2"> 
+                    <button type="button" onclick="closeAdminGateModal()" class="w-1/3 py-2.5 bg-slate-950 text-slate-400 border border-slate-800 font-bold rounded-xl text-xs hover:text-white">Cancel</button> 
+                    <button type="submit" class="w-2/3 py-2.5 bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-black rounded-xl text-xs uppercase tracking-wider">Sign Up &amp; Send Auth Link</button> 
                 </div> 
             </form> 
         </div> 
@@ -940,14 +985,14 @@
     <!-- FIREBASE MODULE & STORE LOGIC -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail, confirmPasswordReset } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail, confirmPasswordReset, sendEmailVerification, onAuthStateChanged, applyActionCode } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
         import { getFirestore, doc, setDoc, deleteDoc, collection, getDocs, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
         import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCQFwjATNzHKwP9e46om1pPJb4ZkHkpdc8",
             authDomain: "brandworkzco-694fa.firebaseapp.com",
-            databaseURL: "https://brandworkzco-694fa-default-rtdb.asia-southeast1.firebasedatabase.app/",
+            databaseURL: "https://brandworkzcreative-default-rtdb.asia-southeast1.firebasedatabase.app",
             projectId: "brandworkzco-694fa",
             storageBucket: "brandworkzco-694fa.firebasestorage.app",
             messagingSenderId: "593299452333",
@@ -980,6 +1025,11 @@
         window.FB_signOut = signOut;
         window.FB_sendPasswordResetEmail = sendPasswordResetEmail;
         window.FB_confirmPasswordReset = confirmPasswordReset;
+        window.FB_sendEmailVerification = sendEmailVerification;
+        window.FB_applyActionCode = applyActionCode;
+
+        // Authorized Admin Email Constant
+        window.ADMIN_EMAIL = "brandworkzco@gmail.com";
 
         // Firestore Collection IDs
         window.COLLECTION_PRODUCTS = "creative_products";
@@ -991,12 +1041,53 @@
         
         if (oobCode) {
             window.activeOobCode = oobCode;
-            document.addEventListener("DOMContentLoaded", () => {
-                if (mode === 'resetPassword' || !mode) {
+            document.addEventListener("DOMContentLoaded", async () => {
+                if (mode === 'verifyEmail') {
+                    try {
+                        await applyActionCode(auth, oobCode);
+                        if (auth.currentUser) await auth.currentUser.reload();
+                        const verifiedEmail = auth.currentUser?.email || "";
+                        const isVerifiedAdminEmail = verifiedEmail.toLowerCase() === window.ADMIN_EMAIL.toLowerCase();
+
+                        if (typeof showToast === 'function') {
+                            showToast("Email verified! You are now ready to sign in.");
+                        }
+                        window.history.replaceState({}, document.title, window.location.pathname);
+
+                        if (isVerifiedAdminEmail) {
+                            if (typeof switchView === 'function') switchView('admin');
+                        } else {
+                            if (typeof switchView === 'function') switchView('customer-auth');
+                            if (typeof toggleCustomerAuthTab === 'function') toggleCustomerAuthTab('login');
+                            const noticeEl = document.getElementById('cust-verification-notice');
+                            if (noticeEl) noticeEl.classList.add('hidden');
+                        }
+                    } catch (err) {
+                        if (typeof showToast === 'function') {
+                            showToast("Verification link status: " + err.message, "error");
+                        }
+                    }
+                } else if (mode === 'resetPassword' || !mode) {
                     document.getElementById('confirm-reset-modal').classList.remove('hidden');
                 }
             });
         }
+
+        // Keep Admin Auth State synchronized with Firebase Auth verified admin session
+        onAuthStateChanged(auth, async (user) => {
+            if (user && user.email && user.email.toLowerCase() === window.ADMIN_EMAIL.toLowerCase()) {
+                await user.reload();
+                if (user.emailVerified) {
+                    window.isAdminLoggedIn = true;
+                    sessionStorage.setItem("is_admin_session", JSON.stringify(true));
+                    localStorage.setItem("is_admin_active_online", "true");
+                    if (typeof broadcastAdminPresence === 'function') broadcastAdminPresence();
+                } else {
+                    window.isAdminLoggedIn = false;
+                    sessionStorage.removeItem("is_admin_session");
+                }
+            }
+        });
 
         // Real-time listener & initial sync for `creative_products` in Firestore
         function initFirestoreProductsSync() {
@@ -1552,26 +1643,116 @@
         document.getElementById('admin-gate-modal').classList.add('hidden'); 
     } 
 
-    function challengeAdminCredentials(event) { 
+    function switchAdminGateTab(tab) {
+        const loginForm = document.getElementById('admin-login-form');
+        const regForm = document.getElementById('admin-register-form');
+        const loginTab = document.getElementById('admin-tab-login');
+        const regTab = document.getElementById('admin-tab-register');
+
+        if (tab === 'register') {
+            loginForm.classList.add('hidden');
+            regForm.classList.remove('hidden');
+            regTab.className = "py-2 text-xs font-black uppercase rounded-lg bg-yellow-400 text-slate-950 transition-all";
+            loginTab.className = "py-2 text-xs font-black uppercase rounded-lg text-slate-400 hover:text-white transition-all";
+        } else {
+            regForm.classList.add('hidden');
+            loginForm.classList.remove('hidden');
+            loginTab.className = "py-2 text-xs font-black uppercase rounded-lg bg-yellow-400 text-slate-950 transition-all";
+            regTab.className = "py-2 text-xs font-black uppercase rounded-lg text-slate-400 hover:text-white transition-all";
+        }
+    }
+
+    async function handleAdminFirebaseRegister(event) {
+        event.preventDefault();
+        const email = document.getElementById('gate-admin-reg-email').value.trim().toLowerCase();
+        const pass = document.getElementById('gate-admin-reg-pass').value;
+
+        if (email !== (window.ADMIN_EMAIL || "brandworkzco@gmail.com").toLowerCase()) {
+            showToast("Only brandworkzco@gmail.com is authorized to register as Admin.", "error");
+            return;
+        }
+
+        try {
+            const userCredential = await window.FB_createUser(window.FB_AUTH, email, pass);
+            const user = userCredential.user;
+            await window.FB_sendEmailVerification(user, {
+                url: window.location.origin + window.location.pathname
+            });
+            await window.FB_signOut(window.FB_AUTH);
+
+            document.getElementById('admin-verification-notice').classList.remove('hidden');
+            switchAdminGateTab('login');
+            document.getElementById('gate-admin-email').value = email;
+            showToast("Admin account created! Click the auth confirmation link sent to brandworkzco@gmail.com.");
+        } catch (error) {
+            if (error.code === 'auth/email-already-in-use') {
+                showToast("This admin email is already registered. Please Sign In or verify your email.", "error");
+                switchAdminGateTab('login');
+            } else {
+                showToast("Admin sign-up error: " + error.message, "error");
+            }
+        }
+    }
+
+    async function handleAdminFirebaseLogin(event) { 
         event.preventDefault(); 
-        const user = document.getElementById('gate-admin-user').value.trim(); 
+        const email = document.getElementById('gate-admin-email').value.trim().toLowerCase(); 
         const pass = document.getElementById('gate-admin-pass').value; 
 
-        if (user === 'admin' && pass === '134228') { 
+        if (email !== (window.ADMIN_EMAIL || "brandworkzco@gmail.com").toLowerCase()) {
+            showToast("Unauthorized email. Only brandworkzco@gmail.com can access Admin Space.", "error");
+            return;
+        }
+
+        try {
+            const userCredential = await window.FB_signIn(window.FB_AUTH, email, pass);
+            const user = userCredential.user;
+            await user.reload();
+
+            if (!user.emailVerified) {
+                window._pendingUnverifiedAdmin = user;
+                document.getElementById('admin-verification-notice').classList.remove('hidden');
+                showToast("Email not verified yet! Please click the confirmation link sent to brandworkzco@gmail.com.", "error");
+                return;
+            }
+
             window.isAdminLoggedIn = true; 
             sessionStorage.setItem("is_admin_session", JSON.stringify(true)); 
             localStorage.setItem("is_admin_active_online", "true");
+            document.getElementById('admin-verification-notice').classList.add('hidden');
             closeAdminGateModal(); 
-            showToast("Admin access cleared safely."); 
-            document.getElementById('admin-gate-modal').querySelector('form').reset(); 
+            showToast("Verified Admin authenticated (brandworkzco@gmail.com)."); 
+            document.getElementById('admin-login-form').reset(); 
+            document.getElementById('gate-admin-email').value = window.ADMIN_EMAIL || "brandworkzco@gmail.com";
             switchView('admin'); 
             broadcastAdminPresence();
-        } else { 
-            showToast("Invalid administrative credentials.", "error"); 
-        } 
+        } catch (error) {
+            showToast("Admin authentication failed: " + error.message, "error"); 
+        }
     } 
 
-    function logoutAdmin() { 
+    async function resendAdminVerificationEmail() {
+        try {
+            const user = window._pendingUnverifiedAdmin || window.FB_AUTH.currentUser;
+            if (!user) {
+                showToast("Please enter your password and click Sign In first so we can resend your verification email.", "error");
+                return;
+            }
+            await window.FB_sendEmailVerification(user, {
+                url: window.location.origin + window.location.pathname
+            });
+            showToast("Confirmation email resent to brandworkzco@gmail.com! Check Inbox & Spam.");
+        } catch (err) {
+            showToast("Could not resend email: " + err.message, "error");
+        }
+    }
+
+    async function logoutAdmin() { 
+        try {
+            await window.FB_signOut(window.FB_AUTH);
+        } catch (e) {
+            console.error(e);
+        }
         window.isAdminLoggedIn = false; 
         sessionStorage.removeItem("is_admin_session"); 
         localStorage.setItem("is_admin_active_online", "false");
@@ -1733,14 +1914,33 @@
             const userCredential = await window.FB_createUser(window.FB_AUTH, email, pass);
             const user = userCredential.user;
 
-            const userData = { username, email, phone, uid: user.uid }; 
-            currentUser = userData; 
-            localStorage.setItem("current_session_user", JSON.stringify(userData)); 
-            syncAuthenticatedLayout(userData); 
-            showToast(`Welcome aboard, ${username}! Firebase Account Created.`); 
-            renderChatMessagesForCustomer(); 
+            // Store pending profile metadata locally so it attaches automatically once verified
+            localStorage.setItem("pending_cust_profile_" + email.toLowerCase(), JSON.stringify({
+                username,
+                email,
+                phone,
+                uid: user.uid
+            }));
+
+            // Dispatch Firebase email verification link
+            await window.FB_sendEmailVerification(user, {
+                url: window.location.origin + window.location.pathname
+            });
+            await window.FB_signOut(window.FB_AUTH);
+
+            document.getElementById('customer-register-form').reset();
+            document.getElementById('cust-verification-notice').classList.remove('hidden');
+            toggleCustomerAuthTab('login');
+            document.getElementById('cust-login-email').value = email;
+            showToast(`Account created for ${username}! Please click the confirmation link sent to ${email} before signing in.`); 
         } catch (error) {
-            showToast(error.message, "error");
+            if (error.code === 'auth/email-already-in-use') {
+                showToast("This email is already registered. Please Sign In or check your inbox for the confirmation link.", "error");
+                toggleCustomerAuthTab('login');
+                document.getElementById('cust-login-email').value = email;
+            } else {
+                showToast(error.message, "error");
+            }
         }
     } 
 
@@ -1753,14 +1953,31 @@
         try {
             const userCredential = await window.FB_signIn(window.FB_AUTH, email, pass);
             const user = userCredential.user;
+            await user.reload();
+
+            if (!user.emailVerified) {
+                window._pendingUnverifiedCustomer = user;
+                await window.FB_signOut(window.FB_AUTH);
+                document.getElementById('cust-verification-notice').classList.remove('hidden');
+                showToast("Email not verified yet! Please click the confirmation link in your email before signing in.", "error");
+                return;
+            }
 
             errorDiv.classList.add('hidden'); 
-            const userData = { username: email.split('@')[0], email: user.email, phone: "+60123456789", uid: user.uid };
+            document.getElementById('cust-verification-notice').classList.add('hidden');
+
+            const savedMeta = JSON.parse(localStorage.getItem("pending_cust_profile_" + email.toLowerCase()) || "null");
+            const userData = { 
+                username: savedMeta?.username || email.split('@')[0], 
+                email: user.email, 
+                phone: savedMeta?.phone || "+60123456789", 
+                uid: user.uid 
+            };
             currentUser = userData; 
             localStorage.setItem("current_session_user", JSON.stringify(userData)); 
             syncAuthenticatedLayout(userData); 
             document.getElementById('customer-login-form').reset(); 
-            showToast(`Logged in safely as ${currentUser.username}`); 
+            showToast(`Email verified! Logged in safely as ${currentUser.username}`); 
             updateCustomerWorkflowUI(); 
             renderChatMessagesForCustomer(); 
         } catch (error) {
@@ -1768,6 +1985,22 @@
             showToast("Invalid credentials or user not found.", "error"); 
         } 
     } 
+
+    async function resendCustomerVerificationEmail() {
+        try {
+            const user = window._pendingUnverifiedCustomer || window.FB_AUTH.currentUser;
+            if (!user) {
+                showToast("Please enter your email & password and click Access Profile first to resend your verification email.", "error");
+                return;
+            }
+            await window.FB_sendEmailVerification(user, {
+                url: window.location.origin + window.location.pathname
+            });
+            showToast("Confirmation email resent! Please check your Inbox & Spam folder.");
+        } catch (err) {
+            showToast("Could not resend email: " + err.message, "error");
+        }
+    }
 
     async function logoutCustomer() { 
         try {

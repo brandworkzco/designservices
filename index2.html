@@ -2252,7 +2252,7 @@
 
         const videoUrl = (product.videoUrl || '').trim();
         if (!videoUrl) {
-            showToast("no video upload edisi by admin", "error");
+            showToast("No video uploaded by admin", "error");
             return;
         }
 
@@ -2948,7 +2948,7 @@
                     <label class="block text-[10px] font-bold text-slate-600 uppercase tracking-wider">Product Video Link (YouTube / MP4 / GitHub URL) ! Editable</label> 
                     <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-1"> 
                         <input type="text" id="scratch-video-url-${product.id}" value="${product.videoUrl || ''}" placeholder="Paste video URL (leave blank if no video)" onchange="handleScratchVideoUrl(${pIdx}, this.value)" class="w-full bg-white border border-slate-200 text-emerald-700 font-mono rounded-lg p-2 text-xs outline-none focus:border-violet-600" />
-                        <p class="text-[9px] text-slate-400">Customers click "Watch Video" above Add to Basket. Empty shows "no video upload edisi by admin".</p>
+                        <p class="text-[9px] text-slate-400">Customers click "Watch Video" above Add to Basket. Empty shows "No video uploaded by admin".</p>
                     </div> 
                 </div> 
 

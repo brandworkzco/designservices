@@ -338,10 +338,6 @@
         <section class="relative bg-gradient-to-b from-white via-violet-50/40 to-white border-b border-violet-100 overflow-hidden py-10 px-4 sm:px-8"> 
             <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10"> 
                 <div class="lg:col-span-7 space-y-5 text-center lg:text-left"> 
-                    <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-violet-100/80 border border-violet-200 text-violet-700 text-[10px] sm:text-xs font-bold tracking-wider uppercase"> 
-                        <span class="relative inline-flex rounded-full h-2 w-2 bg-violet-600"></span> 
-                        <span>Official ToyyibPay FPX Storefront</span> 
-                    </div> 
                     <h1 class="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight leading-tight text-slate-900"> 
                         Creative Layouts <br class="hidden sm:inline"> 
                         Designed <span class="text-transparent bg-clip-text bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-600">To Stand Out.</span> 
@@ -358,22 +354,31 @@
 
                 <div class="lg:col-span-5 relative flex justify-center w-full"> 
                     <div class="relative w-full max-w-sm"> 
-                        <div class="relative bg-white border border-violet-200 rounded-2xl p-5 space-y-3 shadow-xl shadow-violet-900/5"> 
-                            <div class="flex items-center justify-between border-b border-slate-100 pb-2"> 
-                                <span class="text-[10px] font-bold uppercase text-violet-700 tracking-wider">Verified Secure Gateway</span> 
-                                <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold">FPX Active</span> 
+                        <div class="relative bg-white border border-violet-200 rounded-2xl p-5 space-y-3.5 shadow-xl shadow-violet-900/5"> 
+                            <div class="flex items-center justify-between border-b border-slate-100 pb-2.5"> 
+                                <span class="text-[10px] font-bold uppercase text-violet-700 tracking-wider">24-Hour Live Traffic</span> 
+                                <span class="inline-flex items-center gap-1.5 text-[10px] px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
+                                    <span>Live</span>
+                                </span> 
                             </div> 
-                            <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-3 flex items-center gap-3"> 
-                                <div class="text-2xl">💳</div> 
+                            <div class="bg-gradient-to-br from-violet-50/90 via-white to-purple-50/70 border border-violet-100 rounded-xl p-4 flex items-center gap-3.5"> 
+                                <div class="w-12 h-12 rounded-xl bg-violet-600 text-white flex items-center justify-center shadow-md shadow-violet-600/20 flex-shrink-0">
+                                    <i class='bx bx-group text-2xl'></i>
+                                </div> 
                                 <div class="flex-grow"> 
-                                    <h4 class="font-bold text-slate-900 text-xs">ToyyibPay Integration</h4> 
-                                    <p class="text-[10px] text-slate-500">Direct instant bank transfer checkout</p> 
+                                    <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Realtime Visitors Today</p>
+                                    <div class="flex items-baseline gap-2 mt-0.5">
+                                        <span id="realtime-visitor-count" class="text-3xl font-black text-slate-900 tracking-tight">0</span>
+                                        <span class="text-[11px] font-bold text-violet-700">visitors</span>
+                                    </div>
+                                    <p id="visitor-cycle-date" class="text-[10px] text-slate-500 mt-0.5">Resets daily at 12:01 AM</p> 
                                 </div> 
                             </div> 
                         </div> 
                     </div> 
                 </div> 
-            </div> 
+            <div id="products-grid" class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6"></div> 
         </section> 
 
         <section id="storefront-section" class="max-w-7xl mx-auto py-12 px-4 sm:px-8"> 
@@ -1361,7 +1366,104 @@
         document.addEventListener("DOMContentLoaded", () => {
             initFirestoreProductsSync();
             initFirestoreChatSync();
+            initRealtimeDailyVisitorTracker();
         });
+
+        // =========================================================================
+        // REALTIME 24-HOUR VISITOR COUNTER (Resets daily at 12:01 AM)
+        // =========================================================================
+        function getVisitorCycleKey(now = new Date()) {
+            // Cycle runs from 12:01 AM (00:01) today until 12:00:59 AM tomorrow
+            const shifted = new Date(now.getTime() - 60 * 1000); // Subtract 1 minute so 00:00 belongs to previous day's cycle, and 00:01 starts the new day
+            const yyyy = shifted.getFullYear();
+            const mm = String(shifted.getMonth() + 1).padStart(2, '0');
+            const dd = String(shifted.getDate()).padStart(2, '0');
+            return `${yyyy}-${mm}-${dd}`;
+        }
+
+        function updateVisitorCountUI(count, cycleKey) {
+            const countEl = document.getElementById('realtime-visitor-count');
+            const cycleEl = document.getElementById('visitor-cycle-date');
+            if (countEl) countEl.innerText = Number(count || 0).toLocaleString();
+            if (cycleEl) cycleEl.innerText = `Cycle ${cycleKey} • Resets at 12:01 AM`;
+        }
+
+        async function initRealtimeDailyVisitorTracker() {
+            const cycleKey = getVisitorCycleKey();
+            const visitorSessionKey = `bw_counted_cycle_${cycleKey}`;
+            const cachedTotalKey = `bw_visitor_total_${cycleKey}`;
+            let visitorDeviceId = localStorage.getItem("bw_visitor_device_id");
+            if (!visitorDeviceId) {
+                visitorDeviceId = "vis_" + Date.now() + "_" + Math.random().toString(36).substring(2, 8);
+                localStorage.setItem("bw_visitor_device_id", visitorDeviceId);
+            }
+
+            // Clean up outdated local cycle flags and totals from previous days
+            Object.keys(localStorage).forEach(k => {
+                if ((k.startsWith("bw_counted_cycle_") && k !== visitorSessionKey) ||
+                    (k.startsWith("bw_visitor_total_") && k !== cachedTotalKey)) {
+                    localStorage.removeItem(k);
+                }
+            });
+
+            // Immediately show & maintain at least 1 for the current visitor so it never stays at 0
+            let currentDisplayedCount = parseInt(localStorage.getItem(cachedTotalKey) || "0", 10);
+            if (!localStorage.getItem(visitorSessionKey) || currentDisplayedCount < 1) {
+                currentDisplayedCount = Math.max(1, currentDisplayedCount);
+                localStorage.setItem(cachedTotalKey, String(currentDisplayedCount));
+            }
+            updateVisitorCountUI(currentDisplayedCount, cycleKey);
+
+            if (window.FB_DB) {
+                try {
+                    const cycleVisitorsCol = window.FB_collection(window.FB_DB, "daily_visitors", cycleKey, "visitors");
+
+                    // Record this live visitor once per 24h cycle (starting 12:01 AM)
+                    if (!localStorage.getItem(visitorSessionKey)) {
+                        const visitorDocRef = window.FB_doc(window.FB_DB, "daily_visitors", cycleKey, "visitors", visitorDeviceId);
+                        await window.FB_setDoc(visitorDocRef, {
+                            visitorId: visitorDeviceId,
+                            cycleDate: cycleKey,
+                            visitedAt: new Date().toISOString(),
+                            timestamp: Date.now()
+                        }, { merge: true });
+                        localStorage.setItem(visitorSessionKey, "true");
+                    }
+
+                    // Listen in real time and maintain the count so it increments 1 -> 2 -> 3... without ever dropping
+                    window.FB_onSnapshot(cycleVisitorsCol, (snapshot) => {
+                        const storedMax = parseInt(localStorage.getItem(cachedTotalKey) || "1", 10);
+                        const liveCount = Math.max(snapshot.size, storedMax, 1);
+                        localStorage.setItem(cachedTotalKey, String(liveCount));
+                        updateVisitorCountUI(liveCount, cycleKey);
+                    }, (err) => {
+                        console.warn("Visitor counter listener warning:", err.message);
+                    });
+                } catch (err) {
+                    console.warn("Visitor tracker Firestore fallback:", err.message);
+                    localStorage.setItem(visitorSessionKey, "true");
+                    updateVisitorCountUI(currentDisplayedCount, cycleKey);
+                }
+            } else {
+                localStorage.setItem(visitorSessionKey, "true");
+            }
+
+            // Schedule automatic reset right at 12:01:00 AM if user keeps the tab open
+            const now = new Date();
+            const nextReset = new Date(now);
+            nextReset.setHours(0, 1, 0, 0);
+            if (now >= nextReset) {
+                nextReset.setDate(nextReset.getDate() + 1);
+            }
+            const msUntilReset = nextReset.getTime() - now.getTime();
+            setTimeout(() => {
+                const newCycleKey = getVisitorCycleKey();
+                localStorage.removeItem(cachedTotalKey);
+                localStorage.removeItem(visitorSessionKey);
+                updateVisitorCountUI(0, newCycleKey);
+                initRealtimeDailyVisitorTracker();
+            }, msUntilReset + 250);
+        }
     </script>
 
     <script> 
@@ -2014,70 +2116,70 @@
         window.PRODUCTS.forEach(product => { 
             const images = getProductImages(product);
             const card = document.createElement('div'); 
-            card.className = "bg-white border border-slate-200/90 rounded-3xl overflow-hidden shadow-lg shadow-slate-200/50 transition-all hover:scale-[1.01] hover:border-violet-400 flex flex-col justify-between"; 
+            card.className = "bg-white border border-slate-200/90 rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg shadow-slate-200/50 transition-all hover:scale-[1.01] hover:border-violet-400 flex flex-col justify-between"; 
              
             let selectionTierHTML = ""; 
             if (product.dropdowns && product.dropdowns.length > 0) { 
                 const infoLines = (product.dropdowns[0].info || '').split('\n').filter(l => l.trim() !== ''); 
                 const inlineListHTML = infoLines.map(line => ` 
-                    <div class="flex items-center space-x-2 text-xs text-slate-600"> 
-                        <div class="w-4 h-4 rounded-full bg-violet-600 flex items-center justify-center flex-shrink-0"> 
-                            <svg class="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" stroke-width="4" viewBox="0 0 24 24"> 
+                    <div class="flex items-start sm:items-center space-x-1.5 sm:space-x-2 text-[10px] sm:text-xs text-slate-600"> 
+                        <div class="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full bg-violet-600 flex items-center justify-center flex-shrink-0 mt-0.5 sm:mt-0"> 
+                            <svg class="w-2 h-2 sm:w-2.5 sm:h-2.5 text-white" fill="none" stroke="currentColor" stroke-width="4" viewBox="0 0 24 24"> 
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path> 
                             </svg> 
                         </div> 
-                        <span>${line.replace(/^-\s*/, '')}</span> 
+                        <span class="leading-tight">${line.replace(/^-\s*/, '')}</span> 
                     </div> 
                 `).join(''); 
 
                 selectionTierHTML = ` 
-                    <div class="p-5 space-y-4"> 
-                        <div class="flex items-center justify-between border-b border-slate-100 pb-3"> 
+                    <div class="p-3 sm:p-5 space-y-2.5 sm:space-y-4"> 
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-2 sm:pb-3 gap-1"> 
                             <div> 
-                                <h3 class="text-lg font-black tracking-tight text-slate-900 uppercase">${product.title}</h3> 
-                                <p class="text-[10px] text-slate-400 font-bold tracking-wider mt-0.5 uppercase">Dropdown: ${product.dropdownLabel}</p> 
+                                <h3 class="text-xs sm:text-lg font-black tracking-tight text-slate-900 uppercase leading-snug">${product.title}</h3> 
+                                <p class="text-[9px] sm:text-[10px] text-slate-400 font-bold tracking-wider mt-0.5 uppercase">Dropdown: ${product.dropdownLabel}</p> 
                             </div> 
-                            <div class="text-right flex items-baseline space-x-2"> 
-                                <span class="text-[10px] uppercase font-bold text-slate-400">Estimated</span> 
-                                <span id="frontend-price-badge-${product.id}" class="text-2xl font-black text-violet-700">RM ${Number(product.dropdowns[0].price).toFixed(2)}</span> 
+                            <div class="sm:text-right flex items-baseline space-x-1.5 sm:space-x-2"> 
+                                <span class="text-[9px] sm:text-[10px] uppercase font-bold text-slate-400">Est.</span> 
+                                <span id="frontend-price-badge-${product.id}" class="text-base sm:text-2xl font-black text-violet-700">RM ${Number(product.dropdowns[0].price).toFixed(2)}</span> 
                             </div> 
                         </div> 
 
-                        <div class="space-y-2"> 
-                            <select id="frontend-select-${product.id}" onchange="updateFrontendSelectedPrice('${product.id}')" class="w-full bg-slate-50 border border-slate-200 focus:border-violet-600 rounded-lg p-2.5 text-xs text-slate-900 font-medium outline-none transition-colors"> 
+                        <div class="space-y-1.5 sm:space-y-2"> 
+                            <select id="frontend-select-${product.id}" onchange="updateFrontendSelectedPrice('${product.id}')" class="w-full bg-slate-50 border border-slate-200 focus:border-violet-600 rounded-lg p-1.5 sm:p-2.5 text-[10px] sm:text-xs text-slate-900 font-medium outline-none transition-colors"> 
                                 ${product.dropdowns.map((drop, dIdx) => `<option value="${dIdx}">[RM ${Number(drop.price).toFixed(2)}]${drop.name}</option>`).join('')} 
                             </select> 
-                            <div id="frontend-info-box-${product.id}" class="space-y-2 pt-2"> 
-                                ${inlineListHTML || '<span class="text-slate-400 italic text-[11px]">- standard tier summary</span>'} 
+                            <div id="frontend-info-box-${product.id}" class="space-y-1.5 sm:space-y-2 pt-1 sm:pt-2"> 
+                                ${inlineListHTML || '<span class="text-slate-400 italic text-[10px] sm:text-[11px]">- standard tier summary</span>'} 
                             </div> 
                         </div> 
                     </div> 
                 `; 
             } else { 
-                selectionTierHTML = `<div class="p-5 text-[11px] text-slate-400 italic">No configuration variants parsed.</div>`; 
+                selectionTierHTML = `<div class="p-3 sm:p-5 text-[10px] sm:text-[11px] text-slate-400 italic">No configuration variants parsed.</div>`; 
             } 
 
             const slidesHTML = images.map((imgSrc, idx) => `
                 <div onclick="openProductImageModal('${product.id}', ${idx})" title="Click to enlarge photo (${idx + 1}/${images.length})" class="w-full h-full flex-shrink-0 snap-center flex items-center justify-center cursor-zoom-in relative">
-                    <img src="${imgSrc}" class="w-full h-full object-contain p-2 transition-transform duration-300 group-hover:scale-105" alt="${product.title} ${idx + 1}" onerror="this.src='https://placehold.co/600x400/f5f3ff/6d28d9?text=Product+Photo'">
+                    <img src="${imgSrc}" class="w-full h-full object-contain p-1.5 sm:p-2 transition-transform duration-300 group-hover:scale-105" alt="${product.title} ${idx + 1}" onerror="this.src='https://placehold.co/600x400/f5f3ff/6d28d9?text=Product+Photo'">
                 </div>
             `).join('');
 
             const dotsHTML = images.length > 1 ? `
-                <div class="bg-slate-50 border-b border-slate-100 py-2 px-3 flex items-center justify-center gap-2" id="carousel-dots-${product.id}">
+                <div class="bg-slate-50 border-b border-slate-100 py-1.5 sm:py-2 px-2 sm:px-3 flex items-center justify-center gap-1.5 sm:gap-2" id="carousel-dots-${product.id}">
                     ${images.map((_, idx) => `
-                        <button type="button" onclick="goToProductSlide('${product.id}', ${idx})" aria-label="View photo ${idx + 1}" class="h-2 rounded-full transition-all duration-200 ${idx === 0 ? 'w-5 bg-violet-600' : 'w-2 bg-slate-300 hover:bg-slate-400'}"></button>
+                        <button type="button" onclick="goToProductSlide('${product.id}', ${idx})" aria-label="View photo ${idx + 1}" class="h-1.5 sm:h-2 rounded-full transition-all duration-200 ${idx === 0 ? 'w-4 sm:w-5 bg-violet-600' : 'w-1.5 sm:w-2 bg-slate-300 hover:bg-slate-400'}"></button>
                     `).join('')}
                 </div>
             ` : `
-                <div class="bg-slate-50 border-b border-slate-100 py-2 px-3 flex items-center justify-center gap-1.5">
-                    <span class="w-2 h-2 rounded-full bg-violet-600 inline-block"></span>
+                <div class="bg-slate-50 border-b border-slate-100 py-1.5 sm:py-2 px-2 sm:px-3 flex items-center justify-center gap-1.5">
+                    <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-violet-600 inline-block"></span>
                 </div>
             `;
 
             const slideNextBtnHTML = images.length > 1 ? `
-                <button type="button" onclick="event.stopPropagation(); stepProductSlide('${product.id}', 1)" title="Slide right to next photo" class="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-8 h-8 rounded-full bg-white/95 hover:bg-violet-600 text-violet-700 hover:text-white border border-violet-200 flex items-center justify-center transition-colors shadow-md">
-                    <i class='bx bx-chevron-right text-xl'></i>
+                <button type="button" onclick="event.stopPropagation(); stepProductSlide('${product.id}', 1)" title="Slide right to next photo" class="absolute right-1.5 sm:right-3 top-1/2 -translate-y-1/2 z-10 w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-white/95 hover:bg-violet-600 text-violet-700 hover:text-white border border-violet-200 flex items-center justify-center transition-colors shadow-md">
+                    <i class='bx bx-chevron-right text-base sm:text-xl'></i>
                 </button>
             ` : '';
 
@@ -2087,25 +2189,25 @@
                         <div id="carousel-track-${product.id}" onscroll="syncProductCarouselDots('${product.id}')" class="w-full h-full flex overflow-x-auto snap-x snap-mandatory scroll-smooth hide-scrollbar">
                             ${slidesHTML}
                         </div>
-                        <span class="pointer-events-none absolute top-3 left-3 bg-violet-600 text-white font-black text-[9px] uppercase px-2.5 py-1 rounded-full shadow-md"> 
+                        <span class="pointer-events-none absolute top-2 left-2 sm:top-3 sm:left-3 bg-violet-600 text-white font-black text-[7px] sm:text-[9px] uppercase px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-full shadow-md"> 
                             DESIGN WORK 
                         </span> 
                         ${slideNextBtnHTML}
-                        <button type="button" onclick="event.stopPropagation(); openProductImageModal('${product.id}', getCurrentSlideIndex('${product.id}'))" title="Enlarge photo" class="absolute bottom-3 right-3 z-10 bg-white/95 hover:bg-violet-600 text-violet-700 hover:text-white border border-violet-200 px-2.5 py-1 rounded-full text-[10px] font-bold flex items-center space-x-1 transition-colors shadow-md"> 
-                            <i class='bx bx-zoom-in text-sm'></i>
-                            <span>Enlarge</span>
+                        <button type="button" onclick="event.stopPropagation(); openProductImageModal('${product.id}', getCurrentSlideIndex('${product.id}'))" title="Enlarge photo" class="absolute bottom-1.5 right-1.5 sm:bottom-3 sm:right-3 z-10 bg-white/95 hover:bg-violet-600 text-violet-700 hover:text-white border border-violet-200 px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-[8px] sm:text-[10px] font-bold flex items-center space-x-0.5 sm:space-x-1 transition-colors shadow-md"> 
+                            <i class='bx bx-zoom-in text-xs sm:text-sm'></i>
+                            <span class="hidden sm:inline">Enlarge</span>
                         </button> 
                     </div> 
                     ${dotsHTML}
                     ${selectionTierHTML} 
                 </div> 
-                <div class="p-5 pt-0 space-y-2.5"> 
-                    <button onclick="openProductVideoModal('${product.id}')" class="w-full py-2.5 bg-violet-50 hover:bg-violet-100 border border-violet-200 text-violet-700 font-black text-xs rounded-xl transition-all uppercase tracking-wider flex items-center justify-center space-x-2"> 
-                        <i class='bx bx-play-circle text-base'></i>
+                <div class="p-3 pt-0 sm:p-5 sm:pt-0 space-y-1.5 sm:space-y-2.5"> 
+                    <button onclick="openProductVideoModal('${product.id}')" class="w-full py-2 sm:py-2.5 bg-violet-50 hover:bg-violet-100 border border-violet-200 text-violet-700 font-black text-[10px] sm:text-xs rounded-lg sm:rounded-xl transition-all uppercase tracking-wider flex items-center justify-center space-x-1 sm:space-x-2"> 
+                        <i class='bx bx-play-circle text-sm sm:text-base'></i>
                         <span>Watch Video</span> 
                     </button> 
-                    <button onclick="addProductToBasket('${product.id}')" class="w-full py-3 bg-violet-600 hover:bg-violet-700 text-white font-black text-xs rounded-xl transition-all uppercase tracking-wider shadow-md shadow-violet-600/20"> 
-                        Add Package variant to basket 
+                    <button onclick="addProductToBasket('${product.id}')" class="w-full py-2 sm:py-3 px-2 bg-violet-600 hover:bg-violet-700 text-white font-black text-[10px] sm:text-xs rounded-lg sm:rounded-xl transition-all uppercase tracking-wider shadow-md shadow-violet-600/20 leading-tight"> 
+                        Add to Basket 
                     </button> 
                 </div> 
             `; 

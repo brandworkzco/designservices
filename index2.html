@@ -18,14 +18,14 @@
             height: 6px; 
         } 
         ::-webkit-scrollbar-track { 
-            background: #0f172a; 
+            background: #f5f3ff; 
         } 
         ::-webkit-scrollbar-thumb { 
-            background: #eab308; 
+            background: #6d28d9; 
             border-radius: 4px; 
         } 
         ::-webkit-scrollbar-thumb:hover { 
-            background: #ca8a04; 
+            background: #5b21b6; 
         } 
         .hide-scrollbar::-webkit-scrollbar { 
             display: none; 
@@ -42,18 +42,27 @@
             animation: fadeIn 0.25s ease-out forwards; 
         } 
 
+        @keyframes floatAvatar {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-7px); }
+        }
+        .animate-avatar-float {
+            animation: floatAvatar 3.8s ease-in-out infinite;
+        }
+
         /* ========================================================
-           ANIMATED CUSTOMER PORTAL STYLES (Brandworkz Gold/Slate)
+           ANIMATED CUSTOMER PORTAL STYLES (Clean White & Purple)
            ======================================================== */
         .portal-wrapper {
             position: relative;
             width: 100%;
             max-width: 860px;
-            height: 550px;
+            height: 560px;
             margin: 0 auto;
-            background: #080d1a;
-            border: 2px solid #facc15;
-            border-radius: 20px;
+            background: #ffffff;
+            border: 1.5px solid #e2e8f0;
+            box-shadow: 0 20px 45px -15px rgba(91, 33, 182, 0.12);
+            border-radius: 24px;
             overflow: hidden;
         }
 
@@ -120,7 +129,7 @@
             position: relative;
             width: 100%;
             height: 46px;
-            margin: 16px 0;
+            margin: 15px 0;
         }
 
         .portal-input-box input {
@@ -129,17 +138,17 @@
             background: transparent;
             border: none;
             outline: none;
-            border-bottom: 2px solid rgba(148, 163, 184, 0.45);
+            border-bottom: 2px solid #cbd5e1;
             padding-right: 28px;
             font-size: 13.5px;
-            color: #ffffff;
+            color: #0f172a;
             font-weight: 500;
             transition: border-color 0.3s ease;
         }
 
         .portal-input-box input:focus,
         .portal-input-box input:valid {
-            border-bottom-color: #facc15;
+            border-bottom-color: #6d28d9;
         }
 
         .portal-input-box label {
@@ -148,7 +157,7 @@
             left: 0;
             transform: translateY(-50%);
             font-size: 13px;
-            color: #94a3b8;
+            color: #64748b;
             pointer-events: none;
             transition: 0.35s ease;
         }
@@ -158,7 +167,7 @@
             top: -4px;
             font-size: 11px;
             font-weight: 700;
-            color: #facc15;
+            color: #6d28d9;
         }
 
         .portal-input-box i {
@@ -173,40 +182,42 @@
 
         .portal-input-box input:focus ~ i,
         .portal-input-box input:valid ~ i {
-            color: #facc15;
+            color: #6d28d9;
         }
 
-        /* Clean Pill Submit Button */
+        /* Clean Pill Submit Button (Purple) */
         .portal-btn {
             position: relative;
             width: 100%;
             height: 44px;
-            background: #0f172a;
-            border: 2px solid #facc15;
+            background: #6d28d9;
+            border: 2px solid #6d28d9;
             outline: none;
             border-radius: 40px;
             cursor: pointer;
             font-size: 13px;
             text-transform: uppercase;
             letter-spacing: 0.08em;
-            color: #facc15;
+            color: #ffffff;
             font-weight: 800;
             z-index: 1;
             overflow: hidden;
             margin-top: 8px;
-            transition: background-color 0.25s ease, transform 0.15s ease, color 0.25s ease;
+            box-shadow: 0 8px 20px -4px rgba(109, 40, 217, 0.35);
+            transition: background-color 0.25s ease, transform 0.15s ease, box-shadow 0.25s ease;
         }
 
         .portal-btn:hover {
-            background: #facc15;
-            color: #020617;
+            background: #5b21b6;
+            border-color: #5b21b6;
+            box-shadow: 0 10px 24px -4px rgba(91, 33, 182, 0.45);
         }
 
         .portal-btn:active {
             transform: scale(0.98);
         }
 
-        /* Welcome Info Side Panels */
+        /* Avatar Side Panels (Preserving exact slide & blur transition motion) */
         .portal-wrapper .info-text {
             position: absolute;
             top: 0;
@@ -214,6 +225,7 @@
             height: 100%;
             display: flex;
             flex-direction: column;
+            align-items: center;
             justify-content: center;
             z-index: 2;
             pointer-events: none;
@@ -221,8 +233,7 @@
 
         .portal-wrapper .info-text.login {
             right: 0;
-            text-align: right;
-            padding: 0 42px 20px 60px;
+            padding: 0 36px 0 28px;
         }
 
         .portal-wrapper .info-text.login .animation {
@@ -242,8 +253,7 @@
 
         .portal-wrapper .info-text.register {
             left: 0;
-            text-align: left;
-            padding: 0 60px 20px 42px;
+            padding: 0 28px 0 36px;
         }
 
         .portal-wrapper .info-text.register .animation {
@@ -264,7 +274,7 @@
         @media (max-width: 768px) {
             .portal-wrapper {
                 max-width: 440px;
-                height: 580px;
+                height: 600px;
             }
             .portal-wrapper .info-text {
                 display: none;
@@ -276,71 +286,71 @@
         }
     </style> 
 </head> 
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-yellow-400 selection:text-slate-950 overflow-x-hidden"> 
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col selection:bg-violet-600 selection:text-white overflow-x-hidden"> 
 
     <!-- STICKY HEADER -->
-    <header class="sticky top-0 z-40 bg-slate-900/95 backdrop-blur-md border-b border-yellow-400/30 px-3 py-3 sm:px-6"> 
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-violet-200/80 px-3 py-3 sm:px-6 shadow-sm"> 
         <div class="max-w-7xl mx-auto flex flex-col gap-3"> 
             <div class="flex items-center justify-between w-full"> 
                 <button onclick="switchView('store')" class="flex items-center space-x-2 group text-left bg-transparent border-0 p-0 cursor-pointer"> 
-                    <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-yellow-400 flex items-center justify-center font-black text-slate-950 text-lg sm:text-xl transform group-hover:rotate-6 transition-transform"> 
+                    <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-violet-600 to-purple-700 flex items-center justify-center font-black text-white text-lg sm:text-xl transform group-hover:rotate-6 transition-transform shadow-md shadow-violet-600/25"> 
                         BZ 
                     </div> 
                     <div> 
-                        <span class="text-base sm:text-xl font-extrabold tracking-wider text-white">BRAND<span class="text-yellow-400">WORKZ CO</span></span> 
-                        <p class="text-[9px] text-slate-400 tracking-widest uppercase font-semibold">Design Studio</p> 
+                        <span class="text-base sm:text-xl font-extrabold tracking-wider text-slate-900">BRAND<span class="text-violet-600">WORKZ CO</span></span> 
+                        <p class="text-[9px] text-slate-500 tracking-widest uppercase font-semibold">Design Studio</p> 
                     </div> 
                 </button> 
 
                 <div class="flex items-center space-x-1.5 sm:space-x-3"> 
-                    <button onclick="switchView('admin')" class="flex items-center space-x-1 px-2.5 py-2 text-xs font-bold rounded-lg border border-yellow-400/30 bg-slate-900 text-yellow-400 hover:bg-yellow-400 hover:text-slate-950 transition-all shadow shadow-yellow-400/10"> 
+                    <button onclick="switchView('admin')" class="flex items-center space-x-1 px-2.5 py-2 text-xs font-bold rounded-lg border border-violet-200 bg-violet-50 text-violet-700 hover:bg-violet-600 hover:text-white transition-all shadow-sm"> 
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"> 
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path> 
                         </svg> 
                         <span>Admin Space</span> 
                     </button> 
 
-                    <button onclick="toggleCartDrawer(true)" class="relative p-2 rounded-lg bg-yellow-400 hover:bg-yellow-500 text-slate-950 transition-all font-bold flex items-center justify-center shadow-md shadow-yellow-400/20"> 
+                    <button onclick="toggleCartDrawer(true)" class="relative p-2 rounded-lg bg-violet-600 hover:bg-violet-700 text-white transition-all font-bold flex items-center justify-center shadow-md shadow-violet-600/25"> 
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg> 
                         <span id="cart-badge" class="absolute -top-1.5 -right-1.5 bg-rose-600 text-white text-[9px] font-black w-5 h-5 rounded-full flex items-center justify-center opacity-0 scale-90 transition-all duration-300">0</span> 
                     </button> 
                 </div> 
             </div> 
 
-            <div class="flex items-center justify-start pt-1 border-t border-slate-800/60">
-                <button id="customer-portal-btn" onclick="switchView('customer-auth')" class="flex items-center space-x-1.5 px-3 py-1.5 text-xs font-bold rounded-lg border border-slate-800 bg-slate-950 text-slate-300 hover:border-yellow-400/40 transition-all"> 
-                    <svg class="w-3.5 h-3.5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg> 
+            <div class="flex items-center justify-start pt-1 border-t border-slate-100">
+                <button id="customer-portal-btn" onclick="switchView('customer-auth')" class="flex items-center space-x-1.5 px-3 py-1.5 text-xs font-bold rounded-lg border border-slate-200 bg-slate-50 text-slate-700 hover:border-violet-400 hover:text-violet-700 transition-all"> 
+                    <svg class="w-3.5 h-3.5 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg> 
                     <span id="customer-portal-text">Profile Portal</span> 
-                    <span id="customer-portal-username" class="max-w-[160px] truncate text-[11px] text-yellow-400 font-bold hidden"></span> 
+                    <span id="customer-portal-username" class="max-w-[160px] truncate text-[11px] text-violet-700 font-bold hidden"></span> 
                 </button>
             </div>
 
-            <nav class="flex items-center justify-start space-x-2 overflow-x-auto py-1.5 border-t border-slate-800/60 text-xs font-bold tracking-wide hide-scrollbar"> 
-                <button onclick="switchView('store'); setTimeout(() => document.getElementById('storefront-section').scrollIntoView(), 50);" class="text-yellow-400 hover:text-yellow-300 transition-colors whitespace-nowrap bg-slate-950 py-1.5 px-3 rounded-md border border-slate-800">Browse Services</button> 
-                <button onclick="switchView('store'); setTimeout(() => document.getElementById('how-it-works').scrollIntoView(), 50);" class="text-slate-300 hover:text-yellow-400 transition-colors whitespace-nowrap bg-slate-950/40 py-1.5 px-3 rounded-md">Our Process</button> 
-                <button onclick="switchView('store'); setTimeout(() => document.getElementById('payment-methods').scrollIntoView(), 50);" class="text-slate-300 hover:text-yellow-400 transition-colors whitespace-nowrap bg-slate-950/40 py-1.5 px-3 rounded-md">ToyyibPay Info</button> 
+            <nav class="flex items-center justify-start space-x-2 overflow-x-auto py-1.5 border-t border-slate-100 text-xs font-bold tracking-wide hide-scrollbar"> 
+                <button onclick="switchView('store'); setTimeout(() => document.getElementById('storefront-section').scrollIntoView(), 50);" class="text-violet-700 hover:text-violet-800 transition-colors whitespace-nowrap bg-violet-50 py-1.5 px-3 rounded-md border border-violet-200">Browse Services</button> 
+                <button onclick="switchView('store'); setTimeout(() => document.getElementById('how-it-works').scrollIntoView(), 50);" class="text-slate-600 hover:text-violet-700 transition-colors whitespace-nowrap bg-slate-100/80 py-1.5 px-3 rounded-md">Our Process</button> 
+                <button onclick="switchView('store'); setTimeout(() => document.getElementById('payment-methods').scrollIntoView(), 50);" class="text-slate-600 hover:text-violet-700 transition-colors whitespace-nowrap bg-slate-100/80 py-1.5 px-3 rounded-md">ToyyibPay Info</button> 
             </nav> 
         </div> 
     </header> 
 
     <!-- MAIN STORE VIEW -->
     <div id="store-view" class="flex-grow animate-fadeIn"> 
-        <section class="relative bg-slate-900 border-b border-yellow-500/10 overflow-hidden py-10 px-4 sm:px-8"> 
+        <section class="relative bg-gradient-to-b from-white via-violet-50/40 to-white border-b border-violet-100 overflow-hidden py-10 px-4 sm:px-8"> 
             <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10"> 
                 <div class="lg:col-span-7 space-y-5 text-center lg:text-left"> 
-                    <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-yellow-400/10 border border-yellow-400/20 text-yellow-400 text-[10px] sm:text-xs font-bold tracking-wider uppercase"> 
-                        <span class="relative inline-flex rounded-full h-2 w-2 bg-yellow-500"></span> 
+                    <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-violet-100/80 border border-violet-200 text-violet-700 text-[10px] sm:text-xs font-bold tracking-wider uppercase"> 
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-violet-600"></span> 
                         <span>Official ToyyibPay FPX Storefront</span> 
                     </div> 
-                    <h1 class="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight leading-tight text-white"> 
+                    <h1 class="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight leading-tight text-slate-900"> 
                         Creative Layouts <br class="hidden sm:inline"> 
-                        Designed <span class="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-yellow-300 to-amber-500">To Stand Out.</span> 
+                        Designed <span class="text-transparent bg-clip-text bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-600">To Stand Out.</span> 
                     </h1> 
-                    <p class="text-slate-300 text-sm sm:text-base max-w-xl mx-auto lg:mx-0 font-light leading-relaxed"> 
+                    <p class="text-slate-600 text-sm sm:text-base max-w-xl mx-auto lg:mx-0 font-normal leading-relaxed"> 
                         Customize elite design templates with adjustable sizing dropdown categories, save defaults to your Checkout Profile, and pay securely using direct Malaysian FPX. 
                     </p> 
                     <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 pt-2"> 
-                        <button onclick="document.getElementById('storefront-section').scrollIntoView();" class="w-full sm:w-auto px-6 py-3 bg-yellow-400 text-slate-950 font-extrabold text-xs rounded-xl hover:bg-yellow-500 transition-all text-center uppercase tracking-wider"> 
+                        <button onclick="document.getElementById('storefront-section').scrollIntoView();" class="w-full sm:w-auto px-6 py-3 bg-violet-600 text-white font-extrabold text-xs rounded-xl hover:bg-violet-700 transition-all text-center uppercase tracking-wider shadow-lg shadow-violet-600/25"> 
                             Explore Catalog 
                         </button> 
                     </div> 
@@ -348,16 +358,16 @@
 
                 <div class="lg:col-span-5 relative flex justify-center w-full"> 
                     <div class="relative w-full max-w-sm"> 
-                        <div class="relative bg-slate-950 border border-yellow-400/50 rounded-2xl p-5 space-y-3"> 
-                            <div class="flex items-center justify-between border-b border-slate-800 pb-2"> 
-                                <span class="text-[10px] font-bold uppercase text-yellow-400 tracking-wider">Verified Secure Gateway</span> 
-                                <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/25 font-bold">FPX Active</span> 
+                        <div class="relative bg-white border border-violet-200 rounded-2xl p-5 space-y-3 shadow-xl shadow-violet-900/5"> 
+                            <div class="flex items-center justify-between border-b border-slate-100 pb-2"> 
+                                <span class="text-[10px] font-bold uppercase text-violet-700 tracking-wider">Verified Secure Gateway</span> 
+                                <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold">FPX Active</span> 
                             </div> 
-                            <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 flex items-center gap-3"> 
+                            <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-3 flex items-center gap-3"> 
                                 <div class="text-2xl">💳</div> 
                                 <div class="flex-grow"> 
-                                    <h4 class="font-bold text-white text-xs">ToyyibPay Integration</h4> 
-                                    <p class="text-[10px] text-slate-400">Direct instant bank transfer checkout</p> 
+                                    <h4 class="font-bold text-slate-900 text-xs">ToyyibPay Integration</h4> 
+                                    <p class="text-[10px] text-slate-500">Direct instant bank transfer checkout</p> 
                                 </div> 
                             </div> 
                         </div> 
@@ -369,48 +379,48 @@
         <section id="storefront-section" class="max-w-7xl mx-auto py-12 px-4 sm:px-8"> 
             <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4"> 
                 <div> 
-                    <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Our <span class="text-yellow-400">Creative Services Catalog</span></h2> 
-                    <p class="text-slate-400 text-xs sm:text-sm mt-1">Select your preferred package layout variant to automatically calibrate checkout profiles.</p> 
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Our <span class="text-violet-600">Creative Services Catalog</span></h2> 
+                    <p class="text-slate-500 text-xs sm:text-sm mt-1">Select your preferred package layout variant to automatically calibrate checkout profiles.</p> 
                 </div> 
-                <div class="flex items-center space-x-2 text-[11px] text-slate-400 bg-slate-900 p-2 rounded-lg border border-slate-800 self-start"> 
-                    <span class="w-2.5 h-2.5 bg-yellow-400 rounded-full inline-block animate-pulse"></span> 
-                    <span>Firestore Collection: <strong class="text-yellow-400 font-mono">creative_products</strong></span> 
+                <div class="flex items-center space-x-2 text-[11px] text-slate-600 bg-white p-2 rounded-lg border border-slate-200 shadow-sm self-start"> 
+                    <span class="w-2.5 h-2.5 bg-violet-600 rounded-full inline-block animate-pulse"></span> 
+                    <span>Firestore Collection: <strong class="text-violet-700 font-mono">creative_products</strong></span> 
                 </div> 
             </div> 
             <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div> 
         </section> 
 
-        <section id="how-it-works" class="bg-slate-900 border-t border-b border-yellow-500/10 py-12 px-4 sm:px-8"> 
+        <section id="how-it-works" class="bg-white border-t border-b border-violet-100 py-12 px-4 sm:px-8"> 
             <div class="max-w-7xl mx-auto"> 
                 <div class="text-center max-w-xl mx-auto mb-8"> 
-                    <h2 class="text-2xl sm:text-3xl font-extrabold text-white">The <span class="text-yellow-400">Brandworkz Co</span> Workflow</h2> 
-                    <p class="text-slate-400 text-xs mt-2">Professional branding, simplified. Follow our 3-step checkout cycle.</p> 
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">The <span class="text-violet-600">Brandworkz Co</span> Workflow</h2> 
+                    <p class="text-slate-500 text-xs mt-2">Professional branding, simplified. Follow our 3-step checkout cycle.</p> 
                 </div> 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center"> 
-                    <div class="bg-slate-950 p-5 rounded-2xl border border-slate-880 relative group hover:border-yellow-400/40 transition-all"> 
-                        <div class="w-10 h-10 rounded-xl bg-yellow-400 text-slate-950 font-black flex items-center justify-center text-lg mx-auto mb-3">1</div> 
-                        <h4 class="text-base font-bold text-white mb-1.5">Sign In Profile</h4> 
-                        <p class="text-slate-400 text-xs leading-relaxed">Register your email, phone, and billing details to activate your persistent "Checkout Profile".</p> 
+                    <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200/80 relative group hover:border-violet-400 transition-all shadow-sm"> 
+                        <div class="w-10 h-10 rounded-xl bg-violet-600 text-white font-black flex items-center justify-center text-lg mx-auto mb-3 shadow-md shadow-violet-600/20">1</div> 
+                        <h4 class="text-base font-bold text-slate-900 mb-1.5">Sign In Profile</h4> 
+                        <p class="text-slate-600 text-xs leading-relaxed">Register your email, phone, and billing details to activate your persistent "Checkout Profile".</p> 
                     </div> 
-                    <div class="bg-slate-950 p-5 rounded-2xl border border-slate-880 relative group hover:border-yellow-400/40 transition-all"> 
-                        <div class="w-10 h-10 rounded-xl bg-yellow-400 text-slate-950 font-black flex items-center justify-center text-lg mx-auto mb-3">2</div> 
-                        <h4 class="text-base font-bold text-white mb-1.5">Configure Options</h4> 
-                        <p class="text-slate-400 text-xs leading-relaxed">Choose standard Banner or Menu sizes. Custom prices scale instantly based on your selection.</p> 
+                    <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200/80 relative group hover:border-violet-400 transition-all shadow-sm"> 
+                        <div class="w-10 h-10 rounded-xl bg-violet-600 text-white font-black flex items-center justify-center text-lg mx-auto mb-3 shadow-md shadow-violet-600/20">2</div> 
+                        <h4 class="text-base font-bold text-slate-900 mb-1.5">Configure Options</h4> 
+                        <p class="text-slate-600 text-xs leading-relaxed">Choose standard Banner or Menu sizes. Custom prices scale instantly based on your selection.</p> 
                     </div> 
-                    <div class="bg-slate-950 p-5 rounded-2xl border border-slate-880 relative group hover:border-yellow-400/40 transition-all"> 
-                        <div class="w-10 h-10 rounded-xl bg-yellow-400 text-slate-950 font-black flex items-center justify-center text-lg mx-auto mb-3">3</div> 
-                        <h4 class="text-base font-bold text-white mb-1.5">Auto-Submit &amp; Pay</h4> 
-                        <p class="text-slate-400 text-xs leading-relaxed">Click submit to record your brief, dispatch confirmation logs, and process via secure ToyyibPay FPX.</p> 
+                    <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200/80 relative group hover:border-violet-400 transition-all shadow-sm"> 
+                        <div class="w-10 h-10 rounded-xl bg-violet-600 text-white font-black flex items-center justify-center text-lg mx-auto mb-3 shadow-md shadow-violet-600/20">3</div> 
+                        <h4 class="text-base font-bold text-slate-900 mb-1.5">Auto-Submit &amp; Pay</h4> 
+                        <p class="text-slate-600 text-xs leading-relaxed">Click submit to record your brief, dispatch confirmation logs, and process via secure ToyyibPay FPX.</p> 
                     </div> 
                 </div> 
             </div> 
         </section> 
 
         <section id="payment-methods" class="max-w-7xl mx-auto py-12 px-4 sm:px-8 text-center space-y-4"> 
-            <div class="w-12 h-12 rounded-full bg-yellow-400/10 flex items-center justify-center text-2xl mx-auto">🔒</div> 
-            <h3 class="text-xl sm:text-2xl font-black text-white">Direct ToyyibPay FPX Processing</h3> 
-            <p class="text-slate-400 max-w-xl mx-auto text-xs sm:text-sm leading-relaxed"> 
-                Transactions are authorized with secure Malaysian bank transfers. All digital checkouts are securely prepared for dispatch to: <code class="text-yellow-400 bg-slate-900 px-1.5 py-0.5 rounded text-[11px] sm:text-xs font-mono">https://toyyibpay.com/brandworks</code>. 
+            <div class="w-12 h-12 rounded-full bg-violet-100 flex items-center justify-center text-2xl mx-auto">🔒</div> 
+            <h3 class="text-xl sm:text-2xl font-black text-slate-900">Direct ToyyibPay FPX Processing</h3> 
+            <p class="text-slate-600 max-w-xl mx-auto text-xs sm:text-sm leading-relaxed"> 
+                Transactions are authorized with secure Malaysian bank transfers. All digital checkouts are securely prepared for dispatch to: <code class="text-violet-700 bg-violet-50 border border-violet-200 px-1.5 py-0.5 rounded text-[11px] sm:text-xs font-mono">https://toyyibpay.com/brandworks</code>. 
             </p> 
         </section> 
     </div> 
@@ -418,10 +428,10 @@
     <!-- CUSTOMER PROFILE DASHBOARD (ANIMATED PORTAL SECTION) -->
     <div id="customer-auth-view" class="hidden flex-grow px-3 sm:px-8 py-8 max-w-5xl mx-auto w-full animate-fadeIn"> 
         <div class="mb-5 flex items-center justify-between"> 
-            <button onclick="switchView('store')" class="inline-flex items-center space-x-2 text-xs font-bold text-yellow-400 bg-slate-900 border border-slate-800 px-4 py-2 rounded-xl hover:border-yellow-400 transition-all"> 
+            <button onclick="switchView('store')" class="inline-flex items-center space-x-2 text-xs font-bold text-violet-700 bg-white border border-slate-200 px-4 py-2 rounded-xl hover:border-violet-400 shadow-sm transition-all"> 
                 ← Back to Front Page 
             </button> 
-            <span class="text-[11px] font-bold uppercase tracking-widest text-slate-500">Customer Portal</span>
+            <span class="text-[11px] font-bold uppercase tracking-widest text-slate-400">Customer Portal</span>
         </div> 
 
         <!-- ANIMATED PORTAL CARD (UNAUTHENTICATED) -->
@@ -430,19 +440,19 @@
                 
                 <!-- LOGIN FORM -->
                 <div class="form-box login">
-                    <h2 class="animation text-2xl sm:text-3xl font-black text-white text-center mb-2 tracking-tight" style="--i:0; --j:21;">
-                        Sign In
+                    <h2 class="animation text-2xl sm:text-3xl font-black text-slate-900 text-center mb-2 tracking-tight" style="--i:0; --j:21;">
+                        Welcome to Customer Portal
                     </h2>
 
-                    <div class="animation bg-amber-500/10 border border-amber-500/30 rounded-lg p-2.5 text-amber-400 text-[11px] flex items-center space-x-2 mb-1" style="--i:1; --j:22;">
+                    <div class="animation bg-violet-50 border border-violet-200 rounded-lg p-2.5 text-violet-800 text-[11px] flex items-center space-x-2 mb-1" style="--i:1; --j:22;">
                         <span>⚠️</span>
                         <span><strong>Note:</strong> Check your spam folder for your email verification or password reset link.</span>
                     </div>
 
-                    <div id="cust-verification-notice" class="hidden bg-amber-500/10 border border-amber-500/30 rounded-lg p-2.5 text-amber-300 text-[11px] space-y-1.5 mb-2">
+                    <div id="cust-verification-notice" class="hidden bg-amber-50 border border-amber-200 rounded-lg p-2.5 text-amber-800 text-[11px] space-y-1.5 mb-2">
                         <p class="font-bold">📧 Email Confirmation Required</p>
-                        <p class="text-[10px] text-amber-200/90 leading-relaxed">Click the confirmation link sent to your email (check Inbox &amp; Spam), then sign in below.</p>
-                        <button type="button" onclick="resendCustomerVerificationEmail()" class="text-[10px] font-black uppercase tracking-wider text-yellow-400 hover:underline bg-transparent border-0 p-0 cursor-pointer">
+                        <p class="text-[10px] text-amber-700 leading-relaxed">Click the confirmation link sent to your email (check Inbox &amp; Spam), then sign in below.</p>
+                        <button type="button" onclick="resendCustomerVerificationEmail()" class="text-[10px] font-black uppercase tracking-wider text-violet-700 hover:underline bg-transparent border-0 p-0 cursor-pointer">
                             Resend Confirmation Email →
                         </button>
                     </div>
@@ -457,49 +467,119 @@
                         <div class="portal-input-box animation" style="--i:3; --j:24;">
                             <input type="password" id="cust-login-pass" required autocomplete="current-password">
                             <label for="cust-login-pass">Password</label>
-                            <i class='bx bx-show cursor-pointer hover:text-yellow-400' onclick="togglePasswordVisibility('cust-login-pass', this)" title="Show/Hide Password"></i>
+                            <i class='bx bx-show cursor-pointer hover:text-violet-600' onclick="togglePasswordVisibility('cust-login-pass', this)" title="Show/Hide Password"></i>
                         </div>
 
                         <div class="animation flex justify-end -mt-2 mb-3" style="--i:4; --j:25;">
-                            <button type="button" onclick="openForgotPasswordModal()" class="text-[11px] font-bold text-yellow-400 hover:underline bg-transparent border-0 cursor-pointer">
+                            <button type="button" onclick="openForgotPasswordModal()" class="text-[11px] font-bold text-violet-600 hover:underline bg-transparent border-0 cursor-pointer">
                                 Forgot Password?
                             </button>
                         </div>
 
-                        <div id="cust-login-error" class="text-rose-500 text-[11px] font-semibold hidden bg-rose-500/10 p-2 rounded border border-rose-500/20 text-center mb-2"> 
+                        <div id="cust-login-error" class="text-rose-600 text-[11px] font-semibold hidden bg-rose-50 p-2 rounded border border-rose-200 text-center mb-2"> 
                             Invalid credentials. Sign up first if you don't have an active account! 
                         </div>
 
                         <button type="submit" class="portal-btn animation" style="--i:5; --j:26;">
-                            Access Profile
+                            Sign in
                         </button>
 
-                        <div class="animation text-xs text-slate-300 text-center mt-5" style="--i:6; --j:27;">
-                            <p>Don't have an account? 
-                                <a href="#" onclick="event.preventDefault(); toggleCustomerAuthTab('register');" class="text-yellow-400 font-bold hover:underline ml-1">
-                                    Sign Up
+                        <div class="animation text-[11.5px] text-slate-500 text-center mt-4 leading-relaxed" style="--i:6; --j:27;">
+                            <p>Have you received invite confirmation link in your email? 
+                                <a href="#" onclick="event.preventDefault(); toggleCustomerAuthTab('register');" class="text-slate-900 underline decoration-violet-500 font-bold hover:text-violet-700 ml-1">
+                                    Sign up your account
                                 </a>
                             </p>
                         </div>
                     </form>
                 </div>
 
-                <!-- LOGIN WELCOME SIDE PANEL -->
+                <!-- LOGIN AVATAR SIDE PANEL (White & Purple clean card matching screenshot) -->
                 <div class="info-text login">
-                    <span class="animation text-[10px] font-black uppercase tracking-widest text-yellow-400 mb-2 block" style="--i:0; --j:20;">
-                        Brandworkz Co
-                    </span>
-                    <h2 class="animation text-3xl lg:text-4xl font-black text-white uppercase leading-tight tracking-tight" style="--i:1; --j:21;">
-                        WELCOME<br><span class="text-yellow-400">BACK!</span>
-                    </h2>
-                    <p class="animation text-xs text-slate-400 mt-3 leading-relaxed" style="--i:2; --j:22;">
-                        Access your persistent Checkout Profile, manage custom design briefs, and authorize ToyyibPay FPX payments seamlessly.
-                    </p>
+                    <div class="animation w-full flex flex-col items-center justify-center" style="--i:0; --j:20;">
+                        <div class="relative w-64 h-64 rounded-3xl bg-slate-100/90 border border-slate-200/80 flex items-center justify-center shadow-inner overflow-hidden">
+                            <div class="absolute inset-0 bg-gradient-to-b from-violet-100/50 via-transparent to-slate-200/40"></div>
+                            <svg class="w-56 h-56 animate-avatar-float relative z-10 drop-shadow-[0_14px_18px_rgba(76,29,149,0.18)]" viewBox="0 0 260 280" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <linearGradient id="bwBlockGrad1" x1="65" y1="30" x2="185" y2="145" gradientUnits="userSpaceOnUse">
+                                        <stop offset="0%" stop-color="#f3c68f"/>
+                                        <stop offset="55%" stop-color="#d89b5c"/>
+                                        <stop offset="100%" stop-color="#b4753a"/>
+                                    </linearGradient>
+                                    <linearGradient id="bwBlockSide1" x1="165" y1="30" x2="195" y2="140" gradientUnits="userSpaceOnUse">
+                                        <stop offset="0%" stop-color="#c68649"/>
+                                        <stop offset="100%" stop-color="#8c5423"/>
+                                    </linearGradient>
+                                    <linearGradient id="bwHoodieGrad1" x1="70" y1="140" x2="185" y2="235" gradientUnits="userSpaceOnUse">
+                                        <stop offset="0%" stop-color="#1e1b4b"/>
+                                        <stop offset="100%" stop-color="#0f172a"/>
+                                    </linearGradient>
+                                    <linearGradient id="bwPurpleGrad1" x1="0" y1="0" x2="1" y2="1">
+                                        <stop offset="0%" stop-color="#a855f7"/>
+                                        <stop offset="100%" stop-color="#6d28d9"/>
+                                    </linearGradient>
+                                </defs>
+                                <!-- Floor Shadow -->
+                                <ellipse cx="130" cy="256" rx="74" ry="11" fill="#cbd5e1" opacity="0.85"/>
+                                <!-- Sneakers -->
+                                <rect x="86" y="220" width="22" height="24" rx="8" fill="#1e1b4b"/>
+                                <rect x="136" y="220" width="22" height="24" rx="8" fill="#1e1b4b"/>
+                                <path d="M76 244 C76 235, 114 235, 114 246 L114 252 L74 252 Z" fill="#1e1b4b" stroke="#8b5cf6" stroke-width="1.8"/>
+                                <rect x="74" y="249" width="40" height="5" rx="2.5" fill="#ffffff"/>
+                                <path d="M132 244 C132 235, 170 235, 170 246 L170 252 L130 252 Z" fill="#1e1b4b" stroke="#8b5cf6" stroke-width="1.8"/>
+                                <rect x="130" y="249" width="40" height="5" rx="2.5" fill="#ffffff"/>
+                                <!-- Hoodie Torso -->
+                                <path d="M74 152 C74 140, 174 140, 174 152 L180 218 C180 225, 173 230, 165 230 L83 230 C75 230, 68 225, 68 218 Z" fill="url(#bwHoodieGrad1)" stroke="#312e81" stroke-width="2"/>
+                                <!-- Hoodie Strings -->
+                                <path d="M112 146 L110 174" stroke="#a855f7" stroke-width="3" stroke-linecap="round"/>
+                                <path d="M136 146 L138 174" stroke="#a855f7" stroke-width="3" stroke-linecap="round"/>
+                                <!-- Brandworkz BZ Chest Emblem -->
+                                <rect x="108" y="178" width="32" height="24" rx="6" fill="url(#bwPurpleGrad1)"/>
+                                <text x="124" y="194" text-anchor="middle" fill="#ffffff" font-family="Inter, sans-serif" font-weight="900" font-size="13">BZ</text>
+                                <!-- Left Arm Thumbs-Up -->
+                                <path d="M74 156 C52 162, 42 184, 54 198 C62 206, 74 202, 78 190" fill="url(#bwHoodieGrad1)" stroke="#312e81" stroke-width="2"/>
+                                <circle cx="52" cy="184" r="12" fill="#eab074"/>
+                                <path d="M51 174 L51 161 C51 157, 57 157, 57 161 L57 174 Z" fill="#eab074"/>
+                                <!-- Right Arm Holding Laptop -->
+                                <path d="M174 156 C194 164, 200 186, 186 198 L168 198" fill="url(#bwHoodieGrad1)" stroke="#312e81" stroke-width="2"/>
+                                <!-- Laptop -->
+                                <polygon points="154,162 224,154 216,196 148,202" fill="#64748b" stroke="#cbd5e1" stroke-width="1.5"/>
+                                <polygon points="148,202 216,196 232,204 162,210" fill="#94a3b8"/>
+                                <circle cx="186" cy="178" r="9" fill="url(#bwPurpleGrad1)"/>
+                                <text x="186" y="181.5" text-anchor="middle" fill="#ffffff" font-family="Inter, sans-serif" font-weight="900" font-size="8">BZ</text>
+                                <!-- 3D Creative Block Head -->
+                                <polygon points="78,38 164,32 186,44 100,50" fill="#f7d3a3"/>
+                                <polygon points="164,32 186,44 186,136 164,144" fill="url(#bwBlockSide1)"/>
+                                <rect x="76" y="42" width="90" height="102" rx="12" fill="url(#bwBlockGrad1)"/>
+                                <!-- Subtle Engraved Corner Marks -->
+                                <path d="M84 50 L92 54 L84 58 M156 48 L148 52 L156 56 M84 130 L92 134 L84 138" stroke="#9c612c" stroke-width="1.6" stroke-linecap="round" opacity="0.65"/>
+                                <!-- Eyebrows -->
+                                <path d="M90 73 Q101 67 111 72" stroke="#451a03" stroke-width="4" stroke-linecap="round"/>
+                                <path d="M131 72 Q141 67 152 73" stroke="#451a03" stroke-width="4" stroke-linecap="round"/>
+                                <!-- Expressive Eyes -->
+                                <circle cx="101" cy="91" r="13" fill="#ffffff"/>
+                                <circle cx="103" cy="91" r="8" fill="#1e1b4b"/>
+                                <circle cx="106" cy="88" r="3" fill="#ffffff"/>
+                                <circle cx="141" cy="91" r="13" fill="#ffffff"/>
+                                <circle cx="143" cy="91" r="8" fill="#1e1b4b"/>
+                                <circle cx="146" cy="88" r="3" fill="#ffffff"/>
+                                <!-- Thick Designer Glasses -->
+                                <rect x="83" y="75" width="36" height="31" rx="8" stroke="#0f172a" stroke-width="4.5" fill="none"/>
+                                <rect x="123" y="75" width="36" height="31" rx="8" stroke="#0f172a" stroke-width="4.5" fill="none"/>
+                                <path d="M119 89 L123 89" stroke="#0f172a" stroke-width="4.5"/>
+                                <!-- Happy Smile -->
+                                <path d="M104 116 Q121 134 138 116 Z" fill="#450a0a"/>
+                                <path d="M108 117 Q121 122 134 117 Z" fill="#ffffff"/>
+                                <path d="M112 125 Q121 131 130 125 Z" fill="#fb7185"/>
+                            </svg>
+                        </div>
+                        <span class="mt-3 text-[10px] font-black uppercase tracking-widest text-violet-700">Brandworkz Studio Mascot</span>
+                    </div>
                 </div>
 
                 <!-- REGISTER FORM -->
                 <div class="form-box register">
-                    <h2 class="animation text-2xl sm:text-3xl font-black text-white text-center mb-1 tracking-tight" style="--i:17; --j:0;">
+                    <h2 class="animation text-2xl sm:text-3xl font-black text-slate-900 text-center mb-1 tracking-tight" style="--i:17; --j:0;">
                         Sign Up
                     </h2>
 
@@ -519,16 +599,16 @@
                         <div class="portal-input-box animation" style="--i:20; --j:3;">
                             <input type="password" id="cust-reg-pass" name="password" required autocomplete="new-password">
                             <label for="cust-reg-pass">Password *</label>
-                            <i class='bx bx-show cursor-pointer hover:text-yellow-400' onclick="togglePasswordVisibility('cust-reg-pass', this)" title="Show/Hide Password"></i>
+                            <i class='bx bx-show cursor-pointer hover:text-violet-600' onclick="togglePasswordVisibility('cust-reg-pass', this)" title="Show/Hide Password"></i>
                         </div>
 
                         <button type="submit" class="portal-btn animation" style="--i:21; --j:4;">
                             Register Profile
                         </button>
 
-                        <div class="animation text-xs text-slate-300 text-center mt-4" style="--i:22; --j:5;">
+                        <div class="animation text-xs text-slate-500 text-center mt-4" style="--i:22; --j:5;">
                             <p>Already have an account? 
-                                <a href="#" onclick="event.preventDefault(); toggleCustomerAuthTab('login');" class="text-yellow-400 font-bold hover:underline ml-1">
+                                <a href="#" onclick="event.preventDefault(); toggleCustomerAuthTab('login');" class="text-violet-700 font-bold hover:underline ml-1">
                                     Sign In
                                 </a>
                             </p>
@@ -536,64 +616,130 @@
                     </form>
                 </div>
 
-                <!-- REGISTER WELCOME SIDE PANEL -->
+                <!-- REGISTER AVATAR SIDE PANEL (White & Purple clean card) -->
                 <div class="info-text register">
-                    <span class="animation text-[10px] font-black uppercase tracking-widest text-yellow-400 mb-2 block" style="--i:17; --j:0;">
-                        Design Studio
-                    </span>
-                    <h2 class="animation text-3xl lg:text-4xl font-black text-white uppercase leading-tight tracking-tight" style="--i:18; --j:1;">
-                        JOIN <span class="text-yellow-400">US!</span>
-                    </h2>
-                    <p class="animation text-xs text-slate-400 mt-3 leading-relaxed" style="--i:19; --j:2;">
-                        Create your persistent client profile today to save billing preferences, lock creative briefs, and track live project status.
-                    </p>
+                    <div class="animation w-full flex flex-col items-center justify-center" style="--i:17; --j:0;">
+                        <div class="relative w-64 h-64 rounded-3xl bg-slate-100/90 border border-slate-200/80 flex items-center justify-center shadow-inner overflow-hidden">
+                            <div class="absolute inset-0 bg-gradient-to-b from-violet-100/50 via-transparent to-slate-200/40"></div>
+                            <svg class="w-56 h-56 animate-avatar-float relative z-10 drop-shadow-[0_14px_18px_rgba(76,29,149,0.18)]" viewBox="0 0 260 280" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <linearGradient id="bwBlockGrad2" x1="75" y1="30" x2="195" y2="145" gradientUnits="userSpaceOnUse">
+                                        <stop offset="0%" stop-color="#f3c68f"/>
+                                        <stop offset="55%" stop-color="#d89b5c"/>
+                                        <stop offset="100%" stop-color="#b4753a"/>
+                                    </linearGradient>
+                                    <linearGradient id="bwBlockSide2" x1="65" y1="30" x2="95" y2="140" gradientUnits="userSpaceOnUse">
+                                        <stop offset="0%" stop-color="#c68649"/>
+                                        <stop offset="100%" stop-color="#8c5423"/>
+                                    </linearGradient>
+                                    <linearGradient id="bwHoodieGrad2" x1="80" y1="140" x2="195" y2="235" gradientUnits="userSpaceOnUse">
+                                        <stop offset="0%" stop-color="#1e1b4b"/>
+                                        <stop offset="100%" stop-color="#0f172a"/>
+                                    </linearGradient>
+                                    <linearGradient id="bwPurpleGrad2" x1="0" y1="0" x2="1" y2="1">
+                                        <stop offset="0%" stop-color="#a855f7"/>
+                                        <stop offset="100%" stop-color="#6d28d9"/>
+                                    </linearGradient>
+                                </defs>
+                                <!-- Floor Shadow -->
+                                <ellipse cx="130" cy="256" rx="74" ry="11" fill="#cbd5e1" opacity="0.85"/>
+                                <!-- Sneakers -->
+                                <rect x="98" y="220" width="22" height="24" rx="8" fill="#1e1b4b"/>
+                                <rect x="148" y="220" width="22" height="24" rx="8" fill="#1e1b4b"/>
+                                <path d="M88 244 C88 235, 126 235, 126 246 L126 252 L86 252 Z" fill="#1e1b4b" stroke="#8b5cf6" stroke-width="1.8"/>
+                                <rect x="86" y="249" width="40" height="5" rx="2.5" fill="#ffffff"/>
+                                <path d="M144 244 C144 235, 182 235, 182 246 L182 252 L142 252 Z" fill="#1e1b4b" stroke="#8b5cf6" stroke-width="1.8"/>
+                                <rect x="142" y="249" width="40" height="5" rx="2.5" fill="#ffffff"/>
+                                <!-- Hoodie Torso -->
+                                <path d="M86 152 C86 140, 186 140, 186 152 L192 218 C192 225, 185 230, 177 230 L95 230 C87 230, 80 225, 80 218 Z" fill="url(#bwHoodieGrad2)" stroke="#312e81" stroke-width="2"/>
+                                <!-- Hoodie Strings -->
+                                <path d="M124 146 L122 174" stroke="#a855f7" stroke-width="3" stroke-linecap="round"/>
+                                <path d="M148 146 L150 174" stroke="#a855f7" stroke-width="3" stroke-linecap="round"/>
+                                <!-- Brandworkz BZ Chest Emblem -->
+                                <rect x="120" y="178" width="32" height="24" rx="6" fill="url(#bwPurpleGrad2)"/>
+                                <text x="136" y="194" text-anchor="middle" fill="#ffffff" font-family="Inter, sans-serif" font-weight="900" font-size="13">BZ</text>
+                                <!-- Left Arm Holding Stylus Pen -->
+                                <path d="M86 156 C66 164, 60 186, 74 198 L92 198" fill="url(#bwHoodieGrad2)" stroke="#312e81" stroke-width="2"/>
+                                <line x1="42" y1="158" x2="78" y2="196" stroke="#7c3aed" stroke-width="5" stroke-linecap="round"/>
+                                <polygon points="36,152 45,155 39,161" fill="#1e1b4b"/>
+                                <!-- Right Arm Waving Hello -->
+                                <path d="M186 156 C208 158, 218 140, 212 124" stroke="url(#bwHoodieGrad2)" stroke-width="18" stroke-linecap="round"/>
+                                <circle cx="212" cy="118" r="12" fill="#eab074"/>
+                                <!-- 3D Creative Block Head -->
+                                <polygon points="96,32 182,38 160,50 74,44" fill="#f7d3a3"/>
+                                <polygon points="74,44 96,32 96,144 74,136" fill="url(#bwBlockSide2)"/>
+                                <rect x="94" y="42" width="90" height="102" rx="12" fill="url(#bwBlockGrad2)"/>
+                                <!-- Subtle Engraved Corner Marks -->
+                                <path d="M176 50 L168 54 L176 58 M104 48 L112 52 L104 56 M176 130 L168 134 L176 138" stroke="#9c612c" stroke-width="1.6" stroke-linecap="round" opacity="0.65"/>
+                                <!-- Eyebrows -->
+                                <path d="M108 72 Q119 67 129 72" stroke="#451a03" stroke-width="4" stroke-linecap="round"/>
+                                <path d="M149 72 Q159 67 170 72" stroke="#451a03" stroke-width="4" stroke-linecap="round"/>
+                                <!-- Expressive Eyes -->
+                                <circle cx="119" cy="91" r="13" fill="#ffffff"/>
+                                <circle cx="117" cy="91" r="8" fill="#1e1b4b"/>
+                                <circle cx="120" cy="88" r="3" fill="#ffffff"/>
+                                <circle cx="159" cy="91" r="13" fill="#ffffff"/>
+                                <circle cx="157" cy="91" r="8" fill="#1e1b4b"/>
+                                <circle cx="160" cy="88" r="3" fill="#ffffff"/>
+                                <!-- Thick Designer Glasses -->
+                                <rect x="101" y="75" width="36" height="31" rx="8" stroke="#0f172a" stroke-width="4.5" fill="none"/>
+                                <rect x="141" y="75" width="36" height="31" rx="8" stroke="#0f172a" stroke-width="4.5" fill="none"/>
+                                <path d="M137 89 L141 89" stroke="#0f172a" stroke-width="4.5"/>
+                                <!-- Happy Smile -->
+                                <path d="M122 116 Q139 134 156 116 Z" fill="#450a0a"/>
+                                <path d="M126 117 Q139 122 152 117 Z" fill="#ffffff"/>
+                                <path d="M130 125 Q139 131 148 125 Z" fill="#fb7185"/>
+                            </svg>
+                        </div>
+                        <span class="mt-3 text-[10px] font-black uppercase tracking-widest text-violet-700">Create Client Avatar</span>
+                    </div>
                 </div>
 
             </div>
         </div>
 
         <!-- AUTHENTICATED PROFILE CARD -->
-        <div id="customer-authenticated-card" class="bg-slate-900 border border-slate-800 rounded-2xl p-5 sm:p-8 shadow-2xl space-y-5 hidden animate-fadeIn"> 
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-800 pb-4 gap-4"> 
+        <div id="customer-authenticated-card" class="bg-white border border-slate-200 rounded-2xl p-5 sm:p-8 shadow-xl space-y-5 hidden animate-fadeIn"> 
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-4 gap-4"> 
                 <div class="flex items-center space-x-3"> 
-                    <div class="w-12 h-12 rounded-full bg-yellow-400 flex items-center justify-center text-slate-950 text-xl font-bold">👤</div> 
+                    <div class="w-12 h-12 rounded-full bg-violet-600 flex items-center justify-center text-white text-xl font-bold shadow-md shadow-violet-600/20">👤</div> 
                     <div> 
-                        <span class="text-yellow-400 text-[10px] font-bold uppercase tracking-wider block">Verified Customer Profile</span> 
-                        <h3 id="authenticated-cust-username" class="text-lg sm:text-xl font-black text-white">Welcome back!</h3> 
+                        <span class="text-violet-700 text-[10px] font-bold uppercase tracking-wider block">Verified Customer Profile</span> 
+                        <h3 id="authenticated-cust-username" class="text-lg sm:text-xl font-black text-slate-900">Welcome back!</h3> 
                     </div> 
                 </div> 
-                <button onclick="logoutCustomer()" class="px-4 py-2 bg-rose-600/10 hover:bg-rose-600 border border-rose-500/20 hover:border-rose-500 text-rose-400 hover:text-white font-bold text-xs rounded-lg transition-all flex items-center space-x-1 justify-center self-start sm:self-auto"> 
+                <button onclick="logoutCustomer()" class="px-4 py-2 bg-rose-50 hover:bg-rose-600 border border-rose-200 hover:border-rose-600 text-rose-600 hover:text-white font-bold text-xs rounded-lg transition-all flex items-center space-x-1 justify-center self-start sm:self-auto"> 
                     Logout Portal 
                 </button> 
             </div> 
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5 pt-1"> 
-                <div class="bg-slate-950 p-5 rounded-xl border border-slate-850 space-y-3"> 
-                    <h4 class="text-xs font-bold text-white border-b border-slate-900 pb-1.5 flex items-center justify-between"> 
+                <div class="bg-slate-50 p-5 rounded-xl border border-slate-200/80 space-y-3"> 
+                    <h4 class="text-xs font-bold text-slate-900 border-b border-slate-200 pb-1.5 flex items-center justify-between"> 
                         <span>Profile Credentials</span> 
-                        <span class="text-[9px] uppercase font-black text-yellow-400 tracking-wider">Connected</span> 
+                        <span class="text-[9px] uppercase font-black text-violet-700 tracking-wider">Connected</span> 
                     </h4> 
                     <div class="space-y-2 text-xs"> 
                         <div class="flex justify-between gap-2"> 
-                            <span class="text-slate-400">Email:</span> 
-                            <span id="cust-det-email" class="font-semibold text-white truncate max-w-[150px]">email@domain.com</span> 
+                            <span class="text-slate-500">Email:</span> 
+                            <span id="cust-det-email" class="font-semibold text-slate-900 truncate max-w-[150px]">email@domain.com</span> 
                         </div> 
                         <div class="flex justify-between"> 
-                            <span class="text-slate-400">Selected Terms:</span> 
-                            <span id="cust-det-term" class="font-semibold text-yellow-400 uppercase tracking-wide">Not Selected</span> 
+                            <span class="text-slate-500">Selected Terms:</span> 
+                            <span id="cust-det-term" class="font-semibold text-violet-700 uppercase tracking-wide">Not Selected</span> 
                         </div> 
                     </div> 
                 </div> 
 
-                <div class="bg-slate-950 p-5 rounded-xl border border-slate-850 space-y-3 flex flex-col justify-between"> 
+                <div class="bg-slate-50 p-5 rounded-xl border border-slate-200/80 space-y-3 flex flex-col justify-between"> 
                     <div> 
-                        <h4 class="text-xs font-black uppercase text-yellow-400 tracking-wider flex items-center justify-between"> 
+                        <h4 class="text-xs font-black uppercase text-violet-700 tracking-wider flex items-center justify-between"> 
                             <span>Checkout Action Centre</span> 
                         </h4> 
                         <div id="customer-order-action-area" class="mt-4 space-y-3"> 
-                            <div class="p-3 bg-slate-900 rounded-lg border border-slate-800 text-center"> 
-                                <p class="text-xs text-slate-400 mb-2">Order Tracking Status:</p> 
-                                <span id="customer-status-badge" class="px-3 py-1 rounded text-xs font-bold bg-slate-950 text-slate-400 border border-slate-800">No Active Order</span> 
+                            <div class="p-3 bg-white rounded-lg border border-slate-200 text-center"> 
+                                <p class="text-xs text-slate-500 mb-2">Order Tracking Status:</p> 
+                                <span id="customer-status-badge" class="px-3 py-1 rounded text-xs font-bold bg-slate-100 text-slate-600 border border-slate-200">No Active Order</span> 
                             </div> 
                             <div id="dynamic-workflow-btn-placeholder"> 
                                 <div class="text-center p-2 text-xs text-slate-500 italic"> 
@@ -609,53 +755,53 @@
 
     <!-- ADMIN WORKSPACE VIEW -->
     <div id="admin-view" class="flex-grow px-3 sm:px-8 py-8 max-w-7xl mx-auto w-full animate-fadeIn hidden"> 
-        <div class="bg-slate-900 border border-yellow-400/30 rounded-2xl p-4 sm:p-8 shadow-2xl space-y-6"> 
-            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-slate-800 pb-4 gap-4"> 
+        <div class="bg-white border border-violet-200 rounded-2xl p-4 sm:p-8 shadow-xl space-y-6"> 
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-slate-100 pb-4 gap-4"> 
                 <div> 
-                    <h2 class="text-2xl font-black text-white flex items-center gap-2"> 
+                    <h2 class="text-2xl font-black text-slate-900 flex items-center gap-2"> 
                         <span>Admin Workspace Controls</span> 
-                        <span class="text-xs font-bold px-2.5 py-0.5 bg-yellow-400 text-slate-950 rounded-full">Owner Access</span> 
+                        <span class="text-xs font-bold px-2.5 py-0.5 bg-violet-600 text-white rounded-full">Owner Access</span> 
                     </h2> 
-                    <p class="text-slate-400 text-xs mt-1">Configure product layout fields dynamically. Changes synchronize live to Firestore (<code class="text-yellow-400">creative_products</code>) and the storefront.</p> 
+                    <p class="text-slate-500 text-xs mt-1">Configure product layout fields dynamically. Changes synchronize live to Firestore (<code class="text-violet-700 font-bold">creative_products</code>) and the storefront.</p> 
                 </div> 
                 <div class="flex space-x-2"> 
-                    <button onclick="logoutAdmin()" class="text-xs font-bold text-rose-400 hover:text-white px-3.5 py-2 rounded-lg bg-slate-950 border border-slate-800 hover:border-rose-500 transition-all"> 
+                    <button onclick="logoutAdmin()" class="text-xs font-bold text-rose-600 hover:text-white px-3.5 py-2 rounded-lg bg-rose-50 hover:bg-rose-600 border border-rose-200 transition-all"> 
                         Logout Portal 
                     </button> 
-                    <button onclick="switchView('store')" class="text-xs font-bold text-slate-400 hover:text-white px-3.5 py-2 rounded-lg bg-slate-950 border border-slate-800 hover:border-yellow-400/40 transition-all"> 
+                    <button onclick="switchView('store')" class="text-xs font-bold text-slate-600 hover:text-violet-700 px-3.5 py-2 rounded-lg bg-slate-50 border border-slate-200 hover:border-violet-300 transition-all"> 
                         Return to Storefront 
                     </button> 
                 </div> 
             </div> 
 
             <!-- FIRESTORE & REALTIME DB SYNC STATUS PANEL -->
-            <div class="bg-slate-950 rounded-xl p-4 border border-yellow-400/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div class="bg-violet-50/60 rounded-xl p-4 border border-violet-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                 <div class="flex items-center space-x-3">
                     <span class="text-xl">🔥</span>
                     <div>
-                        <h4 class="text-xs font-extrabold text-white uppercase tracking-wider">Cloud Data Synced (Firestore &amp; Realtime DB)</h4>
-                        <p class="text-[10px] text-slate-400 font-mono">Products: <span class="text-yellow-400">creative_products</span> | Chat: <span class="text-yellow-400">chat_message2</span> | Config: <span class="text-yellow-400">h5ZA2SRXjuMdhGeWuMeo</span></p>
+                        <h4 class="text-xs font-extrabold text-slate-900 uppercase tracking-wider">Cloud Data Synced (Firestore &amp; Realtime DB)</h4>
+                        <p class="text-[10px] text-slate-600 font-mono">Products: <span class="text-violet-700 font-bold">creative_products</span> | Chat: <span class="text-violet-700 font-bold">chat_message2</span> | Config: <span class="text-violet-700 font-bold">h5ZA2SRXjuMdhGeWuMeo</span></p>
                     </div>
                 </div>
                 <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
-                    <button onclick="syncAllProductsToFirestore()" class="px-3.5 py-2 bg-emerald-500/20 hover:bg-emerald-500 border border-emerald-500/40 text-emerald-300 hover:text-slate-950 font-black text-[10px] uppercase rounded-lg transition-all whitespace-nowrap">
+                    <button onclick="syncAllProductsToFirestore()" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-[10px] uppercase rounded-lg transition-all whitespace-nowrap shadow-sm">
                         Push Products to creative_products
                     </button>
-                    <input type="text" id="store-data-input" placeholder="store data (string)" class="bg-slate-900 border border-slate-800 text-xs text-white rounded-lg px-3 py-2 outline-none focus:border-yellow-400 flex-grow sm:flex-grow-0" />
-                    <button onclick="syncAllCloudDatabases()" class="px-3.5 py-2 bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-black text-[10px] uppercase rounded-lg transition-all shadow whitespace-nowrap">
+                    <input type="text" id="store-data-input" placeholder="store data (string)" class="bg-white border border-slate-200 text-xs text-slate-900 rounded-lg px-3 py-2 outline-none focus:border-violet-600 flex-grow sm:flex-grow-0" />
+                    <button onclick="syncAllCloudDatabases()" class="px-3.5 py-2 bg-violet-600 hover:bg-violet-700 text-white font-black text-[10px] uppercase rounded-lg transition-all shadow whitespace-nowrap">
                         Sync Cloud Data
                     </button>
                 </div>
             </div>
 
             <!-- DYNAMIC SANDBOX -->
-            <div class="bg-slate-950 rounded-xl p-5 border border-slate-850 space-y-4"> 
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-900 pb-3"> 
+            <div class="bg-slate-50 rounded-xl p-5 border border-slate-200 space-y-4"> 
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-3"> 
                     <div> 
-                        <h3 class="text-sm font-black text-white uppercase tracking-wider">Dynamic Sandbox Frame Arrays (<span class="text-yellow-400 font-mono lowercase">creative_products</span>)</h3> 
-                        <p class="text-[11px] text-slate-500">Edit elements on the fly, upload custom asset streams, and sync directly to Firestore <code class="text-yellow-400">creative_products</code>.</p> 
+                        <h3 class="text-sm font-black text-slate-900 uppercase tracking-wider">Dynamic Sandbox Frame Arrays (<span class="text-violet-700 font-mono lowercase">creative_products</span>)</h3> 
+                        <p class="text-[11px] text-slate-500">Edit elements on the fly, upload custom asset streams, and sync directly to Firestore <code class="text-violet-700 font-bold">creative_products</code>.</p> 
                     </div> 
-                    <button onclick="appendBlankProductFrame()" class="px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-slate-950 text-xs font-black uppercase rounded-lg shadow-md transition-all self-start sm:self-auto"> 
+                    <button onclick="appendBlankProductFrame()" class="px-4 py-2 bg-violet-600 hover:bg-violet-700 text-white text-xs font-black uppercase rounded-lg shadow-md transition-all self-start sm:self-auto"> 
                         (+) New Product Frame 
                     </button> 
                 </div> 
@@ -666,16 +812,16 @@
             <!-- TWO-COLUMN WORKFLOW & CHAT HUB GRID -->
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
                 <!-- CLIENT WORKFLOW PANEL -->
-                <div class="lg:col-span-7 bg-slate-950 border border-slate-850 p-5 rounded-xl space-y-4 flex flex-col justify-between"> 
+                <div class="lg:col-span-7 bg-slate-50 border border-slate-200 p-5 rounded-xl space-y-4 flex flex-col justify-between"> 
                     <div>
-                        <h3 class="text-sm font-black text-white uppercase tracking-wider border-b border-slate-900 pb-2 flex items-center justify-between"> 
+                        <h3 class="text-sm font-black text-slate-900 uppercase tracking-wider border-b border-slate-200 pb-2 flex items-center justify-between"> 
                             <span>Live Client Workflow Tracker</span> 
-                            <span class="w-2.5 h-2.5 bg-blue-500 rounded-full animate-pulse"></span> 
+                            <span class="w-2.5 h-2.5 bg-violet-600 rounded-full animate-pulse"></span> 
                         </h3> 
                         <div class="overflow-x-auto mt-2"> 
                             <table class="w-full text-left border-collapse text-xs"> 
                                 <thead> 
-                                    <tr class="border-b border-slate-900 text-slate-400"> 
+                                    <tr class="border-b border-slate-200 text-slate-500"> 
                                         <th class="pb-2 font-bold uppercase">Order ID / User</th> 
                                         <th class="pb-2 font-bold uppercase">Email</th> 
                                         <th class="pb-2 font-bold uppercase">Payment Choice</th> 
@@ -684,7 +830,7 @@
                                     </tr> 
                                 </thead> 
                                 <tbody id="admin-workflow-table-body">
-                                    <tr><td colspan="5" class="text-center py-4 text-slate-500 italic">No incoming confirmation client requests detected.</td></tr>
+                                    <tr><td colspan="5" class="text-center py-4 text-slate-400 italic">No incoming confirmation client requests detected.</td></tr>
                                 </tbody> 
                             </table> 
                         </div> 
@@ -692,34 +838,34 @@
                 </div> 
 
                 <!-- ADMIN REALTIME CHAT DESK -->
-                <div class="lg:col-span-5 bg-slate-950 border border-slate-850 p-5 rounded-xl flex flex-col h-[380px] lg:h-[420px]">
-                    <div class="border-b border-slate-900 pb-2 flex items-center justify-between">
+                <div class="lg:col-span-5 bg-slate-50 border border-slate-200 p-5 rounded-xl flex flex-col h-[380px] lg:h-[420px]">
+                    <div class="border-b border-slate-200 pb-2 flex items-center justify-between">
                         <div class="flex items-center space-x-2">
                             <span class="flex h-2.5 w-2.5 relative">
-                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75"></span>
-                                <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-yellow-500"></span>
+                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-violet-500 opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-violet-600"></span>
                             </span>
-                            <h3 class="text-sm font-black text-white uppercase tracking-wider font-sans">Live Inbox (<span class="text-yellow-400 font-mono lowercase">chat_message2</span>)</h3>
+                            <h3 class="text-sm font-black text-slate-900 uppercase tracking-wider font-sans">Live Inbox (<span class="text-violet-700 font-mono lowercase">chat_message2</span>)</h3>
                         </div>
-                        <span class="text-[10px] text-yellow-400 font-mono font-bold" id="admin-active-thread-user">No Selected Thread</span>
+                        <span class="text-[10px] text-violet-700 font-mono font-bold" id="admin-active-thread-user">No Selected Thread</span>
                     </div>
 
                     <div class="flex flex-grow overflow-hidden mt-3 gap-3">
                         <!-- Left Side: Chat Channels List -->
-                        <div class="w-1/3 border-r border-slate-900 pr-2 overflow-y-auto flex flex-col gap-1.5" id="admin-chat-channels">
-                            <span class="text-[9px] uppercase tracking-wider font-extrabold text-slate-500">Active Users</span>
-                            <div class="text-[10px] text-slate-500 italic text-center py-4">No active users</div>
+                        <div class="w-1/3 border-r border-slate-200 pr-2 overflow-y-auto flex flex-col gap-1.5" id="admin-chat-channels">
+                            <span class="text-[9px] uppercase tracking-wider font-extrabold text-slate-400">Active Users</span>
+                            <div class="text-[10px] text-slate-400 italic text-center py-4">No active users</div>
                         </div>
 
                         <!-- Right Side: Active Messages Window -->
                         <div class="w-2/3 flex flex-col justify-between h-full">
-                            <div id="admin-chat-messages-container" class="flex-grow overflow-y-auto space-y-3 p-2 bg-slate-900/40 rounded-lg border border-slate-900 text-xs flex flex-col">
-                                <div class="text-center text-slate-500 italic py-8">Select a customer or guest thread to read incoming messages and respond.</div>
+                            <div id="admin-chat-messages-container" class="flex-grow overflow-y-auto space-y-3 p-2 bg-white rounded-lg border border-slate-200 text-xs flex flex-col">
+                                <div class="text-center text-slate-400 italic py-8">Select a customer or guest thread to read incoming messages and respond.</div>
                             </div>
 
                             <form id="admin-chat-form" onsubmit="handleAdminSendMessage(event)" class="mt-2 flex gap-1">
-                                <input type="text" id="admin-chat-input" placeholder="Type administrative response..." class="flex-grow bg-slate-900 border border-slate-850 rounded-lg px-2.5 py-1.5 text-[11px] text-white outline-none focus:border-yellow-400" disabled>
-                                <button type="submit" class="bg-yellow-400 hover:bg-yellow-500 text-slate-950 px-3 py-1.5 text-[11px] font-black uppercase rounded-lg transition-all" id="admin-chat-send-btn" disabled>Send</button>
+                                <input type="text" id="admin-chat-input" placeholder="Type administrative response..." class="flex-grow bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 text-[11px] text-slate-900 outline-none focus:border-violet-600" disabled>
+                                <button type="submit" class="bg-violet-600 hover:bg-violet-700 text-white px-3 py-1.5 text-[11px] font-black uppercase rounded-lg transition-all" id="admin-chat-send-btn" disabled>Send</button>
                             </form>
                         </div>
                     </div>
@@ -729,70 +875,70 @@
     </div> 
 
     <!-- FORGOT PASSWORD MODAL -->
-    <div id="forgot-password-modal" class="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-md flex items-center justify-center p-4 hidden"> 
-        <div class="bg-slate-900 border border-yellow-400/40 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 animate-fadeIn"> 
-            <div class="text-center border-b border-slate-800 pb-3"> 
-                <h3 class="text-lg font-black text-white">Reset Account Password</h3> 
-                <p class="text-xs text-slate-400 mt-1">Enter your registered email address to receive a secure password reset link.</p> 
+    <div id="forgot-password-modal" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 hidden"> 
+        <div class="bg-white border border-violet-200 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 animate-fadeIn"> 
+            <div class="text-center border-b border-slate-100 pb-3"> 
+                <h3 class="text-lg font-black text-slate-900">Reset Account Password</h3> 
+                <p class="text-xs text-slate-500 mt-1">Enter your registered email address to receive a secure password reset link.</p> 
             </div> 
             <form onsubmit="handleSendPasswordReset(event)" class="space-y-4"> 
                 <div class="space-y-1"> 
-                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Account Email</label> 
-                    <input type="email" id="reset-email-input" required placeholder="your.email@domain.com" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs text-white outline-none"> 
+                    <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider">Account Email</label> 
+                    <input type="email" id="reset-email-input" required placeholder="your.email@domain.com" class="w-full bg-slate-50 border border-slate-200 focus:border-violet-600 rounded-lg p-2.5 text-xs text-slate-900 outline-none"> 
                 </div> 
                 <div class="flex items-center gap-2 pt-2"> 
-                    <button type="button" onclick="closeForgotPasswordModal()" class="w-1/3 py-2.5 bg-slate-950 text-slate-400 border border-slate-800 font-bold rounded-xl text-xs hover:text-white">Cancel</button> 
-                    <button type="submit" class="w-2/3 py-2.5 bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-black rounded-xl text-xs uppercase tracking-wider">Send Reset Link</button> 
+                    <button type="button" onclick="closeForgotPasswordModal()" class="w-1/3 py-2.5 bg-slate-100 text-slate-600 border border-slate-200 font-bold rounded-xl text-xs hover:text-slate-900">Cancel</button> 
+                    <button type="submit" class="w-2/3 py-2.5 bg-violet-600 hover:bg-violet-700 text-white font-black rounded-xl text-xs uppercase tracking-wider">Send Reset Link</button> 
                 </div> 
             </form> 
         </div> 
     </div> 
 
     <!-- CONFIRM PASSWORD RESET MODAL -->
-    <div id="confirm-reset-modal" class="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-md flex items-center justify-center p-4 hidden"> 
-        <div class="bg-slate-900 border border-yellow-400/40 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 animate-fadeIn"> 
-            <div class="text-center border-b border-slate-800 pb-3"> 
-                <h3 class="text-lg font-black text-white">Set New Password</h3> 
-                <p class="text-xs text-slate-400 mt-1">Please enter your new secure password below.</p> 
+    <div id="confirm-reset-modal" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 hidden"> 
+        <div class="bg-white border border-violet-200 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 animate-fadeIn"> 
+            <div class="text-center border-b border-slate-100 pb-3"> 
+                <h3 class="text-lg font-black text-slate-900">Set New Password</h3> 
+                <p class="text-xs text-slate-500 mt-1">Please enter your new secure password below.</p> 
             </div> 
             <form onsubmit="handleConfirmPasswordReset(event)" class="space-y-4"> 
                 <div class="space-y-1"> 
-                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">New Password</label> 
+                    <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider">New Password</label> 
                     <div class="relative">
-                        <input type="password" id="new-password-input" required placeholder="••••••••" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 pr-9 text-xs text-white outline-none"> 
-                        <button type="button" onclick="togglePasswordVisibility('new-password-input', this.querySelector('i'))" class="absolute inset-y-0 right-2.5 flex items-center text-slate-400 hover:text-yellow-400 bg-transparent border-0 p-0 cursor-pointer" title="Show/Hide Password">
+                        <input type="password" id="new-password-input" required placeholder="••••••••" class="w-full bg-slate-50 border border-slate-200 focus:border-violet-600 rounded-lg p-2.5 pr-9 text-xs text-slate-900 outline-none"> 
+                        <button type="button" onclick="togglePasswordVisibility('new-password-input', this.querySelector('i'))" class="absolute inset-y-0 right-2.5 flex items-center text-slate-400 hover:text-violet-600 bg-transparent border-0 p-0 cursor-pointer" title="Show/Hide Password">
                             <i class='bx bx-show text-base'></i>
                         </button>
                     </div>
                 </div> 
-                <button type="submit" class="w-full py-2.5 bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-black rounded-xl text-xs uppercase tracking-wider">Update Password</button> 
+                <button type="submit" class="w-full py-2.5 bg-violet-600 hover:bg-violet-700 text-white font-black rounded-xl text-xs uppercase tracking-wider">Update Password</button> 
             </form> 
         </div> 
     </div> 
 
     <!-- ADMIN ACCESS SECURITY CHALLENGE MODAL -->
-    <div id="admin-gate-modal" class="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-md flex items-center justify-center p-4 hidden"> 
-        <div class="bg-slate-900 border border-yellow-400/40 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 animate-fadeIn"> 
-            <div class="text-center border-b border-slate-800 pb-3"> 
-                <h3 class="text-lg font-black text-white">Admin Portal Verification</h3> 
-                <p class="text-xs text-slate-400 mt-1">Authorized exclusively for <span class="text-yellow-400 font-mono font-bold">brandworkzco@gmail.com</span> with email verification.</p> 
+    <div id="admin-gate-modal" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 hidden"> 
+        <div class="bg-white border border-violet-200 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 animate-fadeIn"> 
+            <div class="text-center border-b border-slate-100 pb-3"> 
+                <h3 class="text-lg font-black text-slate-900">Admin Portal Verification</h3> 
+                <p class="text-xs text-slate-500 mt-1">Authorized exclusively for <span class="text-violet-700 font-mono font-bold">brandworkzco@gmail.com</span> with email verification.</p> 
             </div> 
 
             <!-- Toggle Tabs: Admin Sign In vs Admin Sign Up -->
-            <div class="grid grid-cols-2 gap-2 bg-slate-950 p-1 rounded-xl border border-slate-800">
-                <button type="button" id="admin-tab-login" onclick="switchAdminGateTab('login')" class="py-2 text-xs font-black uppercase rounded-lg bg-yellow-400 text-slate-950 transition-all">
+            <div class="grid grid-cols-2 gap-2 bg-slate-100 p-1 rounded-xl border border-slate-200">
+                <button type="button" id="admin-tab-login" onclick="switchAdminGateTab('login')" class="py-2 text-xs font-black uppercase rounded-lg bg-violet-600 text-white transition-all">
                     Admin Sign In
                 </button>
-                <button type="button" id="admin-tab-register" onclick="switchAdminGateTab('register')" class="py-2 text-xs font-black uppercase rounded-lg text-slate-400 hover:text-white transition-all">
+                <button type="button" id="admin-tab-register" onclick="switchAdminGateTab('register')" class="py-2 text-xs font-black uppercase rounded-lg text-slate-500 hover:text-slate-900 transition-all">
                     Admin Sign Up
                 </button>
             </div>
 
             <!-- Verification Pending Notice Box -->
-            <div id="admin-verification-notice" class="hidden bg-amber-500/10 border border-amber-500/30 rounded-xl p-3 text-amber-300 text-xs space-y-2">
+            <div id="admin-verification-notice" class="hidden bg-amber-50 border border-amber-200 rounded-xl p-3 text-amber-800 text-xs space-y-2">
                 <p class="font-bold flex items-center gap-1.5"><span>📧</span><span>Email Verification Required</span></p>
-                <p class="text-[11px] text-amber-200/90 leading-relaxed">A confirmation link has been sent to <strong class="font-mono">brandworkzco@gmail.com</strong>. Please click the verification link in your inbox (check Spam/Junk too), then click <strong>Sign In</strong> below.</p>
-                <button type="button" onclick="resendAdminVerificationEmail()" class="text-[11px] font-black uppercase tracking-wider text-yellow-400 hover:underline bg-transparent border-0 p-0 cursor-pointer">
+                <p class="text-[11px] text-amber-700 leading-relaxed">A confirmation link has been sent to <strong class="font-mono">brandworkzco@gmail.com</strong>. Please click the verification link in your inbox (check Spam/Junk too), then click <strong>Sign In</strong> below.</p>
+                <button type="button" onclick="resendAdminVerificationEmail()" class="text-[11px] font-black uppercase tracking-wider text-violet-700 hover:underline bg-transparent border-0 p-0 cursor-pointer">
                     Resend Verification Email →
                 </button>
             </div>
@@ -800,169 +946,169 @@
             <!-- ADMIN SIGN IN FORM -->
             <form id="admin-login-form" onsubmit="handleAdminFirebaseLogin(event)" class="space-y-4"> 
                 <div class="space-y-1"> 
-                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Admin Email</label> 
-                    <input type="email" id="gate-admin-email" value="brandworkzco@gmail.com" required placeholder="brandworkzco@gmail.com" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs text-white outline-none"> 
+                    <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider">Admin Email</label> 
+                    <input type="email" id="gate-admin-email" value="brandworkzco@gmail.com" required placeholder="brandworkzco@gmail.com" class="w-full bg-slate-50 border border-slate-200 focus:border-violet-600 rounded-lg p-2.5 text-xs text-slate-900 outline-none"> 
                 </div> 
                 <div class="space-y-1"> 
-                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Admin Password</label> 
+                    <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider">Admin Password</label> 
                     <div class="relative">
-                        <input type="password" id="gate-admin-pass" required placeholder="Enter your email password" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 pr-9 text-xs text-white outline-none"> 
-                        <button type="button" onclick="togglePasswordVisibility('gate-admin-pass', this.querySelector('i'))" class="absolute inset-y-0 right-2.5 flex items-center text-slate-400 hover:text-yellow-400 bg-transparent border-0 p-0 cursor-pointer" title="Show/Hide Password">
+                        <input type="password" id="gate-admin-pass" required placeholder="Enter your email password" class="w-full bg-slate-50 border border-slate-200 focus:border-violet-600 rounded-lg p-2.5 pr-9 text-xs text-slate-900 outline-none"> 
+                        <button type="button" onclick="togglePasswordVisibility('gate-admin-pass', this.querySelector('i'))" class="absolute inset-y-0 right-2.5 flex items-center text-slate-400 hover:text-violet-600 bg-transparent border-0 p-0 cursor-pointer" title="Show/Hide Password">
                             <i class='bx bx-show text-base'></i>
                         </button>
                     </div>
                 </div> 
                 <div class="flex items-center justify-between text-[11px]">
-                    <span class="text-slate-400">New admin? Use <button type="button" onclick="switchAdminGateTab('register')" class="text-yellow-400 font-bold hover:underline bg-transparent border-0 p-0 cursor-pointer">Admin Sign Up</button> first</span>
-                    <button type="button" onclick="handleAdminResetPassword()" class="text-yellow-400 font-bold hover:underline bg-transparent border-0 p-0 cursor-pointer">Forgot / Set Password?</button>
+                    <span class="text-slate-500">New admin? Use <button type="button" onclick="switchAdminGateTab('register')" class="text-violet-700 font-bold hover:underline bg-transparent border-0 p-0 cursor-pointer">Admin Sign Up</button> first</span>
+                    <button type="button" onclick="handleAdminResetPassword()" class="text-violet-700 font-bold hover:underline bg-transparent border-0 p-0 cursor-pointer">Forgot / Set Password?</button>
                 </div>
                 <div class="flex items-center gap-2 pt-2"> 
-                    <button type="button" onclick="closeAdminGateModal()" class="w-1/3 py-2.5 bg-slate-950 text-slate-400 border border-slate-800 font-bold rounded-xl text-xs hover:text-white">Cancel</button> 
-                    <button type="submit" class="w-2/3 py-2.5 bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-black rounded-xl text-xs uppercase tracking-wider">Sign In as Admin</button> 
+                    <button type="button" onclick="closeAdminGateModal()" class="w-1/3 py-2.5 bg-slate-100 text-slate-600 border border-slate-200 font-bold rounded-xl text-xs hover:text-slate-900">Cancel</button> 
+                    <button type="submit" class="w-2/3 py-2.5 bg-violet-600 hover:bg-violet-700 text-white font-black rounded-xl text-xs uppercase tracking-wider">Sign In as Admin</button> 
                 </div> 
             </form> 
 
             <!-- ADMIN SIGN UP FORM -->
             <form id="admin-register-form" onsubmit="handleAdminFirebaseRegister(event)" class="space-y-4 hidden"> 
                 <div class="space-y-1"> 
-                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Admin Email</label> 
-                    <input type="email" id="gate-admin-reg-email" value="brandworkzco@gmail.com" required placeholder="brandworkzco@gmail.com" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs text-white outline-none"> 
+                    <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider">Admin Email</label> 
+                    <input type="email" id="gate-admin-reg-email" value="brandworkzco@gmail.com" required placeholder="brandworkzco@gmail.com" class="w-full bg-slate-50 border border-slate-200 focus:border-violet-600 rounded-lg p-2.5 text-xs text-slate-900 outline-none"> 
                 </div> 
                 <div class="space-y-1"> 
-                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Create Admin Password (Same as Email)</label> 
+                    <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider">Create Admin Password (Same as Email)</label> 
                     <div class="relative">
-                        <input type="password" id="gate-admin-reg-pass" required minlength="6" placeholder="Enter your email password" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 pr-9 text-xs text-white outline-none"> 
-                        <button type="button" onclick="togglePasswordVisibility('gate-admin-reg-pass', this.querySelector('i'))" class="absolute inset-y-0 right-2.5 flex items-center text-slate-400 hover:text-yellow-400 bg-transparent border-0 p-0 cursor-pointer" title="Show/Hide Password">
+                        <input type="password" id="gate-admin-reg-pass" required minlength="6" placeholder="Enter your email password" class="w-full bg-slate-50 border border-slate-200 focus:border-violet-600 rounded-lg p-2.5 pr-9 text-xs text-slate-900 outline-none"> 
+                        <button type="button" onclick="togglePasswordVisibility('gate-admin-reg-pass', this.querySelector('i'))" class="absolute inset-y-0 right-2.5 flex items-center text-slate-400 hover:text-violet-600 bg-transparent border-0 p-0 cursor-pointer" title="Show/Hide Password">
                             <i class='bx bx-show text-base'></i>
                         </button>
                     </div>
                 </div> 
                 <div class="flex items-center gap-2 pt-2"> 
-                    <button type="button" onclick="closeAdminGateModal()" class="w-1/3 py-2.5 bg-slate-950 text-slate-400 border border-slate-800 font-bold rounded-xl text-xs hover:text-white">Cancel</button> 
-                    <button type="submit" class="w-2/3 py-2.5 bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-black rounded-xl text-xs uppercase tracking-wider">Sign Up &amp; Send Auth Link</button> 
+                    <button type="button" onclick="closeAdminGateModal()" class="w-1/3 py-2.5 bg-slate-100 text-slate-600 border border-slate-200 font-bold rounded-xl text-xs hover:text-slate-900">Cancel</button> 
+                    <button type="submit" class="w-2/3 py-2.5 bg-violet-600 hover:bg-violet-700 text-white font-black rounded-xl text-xs uppercase tracking-wider">Sign Up &amp; Send Auth Link</button> 
                 </div> 
             </form> 
         </div> 
     </div> 
 
     <!-- CART DRAWER PANEL -->
-    <div id="cart-drawer-backdrop" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm transition-opacity duration-300 opacity-0 hidden" onclick="toggleCartDrawer(false)"></div> 
-    <div class="fixed inset-y-0 right-0 max-w-md w-full bg-slate-900 border-l border-yellow-400/20 shadow-2xl z-50 flex flex-col justify-between transform transition-transform duration-300 translate-x-full" id="cart-drawer-panel"> 
-        <div class="p-5 border-b border-slate-800 flex items-center justify-between bg-slate-950"> 
+    <div id="cart-drawer-backdrop" class="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm transition-opacity duration-300 opacity-0 hidden" onclick="toggleCartDrawer(false)"></div> 
+    <div class="fixed inset-y-0 right-0 max-w-md w-full bg-white border-l border-violet-200 shadow-2xl z-50 flex flex-col justify-between transform transition-transform duration-300 translate-x-full" id="cart-drawer-panel"> 
+        <div class="p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50"> 
             <div class="flex items-center space-x-2"> 
                 <span class="text-xl">🛒</span> 
-                <h3 class="text-lg font-black text-white">Your Checkout Basket</h3> 
+                <h3 class="text-lg font-black text-slate-900">Your Checkout Basket</h3> 
             </div> 
-            <button onclick="toggleCartDrawer(false)" class="p-1 rounded-md text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"> 
+            <button onclick="toggleCartDrawer(false)" class="p-1 rounded-md text-slate-400 hover:text-slate-900 hover:bg-slate-200/60 transition-colors"> 
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg> 
             </button> 
         </div> 
 
         <div class="flex-grow p-5 overflow-y-auto space-y-4" id="cart-drawer-list"> 
-            <div class="h-64 flex flex-col items-center justify-center text-slate-500 space-y-2"> 
+            <div class="h-64 flex flex-col items-center justify-center text-slate-400 space-y-2"> 
                 <span class="text-3xl">🏜️</span> 
                 <p class="text-xs">Your basket is currently empty.</p> 
             </div> 
         </div> 
 
-        <div class="p-5 border-t border-slate-800 bg-slate-950 space-y-4" id="cart-drawer-summary"> 
+        <div class="p-5 border-t border-slate-100 bg-slate-50 space-y-4" id="cart-drawer-summary"> 
             <div class="space-y-1.5"> 
                 <div class="flex justify-between text-xs"> 
-                    <span class="text-slate-400">Selected Subtotal:</span> 
-                    <span id="cart-subtotal" class="font-semibold text-white">RM 0.00</span> 
+                    <span class="text-slate-500">Selected Subtotal:</span> 
+                    <span id="cart-subtotal" class="font-semibold text-slate-900">RM 0.00</span> 
                 </div> 
-                <div class="flex justify-between text-sm border-t border-slate-900 pt-2 font-bold text-white"> 
+                <div class="flex justify-between text-sm border-t border-slate-200 pt-2 font-bold text-slate-900"> 
                     <span>Total (Malaysian Ringgit):</span> 
-                    <span id="cart-total-price" class="text-yellow-400 text-base">RM 0.00</span> 
+                    <span id="cart-total-price" class="text-violet-700 text-base">RM 0.00</span> 
                 </div> 
             </div> 
             <div class="space-y-1.5 pt-1"> 
-                <label class="block text-[10px] font-bold text-slate-300 uppercase tracking-wider">Select Payment Term Option</label> 
-                <select id="checkout-term-selector" class="w-full bg-slate-900 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs text-white outline-none transition-colors"> 
+                <label class="block text-[10px] font-bold text-slate-700 uppercase tracking-wider">Select Payment Term Option</label> 
+                <select id="checkout-term-selector" class="w-full bg-white border border-slate-200 focus:border-violet-600 rounded-lg p-2.5 text-xs text-slate-900 outline-none transition-colors"> 
                     <option value="fpx">Online Transfer with FPX</option> 
                     <option value="cash">Cash Only (Quotation Request Workflow)</option> 
                 </select> 
             </div> 
             <div class="space-y-1.5 pt-1"> 
-                <label class="block text-[10px] font-bold text-slate-300 uppercase tracking-wider">Design Project Brief / Requirements</label> 
-                <textarea id="checkout-brief-text" placeholder="Specify project codes (e.g. Project 803), specific dimensions (e.g. 5cm x 2cm), or specific cultural themes..." class="w-full bg-slate-900 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs text-white outline-none transition-colors resize-none" rows="3"></textarea> 
+                <label class="block text-[10px] font-bold text-slate-700 uppercase tracking-wider">Design Project Brief / Requirements</label> 
+                <textarea id="checkout-brief-text" placeholder="Specify project codes (e.g. Project 803), specific dimensions (e.g. 5cm x 2cm), or specific cultural themes..." class="w-full bg-white border border-slate-200 focus:border-violet-600 rounded-lg p-2.5 text-xs text-slate-900 outline-none transition-colors resize-none" rows="3"></textarea> 
             </div> 
-            <button onclick="executeBasketSubmission()" class="w-full py-3 bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-black rounded-lg transition-all text-xs uppercase tracking-widest shadow-lg shadow-yellow-400/20 flex items-center justify-center space-x-1"> 
+            <button onclick="executeBasketSubmission()" class="w-full py-3 bg-violet-600 hover:bg-violet-700 text-white font-black rounded-lg transition-all text-xs uppercase tracking-widest shadow-lg shadow-violet-600/20 flex items-center justify-center space-x-1"> 
                 <span>Lock Brief Selection to Profile</span> 
             </button> 
         </div> 
     </div> 
 
     <!-- TOYYIBPAY PORTAL MODAL -->
-    <div id="toyyibpay-modal" class="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-md hidden flex items-center justify-center p-4"> 
-        <div class="bg-slate-900 border border-yellow-400/40 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-6 animate-fadeIn"> 
-            <div class="flex items-center justify-between border-b border-slate-800 pb-3"> 
+    <div id="toyyibpay-modal" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm hidden flex items-center justify-center p-4"> 
+        <div class="bg-white border border-violet-200 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-6 animate-fadeIn"> 
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3"> 
                 <div class="flex items-center space-x-2"> 
-                    <span class="text-yellow-400 font-extrabold text-base bg-slate-950 px-2.5 py-1.5 rounded border border-yellow-400/30">toyyibPay</span> 
-                    <span class="text-xs text-slate-400 font-semibold uppercase tracking-wider">FPX Secure Checkout</span> 
+                    <span class="text-violet-700 font-extrabold text-base bg-violet-50 px-2.5 py-1.5 rounded border border-violet-200">toyyibPay</span> 
+                    <span class="text-xs text-slate-500 font-semibold uppercase tracking-wider">FPX Secure Checkout</span> 
                 </div> 
-                <button onclick="closeToyyibpayModal()" class="text-slate-400 hover:text-white text-xs font-bold uppercase tracking-wider bg-slate-950 border border-slate-800 px-3 py-1.5 rounded">Cancel</button> 
+                <button onclick="closeToyyibpayModal()" class="text-slate-500 hover:text-slate-900 text-xs font-bold uppercase tracking-wider bg-slate-100 border border-slate-200 px-3 py-1.5 rounded">Cancel</button> 
             </div> 
             <div class="space-y-4"> 
-                <div class="bg-slate-950 p-4 rounded-xl border border-slate-850 flex items-center justify-between"> 
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center justify-between"> 
                     <div> 
                         <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Merchant Name</span> 
-                        <span class="font-extrabold text-sm text-white">BRANDWORKZ CO</span> 
+                        <span class="font-extrabold text-sm text-slate-900">BRANDWORKZ CO</span> 
                     </div> 
                     <div class="text-right"> 
                         <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Billing Amount</span> 
-                        <span id="toyyibpay-bill-amount" class="font-black text-base text-yellow-400">RM 0.00</span> 
+                        <span id="toyyibpay-bill-amount" class="font-black text-base text-violet-700">RM 0.00</span> 
                     </div> 
                 </div> 
                 <div class="space-y-2"> 
-                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider">Payment Method Selection</label> 
-                    <div class="p-4 bg-slate-950 border border-yellow-400/50 rounded-xl flex items-center space-x-3"> 
-                        <div class="w-4 h-4 rounded-full border-2 border-yellow-400 flex items-center justify-center"><div class="w-2 h-2 rounded-full bg-yellow-400"></div></div> 
+                    <label class="block text-[11px] font-bold text-slate-700 uppercase tracking-wider">Payment Method Selection</label> 
+                    <div class="p-4 bg-violet-50/60 border border-violet-300 rounded-xl flex items-center space-x-3"> 
+                        <div class="w-4 h-4 rounded-full border-2 border-violet-600 flex items-center justify-center"><div class="w-2 h-2 rounded-full bg-violet-600"></div></div> 
                         <div> 
-                            <span class="text-xs font-extrabold text-white block">FPX Online Banking Transfer</span> 
-                            <span class="text-[10px] text-slate-400">Secure automated gateway checkout via ToyyibPay</span> 
+                            <span class="text-xs font-extrabold text-slate-900 block">FPX Online Banking Transfer</span> 
+                            <span class="text-[10px] text-slate-500">Secure automated gateway checkout via ToyyibPay</span> 
                         </div> 
                     </div> 
                 </div> 
             </div> 
-            <button onclick="processToyyibPaySimulation()" id="toyyibpay-submit-btn" class="w-full py-4 bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-black rounded-xl transition-all text-xs uppercase tracking-widest flex items-center justify-center space-x-2 shadow-lg shadow-yellow-400/10"> 
+            <button onclick="processToyyibPaySimulation()" id="toyyibpay-submit-btn" class="w-full py-4 bg-violet-600 hover:bg-violet-700 text-white font-black rounded-xl transition-all text-xs uppercase tracking-widest flex items-center justify-center space-x-2 shadow-lg shadow-violet-600/20"> 
                 <span>Proceed Authorization Transfer</span> 
             </button> 
         </div> 
     </div> 
 
     <!-- PRODUCT VIDEO PREVIEW MODAL -->
-    <div id="product-video-modal" class="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-md hidden flex items-center justify-center p-4" onclick="if(event.target === this) closeProductVideoModal()"> 
-        <div class="bg-slate-900 border border-yellow-400/40 rounded-2xl max-w-2xl w-full p-5 sm:p-6 shadow-2xl space-y-4 animate-fadeIn"> 
-            <div class="flex items-center justify-between border-b border-slate-800 pb-3"> 
+    <div id="product-video-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4" onclick="if(event.target === this) closeProductVideoModal()"> 
+        <div class="bg-white border border-violet-200 rounded-2xl max-w-2xl w-full p-5 sm:p-6 shadow-2xl space-y-4 animate-fadeIn"> 
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3"> 
                 <div class="flex items-center space-x-2"> 
-                    <span class="text-yellow-400 text-lg">🎬</span> 
-                    <h3 id="video-modal-title" class="text-sm sm:text-base font-black text-white uppercase tracking-tight">Product Video Showcase</h3> 
+                    <span class="text-violet-600 text-lg">🎬</span> 
+                    <h3 id="video-modal-title" class="text-sm sm:text-base font-black text-slate-900 uppercase tracking-tight">Product Video Showcase</h3> 
                 </div> 
-                <button onclick="closeProductVideoModal()" class="text-slate-400 hover:text-white text-xs font-bold uppercase tracking-wider bg-slate-950 border border-slate-800 px-3 py-1.5 rounded-lg transition-colors">Close</button> 
+                <button onclick="closeProductVideoModal()" class="text-slate-500 hover:text-slate-900 text-xs font-bold uppercase tracking-wider bg-slate-100 border border-slate-200 px-3 py-1.5 rounded-lg transition-colors">Close</button> 
             </div> 
-            <div id="video-modal-content" class="w-full aspect-video bg-slate-950 rounded-xl border border-slate-800 overflow-hidden flex items-center justify-center"> 
+            <div id="video-modal-content" class="w-full aspect-video bg-slate-950 rounded-xl border border-slate-200 overflow-hidden flex items-center justify-center"> 
             </div> 
         </div> 
     </div> 
 
     <!-- PRODUCT PHOTO ENLARGE LIGHTBOX MODAL -->
-    <div id="product-image-modal" class="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-md hidden flex items-center justify-center p-4" onclick="if(event.target === this) closeProductImageModal()"> 
-        <div class="bg-slate-900 border border-yellow-400/40 rounded-2xl max-w-4xl w-full p-4 sm:p-6 shadow-2xl space-y-4 animate-fadeIn"> 
-            <div class="flex items-center justify-between border-b border-slate-800 pb-3"> 
+    <div id="product-image-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4" onclick="if(event.target === this) closeProductImageModal()"> 
+        <div class="bg-white border border-violet-200 rounded-2xl max-w-4xl w-full p-4 sm:p-6 shadow-2xl space-y-4 animate-fadeIn"> 
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3"> 
                 <div class="flex items-center space-x-2"> 
-                    <i class='bx bx-zoom-in text-yellow-400 text-xl'></i> 
-                    <h3 id="image-modal-title" class="text-sm sm:text-base font-black text-white uppercase tracking-tight">Product Photo Preview</h3> 
-                    <span id="image-modal-counter" class="text-[11px] font-mono text-yellow-400 bg-slate-950 border border-slate-800 px-2 py-0.5 rounded-full hidden">1 / 1</span>
+                    <i class='bx bx-zoom-in text-violet-600 text-xl'></i> 
+                    <h3 id="image-modal-title" class="text-sm sm:text-base font-black text-slate-900 uppercase tracking-tight">Product Photo Preview</h3> 
+                    <span id="image-modal-counter" class="text-[11px] font-mono text-violet-700 bg-violet-50 border border-violet-200 px-2 py-0.5 rounded-full hidden">1 / 1</span>
                 </div> 
-                <button onclick="closeProductImageModal()" class="text-slate-400 hover:text-white text-xs font-bold uppercase tracking-wider bg-slate-950 border border-slate-800 px-3 py-1.5 rounded-lg transition-colors">Close</button> 
+                <button onclick="closeProductImageModal()" class="text-slate-500 hover:text-slate-900 text-xs font-bold uppercase tracking-wider bg-slate-100 border border-slate-200 px-3 py-1.5 rounded-lg transition-colors">Close</button> 
             </div> 
-            <div id="image-modal-stage" class="relative w-full max-h-[75vh] bg-slate-950 rounded-xl border border-slate-800 overflow-hidden flex items-center justify-center p-2 select-none"> 
-                <button id="image-modal-prev" onclick="stepProductImageModal(-1)" class="hidden absolute left-3 z-10 w-9 h-9 rounded-full bg-slate-900/90 hover:bg-yellow-400 text-yellow-400 hover:text-slate-950 border border-yellow-400/40 flex items-center justify-center transition-colors shadow-lg" aria-label="Previous Photo">
+            <div id="image-modal-stage" class="relative w-full max-h-[75vh] bg-slate-50 rounded-xl border border-slate-200 overflow-hidden flex items-center justify-center p-2 select-none"> 
+                <button id="image-modal-prev" onclick="stepProductImageModal(-1)" class="hidden absolute left-3 z-10 w-9 h-9 rounded-full bg-white hover:bg-violet-600 text-violet-700 hover:text-white border border-violet-200 flex items-center justify-center transition-colors shadow-lg" aria-label="Previous Photo">
                     <i class='bx bx-chevron-left text-2xl'></i>
                 </button>
-                <img id="image-modal-preview" src="" alt="Enlarged Product Photo" class="max-w-full max-h-[70vh] object-contain rounded-lg transition-all duration-200" onerror="this.src='https://placehold.co/800x600/1e293b/facc15?text=Product+Photo'">
-                <button id="image-modal-next" onclick="stepProductImageModal(1)" class="hidden absolute right-3 z-10 w-9 h-9 rounded-full bg-slate-900/90 hover:bg-yellow-400 text-yellow-400 hover:text-slate-950 border border-yellow-400/40 flex items-center justify-center transition-colors shadow-lg" aria-label="Next Photo">
+                <img id="image-modal-preview" src="" alt="Enlarged Product Photo" class="max-w-full max-h-[70vh] object-contain rounded-lg transition-all duration-200" onerror="this.src='https://placehold.co/800x600/f5f3ff/6d28d9?text=Product+Photo'">
+                <button id="image-modal-next" onclick="stepProductImageModal(1)" class="hidden absolute right-3 z-10 w-9 h-9 rounded-full bg-white hover:bg-violet-600 text-violet-700 hover:text-white border border-violet-200 flex items-center justify-center transition-colors shadow-lg" aria-label="Next Photo">
                     <i class='bx bx-chevron-right text-2xl'></i>
                 </button>
             </div> 
@@ -976,41 +1122,41 @@
     <!-- PERSISTENT CUSTOMER CHAT FLOATING WIDGET -->
     <div class="fixed bottom-6 right-6 z-40 flex flex-col items-end">
         <!-- Floating Chat Box Panel -->
-        <div id="customer-chat-panel" class="hidden w-80 sm:w-96 bg-slate-900 border border-yellow-400/30 rounded-2xl shadow-2xl flex flex-col h-96 overflow-hidden mb-4 animate-fadeIn">
+        <div id="customer-chat-panel" class="hidden w-80 sm:w-96 bg-white border border-violet-200 rounded-2xl shadow-2xl flex flex-col h-96 overflow-hidden mb-4 animate-fadeIn">
             <!-- Panel Header with live dynamic Admin Online Status -->
-            <div class="bg-slate-950 border-b border-slate-800 p-3.5 flex items-center justify-between">
+            <div class="bg-slate-50 border-b border-slate-200 p-3.5 flex items-center justify-between">
                 <div class="flex items-center space-x-2">
-                    <div id="customer-chat-status-dot" class="w-2.5 h-2.5 rounded-full bg-slate-500"></div>
+                    <div id="customer-chat-status-dot" class="w-2.5 h-2.5 rounded-full bg-slate-400"></div>
                     <div class="flex flex-col">
-                        <span class="text-xs font-black text-white uppercase tracking-wider">Brandworkz Live Help</span>
-                        <p id="customer-chat-status-text" class="text-[9px] text-slate-400 font-medium">Admin Offline</p>
+                        <span class="text-xs font-black text-slate-900 uppercase tracking-wider">Brandworkz Live Help</span>
+                        <p id="customer-chat-status-text" class="text-[9px] text-slate-500 font-medium">Admin Offline</p>
                     </div>
                 </div>
-                <button onclick="toggleCustomerChatPanel(false)" class="text-slate-400 hover:text-white p-1 rounded hover:bg-slate-800">
+                <button onclick="toggleCustomerChatPanel(false)" class="text-slate-400 hover:text-slate-900 p-1 rounded hover:bg-slate-200/70">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
                 </button>
             </div>
 
             <!-- Chat Message Window -->
-            <div id="customer-chat-window" class="flex-grow p-4 overflow-y-auto space-y-3 bg-slate-950/50 flex flex-col scroll-smooth">
+            <div id="customer-chat-window" class="flex-grow p-4 overflow-y-auto space-y-3 bg-slate-50/70 flex flex-col scroll-smooth">
             </div>
 
             <!-- Input Form Section -->
-            <form onsubmit="handleCustomerSendMessage(event)" class="p-3 bg-slate-950 border-t border-slate-850 flex gap-2">
-                <input type="text" id="customer-chat-input" placeholder="Ask about menus, packages, logos..." class="flex-grow bg-slate-900 border border-slate-800 text-xs text-white rounded-lg px-3 py-2 outline-none focus:border-yellow-400 transition-colors">
-                <button type="submit" class="bg-yellow-400 hover:bg-yellow-500 text-slate-950 px-3.5 rounded-lg text-xs font-bold transition-all uppercase tracking-wide">Send</button>
+            <form onsubmit="handleCustomerSendMessage(event)" class="p-3 bg-white border-t border-slate-200 flex gap-2">
+                <input type="text" id="customer-chat-input" placeholder="Ask about menus, packages, logos..." class="flex-grow bg-slate-50 border border-slate-200 text-xs text-slate-900 rounded-lg px-3 py-2 outline-none focus:border-violet-600 transition-colors">
+                <button type="submit" class="bg-violet-600 hover:bg-violet-700 text-white px-3.5 rounded-lg text-xs font-bold transition-all uppercase tracking-wide">Send</button>
             </form>
         </div>
 
         <!-- Floating Action Button -->
         <div class="flex items-center gap-3">
             <!-- WhatsApp Button -->
-            <a href="https://wa.me/60138973700" target="_blank" rel="noopener noreferrer" class="bg-green-500 hover:bg-green-600 text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center transition-all hover:scale-105 relative border-2 border-slate-950">
+            <a href="https://wa.me/60138973700" target="_blank" rel="noopener noreferrer" class="bg-green-500 hover:bg-green-600 text-white w-14 h-14 rounded-full shadow-xl flex items-center justify-center transition-all hover:scale-105 relative border-2 border-white">
                 <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.571-.012c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"></path>
                 </svg>
             </a>
-            <button id="customer-chat-toggle" onclick="toggleCustomerChatPanel(true)" class="bg-yellow-400 hover:bg-yellow-500 text-slate-950 w-14 h-14 rounded-full shadow-2xl flex items-center justify-center transition-all hover:scale-105 relative border-2 border-slate-950">
+            <button id="customer-chat-toggle" onclick="toggleCustomerChatPanel(true)" class="bg-violet-600 hover:bg-violet-700 text-white w-14 h-14 rounded-full shadow-xl flex items-center justify-center transition-all hover:scale-105 relative border-2 border-white">
                 <span id="chat-unread-badge" class="absolute -top-1 -right-1 bg-rose-600 text-white text-[9px] font-black w-5 h-5 rounded-full flex items-center justify-center hidden animate-bounce">0</span>
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
             </button>
@@ -1018,16 +1164,16 @@
     </div>
 
     <!-- MAIN FOOTER BLOCK -->
-    <footer class="bg-slate-900 border-t border-slate-800/80 py-6 px-4 mt-auto"> 
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between text-xs text-slate-400 gap-4"> 
+    <footer class="bg-white border-t border-slate-200 py-6 px-4 mt-auto"> 
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between text-xs text-slate-500 gap-4"> 
             <div class="flex items-center space-x-2"> 
-                <span class="font-extrabold text-white">Brandworkz.Co</span> 
+                <span class="font-extrabold text-slate-900">Brandworkz.Co</span> 
                 <span>© 2026. All Rights Reserved.</span> 
             </div> 
             <div class="flex items-center space-x-4"> 
-                <button onclick="switchView('store')" class="hover:text-yellow-400 transition-colors bg-transparent border-0 cursor-pointer">Catalog</button> 
-                <button onclick="switchView('customer-auth')" class="hover:text-yellow-400 transition-colors bg-transparent border-0 cursor-pointer">Customer Dashboard</button> 
-                <button onclick="switchView('admin')" class="hover:text-yellow-400 transition-colors bg-transparent border-0 cursor-pointer">Admin Workspace</button> 
+                <button onclick="switchView('store')" class="hover:text-violet-700 transition-colors bg-transparent border-0 cursor-pointer">Catalog</button> 
+                <button onclick="switchView('customer-auth')" class="hover:text-violet-700 transition-colors bg-transparent border-0 cursor-pointer">Customer Dashboard</button> 
+                <button onclick="switchView('admin')" class="hover:text-violet-700 transition-colors bg-transparent border-0 cursor-pointer">Admin Workspace</button> 
             </div> 
         </div> 
     </footer> 
@@ -1150,7 +1296,6 @@
                         snapshot.forEach((docSnap) => {
                             firestoreProducts.push(docSnap.data());
                         });
-                        // Sort consistently by orderIndex or ID
                         firestoreProducts.sort((a, b) => (a.orderIndex ?? 999) - (b.orderIndex ?? 999));
                         window.PRODUCTS = firestoreProducts;
                         localStorage.setItem("bw_products", JSON.stringify(window.PRODUCTS));
@@ -1159,7 +1304,6 @@
                             renderAdminScratchSandbox();
                         }
                     } else if (Array.isArray(window.PRODUCTS) && window.PRODUCTS.length > 0) {
-                        // Seed default catalog into `creative_products` if Firestore collection is currently empty
                         if (typeof syncAllProductsToFirestore === 'function') {
                             await syncAllProductsToFirestore(true);
                         }
@@ -1182,7 +1326,6 @@
                     snapshot.forEach((docSnap) => {
                         cloudMessages.push(docSnap.data());
                     });
-                    // Sort chronologically by timestamp
                     cloudMessages.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
 
                     if (cloudMessages.length > 0) {
@@ -1192,7 +1335,6 @@
                         if (typeof renderChatMessagesForCustomer === 'function') renderChatMessagesForCustomer();
                         if (window.isAdminLoggedIn && typeof renderAdminChatHub === 'function') renderAdminChatHub();
 
-                        // Notify unread badge if a new admin message arrived while widget is closed
                         if (cloudMessages.length > prevCount) {
                             const latest = cloudMessages[cloudMessages.length - 1];
                             if (latest && latest.sender === 'admin') {
@@ -1343,7 +1485,6 @@
     window.isAdminLoggedIn = JSON.parse(sessionStorage.getItem("is_admin_session")) || false; 
     let activeAdminThreadUser = null; 
 
-    // Persistent unique Guest identifier so guest chat threads remain distinct in `chat_message2`
     let guestSessionId = localStorage.getItem("bw_guest_session_id");
     if (!guestSessionId) {
         guestSessionId = "Guest_" + Math.random().toString(36).substring(2, 7).toUpperCase();
@@ -1390,16 +1531,12 @@
         if (mqttClient && mqttClient.connected) {
             try {
                 mqttClient.publish(topic, JSON.stringify(payloadObj));
-            } catch (e) {
-                // Ignore blocked socket publish
-            }
+            } catch (e) {}
         }
         if (localSyncChannel) {
             try {
                 localSyncChannel.postMessage({ topic, data: payloadObj });
-            } catch (e) {
-                // Ignore channel error
-            }
+            } catch (e) {}
         }
     }
 
@@ -1715,13 +1852,13 @@
         if (tab === 'register') {
             loginForm.classList.add('hidden');
             regForm.classList.remove('hidden');
-            regTab.className = "py-2 text-xs font-black uppercase rounded-lg bg-yellow-400 text-slate-950 transition-all";
-            loginTab.className = "py-2 text-xs font-black uppercase rounded-lg text-slate-400 hover:text-white transition-all";
+            regTab.className = "py-2 text-xs font-black uppercase rounded-lg bg-violet-600 text-white transition-all";
+            loginTab.className = "py-2 text-xs font-black uppercase rounded-lg text-slate-500 hover:text-slate-900 transition-all";
         } else {
             regForm.classList.add('hidden');
             loginForm.classList.remove('hidden');
-            loginTab.className = "py-2 text-xs font-black uppercase rounded-lg bg-yellow-400 text-slate-950 transition-all";
-            regTab.className = "py-2 text-xs font-black uppercase rounded-lg text-slate-400 hover:text-white transition-all";
+            loginTab.className = "py-2 text-xs font-black uppercase rounded-lg bg-violet-600 text-white transition-all";
+            regTab.className = "py-2 text-xs font-black uppercase rounded-lg text-slate-500 hover:text-slate-900 transition-all";
         }
     }
 
@@ -1738,7 +1875,6 @@
         try {
             const userCredential = await window.FB_createUser(window.FB_AUTH, email, pass);
             const user = userCredential.user;
-            // Send standard Firebase verification email without custom redirect domain blocks
             await window.FB_sendEmailVerification(user);
             window._pendingUnverifiedAdmin = user;
             await window.FB_signOut(window.FB_AUTH);
@@ -1851,8 +1987,8 @@
         const container = document.getElementById('toast-container'); 
         if (!container) return;
         const toast = document.createElement('div'); 
-        toast.className = `p-4 rounded-xl shadow-2xl flex items-center space-x-3 text-xs font-bold border transform scale-95 translate-y-2 opacity-0 transition-all duration-300 pointer-events-auto ${ 
-            type === "success" ? "bg-slate-900 border-yellow-400 text-yellow-400" : "bg-slate-900 border-rose-500 text-rose-500" }`; 
+        toast.className = `p-4 rounded-xl shadow-xl flex items-center space-x-3 text-xs font-bold border transform scale-95 translate-y-2 opacity-0 transition-all duration-300 pointer-events-auto ${ 
+            type === "success" ? "bg-white border-violet-300 text-violet-800" : "bg-white border-rose-300 text-rose-600" }`; 
         toast.innerHTML = `<span>${type === 'success' ? '⚡' : '⚠️'}</span><span>${message}</span>`; 
         container.appendChild(toast); 
         setTimeout(() => { 
@@ -1871,22 +2007,22 @@
         container.innerHTML = ""; 
 
         if (window.PRODUCTS.length === 0) { 
-            container.innerHTML = `<div class="col-span-full text-center text-slate-500 py-12 italic text-xs">No live inventory entries detected in creative_products.</div>`; 
+            container.innerHTML = `<div class="col-span-full text-center text-slate-400 py-12 italic text-xs">No live inventory entries detected in creative_products.</div>`; 
             return; 
         } 
 
         window.PRODUCTS.forEach(product => { 
             const images = getProductImages(product);
             const card = document.createElement('div'); 
-            card.className = "bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-xl transition-all hover:scale-[1.01] hover:border-yellow-500/30 flex flex-col justify-between"; 
+            card.className = "bg-white border border-slate-200/90 rounded-3xl overflow-hidden shadow-lg shadow-slate-200/50 transition-all hover:scale-[1.01] hover:border-violet-400 flex flex-col justify-between"; 
              
             let selectionTierHTML = ""; 
             if (product.dropdowns && product.dropdowns.length > 0) { 
                 const infoLines = (product.dropdowns[0].info || '').split('\n').filter(l => l.trim() !== ''); 
                 const inlineListHTML = infoLines.map(line => ` 
-                    <div class="flex items-center space-x-2 text-xs text-slate-300"> 
-                        <div class="w-4 h-4 rounded-full bg-yellow-400 flex items-center justify-center flex-shrink-0"> 
-                            <svg class="w-2.5 h-2.5 text-slate-950" fill="none" stroke="currentColor" stroke-width="4" viewBox="0 0 24 24"> 
+                    <div class="flex items-center space-x-2 text-xs text-slate-600"> 
+                        <div class="w-4 h-4 rounded-full bg-violet-600 flex items-center justify-center flex-shrink-0"> 
+                            <svg class="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" stroke-width="4" viewBox="0 0 24 24"> 
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path> 
                             </svg> 
                         </div> 
@@ -1896,66 +2032,66 @@
 
                 selectionTierHTML = ` 
                     <div class="p-5 space-y-4"> 
-                        <div class="flex items-center justify-between border-b border-slate-800/60 pb-3"> 
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-3"> 
                             <div> 
-                                <h3 class="text-lg font-black tracking-tight text-white uppercase">${product.title}</h3> 
+                                <h3 class="text-lg font-black tracking-tight text-slate-900 uppercase">${product.title}</h3> 
                                 <p class="text-[10px] text-slate-400 font-bold tracking-wider mt-0.5 uppercase">Dropdown: ${product.dropdownLabel}</p> 
                             </div> 
                             <div class="text-right flex items-baseline space-x-2"> 
-                                <span class="text-[10px] uppercase font-bold text-slate-500">Estimated</span> 
-                                <span id="frontend-price-badge-${product.id}" class="text-2xl font-black text-yellow-400">RM ${Number(product.dropdowns[0].price).toFixed(2)}</span> 
+                                <span class="text-[10px] uppercase font-bold text-slate-400">Estimated</span> 
+                                <span id="frontend-price-badge-${product.id}" class="text-2xl font-black text-violet-700">RM ${Number(product.dropdowns[0].price).toFixed(2)}</span> 
                             </div> 
                         </div> 
 
                         <div class="space-y-2"> 
-                            <select id="frontend-select-${product.id}" onchange="updateFrontendSelectedPrice('${product.id}')" class="w-full bg-slate-950 border border-slate-800 focus:border-yellow-400 rounded-lg p-2.5 text-xs text-white outline-none transition-colors"> 
+                            <select id="frontend-select-${product.id}" onchange="updateFrontendSelectedPrice('${product.id}')" class="w-full bg-slate-50 border border-slate-200 focus:border-violet-600 rounded-lg p-2.5 text-xs text-slate-900 font-medium outline-none transition-colors"> 
                                 ${product.dropdowns.map((drop, dIdx) => `<option value="${dIdx}">[RM ${Number(drop.price).toFixed(2)}]${drop.name}</option>`).join('')} 
                             </select> 
                             <div id="frontend-info-box-${product.id}" class="space-y-2 pt-2"> 
-                                ${inlineListHTML || '<span class="text-slate-500 italic text-[11px]">- standard tier summary</span>'} 
+                                ${inlineListHTML || '<span class="text-slate-400 italic text-[11px]">- standard tier summary</span>'} 
                             </div> 
                         </div> 
                     </div> 
                 `; 
             } else { 
-                selectionTierHTML = `<div class="p-5 text-[11px] text-slate-500 italic">No configuration variants parsed.</div>`; 
+                selectionTierHTML = `<div class="p-5 text-[11px] text-slate-400 italic">No configuration variants parsed.</div>`; 
             } 
 
             const slidesHTML = images.map((imgSrc, idx) => `
                 <div onclick="openProductImageModal('${product.id}', ${idx})" title="Click to enlarge photo (${idx + 1}/${images.length})" class="w-full h-full flex-shrink-0 snap-center flex items-center justify-center cursor-zoom-in relative">
-                    <img src="${imgSrc}" class="w-full h-full object-contain p-2 transition-transform duration-300 group-hover:scale-105" alt="${product.title} ${idx + 1}" onerror="this.src='https://placehold.co/600x400/1e293b/facc15?text=Product+Photo'">
+                    <img src="${imgSrc}" class="w-full h-full object-contain p-2 transition-transform duration-300 group-hover:scale-105" alt="${product.title} ${idx + 1}" onerror="this.src='https://placehold.co/600x400/f5f3ff/6d28d9?text=Product+Photo'">
                 </div>
             `).join('');
 
             const dotsHTML = images.length > 1 ? `
-                <div class="bg-slate-950/90 border-b border-slate-800 py-2 px-3 flex items-center justify-center gap-2" id="carousel-dots-${product.id}">
+                <div class="bg-slate-50 border-b border-slate-100 py-2 px-3 flex items-center justify-center gap-2" id="carousel-dots-${product.id}">
                     ${images.map((_, idx) => `
-                        <button type="button" onclick="goToProductSlide('${product.id}', ${idx})" aria-label="View photo ${idx + 1}" class="h-2 rounded-full transition-all duration-200 ${idx === 0 ? 'w-5 bg-yellow-400' : 'w-2 bg-slate-600 hover:bg-slate-400'}"></button>
+                        <button type="button" onclick="goToProductSlide('${product.id}', ${idx})" aria-label="View photo ${idx + 1}" class="h-2 rounded-full transition-all duration-200 ${idx === 0 ? 'w-5 bg-violet-600' : 'w-2 bg-slate-300 hover:bg-slate-400'}"></button>
                     `).join('')}
                 </div>
             ` : `
-                <div class="bg-slate-950/90 border-b border-slate-800 py-2 px-3 flex items-center justify-center gap-1.5">
-                    <span class="w-2 h-2 rounded-full bg-yellow-400 inline-block"></span>
+                <div class="bg-slate-50 border-b border-slate-100 py-2 px-3 flex items-center justify-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-violet-600 inline-block"></span>
                 </div>
             `;
 
             const slideNextBtnHTML = images.length > 1 ? `
-                <button type="button" onclick="event.stopPropagation(); stepProductSlide('${product.id}', 1)" title="Slide right to next photo" class="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-8 h-8 rounded-full bg-slate-900/90 hover:bg-yellow-400 text-yellow-400 hover:text-slate-950 border border-yellow-400/40 flex items-center justify-center transition-colors shadow-lg">
+                <button type="button" onclick="event.stopPropagation(); stepProductSlide('${product.id}', 1)" title="Slide right to next photo" class="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-8 h-8 rounded-full bg-white/95 hover:bg-violet-600 text-violet-700 hover:text-white border border-violet-200 flex items-center justify-center transition-colors shadow-md">
                     <i class='bx bx-chevron-right text-xl'></i>
                 </button>
             ` : '';
 
             card.innerHTML = ` 
                 <div> 
-                    <div class="relative aspect-video w-full bg-slate-950 overflow-hidden group"> 
+                    <div class="relative aspect-video w-full bg-slate-100/70 overflow-hidden group"> 
                         <div id="carousel-track-${product.id}" onscroll="syncProductCarouselDots('${product.id}')" class="w-full h-full flex overflow-x-auto snap-x snap-mandatory scroll-smooth hide-scrollbar">
                             ${slidesHTML}
                         </div>
-                        <span class="pointer-events-none absolute top-3 left-3 bg-yellow-400 text-slate-950 font-black text-[9px] uppercase px-2.5 py-1 rounded-full shadow-lg"> 
+                        <span class="pointer-events-none absolute top-3 left-3 bg-violet-600 text-white font-black text-[9px] uppercase px-2.5 py-1 rounded-full shadow-md"> 
                             DESIGN WORK 
                         </span> 
                         ${slideNextBtnHTML}
-                        <button type="button" onclick="event.stopPropagation(); openProductImageModal('${product.id}', getCurrentSlideIndex('${product.id}'))" title="Enlarge photo" class="absolute bottom-3 right-3 z-10 bg-slate-900/90 hover:bg-yellow-400 text-yellow-400 hover:text-slate-950 border border-yellow-400/40 px-2.5 py-1 rounded-full text-[10px] font-bold flex items-center space-x-1 transition-colors shadow-lg"> 
+                        <button type="button" onclick="event.stopPropagation(); openProductImageModal('${product.id}', getCurrentSlideIndex('${product.id}'))" title="Enlarge photo" class="absolute bottom-3 right-3 z-10 bg-white/95 hover:bg-violet-600 text-violet-700 hover:text-white border border-violet-200 px-2.5 py-1 rounded-full text-[10px] font-bold flex items-center space-x-1 transition-colors shadow-md"> 
                             <i class='bx bx-zoom-in text-sm'></i>
                             <span>Enlarge</span>
                         </button> 
@@ -1964,11 +2100,11 @@
                     ${selectionTierHTML} 
                 </div> 
                 <div class="p-5 pt-0 space-y-2.5"> 
-                    <button onclick="openProductVideoModal('${product.id}')" class="w-full py-2.5 bg-slate-950 hover:bg-slate-800 border border-yellow-400/40 text-yellow-400 font-black text-xs rounded-xl transition-all uppercase tracking-wider flex items-center justify-center space-x-2"> 
+                    <button onclick="openProductVideoModal('${product.id}')" class="w-full py-2.5 bg-violet-50 hover:bg-violet-100 border border-violet-200 text-violet-700 font-black text-xs rounded-xl transition-all uppercase tracking-wider flex items-center justify-center space-x-2"> 
                         <i class='bx bx-play-circle text-base'></i>
                         <span>Watch Video</span> 
                     </button> 
-                    <button onclick="addProductToBasket('${product.id}')" class="w-full py-3 bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-black text-xs rounded-xl transition-all uppercase tracking-wider shadow-md"> 
+                    <button onclick="addProductToBasket('${product.id}')" class="w-full py-3 bg-violet-600 hover:bg-violet-700 text-white font-black text-xs rounded-xl transition-all uppercase tracking-wider shadow-md shadow-violet-600/20"> 
                         Add Package variant to basket 
                     </button> 
                 </div> 
@@ -2014,9 +2150,9 @@
         const buttons = dotsWrap.querySelectorAll('button');
         buttons.forEach((btn, idx) => {
             if (idx === activeIdx) {
-                btn.className = "h-2 w-5 rounded-full bg-yellow-400 transition-all duration-200";
+                btn.className = "h-2 w-5 rounded-full bg-violet-600 transition-all duration-200";
             } else {
-                btn.className = "h-2 w-2 rounded-full bg-slate-600 hover:bg-slate-400 transition-all duration-200";
+                btn.className = "h-2 w-2 rounded-full bg-slate-300 hover:bg-slate-400 transition-all duration-200";
             }
         });
     }
@@ -2061,7 +2197,7 @@
             if (nextBtn) nextBtn.classList.remove('hidden');
             if (dotsEl) {
                 dotsEl.innerHTML = images.map((_, idx) => `
-                    <button type="button" onclick="activeLightboxSlideIndex = ${idx}; renderProductImageModalSlide();" aria-label="View photo ${idx + 1}" class="h-2.5 rounded-full transition-all ${idx === activeLightboxSlideIndex ? 'w-6 bg-yellow-400' : 'w-2.5 bg-slate-600 hover:bg-slate-400'}"></button>
+                    <button type="button" onclick="activeLightboxSlideIndex = ${idx}; renderProductImageModalSlide();" aria-label="View photo ${idx + 1}" class="h-2.5 rounded-full transition-all ${idx === activeLightboxSlideIndex ? 'w-6 bg-violet-600' : 'w-2.5 bg-slate-300 hover:bg-slate-400'}"></button>
                 `).join('');
             }
         } else {
@@ -2069,7 +2205,7 @@
             if (prevBtn) prevBtn.classList.add('hidden');
             if (nextBtn) nextBtn.classList.add('hidden');
             if (dotsEl) {
-                dotsEl.innerHTML = `<span class="w-2.5 h-2.5 rounded-full bg-yellow-400 inline-block"></span>`;
+                dotsEl.innerHTML = `<span class="w-2.5 h-2.5 rounded-full bg-violet-600 inline-block"></span>`;
             }
         }
     }
@@ -2091,7 +2227,6 @@
         if (modal) modal.classList.add('hidden');
     }
 
-    // Touch swipe support inside the enlarged photo lightbox modal
     (function attachLightboxSwipe() {
         let touchStartX = 0;
         document.addEventListener('touchstart', (e) => {
@@ -2163,15 +2298,15 @@
              
             const infoLines = (selectedDropdown.info || '').split('\n').filter(l => l.trim() !== ''); 
             infoBox.innerHTML = infoLines.map(line => ` 
-                <div class="flex items-center space-x-2 text-xs text-slate-300 animate-fadeIn"> 
-                    <div class="w-4 h-4 rounded-full bg-yellow-400 flex items-center justify-center flex-shrink-0"> 
-                        <svg class="w-2.5 h-2.5 text-slate-950" fill="none" stroke="currentColor" stroke-width="4" viewBox="0 0 24 24"> 
+                <div class="flex items-center space-x-2 text-xs text-slate-600 animate-fadeIn"> 
+                    <div class="w-4 h-4 rounded-full bg-violet-600 flex items-center justify-center flex-shrink-0"> 
+                        <svg class="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" stroke-width="4" viewBox="0 0 24 24"> 
                             <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path> 
                         </svg> 
                     </div> 
                     <span>${line.replace(/^-\s*/, '')}</span> 
                 </div> 
-            `).join('') || '<span class="text-slate-500 italic text-[11px]">- standard tier summary</span>'; 
+            `).join('') || '<span class="text-slate-400 italic text-[11px]">- standard tier summary</span>'; 
         } 
     } 
 
@@ -2441,7 +2576,7 @@
 
         if (cart.length === 0) { 
             listContainer.innerHTML = ` 
-                <div class="h-64 flex flex-col items-center justify-center text-slate-500 space-y-2"> 
+                <div class="h-64 flex flex-col items-center justify-center text-slate-400 space-y-2"> 
                     <span class="text-3xl">🏜️</span> 
                     <p class="text-xs">Your basket is currently empty.</p> 
                 </div> 
@@ -2457,25 +2592,25 @@
             runningSubtotal += cost; 
 
             const div = document.createElement('div'); 
-            div.className = "bg-slate-950 border border-slate-850 p-3.5 rounded-xl space-y-2"; 
+            div.className = "bg-slate-50 border border-slate-200 p-3.5 rounded-xl space-y-2"; 
             div.innerHTML = ` 
                 <div class="flex items-start justify-between gap-2"> 
                     <div> 
-                        <h4 class="font-extrabold text-xs text-white truncate max-w-[200px]">${item.title}</h4> 
-                        <span class="text-[10px] text-yellow-400 font-semibold block mt-0.5">${item.optionSelected}</span> 
+                        <h4 class="font-extrabold text-xs text-slate-900 truncate max-w-[200px]">${item.title}</h4> 
+                        <span class="text-[10px] text-violet-700 font-semibold block mt-0.5">${item.optionSelected}</span> 
                     </div> 
-                    <span class="text-xs font-black text-white">RM ${cost.toFixed(2)}</span> 
+                    <span class="text-xs font-black text-slate-900">RM ${cost.toFixed(2)}</span> 
                 </div> 
-                <div class="flex items-center justify-between border-t border-slate-900 pt-2"> 
-                    <div class="flex items-center space-x-2 text-xs text-slate-400"> 
+                <div class="flex items-center justify-between border-t border-slate-200 pt-2"> 
+                    <div class="flex items-center space-x-2 text-xs text-slate-500"> 
                         <span>Qty:</span> 
-                        <div class="flex items-center bg-slate-900 border border-slate-800 rounded-lg"> 
-                            <button onclick="changeCartItemQty(${index}, -1)" class="px-2 py-0.5 font-black hover:text-yellow-400">-</button> 
-                            <span class="px-2 font-bold text-white">${item.quantity}</span> 
-                            <button onclick="changeCartItemQty(${index}, 1)" class="px-2 py-0.5 font-black hover:text-yellow-400">+</button> 
+                        <div class="flex items-center bg-white border border-slate-200 rounded-lg"> 
+                            <button onclick="changeCartItemQty(${index}, -1)" class="px-2 py-0.5 font-black hover:text-violet-700">-</button> 
+                            <span class="px-2 font-bold text-slate-900">${item.quantity}</span> 
+                            <button onclick="changeCartItemQty(${index}, 1)" class="px-2 py-0.5 font-black hover:text-violet-700">+</button> 
                         </div> 
                     </div> 
-                    <button onclick="changeCartItemQty(${index}, -${item.quantity})" class="text-[10px] text-rose-500 font-bold hover:underline">Remove</button> 
+                    <button onclick="changeCartItemQty(${index}, -${item.quantity})" class="text-[10px] text-rose-600 font-bold hover:underline">Remove</button> 
                 </div> 
             `; 
             listContainer.appendChild(div); 
@@ -2551,7 +2686,7 @@
 
         if (!currentUser || !WORKFLOW_STATE.hasRequest || WORKFLOW_STATE.customerUsername !== currentUser.username) { 
             badge.innerText = "No Active Order"; 
-            badge.className = "px-3 py-1 rounded text-xs font-bold bg-slate-950 text-slate-400 border border-slate-800"; 
+            badge.className = "px-3 py-1 rounded text-xs font-bold bg-slate-100 text-slate-600 border border-slate-200"; 
             area.innerHTML = ` 
                 <div class="text-center p-2 text-xs text-slate-500 italic"> 
                     Add catalog items to basket and submit requirements brief to start workflow loop. 
@@ -2563,26 +2698,26 @@
         badge.innerText = WORKFLOW_STATE.status; 
 
         if (WORKFLOW_STATE.status === "Pending Confirmation") { 
-            badge.className = "px-3 py-1 rounded text-xs font-bold bg-amber-500/10 text-amber-400 border border-amber-500/30"; 
+            badge.className = "px-3 py-1 rounded text-xs font-bold bg-amber-50 text-amber-700 border border-amber-200"; 
             area.innerHTML = ` 
                 <div class="flex gap-2">
-                    <button disabled class="flex-grow py-2.5 bg-slate-800 text-slate-500 cursor-not-allowed font-bold text-xs uppercase tracking-wider rounded-xl border border-slate-700"> 
+                    <button disabled class="flex-grow py-2.5 bg-slate-200 text-slate-500 cursor-not-allowed font-bold text-xs uppercase tracking-wider rounded-xl border border-slate-300"> 
                         Awaiting Admin... 
                     </button>
-                    <button onclick="cancelCurrentOrder()" class="px-4 py-2.5 bg-rose-600/10 hover:bg-rose-600 border border-rose-500/20 hover:border-rose-500 text-rose-400 hover:text-white font-bold text-xs uppercase rounded-xl transition-all">
+                    <button onclick="cancelCurrentOrder()" class="px-4 py-2.5 bg-rose-50 hover:bg-rose-600 border border-rose-200 hover:border-rose-600 text-rose-600 hover:text-white font-bold text-xs uppercase rounded-xl transition-all">
                         Cancel
                     </button>
                 </div>
             `; 
         } else if (WORKFLOW_STATE.status === "Approved") { 
-            badge.className = "px-3 py-1 rounded text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30"; 
+            badge.className = "px-3 py-1 rounded text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200"; 
             if (WORKFLOW_STATE.selectedTerm === "cash") { 
                 area.innerHTML = ` 
                     <div class="flex gap-2">
-                        <button onclick="executeCashQuotationApproval()" class="flex-grow py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow-lg shadow-blue-600/20"> 
+                        <button onclick="executeCashQuotationApproval()" class="flex-grow py-2.5 bg-violet-600 hover:bg-violet-700 text-white font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow-lg shadow-violet-600/20"> 
                             Approve Quotation 
                         </button> 
-                        <button onclick="cancelCurrentOrder()" class="px-4 py-2.5 bg-rose-600/10 hover:bg-rose-600 border border-rose-500/20 hover:border-rose-500 text-rose-400 hover:text-white font-bold text-xs uppercase rounded-xl transition-all">
+                        <button onclick="cancelCurrentOrder()" class="px-4 py-2.5 bg-rose-50 hover:bg-rose-600 border border-rose-200 hover:border-rose-600 text-rose-600 hover:text-white font-bold text-xs uppercase rounded-xl transition-all">
                             Cancel
                         </button>
                     </div>
@@ -2590,31 +2725,31 @@
             } else { 
                 area.innerHTML = ` 
                     <div class="flex gap-2">
-                        <button onclick="triggerToyyibpayFPXPaymentLink()" class="flex-grow py-2.5 bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow-lg shadow-yellow-400/20"> 
+                        <button onclick="triggerToyyibpayFPXPaymentLink()" class="flex-grow py-2.5 bg-violet-600 hover:bg-violet-700 text-white font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow-lg shadow-violet-600/20"> 
                             Buy with FPX 
                         </button> 
-                        <button onclick="cancelCurrentOrder()" class="px-4 py-2.5 bg-rose-600/10 hover:bg-rose-600 border border-rose-500/20 hover:border-rose-500 text-rose-400 hover:text-white font-bold text-xs uppercase rounded-xl transition-all">
+                        <button onclick="cancelCurrentOrder()" class="px-4 py-2.5 bg-rose-50 hover:bg-rose-600 border border-rose-200 hover:border-rose-600 text-rose-600 hover:text-white font-bold text-xs uppercase rounded-xl transition-all">
                             Cancel
                         </button>
                     </div>
                 `; 
             } 
         } else if (WORKFLOW_STATE.status === "Quotation Processed") { 
-            badge.className = "px-3 py-1 rounded text-xs font-bold bg-blue-500/10 text-blue-400 border border-blue-500/30"; 
+            badge.className = "px-3 py-1 rounded text-xs font-bold bg-violet-50 text-violet-700 border border-violet-200"; 
             area.innerHTML = ` 
                 <div class="space-y-2">
-                    <div class="p-3 bg-blue-500/10 border border-blue-500/20 text-blue-400 font-bold text-center text-xs rounded-xl"> 
+                    <div class="p-3 bg-violet-50 border border-violet-200 text-violet-700 font-bold text-center text-xs rounded-xl"> 
                         Awaiting Project Completion... 
                     </div>
-                    <button onclick="cancelCurrentOrder()" class="w-full py-2 bg-rose-600/10 hover:bg-rose-600 border border-rose-500/20 hover:border-rose-500 text-rose-400 hover:text-white font-bold text-xs uppercase rounded-xl transition-all">
+                    <button onclick="cancelCurrentOrder()" class="w-full py-2 bg-rose-50 hover:bg-rose-600 border border-rose-200 hover:border-rose-600 text-rose-600 hover:text-white font-bold text-xs uppercase rounded-xl transition-all">
                         Cancel Order
                     </button>
                 </div>
             `; 
         } else if (WORKFLOW_STATE.status === "Completed") { 
-            badge.className = "px-3 py-1 rounded text-xs font-bold bg-blue-500/10 text-blue-400 border border-blue-500/30"; 
+            badge.className = "px-3 py-1 rounded text-xs font-bold bg-violet-50 text-violet-700 border border-violet-200"; 
             area.innerHTML = ` 
-                <div class="p-3 bg-blue-500/10 border border-blue-500/20 text-blue-400 font-bold text-center text-xs rounded-xl"> 
+                <div class="p-3 bg-violet-50 border border-violet-200 text-violet-700 font-bold text-center text-xs rounded-xl"> 
                     🎉 Order Processed &amp; Marked Completed! 
                 </div> 
             `; 
@@ -2670,46 +2805,46 @@
         } 
 
         const tr = document.createElement('tr'); 
-        tr.className = "border-b border-slate-900/60 font-medium"; 
+        tr.className = "border-b border-slate-200/80 font-medium"; 
 
         let actionsHTML = ""; 
         if (WORKFLOW_STATE.status === "Pending Confirmation") { 
             const btnLabel = WORKFLOW_STATE.selectedTerm === 'cash' ? "Approve Quotation" : "Approve Request"; 
             actionsHTML = ` 
-                <button onclick="adminApproveWorkflowOrder()" class="px-3 py-1 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-black rounded uppercase text-[10px] tracking-wider transition-colors"> 
+                <button onclick="adminApproveWorkflowOrder()" class="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-black rounded uppercase text-[10px] tracking-wider transition-colors"> 
                     ${btnLabel} 
                 </button> 
             `; 
         } else if (WORKFLOW_STATE.status === "Approved" && WORKFLOW_STATE.selectedTerm === "fpx") { 
-            actionsHTML = `<span class="text-slate-400 text-[10px] italic">Awaiting User FPX payment</span>`; 
+            actionsHTML = `<span class="text-slate-500 text-[10px] italic">Awaiting User FPX payment</span>`; 
         } else if (WORKFLOW_STATE.status === "Approved" && WORKFLOW_STATE.selectedTerm === "cash") { 
-            actionsHTML = `<span class="text-slate-400 text-[10px] italic">Awaiting User Quote Approval</span>`; 
+            actionsHTML = `<span class="text-slate-500 text-[10px] italic">Awaiting User Quote Approval</span>`; 
         } else if (WORKFLOW_STATE.status === "Quotation Processed" || WORKFLOW_STATE.status === "Approved") { 
             actionsHTML = ` 
-                <button onclick="adminCompleteWorkflowOrder()" class="px-3 py-1 bg-blue-500 hover:bg-blue-600 text-slate-950 font-black rounded uppercase text-[10px] tracking-wider transition-colors"> 
+                <button onclick="adminCompleteWorkflowOrder()" class="px-3 py-1 bg-violet-600 hover:bg-violet-700 text-white font-black rounded uppercase text-[10px] tracking-wider transition-colors"> 
                     Mark Completed 
                 </button> 
             `; 
         } else { 
-            actionsHTML = `<span class="text-slate-500 text-[10px] uppercase font-bold tracking-widest">Workflow Settled</span>`; 
+            actionsHTML = `<span class="text-slate-400 text-[10px] uppercase font-bold tracking-widest">Workflow Settled</span>`; 
         } 
 
         const displayTerm = WORKFLOW_STATE.selectedTerm === 'cash' ? 'Cash / Quotation' : 'FPX Transfer'; 
 
         tr.innerHTML = ` 
-            <td class="py-3 text-white font-bold"> 
-                <span class="text-yellow-400 font-mono text-[11px] block">${WORKFLOW_STATE.orderId || 'BZ-ORD-NEW'}</span>
+            <td class="py-3 text-slate-900 font-bold"> 
+                <span class="text-violet-700 font-mono text-[11px] block">${WORKFLOW_STATE.orderId || 'BZ-ORD-NEW'}</span>
                 <span class="block">${WORKFLOW_STATE.customerUsername}</span> 
             </td> 
-            <td class="py-3 text-slate-300 font-mono text-[11px]">${WORKFLOW_STATE.customerEmail || 'N/A'}</td>
-            <td class="py-3 text-slate-300 font-medium">
+            <td class="py-3 text-slate-600 font-mono text-[11px]">${WORKFLOW_STATE.customerEmail || 'N/A'}</td>
+            <td class="py-3 text-slate-700 font-medium">
                 <span class="block">${displayTerm}</span>
-                <span class="text-[10px] text-yellow-400 font-black">RM ${WORKFLOW_STATE.amount.toFixed(2)}</span>
+                <span class="text-[10px] text-violet-700 font-black">RM ${WORKFLOW_STATE.amount.toFixed(2)}</span>
             </td> 
             <td class="py-3"> 
                 <span class="px-2 py-0.5 rounded text-[10px] font-black uppercase ${ 
-                    WORKFLOW_STATE.status === 'Pending Confirmation' ? 'bg-amber-500/10 text-amber-400' : 
-                    WORKFLOW_STATE.status === 'Approved' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-blue-500/10 text-blue-400' 
+                    WORKFLOW_STATE.status === 'Pending Confirmation' ? 'bg-amber-50 text-amber-700 border border-amber-200' : 
+                    WORKFLOW_STATE.status === 'Approved' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-violet-50 text-violet-700 border border-violet-200' 
                 }">${WORKFLOW_STATE.status}</span> 
             </td> 
             <td class="py-3 text-right">${actionsHTML}</td> 
@@ -2725,84 +2860,84 @@
         window.PRODUCTS.forEach((product, pIdx) => { 
             const images = getProductImages(product);
             const block = document.createElement('div'); 
-            block.className = "bg-slate-900 border-2 border-slate-800 rounded-2xl p-6 relative space-y-4 shadow-xl"; 
+            block.className = "bg-white border border-slate-200 rounded-2xl p-6 relative space-y-4 shadow-md"; 
              
             let nestedDropdownsHTML = ""; 
             product.dropdowns.forEach((drop, dIdx) => { 
                 nestedDropdownsHTML += ` 
-                    <div class="bg-slate-950 p-3 rounded-xl border border-slate-850 space-y-2 relative group"> 
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-2 relative group"> 
                         <div class="flex items-center justify-between gap-2"> 
-                            <span class="text-[10px] text-yellow-500 font-bold uppercase tracking-wider">List Drop-down ${dIdx + 1}</span> 
-                            <button onclick="removeScratchDropdown(${pIdx}, ${dIdx})" class="text-[10px] font-bold text-rose-500 hover:underline">Remove Option</button> 
+                            <span class="text-[10px] text-violet-700 font-bold uppercase tracking-wider">List Drop-down ${dIdx + 1}</span> 
+                            <button onclick="removeScratchDropdown(${pIdx}, ${dIdx})" class="text-[10px] font-bold text-rose-600 hover:underline">Remove Option</button> 
                         </div> 
                         <div class="grid grid-cols-2 gap-2"> 
                             <div> 
                                 <label class="block text-[9px] uppercase font-bold text-slate-500">Tier Name</label> 
-                                <input type="text" value="${drop.name}" onchange="updateScratchDropdownValue(${pIdx}, ${dIdx}, 'name', this.value)" class="w-full bg-slate-900 border border-slate-800 text-white rounded p-1 text-xs font-semibold outline-none focus:border-yellow-400" /> 
+                                <input type="text" value="${drop.name}" onchange="updateScratchDropdownValue(${pIdx}, ${dIdx}, 'name', this.value)" class="w-full bg-white border border-slate-200 text-slate-900 rounded p-1 text-xs font-semibold outline-none focus:border-violet-600" /> 
                             </div> 
                             <div> 
                                 <label class="block text-[9px] uppercase font-bold text-slate-500">Price (RM)</label> 
-                                <input type="number" step="0.01" value="${drop.price}" onchange="updateScratchDropdownValue(${pIdx}, ${dIdx}, 'price', this.value)" class="w-full bg-slate-900 border border-slate-800 text-yellow-400 rounded p-1 text-xs font-bold outline-none focus:border-yellow-400" /> 
+                                <input type="number" step="0.01" value="${drop.price}" onchange="updateScratchDropdownValue(${pIdx}, ${dIdx}, 'price', this.value)" class="w-full bg-white border border-slate-200 text-violet-700 rounded p-1 text-xs font-bold outline-none focus:border-violet-600" /> 
                             </div> 
                         </div> 
                         <div> 
                             <label class="block text-[9px] uppercase font-bold text-slate-500">*Small Font Info*</label> 
-                            <textarea rows="2" onchange="updateScratchDropdownValue(${pIdx}, ${dIdx}, 'info', this.value)" class="w-full bg-slate-900 border border-slate-800 text-slate-400 font-mono rounded p-1.5 text-[10px] outline-none focus:border-yellow-400 resize-none">${drop.info || ''}</textarea> 
+                            <textarea rows="2" onchange="updateScratchDropdownValue(${pIdx}, ${dIdx}, 'info', this.value)" class="w-full bg-white border border-slate-200 text-slate-600 font-mono rounded p-1.5 text-[10px] outline-none focus:border-violet-600 resize-none">${drop.info || ''}</textarea> 
                         </div> 
                     </div> 
                 `; 
             }); 
 
             const imageLinksHTML = images.map((imgUrl, imgIdx) => `
-                <div class="flex items-center gap-2.5 bg-slate-950 p-2.5 rounded-xl border border-slate-850">
-                    <img id="scratch-preview-${product.id}-${imgIdx}" src="${imgUrl}" class="w-12 h-12 object-contain rounded bg-slate-900 border border-slate-800 flex-shrink-0" onerror="this.src='https://placehold.co/100x100/1e293b/facc15?text=Photo+${imgIdx + 1}'" />
+                <div class="flex items-center gap-2.5 bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+                    <img id="scratch-preview-${product.id}-${imgIdx}" src="${imgUrl}" class="w-12 h-12 object-contain rounded bg-white border border-slate-200 flex-shrink-0" onerror="this.src='https://placehold.co/100x100/f5f3ff/6d28d9?text=Photo+${imgIdx + 1}'" />
                     <div class="flex-grow space-y-1">
                         <div class="flex items-center justify-between">
-                            <span class="text-[9px] font-bold uppercase tracking-wider text-yellow-400">Photo ${imgIdx + 1} Link</span>
-                            ${images.length > 1 ? `<button type="button" onclick="removeScratchPosterUrl(${pIdx}, ${imgIdx})" class="text-[9px] font-bold text-rose-400 hover:underline">Remove</button>` : ''}
+                            <span class="text-[9px] font-bold uppercase tracking-wider text-violet-700">Photo ${imgIdx + 1} Link</span>
+                            ${images.length > 1 ? `<button type="button" onclick="removeScratchPosterUrl(${pIdx}, ${imgIdx})" class="text-[9px] font-bold text-rose-600 hover:underline">Remove</button>` : ''}
                         </div>
-                        <input type="text" value="${imgUrl}" placeholder="e.g. previousmenu.png or https://raw.githubusercontent.com/..." onchange="handleScratchPosterUrl(${pIdx}, ${imgIdx}, this.value)" class="w-full bg-slate-900 border border-slate-800 text-yellow-400 font-mono rounded-lg p-1.5 text-xs outline-none focus:border-yellow-400" />
+                        <input type="text" value="${imgUrl}" placeholder="e.g. previousmenu.png or https://raw.githubusercontent.com/..." onchange="handleScratchPosterUrl(${pIdx}, ${imgIdx}, this.value)" class="w-full bg-white border border-slate-200 text-violet-700 font-mono rounded-lg p-1.5 text-xs outline-none focus:border-violet-600" />
                     </div>
                 </div>
             `).join('');
 
             block.innerHTML = ` 
-                <div class="flex items-center justify-between border-b border-slate-800 pb-2"> 
-                    <span class="text-xs font-mono font-bold text-slate-500">DOC ID: ${product.id}</span> 
-                    <button onclick="deleteProductFrame(${pIdx})" class="w-6 h-6 rounded-full bg-rose-600/20 hover:bg-rose-600 text-rose-400 hover:text-white flex items-center justify-center text-xs font-black transition-all">X</button> 
+                <div class="flex items-center justify-between border-b border-slate-100 pb-2"> 
+                    <span class="text-xs font-mono font-bold text-slate-400">DOC ID: ${product.id}</span> 
+                    <button onclick="deleteProductFrame(${pIdx})" class="w-6 h-6 rounded-full bg-rose-50 hover:bg-rose-600 text-rose-600 hover:text-white flex items-center justify-center text-xs font-black transition-all">X</button> 
                 </div> 
 
                 <div class="space-y-2"> 
                     <div class="flex items-center justify-between">
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Product Image Links / GitHub Paths (${images.length}) ! Editable</label> 
-                        <button type="button" onclick="appendScratchPosterUrl(${pIdx})" class="px-2.5 py-1 bg-yellow-400/15 hover:bg-yellow-400 text-yellow-400 hover:text-slate-950 border border-yellow-400/40 rounded-lg text-[10px] font-black uppercase transition-colors">
+                        <label class="block text-[10px] font-bold text-slate-600 uppercase tracking-wider">Product Image Links / GitHub Paths (${images.length}) ! Editable</label> 
+                        <button type="button" onclick="appendScratchPosterUrl(${pIdx})" class="px-2.5 py-1 bg-violet-50 hover:bg-violet-600 text-violet-700 hover:text-white border border-violet-200 rounded-lg text-[10px] font-black uppercase transition-colors">
                             (+) Add Photo Link
                         </button>
                     </div>
                     <div class="space-y-2 max-h-[210px] overflow-y-auto pr-1 hide-scrollbar">
                         ${imageLinksHTML}
                     </div>
-                    <p class="text-[9px] text-slate-500">Add multiple GitHub or image URLs. Customers see dotted indicators below the photo and can slide right.</p>
+                    <p class="text-[9px] text-slate-400">Add multiple GitHub or image URLs. Customers see dotted indicators below the photo and can slide right.</p>
                 </div> 
 
                 <div class="space-y-1.5"> 
-                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Product Video Link (YouTube / MP4 / GitHub URL) ! Editable</label> 
-                    <div class="bg-slate-950 p-3 rounded-xl border border-slate-850 space-y-1"> 
-                        <input type="text" id="scratch-video-url-${product.id}" value="${product.videoUrl || ''}" placeholder="Paste video URL (leave blank if no video)" onchange="handleScratchVideoUrl(${pIdx}, this.value)" class="w-full bg-slate-900 border border-slate-800 text-emerald-400 font-mono rounded-lg p-2 text-xs outline-none focus:border-yellow-400" />
-                        <p class="text-[9px] text-slate-500">Customers click "Watch Video" above Add to Basket. Empty shows "no video upload edisi by admin".</p>
+                    <label class="block text-[10px] font-bold text-slate-600 uppercase tracking-wider">Product Video Link (YouTube / MP4 / GitHub URL) ! Editable</label> 
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-1"> 
+                        <input type="text" id="scratch-video-url-${product.id}" value="${product.videoUrl || ''}" placeholder="Paste video URL (leave blank if no video)" onchange="handleScratchVideoUrl(${pIdx}, this.value)" class="w-full bg-white border border-slate-200 text-emerald-700 font-mono rounded-lg p-2 text-xs outline-none focus:border-violet-600" />
+                        <p class="text-[9px] text-slate-400">Customers click "Watch Video" above Add to Basket. Empty shows "no video upload edisi by admin".</p>
                     </div> 
                 </div> 
 
                 <div class="space-y-1"> 
-                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">*Big Font* Product Title ! Editable</label> 
-                    <input type="text" value="${product.title}" onchange="window.PRODUCTS[${pIdx}].title = this.value; saveProductToFirestore(window.PRODUCTS[${pIdx}], ${pIdx}); renderProductCatalog();" class="w-full bg-slate-950 border border-slate-800 text-white rounded-lg p-2.5 text-sm font-black outline-none focus:border-yellow-400" /> 
+                    <label class="block text-[10px] font-bold text-slate-600 uppercase tracking-wider">*Big Font* Product Title ! Editable</label> 
+                    <input type="text" value="${product.title}" onchange="window.PRODUCTS[${pIdx}].title = this.value; saveProductToFirestore(window.PRODUCTS[${pIdx}], ${pIdx}); renderProductCatalog();" class="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-lg p-2.5 text-sm font-black outline-none focus:border-violet-600" /> 
                 </div> 
 
-                <hr class="border-slate-800" /> 
+                <hr class="border-slate-100" /> 
 
                 <div class="space-y-1"> 
-                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Drop-down Base Group Label ! Editable</label> 
-                    <input type="text" value="${product.dropdownLabel}" onchange="window.PRODUCTS[${pIdx}].dropdownLabel = this.value; saveProductToFirestore(window.PRODUCTS[${pIdx}], ${pIdx});" class="w-full bg-slate-950 border border-slate-800 text-yellow-400 font-bold rounded-lg p-2 text-xs outline-none focus:border-yellow-400" /> 
+                    <label class="block text-[10px] font-bold text-slate-600 uppercase tracking-wider">Drop-down Base Group Label ! Editable</label> 
+                    <input type="text" value="${product.dropdownLabel}" onchange="window.PRODUCTS[${pIdx}].dropdownLabel = this.value; saveProductToFirestore(window.PRODUCTS[${pIdx}], ${pIdx});" class="w-full bg-slate-50 border border-slate-200 text-violet-700 font-bold rounded-lg p-2 text-xs outline-none focus:border-violet-600" /> 
                 </div> 
 
                 <div class="space-y-3 max-h-[220px] overflow-y-auto pr-1 hide-scrollbar"> 
@@ -2810,16 +2945,16 @@
                 </div> 
 
                 <div class="grid grid-cols-2 gap-2 pt-2"> 
-                    <button onclick="appendNewScratchDropdown(${pIdx})" class="py-2 bg-slate-950 border border-slate-800 hover:border-yellow-400/40 text-slate-300 font-bold text-xs rounded-xl transition-all"> 
+                    <button onclick="appendNewScratchDropdown(${pIdx})" class="py-2 bg-slate-50 border border-slate-200 hover:border-violet-400 text-slate-700 font-bold text-xs rounded-xl transition-all"> 
                         (+) New Drop-down 
                     </button> 
-                    <button onclick="popLastScratchDropdown(${pIdx})" class="py-2 bg-slate-950 border border-slate-800 hover:border-rose-500/40 text-rose-400 font-bold text-xs rounded-xl transition-all"> 
+                    <button onclick="popLastScratchDropdown(${pIdx})" class="py-2 bg-rose-50 border border-rose-200 hover:bg-rose-600 hover:text-white text-rose-600 font-bold text-xs rounded-xl transition-all"> 
                         (-) Delete Drop-down 
                     </button> 
                 </div> 
 
-                <div class="pt-4 border-t border-slate-800/80"> 
-                    <button onclick="commitScratchChangesLive(${pIdx})" class="w-full py-2.5 bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow-md"> 
+                <div class="pt-4 border-t border-slate-100"> 
+                    <button onclick="commitScratchChangesLive(${pIdx})" class="w-full py-2.5 bg-violet-600 hover:bg-violet-700 text-white font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow-md"> 
                         Apply &amp; Sync to creative_products 
                     </button> 
                 </div> 
@@ -3009,7 +3144,7 @@
         const now = Date.now();
         const newMsg = {
             id: 'msg_' + now + '_' + Math.random().toString(36).substring(2, 7),
-            sender: identity.role, // 'customer' or 'guest'
+            sender: identity.role,
             senderRole: identity.role,
             user: identity.user,
             email: identity.email,
@@ -3042,8 +3177,8 @@
         const relevantMessages = window.CHAT_MESSAGES.filter(m => m.user === identity.user);
 
         let html = `
-            <div class="text-center p-3 text-[10px] text-slate-500 bg-slate-950/85 rounded-xl border border-slate-900 leading-relaxed">
-                💬 Connected as <strong class="text-yellow-400">${identity.user}</strong> (${identity.role.toUpperCase()}). Messages sync live to <span class="font-mono text-yellow-400">chat_message2</span>.
+            <div class="text-center p-3 text-[10px] text-slate-500 bg-white rounded-xl border border-slate-200 leading-relaxed">
+                💬 Connected as <strong class="text-violet-700">${identity.user}</strong> (${identity.role.toUpperCase()}). Messages sync live to <span class="font-mono text-violet-700">chat_message2</span>.
             </div>
         `;
 
@@ -3051,20 +3186,20 @@
             if (msg.sender === 'admin') {
                 html += `
                     <div class="self-start max-w-[80%] flex flex-col items-start animate-fadeIn space-y-1">
-                        <span class="text-[8px] text-slate-400 font-bold uppercase tracking-wider">Lead Designer (Admin)</span>
-                        <div class="bg-slate-900 border border-slate-800 text-slate-200 px-3 py-2 rounded-2xl rounded-tl-none text-xs shadow-md">
-                            <p class="leading-relaxed font-light">${msg.message}</p>
-                            <span class="text-[8px] text-slate-500 block text-right mt-1">${msg.time || ''}</span>
+                        <span class="text-[8px] text-slate-500 font-bold uppercase tracking-wider">Lead Designer (Admin)</span>
+                        <div class="bg-white border border-slate-200 text-slate-800 px-3 py-2 rounded-2xl rounded-tl-none text-xs shadow-sm">
+                            <p class="leading-relaxed font-normal">${msg.message}</p>
+                            <span class="text-[8px] text-slate-400 block text-right mt-1">${msg.time || ''}</span>
                         </div>
                     </div>
                 `;
             } else {
                 html += `
                     <div class="self-end max-w-[80%] flex flex-col items-end animate-fadeIn space-y-1">
-                        <span class="text-[8px] text-yellow-400 font-extrabold uppercase tracking-wider">You (${identity.role === 'guest' ? 'Guest' : identity.user})</span>
-                        <div class="bg-yellow-400 text-slate-950 px-3 py-2 rounded-2xl rounded-tr-none text-xs shadow-md">
-                            <p class="leading-relaxed font-semibold">${msg.message}</p>
-                            <span class="text-[8px] font-bold text-slate-900/60 block text-right mt-1">${msg.time || ''}</span>
+                        <span class="text-[8px] text-violet-700 font-extrabold uppercase tracking-wider">You (${identity.role === 'guest' ? 'Guest' : identity.user})</span>
+                        <div class="bg-violet-600 text-white px-3 py-2 rounded-2xl rounded-tr-none text-xs shadow-sm">
+                            <p class="leading-relaxed font-medium">${msg.message}</p>
+                            <span class="text-[8px] font-bold text-violet-200 block text-right mt-1">${msg.time || ''}</span>
                         </div>
                     </div>
                 `;
@@ -3082,14 +3217,14 @@
 
         const userChannels = [...new Set(window.CHAT_MESSAGES.map(m => m.user))].filter(u => u && u !== 'system_bot' && u !== 'admin');
 
-        channelContainer.innerHTML = `<span class="text-[9px] uppercase tracking-wider font-extrabold text-slate-500 font-mono">Threads (${userChannels.length})</span>`;
+        channelContainer.innerHTML = `<span class="text-[9px] uppercase tracking-wider font-extrabold text-slate-400 font-mono">Threads (${userChannels.length})</span>`;
          
         if (userChannels.length === 0) {
             channelContainer.innerHTML += `
-                <div class="text-[10px] text-slate-500 italic text-center py-4">No active users</div>
+                <div class="text-[10px] text-slate-400 italic text-center py-4">No active users</div>
             `;
             messageContainer.innerHTML = `
-                <div class="text-center text-slate-500 italic py-8 font-light">Select a customer or guest thread to read incoming messages and respond.</div>
+                <div class="text-center text-slate-400 italic py-8 font-light">Select a customer or guest thread to read incoming messages and respond.</div>
             `;
             return;
         }
@@ -3099,8 +3234,8 @@
             const isActive = activeAdminThreadUser === userChan;
             btn.className = `w-full text-left p-2 rounded-lg text-xs font-semibold transition-all flex items-center justify-between border ${
                 isActive 
-                ? 'bg-yellow-400 text-slate-950 border-yellow-400' 
-                : 'bg-slate-900 hover:bg-slate-850 text-slate-300 border-slate-800'
+                ? 'bg-violet-600 text-white border-violet-600' 
+                : 'bg-white hover:bg-violet-50 text-slate-700 border-slate-200'
             }`;
              
             const userMessages = window.CHAT_MESSAGES.filter(m => m.user === userChan);
@@ -3133,10 +3268,10 @@
                 if (isAdminMsg) {
                     messagesHTML += `
                         <div class="self-end max-w-[85%] flex flex-col items-end animate-fadeIn space-y-0.5">
-                            <span class="text-[8px] text-slate-500 font-bold uppercase tracking-wider">You (Admin)</span>
-                            <div class="bg-slate-900 border border-slate-800 text-slate-200 px-3 py-2 rounded-2xl rounded-tr-none text-xs shadow-md">
-                                <p class="leading-relaxed font-light">${msg.message}</p>
-                                <span class="text-[7px] text-slate-500 block text-right mt-1">${msg.time || ''}</span>
+                            <span class="text-[8px] text-slate-400 font-bold uppercase tracking-wider">You (Admin)</span>
+                            <div class="bg-slate-100 border border-slate-200 text-slate-800 px-3 py-2 rounded-2xl rounded-tr-none text-xs shadow-sm">
+                                <p class="leading-relaxed font-normal">${msg.message}</p>
+                                <span class="text-[7px] text-slate-400 block text-right mt-1">${msg.time || ''}</span>
                             </div>
                         </div>
                     `;
@@ -3144,17 +3279,17 @@
                     const roleBadge = msg.user && msg.user.startsWith("Guest_") ? "Guest" : "Customer";
                     messagesHTML += `
                         <div class="self-start max-w-[85%] flex flex-col items-start animate-fadeIn space-y-0.5">
-                            <span class="text-[8px] text-yellow-400 font-extrabold uppercase tracking-wider">${msg.user} (${roleBadge})</span>
-                            <div class="bg-yellow-400 text-slate-950 px-3 py-2 rounded-2xl rounded-tl-none text-xs shadow-md font-semibold">
+                            <span class="text-[8px] text-violet-700 font-extrabold uppercase tracking-wider">${msg.user} (${roleBadge})</span>
+                            <div class="bg-violet-600 text-white px-3 py-2 rounded-2xl rounded-tl-none text-xs shadow-sm font-medium">
                                 <p class="leading-relaxed">${msg.message}</p>
-                                <span class="text-[7px] text-slate-900/60 block text-right mt-1">${msg.time || ''}</span>
+                                <span class="text-[7px] text-violet-200 block text-right mt-1">${msg.time || ''}</span>
                             </div>
                         </div>
                     `;
                 }
             });
 
-            messageContainer.innerHTML = messagesHTML || `<div class="text-slate-500 italic text-center py-8">Thread is empty.</div>`;
+            messageContainer.innerHTML = messagesHTML || `<div class="text-slate-400 italic text-center py-8">Thread is empty.</div>`;
             setTimeout(() => { messageContainer.scrollTop = messageContainer.scrollHeight; }, 20);
         }
     }

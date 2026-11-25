@@ -436,7 +436,7 @@
 
         <!-- ANIMATED PORTAL CARD (UNAUTHENTICATED) -->
         <div id="customer-unauthenticated-card">
-            <div class="portal-wrapper" id="portalWrapper">
+            <div class="portal-wrapper active" id="portalWrapper">
                 
                 <!-- LOGIN FORM -->
                 <div class="form-box login">
@@ -2429,7 +2429,7 @@
         document.getElementById('customer-unauthenticated-card').classList.remove('hidden'); 
         document.getElementById('customer-portal-username').classList.add('hidden'); 
         document.getElementById('customer-portal-text').classList.remove('hidden'); 
-        toggleCustomerAuthTab('login'); 
+        toggleCustomerAuthTab('register'); 
         showToast("Logged out from customer session."); 
         updateCustomerWorkflowUI(); 
         renderChatMessagesForCustomer(); 
@@ -2443,6 +2443,30 @@
             portalWrapper.classList.add('active');
         } else { 
             portalWrapper.classList.remove('active');
+        } 
+    } 
+
+    function switchView(viewName) { 
+        if (viewName === 'admin' && !window.isAdminLoggedIn) { 
+            document.getElementById('admin-gate-modal').classList.remove('hidden'); 
+            return; 
+        } 
+
+        document.getElementById('store-view').classList.add('hidden'); 
+        document.getElementById('customer-auth-view').classList.add('hidden'); 
+        document.getElementById('admin-view').classList.add('hidden'); 
+
+        if (viewName === 'store') { 
+            document.getElementById('store-view').classList.remove('hidden'); 
+            renderProductCatalog(); 
+        } else if (viewName === 'customer-auth') { 
+            document.getElementById('customer-auth-view').classList.remove('hidden'); 
+            if (!currentUser) {
+                toggleCustomerAuthTab('register');
+            }
+        } else if (viewName === 'admin' && window.isAdminLoggedIn) { 
+            document.getElementById('admin-view').classList.remove('hidden'); 
+            renderAdminWorkspace(); 
         } 
     } 
 

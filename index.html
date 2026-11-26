@@ -320,7 +320,7 @@
             <div class="flex items-center justify-start pt-1 border-t border-slate-100">
                 <button id="customer-portal-btn" onclick="switchView('customer-auth')" class="flex items-center space-x-1.5 px-3 py-1.5 text-xs font-bold rounded-lg border border-slate-200 bg-slate-50 text-slate-700 hover:border-violet-400 hover:text-violet-700 transition-all"> 
                     <svg class="w-3.5 h-3.5 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg> 
-                    <span id="customer-portal-text">Profile Portal</span> 
+                    <span id="customer-portal-text">Sign In/Sign Up</span> 
                     <span id="customer-portal-username" class="max-w-[160px] truncate text-[11px] text-violet-700 font-bold hidden"></span> 
                 </button>
             </div>
@@ -378,7 +378,7 @@
                         </div> 
                     </div> 
                 </div> 
-            <div id="products-grid" class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6"></div> 
+            </div>
         </section> 
 
         <section id="storefront-section" class="max-w-7xl mx-auto py-12 px-4 sm:px-8"> 
@@ -392,7 +392,7 @@
                     <span>Firestore Collection: <strong class="text-violet-700 font-mono">creative_products</strong></span> 
                 </div> 
             </div> 
-            <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div> 
+            <div id="products-grid" class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6"></div> 
         </section> 
 
         <section id="how-it-works" class="bg-white border-t border-b border-violet-100 py-12 px-4 sm:px-8"> 
@@ -1467,7 +1467,7 @@
     </script>
 
     <script> 
-    window.PRODUCTS = JSON.parse(localStorage.getItem("bw_products")) || [ 
+    const DEFAULT_PRODUCTS = [ 
         { 
             id: "p_frame_1", 
             orderIndex: 0,
@@ -1580,7 +1580,17 @@
                 { name: "Life Planner", price: 35.00, info: "- Html Site Size Format\n- Malay & English Language\n- Stylus On & Off Mode" } 
             ]  
        }    
-    ]; 
+    ];
+
+    let parsedStoredProducts = null;
+    try {
+        const rawStored = JSON.parse(localStorage.getItem("bw_products"));
+        if (Array.isArray(rawStored) && rawStored.length > 0) {
+            parsedStoredProducts = rawStored;
+        }
+    } catch (e) {}
+
+    window.PRODUCTS = parsedStoredProducts || DEFAULT_PRODUCTS;
 
     let cart = []; 
     let currentUser = JSON.parse(localStorage.getItem("current_session_user")) || null; 
@@ -1935,6 +1945,9 @@
             renderProductCatalog(); 
         } else if (viewName === 'customer-auth') { 
             document.getElementById('customer-auth-view').classList.remove('hidden'); 
+            if (!currentUser) {
+                toggleCustomerAuthTab('register');
+            }
         } else if (viewName === 'admin' && window.isAdminLoggedIn) { 
             document.getElementById('admin-view').classList.remove('hidden'); 
             renderAdminWorkspace(); 
@@ -2108,9 +2121,8 @@
         if(!container) return; 
         container.innerHTML = ""; 
 
-        if (window.PRODUCTS.length === 0) { 
-            container.innerHTML = `<div class="col-span-full text-center text-slate-400 py-12 italic text-xs">No live inventory entries detected in creative_products.</div>`; 
-            return; 
+        if (!Array.isArray(window.PRODUCTS) || window.PRODUCTS.length === 0) { 
+            window.PRODUCTS = DEFAULT_PRODUCTS;
         } 
 
         window.PRODUCTS.forEach(product => { 
@@ -2420,9 +2432,11 @@
     } 
 
     function syncAuthenticatedLayout(user) { 
-        document.getElementById('customer-portal-text').classList.add('hidden'); 
+        const portalText = document.getElementById('customer-portal-text');
+        portalText.innerText = "Profile Portal";
+        portalText.classList.remove('hidden'); 
         const userBadge = document.getElementById('customer-portal-username'); 
-        userBadge.innerText = user.username; 
+        userBadge.innerText = `(${user.username})`; 
         userBadge.classList.remove('hidden'); 
 
         document.getElementById('authenticated-cust-username').innerText = `Welcome back, ${user.username}!`; 
@@ -2530,7 +2544,9 @@
         document.getElementById('customer-authenticated-card').classList.add('hidden'); 
         document.getElementById('customer-unauthenticated-card').classList.remove('hidden'); 
         document.getElementById('customer-portal-username').classList.add('hidden'); 
-        document.getElementById('customer-portal-text').classList.remove('hidden'); 
+        const portalText = document.getElementById('customer-portal-text');
+        portalText.innerText = "Sign In/Sign Up";
+        portalText.classList.remove('hidden'); 
         toggleCustomerAuthTab('register'); 
         showToast("Logged out from customer session."); 
         updateCustomerWorkflowUI(); 
@@ -2545,30 +2561,6 @@
             portalWrapper.classList.add('active');
         } else { 
             portalWrapper.classList.remove('active');
-        } 
-    } 
-
-    function switchView(viewName) { 
-        if (viewName === 'admin' && !window.isAdminLoggedIn) { 
-            document.getElementById('admin-gate-modal').classList.remove('hidden'); 
-            return; 
-        } 
-
-        document.getElementById('store-view').classList.add('hidden'); 
-        document.getElementById('customer-auth-view').classList.add('hidden'); 
-        document.getElementById('admin-view').classList.add('hidden'); 
-
-        if (viewName === 'store') { 
-            document.getElementById('store-view').classList.remove('hidden'); 
-            renderProductCatalog(); 
-        } else if (viewName === 'customer-auth') { 
-            document.getElementById('customer-auth-view').classList.remove('hidden'); 
-            if (!currentUser) {
-                toggleCustomerAuthTab('register');
-            }
-        } else if (viewName === 'admin' && window.isAdminLoggedIn) { 
-            document.getElementById('admin-view').classList.remove('hidden'); 
-            renderAdminWorkspace(); 
         } 
     } 
 
@@ -2829,7 +2821,7 @@
                 <div class="flex gap-2">
                     <button disabled class="flex-grow py-2.5 bg-slate-200 text-slate-500 cursor-not-allowed font-bold text-xs uppercase tracking-wider rounded-xl border border-slate-300"> 
                         Awaiting Admin... 
-                    </button>
+                    </button> 
                     <button onclick="cancelCurrentOrder()" class="px-4 py-2.5 bg-rose-50 hover:bg-rose-600 border border-rose-200 hover:border-rose-600 text-rose-600 hover:text-white font-bold text-xs uppercase rounded-xl transition-all">
                         Cancel
                     </button>

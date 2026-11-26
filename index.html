@@ -318,10 +318,10 @@
             </div> 
 
             <div class="flex items-center justify-start pt-1 border-t border-slate-100">
-                <button id="customer-portal-btn" onclick="switchView('customer-auth')" class="flex items-center space-x-1.5 px-3 py-1.5 text-xs font-bold rounded-lg border border-slate-200 bg-slate-50 text-slate-700 hover:border-violet-400 hover:text-violet-700 transition-all"> 
-                    <svg class="w-3.5 h-3.5 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg> 
-                    <span id="customer-portal-text">Profile Portal</span> 
-                    <span id="customer-portal-username" class="max-w-[160px] truncate text-[11px] text-violet-700 font-bold hidden"></span> 
+                <button id="customer-portal-btn" onclick="handleHeaderAuthButtonClick()" class="flex items-center space-x-1.5 px-3 py-1.5 text-xs font-bold rounded-lg border border-slate-200 bg-slate-50 text-slate-700 hover:border-violet-400 hover:text-violet-700 transition-all"> 
+                    <svg id="customer-portal-icon" class="w-3.5 h-3.5 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg> 
+                    <span id="customer-portal-text">Sign in/Sign up</span> 
+                    <span id="customer-portal-username" class="max-w-[160px] truncate text-[11px] text-rose-600 font-bold hidden"></span> 
                 </button>
             </div>
 
@@ -2377,10 +2377,21 @@
     } 
 
     function syncAuthenticatedLayout(user) { 
-        document.getElementById('customer-portal-text').classList.add('hidden'); 
-        const userBadge = document.getElementById('customer-portal-username'); 
-        userBadge.innerText = user.username; 
-        userBadge.classList.remove('hidden'); 
+        const portalBtn = document.getElementById('customer-portal-btn');
+        const portalText = document.getElementById('customer-portal-text');
+        const userBadge = document.getElementById('customer-portal-username');
+
+        if (portalBtn) {
+            portalBtn.className = "flex items-center space-x-1.5 px-3 py-1.5 text-xs font-bold rounded-lg border border-rose-200 bg-rose-50 text-rose-600 hover:bg-rose-600 hover:text-white transition-all";
+        }
+        if (portalText) {
+            portalText.innerText = "Sign out";
+            portalText.classList.remove('hidden');
+        }
+        if (userBadge) {
+            userBadge.innerText = `(${user.username})`;
+            userBadge.classList.remove('hidden');
+        }
 
         document.getElementById('authenticated-cust-username').innerText = `Welcome back, ${user.username}!`; 
         document.getElementById('cust-det-email').innerText = user.email; 
@@ -2490,13 +2501,32 @@
         const guestCard = document.getElementById('guest-order-tracker-card');
         if (guestCard) guestCard.classList.remove('hidden');
         document.getElementById('customer-unauthenticated-card').classList.remove('hidden'); 
-        document.getElementById('customer-portal-username').classList.add('hidden'); 
-        document.getElementById('customer-portal-text').classList.remove('hidden'); 
+
+        const portalBtn = document.getElementById('customer-portal-btn');
+        const portalText = document.getElementById('customer-portal-text');
+        const userBadge = document.getElementById('customer-portal-username');
+        if (portalBtn) {
+            portalBtn.className = "flex items-center space-x-1.5 px-3 py-1.5 text-xs font-bold rounded-lg border border-slate-200 bg-slate-50 text-slate-700 hover:border-violet-400 hover:text-violet-700 transition-all";
+        }
+        if (userBadge) userBadge.classList.add('hidden'); 
+        if (portalText) {
+            portalText.innerText = "Sign in/Sign up";
+            portalText.classList.remove('hidden'); 
+        }
+
         toggleCustomerAuthTab('register'); 
         showToast("Logged out from customer session."); 
         updateCustomerWorkflowUI(); 
         renderChatMessagesForCustomer(); 
     } 
+
+    function handleHeaderAuthButtonClick() {
+        if (currentUser) {
+            logoutCustomer();
+        } else {
+            switchView('customer-auth');
+        }
+    }
 
     function toggleCustomerAuthTab(tab) { 
         const portalWrapper = document.getElementById('portalWrapper');

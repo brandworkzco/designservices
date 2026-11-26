@@ -396,6 +396,309 @@
         </section> 
 
         <section id="how-it-works" class="bg-white border-t border-b border-violet-100 py-12 px-4 sm:px-8"> 
+            <div class="max-w-7xl mx-auto"> 
+                <div class="text-center max-w-xl mx-auto mb-8"> 
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">The <span class="text-violet-600">Brandworkz Co</span> Workflow</h2> 
+                    <p class="text-slate-500 text-xs mt-2">Professional branding, simplified. Follow our 3-step checkout cycle.</p> 
+                </div> 
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center"> 
+                    <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 relative group hover:border-violet-400 transition-all"> 
+                        <div class="w-10 h-10 rounded-xl bg-violet-600 text-white font-black flex items-center justify-center text-lg mx-auto mb-3 shadow-md shadow-violet-600/20">1</div> 
+                        <h4 class="text-base font-bold text-slate-900 mb-1.5">Sign Up or Continue as Guest</h4> 
+                        <p class="text-slate-500 text-xs leading-relaxed">Register your account or checkout immediately as a Guest with real-time order tracking.</p> 
+                    </div> 
+                    <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 relative group hover:border-violet-400 transition-all"> 
+                        <div class="w-10 h-10 rounded-xl bg-violet-600 text-white font-black flex items-center justify-center text-lg mx-auto mb-3 shadow-md shadow-violet-600/20">2</div> 
+                        <h4 class="text-base font-bold text-slate-900 mb-1.5">Configure Options</h4> 
+                        <p class="text-slate-500 text-xs leading-relaxed">Choose standard Banner, Logo, or Menu tiers. Custom prices scale instantly based on your selection.</p> 
+                    </div> 
+                    <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 relative group hover:border-violet-400 transition-all"> 
+                        <div class="w-10 h-10 rounded-xl bg-violet-600 text-white font-black flex items-center justify-center text-lg mx-auto mb-3 shadow-md shadow-violet-600/20">3</div> 
+                        <h4 class="text-base font-bold text-slate-900 mb-1.5">Auto-Submit &amp; Pay</h4> 
+                        <p class="text-slate-500 text-xs leading-relaxed">Submit your project brief, track live status in your portal, and authorize via secure ToyyibPay FPX.</p> 
+                    </div> 
+                </div> 
+            </div> 
+        </section> 
+
+        <section id="payment-methods" class="max-w-7xl mx-auto py-12 px-4 sm:px-8 text-center space-y-4"> 
+            <div class="w-12 h-12 rounded-full bg-violet-100 text-violet-700 flex items-center justify-center text-2xl mx-auto">🔒</div> 
+            <h3 class="text-xl sm:text-2xl font-black text-slate-900">Direct ToyyibPay FPX Processing</h3> 
+            <p class="text-slate-500 max-w-xl mx-auto text-xs sm:text-sm leading-relaxed"> 
+                Transactions are authorized with secure Malaysian bank transfers. All digital checkouts are securely prepared for dispatch to: <code class="text-violet-700 bg-violet-50 border border-violet-200 px-1.5 py-0.5 rounded text-[11px] sm:text-xs font-mono">https://toyyibpay.com/brandworks</code>. 
+            </p> 
+        </section> 
+    </div> 
+
+    <!-- CUSTOMER & GUEST PORTAL VIEW -->
+    <div id="customer-auth-view" class="hidden flex-grow px-3 sm:px-8 py-8 max-w-5xl mx-auto w-full animate-fadeIn"> 
+        <div class="mb-5 flex items-center justify-between"> 
+            <button onclick="switchView('store')" class="inline-flex items-center space-x-2 text-xs font-bold text-violet-700 bg-white border border-slate-200 px-4 py-2 rounded-xl hover:border-violet-400 shadow-sm transition-all"> 
+                ← Back to Front Page 
+            </button> 
+            <span class="text-[11px] font-bold uppercase tracking-widest text-slate-400">Customer &amp; Guest Portal</span>
+        </div> 
+
+        <!-- GUEST LIVE ORDER TRACKER CARD (Visible when not logged in so Guests can track active orders) -->
+        <div id="guest-order-tracker-card" class="mb-6 bg-white border border-violet-200 rounded-2xl p-5 sm:p-6 shadow-lg shadow-violet-900/5 space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-3 gap-2">
+                <div class="flex items-center space-x-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-violet-100 text-violet-700 flex items-center justify-center font-black text-base">📦</div>
+                    <div>
+                        <span class="text-[10px] font-black uppercase tracking-wider text-violet-700 block">Guest Session Active</span>
+                        <h3 id="guest-tracker-identity" class="text-sm sm:text-base font-black text-slate-900">Guest Order Tracking Status</h3>
+                    </div>
+                </div>
+                <span id="guest-status-badge" class="self-start sm:self-auto px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-600 border border-slate-200">No Active Order</span>
+            </div>
+            <div id="guest-workflow-btn-placeholder">
+                <div class="text-center p-2 text-xs text-slate-500 italic">
+                    Add catalog items to your basket and lock your brief to track your Guest order status here in real time.
+                </div>
+            </div>
+        </div>
+
+        <!-- ANIMATED PORTAL CARD (UNAUTHENTICATED - STARTS ON SIGN UP) -->
+        <div id="customer-unauthenticated-card">
+            <div class="portal-wrapper active" id="portalWrapper">
+                
+                <!-- LOGIN FORM -->
+                <div class="form-box login">
+                    <h2 class="animation text-2xl sm:text-3xl font-black text-slate-900 text-center mb-1 tracking-tight" style="--i:0; --j:21;">
+                        Welcome to<br><span class="text-violet-600">Customer Portal</span>
+                    </h2>
+                    <p class="animation text-xs text-slate-500 text-center mb-2" style="--i:1; --j:22;">
+                        Sign in to track your briefs, projects and releases.
+                    </p>
+
+                    <div id="cust-verification-notice" class="hidden bg-amber-50 border border-amber-200 rounded-lg p-2.5 text-amber-800 text-[11px] space-y-1.5 mb-2">
+                        <p class="font-bold">📧 Email Confirmation Required</p>
+                        <p class="text-[10px] text-amber-700 leading-relaxed">Click the confirmation link sent to your email (check Inbox &amp; Spam), then sign in below.</p>
+                        <button type="button" onclick="resendCustomerVerificationEmail()" class="text-[10px] font-black uppercase tracking-wider text-violet-700 hover:underline bg-transparent border-0 p-0 cursor-pointer">
+                            Resend Confirmation Email →
+                        </button>
+                    </div>
+
+                    <form id="customer-login-form" onsubmit="handleCustomerLogin(event)">
+                        <div class="portal-input-box animation" style="--i:2; --j:23;">
+                            <input type="email" id="cust-login-email" required autocomplete="email">
+                            <label for="cust-login-email">Email Address</label>
+                            <i class='bx bxs-envelope'></i>
+                        </div>
+
+                        <div class="portal-input-box animation" style="--i:3; --j:24;">
+                            <input type="password" id="cust-login-pass" required autocomplete="current-password">
+                            <label for="cust-login-pass">Password</label>
+                            <i class='bx bx-show cursor-pointer hover:text-violet-600' onclick="togglePasswordVisibility('cust-login-pass', this)" title="Show/Hide Password"></i>
+                        </div>
+
+                        <div class="animation flex justify-end -mt-2 mb-3" style="--i:4; --j:25;">
+                            <button type="button" onclick="openForgotPasswordModal()" class="text-[11px] font-bold text-violet-700 hover:underline bg-transparent border-0 cursor-pointer">
+                                Forgot password?
+                            </button>
+                        </div>
+
+                        <div id="cust-login-error" class="text-rose-600 text-[11px] font-semibold hidden bg-rose-50 p-2 rounded border border-rose-200 text-center mb-2"> 
+                            Invalid credentials. Sign up first if you don't have an active account! 
+                        </div>
+
+                        <button type="submit" class="portal-btn animation" style="--i:5; --j:26;">
+                            Sign In
+                        </button>
+
+                        <div class="animation text-xs text-slate-500 text-center mt-4" style="--i:6; --j:27;">
+                            <p>Have you received invite confirmation link in your email? 
+                                <a href="#" onclick="event.preventDefault(); toggleCustomerAuthTab('register');" class="text-violet-700 font-bold underline hover:text-violet-800 ml-1">
+                                    Sign up your account
+                                </a>
+                            </p>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- LOGIN SIDE PANEL (3D-STYLED MASCOT AVATAR) -->
+                <div class="info-text login bg-gradient-to-br from-violet-50 via-purple-50/80 to-slate-100 border-l border-violet-100">
+                    <div class="animation flex flex-col items-center" style="--i:0; --j:20;">
+                        <svg viewBox="0 0 260 280" class="w-48 h-52 animate-avatar-float drop-shadow-xl" xmlns="http://www.w3.org/2000/svg">
+                            <ellipse cx="130" cy="258" rx="68" ry="12" fill="#ddd6fe" opacity="0.7"/>
+                            <path d="M55 155 C25 130, 35 75, 85 65 C125 55, 195 55, 225 90 C245 115, 230 165, 200 180 Z" fill="#ede9fe"/>
+                            <!-- Legs & Sneakers -->
+                            <rect x="96" y="205" width="18" height="32" rx="8" fill="#1e1b4b"/>
+                            <rect x="142" y="205" width="18" height="32" rx="8" fill="#1e1b4b"/>
+                            <rect x="82" y="232" width="38" height="18" rx="9" fill="#312e81"/>
+                            <rect x="82" y="244" width="38" height="6" rx="3" fill="#ffffff"/>
+                            <circle cx="101" cy="240" r="3.5" fill="#a855f7"/>
+                            <rect x="138" y="232" width="38" height="18" rx="9" fill="#312e81"/>
+                            <rect x="138" y="244" width="38" height="6" rx="3" fill="#ffffff"/>
+                            <circle cx="157" cy="240" r="3.5" fill="#a855f7"/>
+                            <!-- Hoodie Body -->
+                            <rect x="76" y="132" width="108" height="84" rx="28" fill="#2e1065"/>
+                            <path d="M104 134 L130 152 L156 134" fill="none" stroke="#6d28d9" stroke-width="4" stroke-linecap="round"/>
+                            <text x="130" y="177" text-anchor="middle" fill="#c4b5fd" font-family="Inter, sans-serif" font-weight="900" font-size="14" letter-spacing="1">BZ</text>
+                            <text x="130" y="191" text-anchor="middle" fill="#ffffff" font-family="Inter, sans-serif" font-weight="700" font-size="8.5">Brandworkz</text>
+                            <!-- Left Arm Giving Thumbs Up -->
+                            <path d="M78 148 Q46 155 48 128" fill="none" stroke="#2e1065" stroke-width="20" stroke-linecap="round"/>
+                            <circle cx="48" cy="122" r="11" fill="#f5d0a9"/>
+                            <rect x="44" y="104" width="8" height="15" rx="4" fill="#f5d0a9"/>
+                            <!-- Head -->
+                            <rect x="74" y="34" width="112" height="104" rx="26" fill="#f5d0a9" stroke="#e2b488" stroke-width="2"/>
+                            <path d="M84 44 L96 44 M90 39 L90 49 M164 44 L176 44 M170 39 L170 49" stroke="#d9a373" stroke-width="2" stroke-linecap="round"/>
+                            <!-- Eyebrows & Glasses -->
+                            <path d="M92 64 Q104 58 116 64" fill="none" stroke="#451a03" stroke-width="4" stroke-linecap="round"/>
+                            <path d="M144 64 Q156 58 168 64" fill="none" stroke="#451a03" stroke-width="4" stroke-linecap="round"/>
+                            <rect x="84" y="68" width="42" height="32" rx="9" fill="#ffffff" stroke="#1e1b4b" stroke-width="5"/>
+                            <rect x="134" y="68" width="42" height="32" rx="9" fill="#ffffff" stroke="#1e1b4b" stroke-width="5"/>
+                            <line x1="126" y1="82" x2="134" y2="82" stroke="#1e1b4b" stroke-width="5"/>
+                            <!-- Eyes -->
+                            <circle cx="105" cy="84" r="9" fill="#3b0764"/>
+                            <circle cx="102" cy="81" r="3" fill="#ffffff"/>
+                            <circle cx="155" cy="84" r="9" fill="#3b0764"/>
+                            <circle cx="152" cy="81" r="3" fill="#ffffff"/>
+                            <!-- Happy Smile -->
+                            <path d="M112 110 Q130 128 148 110 Z" fill="#450a0a"/>
+                            <path d="M118 118 Q130 125 142 118 Z" fill="#f43f5e"/>
+                            <!-- Laptop Held in Right Hand -->
+                            <path d="M180 150 Q204 162 194 182" fill="none" stroke="#2e1065" stroke-width="19" stroke-linecap="round"/>
+                            <polygon points="154,152 216,142 208,188 146,196" fill="#64748b" stroke="#475569" stroke-width="2"/>
+                            <circle cx="182" cy="168" r="7" fill="#a855f7"/>
+                            <circle cx="192" cy="184" r="10" fill="#f5d0a9"/>
+                        </svg>
+                        <span class="mt-2 px-3 py-1 rounded-full bg-white border border-violet-200 text-[10px] font-extrabold uppercase tracking-widest text-violet-700 shadow-sm">
+                            Brandworkz Studio
+                        </span>
+                    </div>
+                </div>
+
+                <!-- REGISTER FORM -->
+                <div class="form-box register">
+                    <h2 class="animation text-2xl sm:text-3xl font-black text-slate-900 text-center mb-1 tracking-tight" style="--i:17; --j:0;">
+                        Create <span class="text-violet-600">Account</span>
+                    </h2>
+                    <p class="animation text-xs text-slate-500 text-center mb-1" style="--i:17; --j:0;">
+                        Register your profile to manage creative briefs.
+                    </p>
+
+                    <form id="customer-register-form" onsubmit="handleCustomerRegister(event)">
+                        <div class="portal-input-box animation" style="--i:18; --j:1;">
+                            <input type="text" id="cust-reg-user" name="username" required autocomplete="username">
+                            <label for="cust-reg-user">Username *</label>
+                            <i class='bx bxs-user'></i>
+                        </div>
+
+                        <div class="portal-input-box animation" style="--i:19; --j:2;">
+                            <input type="email" id="cust-reg-email" name="email" required autocomplete="email">
+                            <label for="cust-reg-email">Email Address *</label>
+                            <i class='bx bxs-envelope'></i>
+                        </div>
+
+                        <div class="portal-input-box animation" style="--i:20; --j:3;">
+                            <input type="password" id="cust-reg-pass" name="password" required autocomplete="new-password">
+                            <label for="cust-reg-pass">Password *</label>
+                            <i class='bx bx-show cursor-pointer hover:text-violet-600' onclick="togglePasswordVisibility('cust-reg-pass', this)" title="Show/Hide Password"></i>
+                        </div>
+
+                        <button type="submit" class="portal-btn animation" style="--i:21; --j:4;">
+                            Sign Up
+                        </button>
+
+                        <div class="animation text-xs text-slate-500 text-center mt-4" style="--i:22; --j:5;">
+                            <p>Already have an account? 
+                                <a href="#" onclick="event.preventDefault(); toggleCustomerAuthTab('login');" class="text-violet-700 font-bold underline hover:text-violet-800 ml-1">
+                                    Sign In
+                                </a>
+                            </p>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- REGISTER SIDE PANEL (3D-STYLED MASCOT AVATAR) -->
+                <div class="info-text register bg-gradient-to-br from-violet-50 via-purple-50/80 to-slate-100 border-r border-violet-100">
+                    <div class="animation flex flex-col items-center" style="--i:17; --j:0;">
+                        <svg viewBox="0 0 260 280" class="w-48 h-52 animate-avatar-float drop-shadow-xl" xmlns="http://www.w3.org/2000/svg">
+                            <ellipse cx="130" cy="258" rx="68" ry="12" fill="#ddd6fe" opacity="0.7"/>
+                            <path d="M40 120 C35 70, 95 45, 155 55 C205 65, 230 115, 210 165 C190 205, 70 200, 40 120 Z" fill="#ede9fe"/>
+                            <!-- Legs & Sneakers -->
+                            <rect x="98" y="205" width="18" height="32" rx="8" fill="#1e1b4b"/>
+                            <rect x="144" y="205" width="18" height="32" rx="8" fill="#1e1b4b"/>
+                            <rect x="84" y="232" width="38" height="18" rx="9" fill="#312e81"/>
+                            <rect x="84" y="244" width="38" height="6" rx="3" fill="#ffffff"/>
+                            <circle cx="103" cy="240" r="3.5" fill="#a855f7"/>
+                            <rect x="140" y="232" width="38" height="18" rx="9" fill="#312e81"/>
+                            <rect x="140" y="244" width="38" height="6" rx="3" fill="#ffffff"/>
+                            <circle cx="159" cy="240" r="3.5" fill="#a855f7"/>
+                            <!-- Hoodie Body -->
+                            <rect x="76" y="132" width="108" height="84" rx="28" fill="#4c1d95"/>
+                            <text x="130" y="177" text-anchor="middle" fill="#ede9fe" font-family="Inter, sans-serif" font-weight="900" font-size="14" letter-spacing="1">BZ</text>
+                            <text x="130" y="191" text-anchor="middle" fill="#ffffff" font-family="Inter, sans-serif" font-weight="700" font-size="8.5">Studio VIP</text>
+                            <!-- Stylus Pen in Right Hand -->
+                            <path d="M180 146 Q210 135 208 112" fill="none" stroke="#4c1d95" stroke-width="19" stroke-linecap="round"/>
+                            <circle cx="208" cy="108" r="11" fill="#f5d0a9"/>
+                            <line x1="202" y1="118" x2="222" y2="82" stroke="#7c3aed" stroke-width="5" stroke-linecap="round"/>
+                            <!-- Wave Hand -->
+                            <path d="M78 148 Q48 162 56 184" fill="none" stroke="#4c1d95" stroke-width="19" stroke-linecap="round"/>
+                            <circle cx="58" cy="186" r="10" fill="#f5d0a9"/>
+                            <!-- Head -->
+                            <rect x="74" y="34" width="112" height="104" rx="26" fill="#f5d0a9" stroke="#e2b488" stroke-width="2"/>
+                            <path d="M92 62 Q104 55 116 62" fill="none" stroke="#451a03" stroke-width="4" stroke-linecap="round"/>
+                            <path d="M144 62 Q156 55 168 62" fill="none" stroke="#451a03" stroke-width="4" stroke-linecap="round"/>
+                            <rect x="84" y="68" width="42" height="32" rx="9" fill="#ffffff" stroke="#1e1b4b" stroke-width="5"/>
+                            <rect x="134" y="68" width="42" height="32" rx="9" fill="#ffffff" stroke="#1e1b4b" stroke-width="5"/>
+                            <line x1="126" y1="82" x2="134" y2="82" stroke="#1e1b4b" stroke-width="5"/>
+                            <circle cx="105" cy="84" r="9" fill="#3b0764"/>
+                            <circle cx="102" cy="81" r="3" fill="#ffffff"/>
+                            <circle cx="155" cy="84" r="9" fill="#3b0764"/>
+                            <circle cx="152" cy="81" r="3" fill="#ffffff"/>
+                            <path d="M112 110 Q130 128 148 110 Z" fill="#450a0a"/>
+                            <path d="M118 118 Q130 125 142 118 Z" fill="#f43f5e"/>
+                        </svg>
+                        <span class="mt-2 px-3 py-1 rounded-full bg-white border border-violet-200 text-[10px] font-extrabold uppercase tracking-widest text-violet-700 shadow-sm">
+                            Creative Membership
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- AUTHENTICATED PROFILE CARD -->
+        <div id="customer-authenticated-card" class="bg-white border border-violet-200 rounded-2xl p-5 sm:p-8 shadow-xl space-y-5 hidden animate-fadeIn"> 
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-4 gap-4"> 
+                <div class="flex items-center space-x-3"> 
+                    <div class="w-12 h-12 rounded-full bg-violet-600 flex items-center justify-center text-white text-xl font-bold shadow-md shadow-violet-600/20">👤</div> 
+                    <div> 
+                        <span class="text-violet-700 text-[10px] font-bold uppercase tracking-wider block">Verified Customer Profile</span> 
+                        <h3 id="authenticated-cust-username" class="text-lg sm:text-xl font-black text-slate-900">Welcome back!</h3> 
+                    </div> 
+                </div> 
+                <button onclick="logoutCustomer()" class="px-4 py-2 bg-rose-50 hover:bg-rose-600 border border-rose-200 hover:border-rose-600 text-rose-600 hover:text-white font-bold text-xs rounded-lg transition-all flex items-center space-x-1 justify-center self-start sm:self-auto"> 
+                    Logout Portal 
+                </button> 
+            </div> 
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 pt-1"> 
+                <div class="bg-slate-50 p-5 rounded-xl border border-slate-200 space-y-3"> 
+                    <h4 class="text-xs font-bold text-slate-900 border-b border-slate-200 pb-1.5 flex items-center justify-between"> 
+                        <span>Profile Credentials</span> 
+                        <span class="text-[9px] uppercase font-black text-violet-700 tracking-wider">Connected</span> 
+                    </h4> 
+                    <div class="space-y-2 text-xs"> 
+                        <div class="flex justify-between gap-2"> 
+                            <span class="text-slate-500">Email:</span> 
+                            <span id="cust-det-email" class="font-semibold text-slate-900 truncate max-w-[150px]">email@domain.com</span> 
+                        </div> 
+                        <div class="flex justify-between"> 
+                            <span class="text-slate-500">Selected Terms:</span> 
+                            <span id="cust-det-term" class="font-semibold text-violet-700 uppercase tracking-wide">Not Selected</span> 
+                        </div> 
+                    </div> 
+                </div> 
+
+                <div class="bg-slate-50 p-5 rounded-xl border border-slate-200 space-y-3 flex flex-col justify-between"> 
+                    <div> 
+                        <h4 class="text-xs font-black uppercase text-violet-700 tracking-wider flex items-center justify-between"> 
+                            <span>Checkout Action Centre</span> 
+                        </h4> 
+                        <div id="customer-order-action-area" class="mt-4 space-y-3"> 
                             <div class="p-3 bg-white rounded-lg border border-slate-200 text-center"> 
                                 <p class="text-xs text-slate-500 mb-2">Order Tracking Status:</p> 
                                 <span id="customer-status-badge" class="px-3 py-1 rounded text-xs font-bold bg-slate-100 text-slate-600 border border-slate-200">No Active Order</span> 
@@ -2082,6 +2385,8 @@
         document.getElementById('authenticated-cust-username').innerText = `Welcome back, ${user.username}!`; 
         document.getElementById('cust-det-email').innerText = user.email; 
 
+        const guestCard = document.getElementById('guest-order-tracker-card');
+        if (guestCard) guestCard.classList.add('hidden');
         document.getElementById('customer-unauthenticated-card').classList.add('hidden'); 
         document.getElementById('customer-authenticated-card').classList.remove('hidden'); 
     } 
@@ -2182,6 +2487,8 @@
         currentUser = null; 
         localStorage.removeItem("current_session_user"); 
         document.getElementById('customer-authenticated-card').classList.add('hidden'); 
+        const guestCard = document.getElementById('guest-order-tracker-card');
+        if (guestCard) guestCard.classList.remove('hidden');
         document.getElementById('customer-unauthenticated-card').classList.remove('hidden'); 
         document.getElementById('customer-portal-username').classList.add('hidden'); 
         document.getElementById('customer-portal-text').classList.remove('hidden'); 
@@ -2401,12 +2708,6 @@
     } 
 
     function executeBasketSubmission() { 
-        if (!currentUser) { 
-            showToast("Please sign in to lock selections to your profile.", "error"); 
-            switchView('customer-auth'); 
-            toggleCartDrawer(false); 
-            return; 
-        } 
         if (cart.length === 0) { 
             showToast("Basket is empty.", "error"); 
             return; 
@@ -2420,10 +2721,12 @@
         const selectedTerm = document.getElementById('checkout-term-selector').value; 
         let totalAmount = cart.reduce((sum, item) => sum + (item.singlePrice * item.quantity), 0); 
         const generatedOrderId = "BZ-ORD-" + Math.floor(1000 + Math.random() * 9000);
+        const activeUserLabel = currentUser ? currentUser.username : guestSessionId;
+        const activeEmailLabel = currentUser ? currentUser.email : `${guestSessionId.toLowerCase()}@guest.brandworkz.co`;
          
         WORKFLOW_STATE.hasRequest = true; 
-        WORKFLOW_STATE.customerUsername = currentUser.username; 
-        WORKFLOW_STATE.customerEmail = currentUser.email;
+        WORKFLOW_STATE.customerUsername = activeUserLabel; 
+        WORKFLOW_STATE.customerEmail = activeEmailLabel;
         WORKFLOW_STATE.orderId = generatedOrderId;
         WORKFLOW_STATE.status = "Pending Confirmation"; 
         WORKFLOW_STATE.amount = totalAmount; 
@@ -2436,7 +2739,9 @@
         toggleCartDrawer(false); 
         cart = []; 
         updateCartBadgeCount(); 
-        showToast("Order pre-purchase details auto-saved & synced to Admin Workspace!"); 
+        showToast(currentUser 
+            ? "Order pre-purchase details auto-saved & synced to Admin Workspace!" 
+            : `Guest Order (${generatedOrderId}) locked! Track live status in Profile Portal.`); 
     } 
 
     function cancelCurrentOrder() {
@@ -2452,88 +2757,102 @@
     }
 
     function updateCustomerWorkflowUI() { 
-        const area = document.getElementById('dynamic-workflow-btn-placeholder'); 
-        const badge = document.getElementById('customer-status-badge'); 
+        const activeOwnerName = currentUser ? currentUser.username : guestSessionId;
+        const hasActiveUserOrder = WORKFLOW_STATE.hasRequest && WORKFLOW_STATE.customerUsername === activeOwnerName;
+
+        const guestIdentityEl = document.getElementById('guest-tracker-identity');
+        if (guestIdentityEl) {
+            guestIdentityEl.innerText = `Guest Order Tracking (${guestSessionId})`;
+        }
+
+        const targets = [
+            { area: document.getElementById('dynamic-workflow-btn-placeholder'), badge: document.getElementById('customer-status-badge'), isGuest: false },
+            { area: document.getElementById('guest-workflow-btn-placeholder'), badge: document.getElementById('guest-status-badge'), isGuest: true }
+        ];
+
         const termLabel = document.getElementById('cust-det-term'); 
-         
         if(currentUser && termLabel) { 
-            termLabel.innerText = WORKFLOW_STATE.hasRequest && WORKFLOW_STATE.customerUsername === currentUser.username 
+            termLabel.innerText = hasActiveUserOrder 
                 ? (WORKFLOW_STATE.selectedTerm === 'cash' ? "Cash Only" : "Online Transfer with FPX") 
                 : "Not Selected"; 
         } 
 
-        if(!area || !badge) return; 
+        targets.forEach(({ area, badge, isGuest }) => {
+            if (!area || !badge) return;
 
-        if (!currentUser || !WORKFLOW_STATE.hasRequest || WORKFLOW_STATE.customerUsername !== currentUser.username) { 
-            badge.innerText = "No Active Order"; 
-            badge.className = "px-3 py-1 rounded text-xs font-bold bg-slate-100 text-slate-600 border border-slate-200"; 
-            area.innerHTML = ` 
-                <div class="text-center p-2 text-xs text-slate-500 italic"> 
-                    Add catalog items to basket and submit requirements brief to start workflow loop. 
-                </div> 
-            `; 
-            return; 
-        } 
+            if (!hasActiveUserOrder) { 
+                badge.innerText = "No Active Order"; 
+                badge.className = "px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-600 border border-slate-200"; 
+                area.innerHTML = ` 
+                    <div class="text-center p-2 text-xs text-slate-500 italic"> 
+                        ${isGuest 
+                            ? 'Add catalog items to your basket and lock your brief to track your Guest order status here in real time.' 
+                            : 'Add catalog items to basket and submit requirements brief to start workflow loop.'} 
+                    </div> 
+                `; 
+                return; 
+            } 
 
-        badge.innerText = WORKFLOW_STATE.status; 
+            badge.innerText = `${WORKFLOW_STATE.orderId ? WORKFLOW_STATE.orderId + ' • ' : ''}${WORKFLOW_STATE.status}`; 
 
-        if (WORKFLOW_STATE.status === "Pending Confirmation") { 
-            badge.className = "px-3 py-1 rounded text-xs font-bold bg-amber-50 text-amber-700 border border-amber-200"; 
-            area.innerHTML = ` 
-                <div class="flex gap-2">
-                    <button disabled class="flex-grow py-2.5 bg-slate-200 text-slate-500 cursor-not-allowed font-bold text-xs uppercase tracking-wider rounded-xl border border-slate-300"> 
-                        Awaiting Admin... 
-                    </button>
-                    <button onclick="cancelCurrentOrder()" class="px-4 py-2.5 bg-rose-50 hover:bg-rose-600 border border-rose-200 hover:border-rose-600 text-rose-600 hover:text-white font-bold text-xs uppercase rounded-xl transition-all">
-                        Cancel
-                    </button>
-                </div>
-            `; 
-        } else if (WORKFLOW_STATE.status === "Approved") { 
-            badge.className = "px-3 py-1 rounded text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200"; 
-            if (WORKFLOW_STATE.selectedTerm === "cash") { 
+            if (WORKFLOW_STATE.status === "Pending Confirmation") { 
+                badge.className = "px-3 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-700 border border-amber-200"; 
                 area.innerHTML = ` 
                     <div class="flex gap-2">
-                        <button onclick="executeCashQuotationApproval()" class="flex-grow py-2.5 bg-violet-600 hover:bg-violet-700 text-white font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow-lg shadow-violet-600/20"> 
-                            Approve Quotation 
+                        <button disabled class="flex-grow py-2.5 bg-slate-200 text-slate-500 cursor-not-allowed font-bold text-xs uppercase tracking-wider rounded-xl border border-slate-300"> 
+                            Awaiting Admin... 
                         </button> 
                         <button onclick="cancelCurrentOrder()" class="px-4 py-2.5 bg-rose-50 hover:bg-rose-600 border border-rose-200 hover:border-rose-600 text-rose-600 hover:text-white font-bold text-xs uppercase rounded-xl transition-all">
                             Cancel
                         </button>
                     </div>
                 `; 
-            } else { 
+            } else if (WORKFLOW_STATE.status === "Approved") { 
+                badge.className = "px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200"; 
+                if (WORKFLOW_STATE.selectedTerm === "cash") { 
+                    area.innerHTML = ` 
+                        <div class="flex gap-2">
+                            <button onclick="executeCashQuotationApproval()" class="flex-grow py-2.5 bg-violet-600 hover:bg-violet-700 text-white font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow-lg shadow-violet-600/20"> 
+                                Approve Quotation 
+                            </button> 
+                            <button onclick="cancelCurrentOrder()" class="px-4 py-2.5 bg-rose-50 hover:bg-rose-600 border border-rose-200 hover:border-rose-600 text-rose-600 hover:text-white font-bold text-xs uppercase rounded-xl transition-all">
+                                Cancel
+                            </button>
+                        </div>
+                    `; 
+                } else { 
+                    area.innerHTML = ` 
+                        <div class="flex gap-2">
+                            <button onclick="triggerToyyibpayFPXPaymentLink()" class="flex-grow py-2.5 bg-violet-600 hover:bg-violet-700 text-white font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow-lg shadow-violet-600/20"> 
+                                Buy with FPX 
+                            </button> 
+                            <button onclick="cancelCurrentOrder()" class="px-4 py-2.5 bg-rose-50 hover:bg-rose-600 border border-rose-200 hover:border-rose-600 text-rose-600 hover:text-white font-bold text-xs uppercase rounded-xl transition-all">
+                                Cancel
+                            </button>
+                        </div>
+                    `; 
+                } 
+            } else if (WORKFLOW_STATE.status === "Quotation Processed") { 
+                badge.className = "px-3 py-1 rounded-full text-xs font-bold bg-violet-50 text-violet-700 border border-violet-200"; 
                 area.innerHTML = ` 
-                    <div class="flex gap-2">
-                        <button onclick="triggerToyyibpayFPXPaymentLink()" class="flex-grow py-2.5 bg-violet-600 hover:bg-violet-700 text-white font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow-lg shadow-violet-600/20"> 
-                            Buy with FPX 
-                        </button> 
-                        <button onclick="cancelCurrentOrder()" class="px-4 py-2.5 bg-rose-50 hover:bg-rose-600 border border-rose-200 hover:border-rose-600 text-rose-600 hover:text-white font-bold text-xs uppercase rounded-xl transition-all">
-                            Cancel
+                    <div class="space-y-2">
+                        <div class="p-3 bg-violet-50 border border-violet-200 text-violet-700 font-bold text-center text-xs rounded-xl"> 
+                            Awaiting Project Completion... 
+                        </div>
+                        <button onclick="cancelCurrentOrder()" class="w-full py-2 bg-rose-50 hover:bg-rose-600 border border-rose-200 hover:border-rose-600 text-rose-600 hover:text-white font-bold text-xs uppercase rounded-xl transition-all">
+                            Cancel Order
                         </button>
                     </div>
+                `; 
+            } else if (WORKFLOW_STATE.status === "Completed") { 
+                badge.className = "px-3 py-1 rounded-full text-xs font-bold bg-violet-50 text-violet-700 border border-violet-200"; 
+                area.innerHTML = ` 
+                    <div class="p-3 bg-violet-50 border border-violet-200 text-violet-700 font-bold text-center text-xs rounded-xl"> 
+                        🎉 Order Processed &amp; Marked Completed! 
+                    </div> 
                 `; 
             } 
-        } else if (WORKFLOW_STATE.status === "Quotation Processed") { 
-            badge.className = "px-3 py-1 rounded text-xs font-bold bg-violet-50 text-violet-700 border border-violet-200"; 
-            area.innerHTML = ` 
-                <div class="space-y-2">
-                    <div class="p-3 bg-violet-50 border border-violet-200 text-violet-700 font-bold text-center text-xs rounded-xl"> 
-                        Awaiting Project Completion... 
-                    </div>
-                    <button onclick="cancelCurrentOrder()" class="w-full py-2 bg-rose-50 hover:bg-rose-600 border border-rose-200 hover:border-rose-600 text-rose-600 hover:text-white font-bold text-xs uppercase rounded-xl transition-all">
-                        Cancel Order
-                    </button>
-                </div>
-            `; 
-        } else if (WORKFLOW_STATE.status === "Completed") { 
-            badge.className = "px-3 py-1 rounded text-xs font-bold bg-violet-50 text-violet-700 border border-violet-200"; 
-            area.innerHTML = ` 
-                <div class="p-3 bg-violet-50 border border-violet-200 text-violet-700 font-bold text-center text-xs rounded-xl"> 
-                    🎉 Order Processed &amp; Marked Completed! 
-                </div> 
-            `; 
-        } 
+        });
     } 
 
     function executeCashQuotationApproval() { 

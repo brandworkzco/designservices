@@ -42,14 +42,6 @@
             animation: fadeIn 0.25s ease-out forwards; 
         } 
 
-        @keyframes floatAvatar {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-7px); }
-        }
-        .animate-avatar-float {
-            animation: floatAvatar 3.8s ease-in-out infinite;
-        }
-
         /* ========================================================
            ANIMATED CUSTOMER PORTAL STYLES (Clean White & Purple)
            ======================================================== */
@@ -217,7 +209,7 @@
             transform: scale(0.98);
         }
 
-        /* Avatar Side Panels (Preserving exact slide & blur transition motion) */
+        /* Avatar Side Panels (Transparent background with slide & blur transition motion) */
         .portal-wrapper .info-text {
             position: absolute;
             top: 0;
@@ -227,6 +219,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            background: transparent;
             z-index: 2;
             pointer-events: none;
         }
@@ -269,6 +262,28 @@
             opacity: 1;
             filter: blur(0);
             transition-delay: calc(0.08s * var(--j));
+        }
+
+        /* Transparent Avatar Container */
+        .avatar-transparent-stage {
+            position: relative;
+            width: 100%;
+            height: 315px;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: visible;
+        }
+
+        .avatar-transparent-img {
+            width: auto;
+            height: 315px;
+            max-width: 100%;
+            object-fit: contain;
+            background: transparent;
+            mix-blend-mode: multiply;
+            filter: drop-shadow(0 14px 18px rgba(76, 29, 149, 0.16));
         }
 
         @media (max-width: 768px) {
@@ -499,86 +514,12 @@
                     </form>
                 </div>
 
-                <!-- LOGIN AVATAR SIDE PANEL (White & Purple clean card matching screenshot) -->
+                <!-- LOGIN AVATAR SIDE PANEL (Transparent Background) -->
                 <div class="info-text login">
-                    <div class="animation w-full flex flex-col items-center justify-center" style="--i:0; --j:20;">
-                        <div class="relative w-64 h-64 rounded-3xl bg-slate-100/90 border border-slate-200/80 flex items-center justify-center shadow-inner overflow-hidden">
-                            <div class="absolute inset-0 bg-gradient-to-b from-violet-100/50 via-transparent to-slate-200/40"></div>
-                            <svg class="w-56 h-56 animate-avatar-float relative z-10 drop-shadow-[0_14px_18px_rgba(76,29,149,0.18)]" viewBox="0 0 260 280" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <defs>
-                                    <linearGradient id="bwBlockGrad1" x1="65" y1="30" x2="185" y2="145" gradientUnits="userSpaceOnUse">
-                                        <stop offset="0%" stop-color="#f3c68f"/>
-                                        <stop offset="55%" stop-color="#d89b5c"/>
-                                        <stop offset="100%" stop-color="#b4753a"/>
-                                    </linearGradient>
-                                    <linearGradient id="bwBlockSide1" x1="165" y1="30" x2="195" y2="140" gradientUnits="userSpaceOnUse">
-                                        <stop offset="0%" stop-color="#c68649"/>
-                                        <stop offset="100%" stop-color="#8c5423"/>
-                                    </linearGradient>
-                                    <linearGradient id="bwHoodieGrad1" x1="70" y1="140" x2="185" y2="235" gradientUnits="userSpaceOnUse">
-                                        <stop offset="0%" stop-color="#1e1b4b"/>
-                                        <stop offset="100%" stop-color="#0f172a"/>
-                                    </linearGradient>
-                                    <linearGradient id="bwPurpleGrad1" x1="0" y1="0" x2="1" y2="1">
-                                        <stop offset="0%" stop-color="#a855f7"/>
-                                        <stop offset="100%" stop-color="#6d28d9"/>
-                                    </linearGradient>
-                                </defs>
-                                <!-- Floor Shadow -->
-                                <ellipse cx="130" cy="256" rx="74" ry="11" fill="#cbd5e1" opacity="0.85"/>
-                                <!-- Sneakers -->
-                                <rect x="86" y="220" width="22" height="24" rx="8" fill="#1e1b4b"/>
-                                <rect x="136" y="220" width="22" height="24" rx="8" fill="#1e1b4b"/>
-                                <path d="M76 244 C76 235, 114 235, 114 246 L114 252 L74 252 Z" fill="#1e1b4b" stroke="#8b5cf6" stroke-width="1.8"/>
-                                <rect x="74" y="249" width="40" height="5" rx="2.5" fill="#ffffff"/>
-                                <path d="M132 244 C132 235, 170 235, 170 246 L170 252 L130 252 Z" fill="#1e1b4b" stroke="#8b5cf6" stroke-width="1.8"/>
-                                <rect x="130" y="249" width="40" height="5" rx="2.5" fill="#ffffff"/>
-                                <!-- Hoodie Torso -->
-                                <path d="M74 152 C74 140, 174 140, 174 152 L180 218 C180 225, 173 230, 165 230 L83 230 C75 230, 68 225, 68 218 Z" fill="url(#bwHoodieGrad1)" stroke="#312e81" stroke-width="2"/>
-                                <!-- Hoodie Strings -->
-                                <path d="M112 146 L110 174" stroke="#a855f7" stroke-width="3" stroke-linecap="round"/>
-                                <path d="M136 146 L138 174" stroke="#a855f7" stroke-width="3" stroke-linecap="round"/>
-                                <!-- Brandworkz BZ Chest Emblem -->
-                                <rect x="108" y="178" width="32" height="24" rx="6" fill="url(#bwPurpleGrad1)"/>
-                                <text x="124" y="194" text-anchor="middle" fill="#ffffff" font-family="Inter, sans-serif" font-weight="900" font-size="13">BZ</text>
-                                <!-- Left Arm Thumbs-Up -->
-                                <path d="M74 156 C52 162, 42 184, 54 198 C62 206, 74 202, 78 190" fill="url(#bwHoodieGrad1)" stroke="#312e81" stroke-width="2"/>
-                                <circle cx="52" cy="184" r="12" fill="#eab074"/>
-                                <path d="M51 174 L51 161 C51 157, 57 157, 57 161 L57 174 Z" fill="#eab074"/>
-                                <!-- Right Arm Holding Laptop -->
-                                <path d="M174 156 C194 164, 200 186, 186 198 L168 198" fill="url(#bwHoodieGrad1)" stroke="#312e81" stroke-width="2"/>
-                                <!-- Laptop -->
-                                <polygon points="154,162 224,154 216,196 148,202" fill="#64748b" stroke="#cbd5e1" stroke-width="1.5"/>
-                                <polygon points="148,202 216,196 232,204 162,210" fill="#94a3b8"/>
-                                <circle cx="186" cy="178" r="9" fill="url(#bwPurpleGrad1)"/>
-                                <text x="186" y="181.5" text-anchor="middle" fill="#ffffff" font-family="Inter, sans-serif" font-weight="900" font-size="8">BZ</text>
-                                <!-- 3D Creative Block Head -->
-                                <polygon points="78,38 164,32 186,44 100,50" fill="#f7d3a3"/>
-                                <polygon points="164,32 186,44 186,136 164,144" fill="url(#bwBlockSide1)"/>
-                                <rect x="76" y="42" width="90" height="102" rx="12" fill="url(#bwBlockGrad1)"/>
-                                <!-- Subtle Engraved Corner Marks -->
-                                <path d="M84 50 L92 54 L84 58 M156 48 L148 52 L156 56 M84 130 L92 134 L84 138" stroke="#9c612c" stroke-width="1.6" stroke-linecap="round" opacity="0.65"/>
-                                <!-- Eyebrows -->
-                                <path d="M90 73 Q101 67 111 72" stroke="#451a03" stroke-width="4" stroke-linecap="round"/>
-                                <path d="M131 72 Q141 67 152 73" stroke="#451a03" stroke-width="4" stroke-linecap="round"/>
-                                <!-- Expressive Eyes -->
-                                <circle cx="101" cy="91" r="13" fill="#ffffff"/>
-                                <circle cx="103" cy="91" r="8" fill="#1e1b4b"/>
-                                <circle cx="106" cy="88" r="3" fill="#ffffff"/>
-                                <circle cx="141" cy="91" r="13" fill="#ffffff"/>
-                                <circle cx="143" cy="91" r="8" fill="#1e1b4b"/>
-                                <circle cx="146" cy="88" r="3" fill="#ffffff"/>
-                                <!-- Thick Designer Glasses -->
-                                <rect x="83" y="75" width="36" height="31" rx="8" stroke="#0f172a" stroke-width="4.5" fill="none"/>
-                                <rect x="123" y="75" width="36" height="31" rx="8" stroke="#0f172a" stroke-width="4.5" fill="none"/>
-                                <path d="M119 89 L123 89" stroke="#0f172a" stroke-width="4.5"/>
-                                <!-- Happy Smile -->
-                                <path d="M104 116 Q121 134 138 116 Z" fill="#450a0a"/>
-                                <path d="M108 117 Q121 122 134 117 Z" fill="#ffffff"/>
-                                <path d="M112 125 Q121 131 130 125 Z" fill="#fb7185"/>
-                            </svg>
+                    <div class="animation w-full flex flex-col items-center justify-center bg-transparent" style="--i:0; --j:20;">
+                        <div class="avatar-transparent-stage">
+                            <img src="https://brandworkzco.github.io/designservices/bzavatar3.webp" alt="Brandworkz Studio Mascot" class="avatar-transparent-img relative z-10" onerror="this.src='https://placehold.co/315x315/transparent/6d28d9?text=BZ+Avatar'">
                         </div>
-                        <span class="mt-3 text-[10px] font-black uppercase tracking-widest text-violet-700">Brandworkz Studio Mascot</span>
                     </div>
                 </div>
 
@@ -621,82 +562,12 @@
                     </form>
                 </div>
 
-                <!-- REGISTER AVATAR SIDE PANEL (White & Purple clean card) -->
+                <!-- REGISTER AVATAR SIDE PANEL (Transparent Background) -->
                 <div class="info-text register">
-                    <div class="animation w-full flex flex-col items-center justify-center" style="--i:17; --j:0;">
-                        <div class="relative w-64 h-64 rounded-3xl bg-slate-100/90 border border-slate-200/80 flex items-center justify-center shadow-inner overflow-hidden">
-                            <div class="absolute inset-0 bg-gradient-to-b from-violet-100/50 via-transparent to-slate-200/40"></div>
-                            <svg class="w-56 h-56 animate-avatar-float relative z-10 drop-shadow-[0_14px_18px_rgba(76,29,149,0.18)]" viewBox="0 0 260 280" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <defs>
-                                    <linearGradient id="bwBlockGrad2" x1="75" y1="30" x2="195" y2="145" gradientUnits="userSpaceOnUse">
-                                        <stop offset="0%" stop-color="#f3c68f"/>
-                                        <stop offset="55%" stop-color="#d89b5c"/>
-                                        <stop offset="100%" stop-color="#b4753a"/>
-                                    </linearGradient>
-                                    <linearGradient id="bwBlockSide2" x1="65" y1="30" x2="95" y2="140" gradientUnits="userSpaceOnUse">
-                                        <stop offset="0%" stop-color="#c68649"/>
-                                        <stop offset="100%" stop-color="#8c5423"/>
-                                    </linearGradient>
-                                    <linearGradient id="bwHoodieGrad2" x1="80" y1="140" x2="195" y2="235" gradientUnits="userSpaceOnUse">
-                                        <stop offset="0%" stop-color="#1e1b4b"/>
-                                        <stop offset="100%" stop-color="#0f172a"/>
-                                    </linearGradient>
-                                    <linearGradient id="bwPurpleGrad2" x1="0" y1="0" x2="1" y2="1">
-                                        <stop offset="0%" stop-color="#a855f7"/>
-                                        <stop offset="100%" stop-color="#6d28d9"/>
-                                    </linearGradient>
-                                </defs>
-                                <!-- Floor Shadow -->
-                                <ellipse cx="130" cy="256" rx="74" ry="11" fill="#cbd5e1" opacity="0.85"/>
-                                <!-- Sneakers -->
-                                <rect x="98" y="220" width="22" height="24" rx="8" fill="#1e1b4b"/>
-                                <rect x="148" y="220" width="22" height="24" rx="8" fill="#1e1b4b"/>
-                                <path d="M88 244 C88 235, 126 235, 126 246 L126 252 L86 252 Z" fill="#1e1b4b" stroke="#8b5cf6" stroke-width="1.8"/>
-                                <rect x="86" y="249" width="40" height="5" rx="2.5" fill="#ffffff"/>
-                                <path d="M144 244 C144 235, 182 235, 182 246 L182 252 L142 252 Z" fill="#1e1b4b" stroke="#8b5cf6" stroke-width="1.8"/>
-                                <rect x="142" y="249" width="40" height="5" rx="2.5" fill="#ffffff"/>
-                                <!-- Hoodie Torso -->
-                                <path d="M86 152 C86 140, 186 140, 186 152 L192 218 C192 225, 185 230, 177 230 L95 230 C87 230, 80 225, 80 218 Z" fill="url(#bwHoodieGrad2)" stroke="#312e81" stroke-width="2"/>
-                                <!-- Hoodie Strings -->
-                                <path d="M124 146 L122 174" stroke="#a855f7" stroke-width="3" stroke-linecap="round"/>
-                                <path d="M148 146 L150 174" stroke="#a855f7" stroke-width="3" stroke-linecap="round"/>
-                                <!-- Brandworkz BZ Chest Emblem -->
-                                <rect x="120" y="178" width="32" height="24" rx="6" fill="url(#bwPurpleGrad2)"/>
-                                <text x="136" y="194" text-anchor="middle" fill="#ffffff" font-family="Inter, sans-serif" font-weight="900" font-size="13">BZ</text>
-                                <!-- Left Arm Holding Stylus Pen -->
-                                <path d="M86 156 C66 164, 60 186, 74 198 L92 198" fill="url(#bwHoodieGrad2)" stroke="#312e81" stroke-width="2"/>
-                                <line x1="42" y1="158" x2="78" y2="196" stroke="#7c3aed" stroke-width="5" stroke-linecap="round"/>
-                                <polygon points="36,152 45,155 39,161" fill="#1e1b4b"/>
-                                <!-- Right Arm Waving Hello -->
-                                <path d="M186 156 C208 158, 218 140, 212 124" stroke="url(#bwHoodieGrad2)" stroke-width="18" stroke-linecap="round"/>
-                                <circle cx="212" cy="118" r="12" fill="#eab074"/>
-                                <!-- 3D Creative Block Head -->
-                                <polygon points="96,32 182,38 160,50 74,44" fill="#f7d3a3"/>
-                                <polygon points="74,44 96,32 96,144 74,136" fill="url(#bwBlockSide2)"/>
-                                <rect x="94" y="42" width="90" height="102" rx="12" fill="url(#bwBlockGrad2)"/>
-                                <!-- Subtle Engraved Corner Marks -->
-                                <path d="M176 50 L168 54 L176 58 M104 48 L112 52 L104 56 M176 130 L168 134 L176 138" stroke="#9c612c" stroke-width="1.6" stroke-linecap="round" opacity="0.65"/>
-                                <!-- Eyebrows -->
-                                <path d="M108 72 Q119 67 129 72" stroke="#451a03" stroke-width="4" stroke-linecap="round"/>
-                                <path d="M149 72 Q159 67 170 72" stroke="#451a03" stroke-width="4" stroke-linecap="round"/>
-                                <!-- Expressive Eyes -->
-                                <circle cx="119" cy="91" r="13" fill="#ffffff"/>
-                                <circle cx="117" cy="91" r="8" fill="#1e1b4b"/>
-                                <circle cx="120" cy="88" r="3" fill="#ffffff"/>
-                                <circle cx="159" cy="91" r="13" fill="#ffffff"/>
-                                <circle cx="157" cy="91" r="8" fill="#1e1b4b"/>
-                                <circle cx="160" cy="88" r="3" fill="#ffffff"/>
-                                <!-- Thick Designer Glasses -->
-                                <rect x="101" y="75" width="36" height="31" rx="8" stroke="#0f172a" stroke-width="4.5" fill="none"/>
-                                <rect x="141" y="75" width="36" height="31" rx="8" stroke="#0f172a" stroke-width="4.5" fill="none"/>
-                                <path d="M137 89 L141 89" stroke="#0f172a" stroke-width="4.5"/>
-                                <!-- Happy Smile -->
-                                <path d="M122 116 Q139 134 156 116 Z" fill="#450a0a"/>
-                                <path d="M126 117 Q139 122 152 117 Z" fill="#ffffff"/>
-                                <path d="M130 125 Q139 131 148 125 Z" fill="#fb7185"/>
-                            </svg>
+                    <div class="animation w-full flex flex-col items-center justify-center bg-transparent" style="--i:17; --j:0;">
+                        <div class="avatar-transparent-stage">
+                            <img src="https://brandworkzco.github.io/designservices/bzavatar3.webp" alt="Create Client Avatar" class="avatar-transparent-img relative z-10" onerror="this.src='https://placehold.co/315x315/transparent/6d28d9?text=BZ+Avatar'">
                         </div>
-                        <span class="mt-3 text-[10px] font-black uppercase tracking-widest text-violet-700">Create Client Avatar</span>
                     </div>
                 </div>
 
@@ -1373,8 +1244,7 @@
         // REALTIME 24-HOUR VISITOR COUNTER (Resets daily at 12:01 AM)
         // =========================================================================
         function getVisitorCycleKey(now = new Date()) {
-            // Cycle runs from 12:01 AM (00:01) today until 12:00:59 AM tomorrow
-            const shifted = new Date(now.getTime() - 60 * 1000); // Subtract 1 minute so 00:00 belongs to previous day's cycle, and 00:01 starts the new day
+            const shifted = new Date(now.getTime() - 60 * 1000);
             const yyyy = shifted.getFullYear();
             const mm = String(shifted.getMonth() + 1).padStart(2, '0');
             const dd = String(shifted.getDate()).padStart(2, '0');
@@ -1398,7 +1268,6 @@
                 localStorage.setItem("bw_visitor_device_id", visitorDeviceId);
             }
 
-            // Clean up outdated local cycle flags and totals from previous days
             Object.keys(localStorage).forEach(k => {
                 if ((k.startsWith("bw_counted_cycle_") && k !== visitorSessionKey) ||
                     (k.startsWith("bw_visitor_total_") && k !== cachedTotalKey)) {
@@ -1406,7 +1275,6 @@
                 }
             });
 
-            // Immediately show & maintain at least 1 for the current visitor so it never stays at 0
             let currentDisplayedCount = parseInt(localStorage.getItem(cachedTotalKey) || "0", 10);
             if (!localStorage.getItem(visitorSessionKey) || currentDisplayedCount < 1) {
                 currentDisplayedCount = Math.max(1, currentDisplayedCount);
@@ -1418,7 +1286,6 @@
                 try {
                     const cycleVisitorsCol = window.FB_collection(window.FB_DB, "daily_visitors", cycleKey, "visitors");
 
-                    // Record this live visitor once per 24h cycle (starting 12:01 AM)
                     if (!localStorage.getItem(visitorSessionKey)) {
                         const visitorDocRef = window.FB_doc(window.FB_DB, "daily_visitors", cycleKey, "visitors", visitorDeviceId);
                         await window.FB_setDoc(visitorDocRef, {
@@ -1430,7 +1297,6 @@
                         localStorage.setItem(visitorSessionKey, "true");
                     }
 
-                    // Listen in real time and maintain the count so it increments 1 -> 2 -> 3... without ever dropping
                     window.FB_onSnapshot(cycleVisitorsCol, (snapshot) => {
                         const storedMax = parseInt(localStorage.getItem(cachedTotalKey) || "1", 10);
                         const liveCount = Math.max(snapshot.size, storedMax, 1);
@@ -1448,7 +1314,6 @@
                 localStorage.setItem(visitorSessionKey, "true");
             }
 
-            // Schedule automatic reset right at 12:01:00 AM if user keeps the tab open
             const now = new Date();
             const nextReset = new Date(now);
             nextReset.setHours(0, 1, 0, 0);
@@ -2407,8 +2272,8 @@
         const selectedDropdown = product.dropdowns[dropdownIdx]; 
          
         if (selectedDropdown) { 
-            document.getElementById(`frontend-price-badge-${productId}`).innerText = `RM ${Number(selectedDropdown.price).toFixed(2)}`; 
-            const infoBox = document.getElementById(`frontend-info-box-${productId}`); 
+            document.getElementById(`frontend-price-badge-${product.id}`).innerText = `RM ${Number(selectedDropdown.price).toFixed(2)}`; 
+            const infoBox = document.getElementById(`frontend-info-box-${product.id}`); 
              
             const infoLines = (selectedDropdown.info || '').split('\n').filter(l => l.trim() !== ''); 
             infoBox.innerHTML = infoLines.map(line => ` 
